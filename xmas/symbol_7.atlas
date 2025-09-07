@@ -1,0 +1,20 @@
+
+symbol_7.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+J
+  rotate: false
+  xy: 0, 0
+  size: 82, 155
+  orig: 86, 158
+  offset: 2, 1
+  index: -1
+shine
+  rotate: false
+  xy: 0, 156
+  size: 85, 188
+  orig: 88, 190
+  offset: 2, 1
+  index: -1

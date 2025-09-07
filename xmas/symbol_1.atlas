@@ -1,0 +1,34 @@
+
+symbol_1.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cane_left
+  rotate: true
+  xy: 128, 155
+  size: 94, 121
+  orig: 94, 121
+  offset: 0, 0
+  index: -1
+cane_right
+  rotate: true
+  xy: 0, 113
+  size: 94, 121
+  orig: 94, 121
+  offset: 0, 0
+  index: -1
+ribbon_bow
+  rotate: false
+  xy: 43, 208
+  size: 84, 41
+  orig: 84, 41
+  offset: 0, 0
+  index: -1
+ribbon_bow_right
+  rotate: true
+  xy: 0, 221
+  size: 28, 42
+  orig: 28, 42
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,20 @@
+
+big_win_fx2.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+CROSS2
+  rotate: false
+  xy: 0, 98
+  size: 144, 143
+  orig: 158, 158
+  offset: 7, 7
+  index: -1
+DOTS01
+  rotate: true
+  xy: 145, 124
+  size: 117, 96
+  orig: 128, 128
+  offset: 6, 13
+  index: -1

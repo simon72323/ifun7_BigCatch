@@ -1,0 +1,104 @@
+
+free_retrigger.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+10
+  rotate: false
+  xy: 300, 481
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+DARK
+  rotate: false
+  xy: 1, 700
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+SF1
+  rotate: true
+  xy: 184, 620
+  size: 100, 115
+  orig: 100, 115
+  offset: 0, 0
+  index: -1
+arrow
+  rotate: false
+  xy: 1252, 481
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+en
+  rotate: true
+  xy: 1728, 245
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+frame
+  rotate: false
+  xy: 1, 241
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+id
+  rotate: false
+  xy: 477, 241
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+ko
+  rotate: false
+  xy: 953, 241
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+ms
+  rotate: false
+  xy: 1429, 5
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+ph
+  rotate: false
+  xy: 1, 1
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+shine
+  rotate: false
+  xy: 22, 648
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 95, 641
+  size: 88, 79
+  orig: 92, 81
+  offset: 2, 1
+  index: -1
+th
+  rotate: false
+  xy: 776, 481
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1
+zh-cn
+  rotate: false
+  xy: 477, 1
+  size: 475, 239
+  orig: 475, 239
+  offset: 0, 0
+  index: -1

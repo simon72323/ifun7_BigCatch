@@ -1,0 +1,104 @@
+
+free_fx.png
+size: 512,512
+format: RGBA4444
+filter: Linear,Linear
+repeat: none
+bag
+  rotate: true
+  xy: 0, 293
+  size: 156, 185
+  orig: 156, 185
+  offset: 0, 0
+  index: -1
+body
+  rotate: true
+  xy: 186, 320
+  size: 123, 176
+  orig: 123, 176
+  offset: 0, 0
+  index: -1
+cf1
+  rotate: false
+  xy: 363, 210
+  size: 140, 140
+  orig: 150, 150
+  offset: 5, 5
+  index: -1
+chimney
+  rotate: false
+  xy: 199, 444
+  size: 191, 66
+  orig: 200, 80
+  offset: 4, 3
+  index: -1
+eyec
+  rotate: true
+  xy: 491, 484
+  size: 26, 8
+  orig: 27, 8
+  offset: 0, 0
+  index: -1
+face
+  rotate: false
+  xy: 0, 185
+  size: 54, 52
+  orig: 56, 55
+  offset: 1, 2
+  index: -1
+hair back
+  rotate: true
+  xy: 363, 351
+  size: 73, 147
+  orig: 73, 147
+  offset: 0, 0
+  index: -1
+hair l
+  rotate: true
+  xy: 186, 282
+  size: 37, 131
+  orig: 39, 131
+  offset: 0, 0
+  index: -1
+hair r
+  rotate: false
+  xy: 318, 259
+  size: 32, 60
+  orig: 32, 60
+  offset: 0, 0
+  index: -1
+hand r
+  rotate: true
+  xy: 0, 238
+  size: 54, 96
+  orig: 54, 99
+  offset: 0, 3
+  index: -1
+hat
+  rotate: false
+  xy: 97, 234
+  size: 85, 58
+  orig: 85, 58
+  offset: 0, 0
+  index: -1
+ice
+  rotate: false
+  xy: 391, 425
+  size: 99, 85
+  orig: 100, 85
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: false
+  xy: 186, 444
+  size: 9, 5
+  orig: 10, 6
+  offset: 1, 1
+  index: -1
+snow
+  rotate: false
+  xy: 0, 450
+  size: 198, 60
+  orig: 200, 60
+  offset: 1, 0
+  index: -1

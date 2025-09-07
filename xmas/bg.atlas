@@ -1,0 +1,62 @@
+
+bg.png
+size: 4096,4096
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: true
+  xy: 869, 2445
+  size: 960, 1600
+  orig: 960, 1600
+  offset: 0, 0
+  index: -1
+bg_m
+  rotate: true
+  xy: 2470, 2444
+  size: 960, 1600
+  orig: 960, 1600
+  offset: 0, 0
+  index: -1
+free_gift_light
+  rotate: false
+  xy: 2030, 3406
+  size: 960, 664
+  orig: 960, 664
+  offset: 0, 0
+  index: -1
+game_gift
+  rotate: false
+  xy: 2991, 3405
+  size: 960, 665
+  orig: 960, 668
+  offset: 0, 0
+  index: -1
+light
+  rotate: false
+  xy: 0, 3910
+  size: 161, 160
+  orig: 161, 160
+  offset: 0, 0
+  index: -1
+main_game_glow
+  rotate: false
+  xy: 1096, 3584
+  size: 933, 486
+  orig: 933, 486
+  offset: 0, 0
+  index: -1
+main_gftlight
+  rotate: false
+  xy: 162, 3630
+  size: 933, 440
+  orig: 933, 440
+  offset: 0, 0
+  index: -1
+side-shine-free
+  rotate: true
+  xy: 0, 2899
+  size: 730, 868
+  orig: 730, 868
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,64 @@
+{
+"skeleton": { "hash": "fHzkX4k+yszkHGrVgGL55PW4mKc", "spine": "3.8.72", "x": -30.44, "y": -55.76, "width": 61, "height": 112.06 },
+"bones": [
+	{ "name": "root", "x": 4.48, "y": 0.4, "scaleX": 0.7093, "scaleY": 0.7093 },
+	{ "name": "symbol", "parent": "root" },
+	{ "name": "shine", "parent": "root", "x": -85.37, "scaleX": 0.7106, "scaleY": 1.5849 }
+],
+"slots": [
+	{ "name": "J", "bone": "symbol", "attachment": "J" },
+	{ "name": "shining", "bone": "symbol", "attachment": "shining" },
+	{ "name": "shine", "bone": "shine", "attachment": "shine", "blend": "additive" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"J": {
+				"J": { "x": -6.24, "y": -0.18, "width": 86, "height": 158 }
+			},
+			"shining": {
+				"shining": {
+					"type": "clipping",
+					"end": "shine",
+					"vertexCount": 24,
+					"vertices": [ -12.52, -21.33, -12.55, 69.87, -9.03, 74, -5.4, 75.82, 19.05, 76.04, 23.35, 73.49, 26.09, 69.62, 26.46, -35.98, 22.45, -47.73, 15.91, -55.08, 5.65, -63.2, -4, -66.57, -14.27, -68.57, -27.65, -67.49, -38.54, -63.97, -44.05, -58.25, -44.73, -52.37, -44.35, -30.52, -41.9, -28.37, -37.6, -27.37, -32.87, -27.91, -27.09, -28.55, -19.72, -28.11, -15.83, -25.51 ]
+				}
+			},
+			"shine": {
+				"shine": { "x": 2.31, "y": 2.65, "width": 88, "height": 190 }
+			}
+		}
+	}
+],
+"animations": {
+	"idle": {},
+	"play": {
+		"slots": {
+			"shine": {
+				"color": [
+					{ "color": "89bbffff" }
+				]
+			}
+		},
+		"bones": {
+			"symbol": {
+				"scale": [
+					{ "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.1667, "x": 1.162, "y": 0.78, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.5, "y": 1.268, "curve": 0.25, "c3": 0.75 },
+					{ "time": 0.7667 },
+					{ "time": 0.8667, "x": 0.663, "y": 0.663 },
+					{ "time": 1 }
+				]
+			},
+			"shine": {
+				"translate": [
+					{},
+					{ "time": 1, "x": 147.83 }
+				]
+			}
+		}
+	}
+}
+}

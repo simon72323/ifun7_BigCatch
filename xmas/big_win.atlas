@@ -1,0 +1,146 @@
+
+big_win.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+11
+  rotate: false
+  xy: 1060, 1764
+  size: 979, 182
+  orig: 979, 182
+  offset: 0, 0
+  index: -1
+12
+  rotate: false
+  xy: 459, 533
+  size: 512, 386
+  orig: 512, 386
+  offset: 0, 0
+  index: -1
+13
+  rotate: false
+  xy: 434, 1298
+  size: 526, 296
+  orig: 526, 296
+  offset: 0, 0
+  index: -1
+14
+  rotate: false
+  xy: 0, 943
+  size: 920, 355
+  orig: 920, 355
+  offset: 0, 0
+  index: -1
+21
+  rotate: false
+  xy: 0, 1594
+  size: 979, 182
+  orig: 979, 182
+  offset: 0, 0
+  index: -1
+22
+  rotate: false
+  xy: 920, 919
+  size: 780, 367
+  orig: 780, 367
+  offset: 0, 0
+  index: -1
+23
+  rotate: false
+  xy: 960, 1286
+  size: 526, 296
+  orig: 526, 296
+  offset: 0, 0
+  index: -1
+24
+  rotate: false
+  xy: 0, 64
+  size: 920, 469
+  orig: 920, 471
+  offset: 0, 2
+  index: -1
+301
+  rotate: false
+  xy: 0, 1886
+  size: 61, 60
+  orig: 61, 60
+  offset: 0, 0
+  index: -1
+303
+  rotate: false
+  xy: 523, 1794
+  size: 207, 152
+  orig: 207, 152
+  offset: 0, 0
+  index: -1
+305
+  rotate: false
+  xy: 308, 1802
+  size: 215, 144
+  orig: 215, 144
+  offset: 0, 0
+  index: -1
+31
+  rotate: false
+  xy: 979, 1582
+  size: 979, 182
+  orig: 979, 182
+  offset: 0, 0
+  index: -1
+32
+  rotate: false
+  xy: 971, 524
+  size: 645, 395
+  orig: 645, 395
+  offset: 0, 0
+  index: -1
+3277791-01
+  rotate: false
+  xy: 0, 1376
+  size: 434, 218
+  orig: 434, 218
+  offset: 0, 0
+  index: -1
+33
+  rotate: false
+  xy: 1486, 1286
+  size: 526, 296
+  orig: 526, 296
+  offset: 0, 0
+  index: -1
+34
+  rotate: false
+  xy: 920, 0
+  size: 920, 524
+  orig: 920, 524
+  offset: 0, 0
+  index: -1
+DISCO_LIGHT2
+  rotate: true
+  xy: 730, 1776
+  size: 170, 330
+  orig: 170, 330
+  offset: 0, 0
+  index: -1
+FX1
+  rotate: true
+  xy: 61, 1863
+  size: 83, 101
+  orig: 83, 101
+  offset: 0, 0
+  index: -1
+FX2
+  rotate: true
+  xy: 0, 573
+  size: 370, 459
+  orig: 370, 459
+  offset: 0, 0
+  index: -1
+FX3
+  rotate: true
+  xy: 162, 1803
+  size: 143, 146
+  orig: 143, 146
+  offset: 0, 0
+  index: -1
