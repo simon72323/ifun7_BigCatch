@@ -1,0 +1,26 @@
+fg人物動畫
+一開始人物播 idel
+左輪播into_fg 人物播 to_prepare
+接著連播prepare
+
+
+第一階段 8~32
+左輪 hit_x8 時 人物播 fire_start
+接著播 fire_loop_A
+
+左輪播 hit_x16、hit_x32 人物播 fire_hit1 然後回到 fire_loop_A
+左輪back_x16、back_x32、back_x64 人物提早0.5秒播 fire_end 然後回到 prepare
+
+第二階段 64~256
+左輪播 hit_x64、hit_x128、hit_x256 人物播 fire_hit2 然後回到 fire_loop_A
+左輪back_x128、back_x256、back_x512 人物提早0.5秒播 fire_end 然後回到 prepare
+
+第三階段 512~1024
+左輪播 hit_x512、hit_x1024 人物播 fire_hit3 然後回到 fire_loop_A
+左輪back_x1024、back_xnone 人物提早0.5秒播 fire_end 然後回到 prepare
+
+偶爾 fire_loop_A 可以替換成 fire_loop_B
+
+結束
+最後一局在乘倍左輪狀態下 播end_a
+如不是播end_b

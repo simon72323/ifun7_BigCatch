@@ -1,5 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { getNetworkManager } from 'db://assets/common/scripts/network/NetworkManager';
+import { getNetworkManager } from '@/common/scriptsIFun7/network/NetworkManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Slot001GameMain')

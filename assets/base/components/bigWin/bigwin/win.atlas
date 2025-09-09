@@ -1,0 +1,426 @@
+
+win.png
+size: 1956,988
+format: RGBA4444
+filter: Linear,Linear
+repeat: none
+bg_light_all_01
+  rotate: false
+  xy: 2, 125
+  size: 774, 861
+  orig: 774, 861
+  offset: 0, 0
+  index: -1
+bg_light_all_02
+  rotate: false
+  xy: 1155, 195
+  size: 286, 285
+  orig: 286, 285
+  offset: 0, 0
+  index: -1
+chips_01
+  rotate: true
+  xy: 1696, 300
+  size: 84, 94
+  orig: 84, 94
+  offset: 0, 0
+  index: -1
+chips_02
+  rotate: true
+  xy: 1105, 3
+  size: 57, 52
+  orig: 57, 52
+  offset: 0, 0
+  index: -1
+chips_03
+  rotate: false
+  xy: 870, 18
+  size: 90, 82
+  orig: 90, 82
+  offset: 0, 0
+  index: -1
+chips_04
+  rotate: true
+  xy: 1887, 418
+  size: 75, 49
+  orig: 75, 49
+  offset: 0, 0
+  index: -1
+chips_05
+  rotate: false
+  xy: 1343, 2
+  size: 95, 74
+  orig: 95, 74
+  offset: 0, 0
+  index: -1
+coin_01
+  rotate: false
+  xy: 1343, 78
+  size: 89, 115
+  orig: 89, 115
+  offset: 0, 0
+  index: -1
+coin_02
+  rotate: false
+  xy: 713, 27
+  size: 61, 96
+  orig: 61, 96
+  offset: 0, 0
+  index: -1
+coin_03
+  rotate: true
+  xy: 1023, 6
+  size: 54, 80
+  orig: 54, 80
+  offset: 0, 0
+  index: -1
+coin_04
+  rotate: false
+  xy: 1846, 214
+  size: 59, 78
+  orig: 68, 83
+  offset: 4, 2
+  index: -1
+coin_05
+  rotate: true
+  xy: 1378, 482
+  size: 109, 118
+  orig: 119, 127
+  offset: 5, 5
+  index: -1
+coin_06
+  rotate: true
+  xy: 1887, 294
+  size: 54, 55
+  orig: 54, 55
+  offset: 0, 0
+  index: -1
+coin_07
+  rotate: false
+  xy: 1753, 142
+  size: 87, 68
+  orig: 87, 70
+  offset: 0, 1
+  index: -1
+coin_08
+  rotate: false
+  xy: 1753, 212
+  size: 91, 80
+  orig: 94, 80
+  offset: 0, 0
+  index: -1
+coin_09
+  rotate: false
+  xy: 1792, 294
+  size: 93, 96
+  orig: 93, 96
+  offset: 0, 0
+  index: -1
+coin_10
+  rotate: false
+  xy: 1791, 392
+  size: 94, 101
+  orig: 94, 102
+  offset: 0, 1
+  index: -1
+coin_11
+  rotate: false
+  xy: 1289, 4
+  size: 52, 63
+  orig: 55, 63
+  offset: 2, 0
+  index: -1
+coin_12
+  rotate: false
+  xy: 1694, 495
+  size: 59, 96
+  orig: 71, 100
+  offset: 7, 4
+  index: -1
+coin_13
+  rotate: true
+  xy: 2, 2
+  size: 121, 159
+  orig: 121, 159
+  offset: 0, 0
+  index: -1
+coin_14
+  rotate: false
+  xy: 1696, 386
+  size: 93, 107
+  orig: 121, 174
+  offset: 0, 42
+  index: -1
+coin_f
+  rotate: false
+  xy: 1443, 112
+  size: 166, 166
+  orig: 166, 166
+  offset: 0, 0
+  index: -1
+coin_side1
+  rotate: true
+  xy: 1440, 17
+  size: 19, 161
+  orig: 154, 170
+  offset: 70, 3
+  index: -1
+coin_side2
+  rotate: true
+  xy: 1755, 495
+  size: 38, 158
+  orig: 154, 170
+  offset: 51, 7
+  index: -1
+crown_blur_000
+  rotate: false
+  xy: 163, 5
+  size: 193, 118
+  orig: 195, 124
+  offset: 2, 6
+  index: -1
+crown_blur_02
+  rotate: false
+  xy: 1146, 69
+  size: 195, 124
+  orig: 195, 124
+  offset: 0, 0
+  index: -1
+crown_green_000
+  rotate: true
+  xy: 1600, 296
+  size: 169, 94
+  orig: 194, 124
+  offset: 12, 16
+  index: -1
+crown_green_01
+  rotate: false
+  xy: 1498, 467
+  size: 194, 124
+  orig: 194, 124
+  offset: 0, 0
+  index: -1
+crown_red_000
+  rotate: true
+  xy: 1000, 62
+  size: 200, 144
+  orig: 220, 160
+  offset: 15, 16
+  index: -1
+crown_red_03
+  rotate: false
+  xy: 778, 102
+  size: 220, 160
+  orig: 220, 160
+  offset: 0, 0
+  index: -1
+dark
+  rotate: true
+  xy: 1440, 38
+  size: 72, 160
+  orig: 72, 160
+  offset: 0, 0
+  index: -1
+ribbon_01
+  rotate: false
+  xy: 778, 819
+  size: 601, 167
+  orig: 601, 167
+  offset: 0, 0
+  index: -1
+ribbon_02
+  rotate: false
+  xy: 778, 650
+  size: 598, 167
+  orig: 598, 167
+  offset: 0, 0
+  index: -1
+ribbon_03
+  rotate: false
+  xy: 778, 482
+  size: 598, 166
+  orig: 598, 166
+  offset: 0, 0
+  index: -1
+shield_01
+  rotate: false
+  xy: 1381, 811
+  size: 375, 175
+  orig: 375, 175
+  offset: 0, 0
+  index: -1
+shield_02
+  rotate: false
+  xy: 778, 264
+  size: 375, 216
+  orig: 375, 216
+  offset: 0, 0
+  index: -1
+shield_03
+  rotate: false
+  xy: 1378, 593
+  size: 375, 216
+  orig: 375, 216
+  offset: 0, 0
+  index: -1
+shine_star_g
+  rotate: true
+  xy: 1755, 535
+  size: 151, 152
+  orig: 153, 154
+  offset: 1, 1
+  index: -1
+shine_vfx_01
+  rotate: true
+  xy: 1838, 67
+  size: 73, 69
+  orig: 73, 69
+  offset: 0, 0
+  index: -1
+star_01
+  rotate: false
+  xy: 1846, 143
+  size: 69, 69
+  orig: 69, 69
+  offset: 0, 0
+  index: -1
+star_02
+  rotate: false
+  xy: 1768, 2
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1
+star_03
+  rotate: true
+  xy: 962, 2
+  size: 58, 59
+  orig: 58, 59
+  offset: 0, 0
+  index: -1
+star_04
+  rotate: false
+  xy: 1603, 2
+  size: 51, 50
+  orig: 51, 50
+  offset: 0, 0
+  index: -1
+star_05
+  rotate: false
+  xy: 1709, 3
+  size: 49, 49
+  orig: 49, 49
+  offset: 0, 0
+  index: -1
+star_06
+  rotate: false
+  xy: 1829, 2
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1
+star_07
+  rotate: true
+  xy: 776, 15
+  size: 85, 92
+  orig: 85, 92
+  offset: 0, 0
+  index: -1
+star_08
+  rotate: false
+  xy: 1611, 54
+  size: 78, 76
+  orig: 78, 76
+  offset: 0, 0
+  index: -1
+star_09
+  rotate: false
+  xy: 1691, 54
+  size: 75, 76
+  orig: 75, 76
+  offset: 0, 0
+  index: -1
+star_10
+  rotate: false
+  xy: 1890, 9
+  size: 56, 56
+  orig: 56, 56
+  offset: 0, 0
+  index: -1
+star_11
+  rotate: false
+  xy: 1224, 6
+  size: 63, 61
+  orig: 63, 61
+  offset: 0, 0
+  index: -1
+star_12
+  rotate: false
+  xy: 1887, 350
+  size: 66, 66
+  orig: 66, 66
+  offset: 0, 0
+  index: -1
+star_13
+  rotate: false
+  xy: 1159, 5
+  size: 63, 62
+  orig: 63, 62
+  offset: 0, 0
+  index: -1
+star_14
+  rotate: true
+  xy: 1768, 63
+  size: 77, 68
+  orig: 77, 68
+  offset: 0, 0
+  index: -1
+star_vfx_01
+  rotate: true
+  xy: 1656, 2
+  size: 50, 51
+  orig: 50, 51
+  offset: 0, 0
+  index: -1
+trumpet_l_01_1
+  rotate: true
+  xy: 1611, 132
+  size: 162, 140
+  orig: 162, 140
+  offset: 0, 0
+  index: -1
+trumpet_l_01_2
+  rotate: false
+  xy: 358, 7
+  size: 176, 116
+  orig: 176, 116
+  offset: 0, 0
+  index: -1
+trumpet_r_01_1
+  rotate: false
+  xy: 1758, 688
+  size: 161, 140
+  orig: 161, 140
+  offset: 0, 0
+  index: -1
+trumpet_r_01_2
+  rotate: false
+  xy: 536, 7
+  size: 175, 116
+  orig: 175, 116
+  offset: 0, 0
+  index: -1
+wheat_l
+  rotate: false
+  xy: 1443, 280
+  size: 155, 185
+  orig: 155, 185
+  offset: 0, 0
+  index: -1
+wheat_r
+  rotate: true
+  xy: 1758, 830
+  size: 156, 185
+  orig: 156, 185
+  offset: 0, 0
+  index: -1

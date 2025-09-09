@@ -1,0 +1,17 @@
+info face="num_totalwin" size=126.0 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 padding=0,0,0,0 spacing=0,0 common lineHeight=126.0 base=48 scaleW=764.0 scaleH=126.0 pages=1 packed=0 page id=0 file="num_totalwin.png"
+chars count=12
+char id=49 x=0 y=0 width=72.0 height=126.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="1"
+char id=50 x=72.0 y=0 width=72.0 height=125.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="2"
+char id=51 x=144.0 y=0 width=72.0 height=126.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="3"
+char id=52 x=216.0 y=0 width=72.0 height=126.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="4"
+char id=53 x=288.0 y=0 width=72.0 height=126.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="5"
+char id=54 x=360.0 y=0 width=72.0 height=126.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="6"
+char id=55 x=432.0 y=0 width=72.0 height=126.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="7"
+char id=56 x=504.0 y=0 width=72.0 height=125.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="8"
+char id=57 x=576.0 y=0 width=72.0 height=125.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="9"
+char id=48 x=648.0 y=0 width=72.0 height=125.0 xoffset=0 yoffset=0 xadvance=72.0 page=0 chnl=15 letter="0"
+char id=46 x=720.0 y=0 width=42.0 height=50.0 xoffset=8.0 yoffset=76.0 xadvance=52.0 page=0 chnl=15 letter="."
+char id=44 x=720.0 y=50.0 width=44.0 height=60.0 xoffset=8.0 yoffset=77.0 xadvance=52.0 page=0 chnl=15 letter=","
+
+
+kernings count=0

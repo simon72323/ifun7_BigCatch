@@ -1,0 +1,178 @@
+{
+"skeleton": { "hash": "lnINHLkFLOmec2Mv1z8/xhLKQqM", "spine": "3.7.94", "width": 0, "height": 0 },
+"bones": [
+	{ "name": "root" },
+	{ "name": "bar", "parent": "root", "y": -518 },
+	{ "name": "btn", "parent": "root", "rotation": -0.07 },
+	{ "name": "btn_l", "parent": "btn", "x": -125 },
+	{ "name": "btn_r", "parent": "btn", "x": 125 }
+],
+"slots": [
+	{ "name": "bar_b", "bone": "bar", "blend": "additive" },
+	{ "name": "bar_a", "bone": "bar", "blend": "additive" },
+	{ "name": "btn_l", "bone": "btn_l", "blend": "additive" },
+	{ "name": "btn_r", "bone": "btn_r", "blend": "additive" }
+],
+"skins": {
+	"default": {
+		"bar_a": {
+			"bar_b/bar_b_00": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_02": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_04": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_06": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_08": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_10": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_12": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_14": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_16": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_18": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_20": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_22": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_24": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_26": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_b/bar_b_28": { "y": 0.5, "width": 720, "height": 205 }
+		},
+		"bar_b": {
+			"bar_a/bar_a_00": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_02": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_04": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_06": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_08": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_10": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_12": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_14": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_16": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_18": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_20": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_22": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_24": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_26": { "y": 0.5, "width": 720, "height": 205 },
+			"bar_a/bar_a_28": { "y": 0.5, "width": 720, "height": 205 }
+		},
+		"btn_l": {
+			"btn_l/btn_l_02": { "width": 250, "height": 200 },
+			"btn_l/btn_l_04": { "width": 250, "height": 200 },
+			"btn_l/btn_l_06": { "width": 250, "height": 200 },
+			"btn_l/btn_l_08": { "width": 250, "height": 200 },
+			"btn_l/btn_l_10": { "width": 250, "height": 200 },
+			"btn_l/btn_l_12": { "width": 250, "height": 200 },
+			"btn_l/btn_l_14": { "width": 250, "height": 200 },
+			"btn_l/btn_l_16": { "width": 250, "height": 200 },
+			"btn_l/btn_l_18": { "width": 250, "height": 200 },
+			"btn_l/btn_l_20": { "width": 250, "height": 200 },
+			"btn_l/btn_l_22": { "width": 250, "height": 200 },
+			"btn_l/btn_l_24": { "width": 250, "height": 200 },
+			"btn_l/btn_l_26": { "width": 250, "height": 200 },
+			"btn_l/btn_l_28": { "width": 250, "height": 200 }
+		},
+		"btn_r": {
+			"btn_r/btn_r_02": { "width": 250, "height": 200 },
+			"btn_r/btn_r_04": { "width": 250, "height": 200 },
+			"btn_r/btn_r_06": { "width": 250, "height": 200 },
+			"btn_r/btn_r_08": { "width": 250, "height": 200 },
+			"btn_r/btn_r_10": { "width": 250, "height": 200 },
+			"btn_r/btn_r_12": { "width": 250, "height": 200 },
+			"btn_r/btn_r_14": { "width": 250, "height": 200 },
+			"btn_r/btn_r_16": { "width": 250, "height": 200 },
+			"btn_r/btn_r_18": { "width": 250, "height": 200 },
+			"btn_r/btn_r_20": { "width": 250, "height": 200 },
+			"btn_r/btn_r_22": { "width": 250, "height": 200 },
+			"btn_r/btn_r_24": { "width": 250, "height": 200 },
+			"btn_r/btn_r_26": { "width": 250, "height": 200 },
+			"btn_r/btn_r_28": { "width": 250, "height": 200 }
+		}
+	}
+},
+"animations": {
+	"bar_a": {
+		"slots": {
+			"bar_a": {
+				"attachment": [
+					{ "time": 0, "name": "bar_b/bar_b_00" },
+					{ "time": 0.0667, "name": "bar_b/bar_b_02" },
+					{ "time": 0.1333, "name": "bar_b/bar_b_04" },
+					{ "time": 0.2, "name": "bar_b/bar_b_06" },
+					{ "time": 0.2667, "name": "bar_b/bar_b_08" },
+					{ "time": 0.3333, "name": "bar_b/bar_b_10" },
+					{ "time": 0.4, "name": "bar_b/bar_b_12" },
+					{ "time": 0.4667, "name": "bar_b/bar_b_14" },
+					{ "time": 0.5333, "name": "bar_b/bar_b_16" },
+					{ "time": 0.6, "name": "bar_b/bar_b_18" },
+					{ "time": 0.6667, "name": "bar_b/bar_b_20" },
+					{ "time": 0.7333, "name": "bar_b/bar_b_22" },
+					{ "time": 0.8, "name": "bar_b/bar_b_24" },
+					{ "time": 0.8667, "name": "bar_b/bar_b_26" },
+					{ "time": 0.9333, "name": "bar_b/bar_b_28" },
+					{ "time": 1, "name": "bar_b/bar_b_00" }
+				]
+			}
+		}
+	},
+	"bar_b": {
+		"slots": {
+			"bar_b": {
+				"attachment": [
+					{ "time": 0, "name": "bar_a/bar_a_00" },
+					{ "time": 0.0667, "name": "bar_a/bar_a_02" },
+					{ "time": 0.1333, "name": "bar_a/bar_a_04" },
+					{ "time": 0.2, "name": "bar_a/bar_a_06" },
+					{ "time": 0.2667, "name": "bar_a/bar_a_08" },
+					{ "time": 0.3333, "name": "bar_a/bar_a_10" },
+					{ "time": 0.4, "name": "bar_a/bar_a_12" },
+					{ "time": 0.4667, "name": "bar_a/bar_a_14" },
+					{ "time": 0.5333, "name": "bar_a/bar_a_16" },
+					{ "time": 0.6, "name": "bar_a/bar_a_18" },
+					{ "time": 0.6667, "name": "bar_a/bar_a_20" },
+					{ "time": 0.7333, "name": "bar_a/bar_a_22" },
+					{ "time": 0.8, "name": "bar_a/bar_a_24" },
+					{ "time": 0.8667, "name": "bar_a/bar_a_26" },
+					{ "time": 0.9333, "name": "bar_a/bar_a_28" },
+					{ "time": 1, "name": "bar_a/bar_a_00" }
+				]
+			}
+		}
+	},
+	"btn": {
+		"slots": {
+			"btn_l": {
+				"attachment": [
+					{ "time": 0, "name": "btn_l/btn_l_02" },
+					{ "time": 0.0333, "name": "btn_l/btn_l_04" },
+					{ "time": 0.0667, "name": "btn_l/btn_l_06" },
+					{ "time": 0.1333, "name": "btn_l/btn_l_08" },
+					{ "time": 0.2, "name": "btn_l/btn_l_10" },
+					{ "time": 0.2667, "name": "btn_l/btn_l_12" },
+					{ "time": 0.3333, "name": "btn_l/btn_l_14" },
+					{ "time": 0.4, "name": "btn_l/btn_l_16" },
+					{ "time": 0.4667, "name": "btn_l/btn_l_18" },
+					{ "time": 0.5333, "name": "btn_l/btn_l_20" },
+					{ "time": 0.6, "name": "btn_l/btn_l_22" },
+					{ "time": 0.6667, "name": "btn_l/btn_l_24" },
+					{ "time": 0.7, "name": "btn_l/btn_l_26" },
+					{ "time": 0.7333, "name": "btn_l/btn_l_28" },
+					{ "time": 0.7667, "name": null }
+				]
+			},
+			"btn_r": {
+				"attachment": [
+					{ "time": 0, "name": "btn_r/btn_r_02" },
+					{ "time": 0.0333, "name": "btn_r/btn_r_04" },
+					{ "time": 0.0667, "name": "btn_r/btn_r_06" },
+					{ "time": 0.1333, "name": "btn_r/btn_r_08" },
+					{ "time": 0.2, "name": "btn_r/btn_r_10" },
+					{ "time": 0.2667, "name": "btn_r/btn_r_12" },
+					{ "time": 0.3333, "name": "btn_r/btn_r_14" },
+					{ "time": 0.4, "name": "btn_r/btn_r_16" },
+					{ "time": 0.4667, "name": "btn_r/btn_r_18" },
+					{ "time": 0.5333, "name": "btn_r/btn_r_20" },
+					{ "time": 0.6, "name": "btn_r/btn_r_22" },
+					{ "time": 0.6667, "name": "btn_r/btn_r_24" },
+					{ "time": 0.7, "name": "btn_r/btn_r_26" },
+					{ "time": 0.7333, "name": "btn_r/btn_r_28" },
+					{ "time": 0.7667, "name": null }
+				]
+			}
+		}
+	}
+}
+}

@@ -1,7 +1,13 @@
 {
-  "name": "NewProject",
-  "uuid": "2ab3c140-05d5-4200-91a2-cfb746bb8e7a",
+  "name": "cocosSlotGame",
+  "uuid": "fb72b8a4-04cc-49f5-ba33-4a2bd191d129",
   "creator": {
     "version": "3.8.6"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2"
   }
 }

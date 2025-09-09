@@ -1,0 +1,66 @@
+{
+  "ver": "1.0.6",
+  "importer": "bitmap-font",
+  "imported": true,
+  "uuid": "ad68b14a-6236-4880-84e6-2e5399efb1c7",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "_fntConfig": {
+      "commonHeight": 45,
+      "fontSize": 45,
+      "atlasName": "num_paytable1.png",
+      "fontDefDictionary": {
+        "51": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 36,
+            "height": 44
+          },
+          "xOffset": 0,
+          "yOffset": 0,
+          "xAdvance": 32
+        },
+        "52": {
+          "rect": {
+            "x": 36,
+            "y": 0,
+            "width": 36,
+            "height": 44
+          },
+          "xOffset": 0,
+          "yOffset": 0,
+          "xAdvance": 32
+        },
+        "53": {
+          "rect": {
+            "x": 72,
+            "y": 0,
+            "width": 36,
+            "height": 45
+          },
+          "xOffset": 0,
+          "yOffset": 0,
+          "xAdvance": 32
+        },
+        "54": {
+          "rect": {
+            "x": 108,
+            "y": 0,
+            "width": 36,
+            "height": 44
+          },
+          "xOffset": 0,
+          "yOffset": 0,
+          "xAdvance": 32
+        }
+      },
+      "kerningDict": {}
+    },
+    "fontSize": 45,
+    "textureUuid": "8078301f-c9c4-4d1a-be54-5ae74ddff5ba"
+  }
+}

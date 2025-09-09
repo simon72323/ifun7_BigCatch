@@ -1,0 +1,34 @@
+
+spin_button_ani.png
+size: 280,280
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Arrows
+  rotate: false
+  xy: 2, 2
+  size: 110, 107
+  orig: 110, 107
+  offset: 0, 0
+  index: -1
+Infinity
+  rotate: true
+  xy: 170, 169
+  size: 108, 55
+  orig: 108, 55
+  offset: 0, 0
+  index: -1
+Spin Button_light
+  rotate: false
+  xy: 2, 111
+  size: 166, 166
+  orig: 166, 166
+  offset: 0, 0
+  index: -1
+Stop
+  rotate: false
+  xy: 114, 46
+  size: 63, 63
+  orig: 63, 63
+  offset: 0, 0
+  index: -1

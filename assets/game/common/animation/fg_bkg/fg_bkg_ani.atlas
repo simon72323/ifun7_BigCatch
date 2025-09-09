@@ -1,0 +1,48 @@
+
+fg_bkg_ani.png
+size: 812,812
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cactus
+  rotate: false
+  xy: 2, 287
+  size: 131, 521
+  orig: 131, 521
+  offset: 0, 0
+  index: -1
+fg_butbkg
+  rotate: false
+  xy: 135, 468
+  size: 360, 340
+  orig: 360, 340
+  offset: 0, 0
+  index: -1
+fg_topbkg
+  rotate: false
+  xy: 2, 2
+  size: 361, 283
+  orig: 361, 283
+  offset: 0, 0
+  index: -1
+stone
+  rotate: true
+  xy: 365, 66
+  size: 400, 280
+  orig: 400, 280
+  offset: 0, 0
+  index: -1
+tumbleweed
+  rotate: false
+  xy: 497, 658
+  size: 158, 150
+  orig: 158, 151
+  offset: 0, 0
+  index: -1
+tumbleweed_shadow
+  rotate: false
+  xy: 135, 312
+  size: 161, 154
+  orig: 163, 156
+  offset: 1, 1
+  index: -1

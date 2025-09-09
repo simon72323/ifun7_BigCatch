@@ -1,0 +1,76 @@
+
+box_all.png
+size: 836,836
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+BaseBoard
+  rotate: false
+  xy: 2, 146
+  size: 612, 688
+  orig: 656, 771
+  offset: 20, 59
+  index: -1
+BaseBoard_01
+  rotate: true
+  xy: 616, 173
+  size: 130, 112
+  orig: 130, 112
+  offset: 0, 0
+  index: -1
+BaseBoard_light
+  rotate: true
+  xy: 616, 457
+  size: 163, 182
+  orig: 167, 186
+  offset: 2, 2
+  index: -1
+Deco_1
+  rotate: true
+  xy: 667, 83
+  size: 88, 100
+  orig: 88, 100
+  offset: 0, 0
+  index: -1
+Deco_2
+  rotate: false
+  xy: 334, 2
+  size: 42, 44
+  orig: 42, 44
+  offset: 0, 0
+  index: -1
+Deco_3
+  rotate: false
+  xy: 2, 27
+  size: 330, 19
+  orig: 330, 19
+  offset: 0, 0
+  index: -1
+costbar
+  rotate: false
+  xy: 2, 48
+  size: 491, 96
+  orig: 493, 96
+  offset: 1, 0
+  index: -1
+halo_A
+  rotate: false
+  xy: 616, 622
+  size: 216, 212
+  orig: 217, 219
+  offset: 1, 5
+  index: -1
+particle
+  rotate: false
+  xy: 616, 305
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+roll_shine_B
+  rotate: false
+  xy: 495, 7
+  size: 170, 137
+  orig: 251, 222
+  offset: 43, 46
+  index: -1

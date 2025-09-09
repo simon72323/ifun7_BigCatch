@@ -1,0 +1,265 @@
+
+revolver.png
+size: 714,714
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Center
+  rotate: false
+  xy: 636, 606
+  size: 65, 65
+  orig: 65, 65
+  offset: 0, 0
+  index: -1
+center_shadow
+  rotate: false
+  xy: 183, 81
+  size: 41, 41
+  orig: 43, 43
+  offset: 1, 1
+  index: -1
+cylinder_00
+  rotate: false
+  xy: 0, 398
+  size: 311, 316
+  orig: 311, 316
+  offset: 0, 0
+  index: -1
+gold_buller
+  rotate: false
+  xy: 463, 321
+  size: 116, 116
+  orig: 120, 120
+  offset: 2, 2
+  index: -1
+gold_buller_light
+  rotate: false
+  xy: 97, 14
+  size: 84, 84
+  orig: 84, 84
+  offset: 0, 0
+  index: -1
+halo_A
+  rotate: false
+  xy: 0, 227
+  size: 172, 169
+  orig: 173, 175
+  offset: 1, 4
+  index: -1
+iron_buller
+  rotate: false
+  xy: 580, 188
+  size: 116, 116
+  orig: 120, 120
+  offset: 2, 2
+  index: -1
+iron_buller_light
+  rotate: false
+  xy: 174, 167
+  size: 84, 84
+  orig: 84, 84
+  offset: 0, 0
+  index: -1
+pin
+  rotate: false
+  xy: 683, 558
+  size: 30, 46
+  orig: 32, 56
+  offset: 1, 9
+  index: -1
+spark/spark_001
+  rotate: true
+  xy: 226, 81
+  size: 41, 33
+  orig: 180, 135
+  offset: 70, 47
+  index: -1
+spark/spark_002
+  rotate: false
+  xy: 183, 0
+  size: 73, 79
+  orig: 180, 135
+  offset: 55, 25
+  index: -1
+spark/spark_003
+  rotate: false
+  xy: 0, 2
+  size: 95, 96
+  orig: 180, 135
+  offset: 46, 20
+  index: -1
+spark/spark_004
+  rotate: true
+  xy: 453, 81
+  size: 112, 113
+  orig: 180, 135
+  offset: 35, 11
+  index: -1
+spark/spark_005
+  rotate: false
+  xy: 453, 195
+  size: 125, 124
+  orig: 180, 135
+  offset: 31, 7
+  index: -1
+spark/spark_006
+  rotate: true
+  xy: 174, 253
+  size: 143, 127
+  orig: 180, 135
+  offset: 21, 5
+  index: -1
+spark/spark_007
+  rotate: false
+  xy: 0, 100
+  size: 163, 125
+  orig: 180, 135
+  offset: 15, 7
+  index: -1
+spark/spark_008
+  rotate: false
+  xy: 313, 589
+  size: 171, 125
+  orig: 180, 135
+  offset: 8, 7
+  index: -1
+spark_B/spark_B002
+  rotate: false
+  xy: 313, 479
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B003
+  rotate: false
+  xy: 486, 606
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B005
+  rotate: false
+  xy: 313, 369
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B007
+  rotate: false
+  xy: 303, 259
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B008
+  rotate: true
+  xy: 463, 439
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B009
+  rotate: true
+  xy: 573, 456
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B011
+  rotate: true
+  xy: 581, 306
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B012
+  rotate: false
+  xy: 303, 149
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+spark_B/spark_B013
+  rotate: true
+  xy: 568, 38
+  size: 148, 108
+  orig: 148, 108
+  offset: 0, 0
+  index: -1
+x1
+  rotate: false
+  xy: 470, 35
+  size: 48, 44
+  orig: 49, 44
+  offset: 1, 0
+  index: -1
+x1024
+  rotate: false
+  xy: 304, 77
+  size: 72, 70
+  orig: 72, 70
+  offset: 0, 0
+  index: -1
+x128
+  rotate: false
+  xy: 636, 673
+  size: 78, 41
+  orig: 80, 41
+  offset: 1, 0
+  index: -1
+x16
+  rotate: false
+  xy: 378, 103
+  size: 71, 44
+  orig: 71, 44
+  offset: 0, 0
+  index: -1
+x2
+  rotate: true
+  xy: 424, 1
+  size: 54, 44
+  orig: 54, 44
+  offset: 0, 0
+  index: -1
+x256
+  rotate: true
+  xy: 260, 169
+  size: 82, 41
+  orig: 83, 42
+  offset: 1, 0
+  index: -1
+x32
+  rotate: false
+  xy: 304, 31
+  size: 72, 44
+  orig: 72, 44
+  offset: 0, 0
+  index: -1
+x4
+  rotate: false
+  xy: 378, 57
+  size: 56, 44
+  orig: 57, 44
+  offset: 1, 0
+  index: -1
+x512
+  rotate: false
+  xy: 165, 124
+  size: 80, 41
+  orig: 81, 42
+  offset: 1, 0
+  index: -1
+x64
+  rotate: true
+  xy: 258, 3
+  size: 76, 44
+  orig: 76, 44
+  offset: 0, 0
+  index: -1
+x8
+  rotate: true
+  xy: 378, 0
+  size: 55, 44
+  orig: 56, 44
+  offset: 0, 0
+  index: -1

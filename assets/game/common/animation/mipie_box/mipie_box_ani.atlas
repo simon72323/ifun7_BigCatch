@@ -1,0 +1,48 @@
+
+mipie_box_ani.png
+size: 516,540
+format: RGBA4444
+filter: Linear,Linear
+repeat: none
+3
+  rotate: true
+  xy: 294, 76
+  size: 122, 140
+  orig: 122, 140
+  offset: 0, 0
+  index: -1
+bg_light2
+  rotate: true
+  xy: 2, 14
+  size: 60, 307
+  orig: 60, 307
+  offset: 0, 0
+  index: -1
+glow
+  rotate: true
+  xy: 454, 2
+  size: 278, 54
+  orig: 278, 54
+  offset: 0, 0
+  index: -1
+motion_60
+  rotate: true
+  xy: 2, 282
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+reelbg_light3
+  rotate: true
+  xy: 2, 78
+  size: 120, 290
+  orig: 120, 291
+  offset: 0, 1
+  index: -1
+slowmotion_line_00
+  rotate: true
+  xy: 2, 200
+  size: 80, 450
+  orig: 80, 450
+  offset: 0, 0
+  index: -1

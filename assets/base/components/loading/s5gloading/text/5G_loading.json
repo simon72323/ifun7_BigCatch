@@ -1,0 +1,150 @@
+{
+"skeleton": { "hash": "0Qrl+jdA9aw7Sr4jFkSpr/TUM0g", "spine": "3.7.94", "width": 163.16, "height": 16.12, "images": "./images/", "audio": "C:/Users/Goose Tsai/Desktop/GS工作檔/5G_loading" },
+"bones": [
+	{ "name": "root", "scaleX": 0.5, "scaleY": 0.5 },
+	{ "name": "5G", "parent": "root", "y": 96.27, "scaleX": 0.31, "scaleY": 0.31 },
+	{ "name": "Loading", "parent": "5G", "y": -515.9 }
+],
+"slots": [
+	{ "name": "L", "bone": "Loading", "attachment": "L" },
+	{ "name": "O", "bone": "Loading", "attachment": "O" },
+	{ "name": "A", "bone": "Loading", "attachment": "A" },
+	{ "name": "D", "bone": "Loading", "attachment": "D" },
+	{ "name": "I", "bone": "Loading", "attachment": "I" },
+	{ "name": "N", "bone": "Loading", "attachment": "N" },
+	{ "name": "G", "bone": "Loading", "attachment": "G" },
+	{ "name": "Point", "bone": "Loading", "attachment": "Point" },
+	{ "name": "Point02", "bone": "Loading", "attachment": "Point" },
+	{ "name": "Point03", "bone": "Loading", "attachment": "Point" }
+],
+"skins": {
+	"default": {
+		"A": {
+			"A": { "x": -159, "y": 0.9, "width": 96, "height": 104 }
+		},
+		"D": {
+			"D": { "x": -25, "y": 0.9, "width": 96, "height": 104 }
+		},
+		"G": {
+			"G": { "x": 302.5, "y": 0.9, "width": 95, "height": 104 }
+		},
+		"I": {
+			"I": { "x": 78.5, "y": 0.9, "width": 35, "height": 104 }
+		},
+		"L": {
+			"L": { "x": -405.5, "y": 0.9, "width": 79, "height": 104 }
+		},
+		"N": {
+			"N": { "x": 175.96, "y": 0.9, "width": 78, "height": 102 }
+		},
+		"O": {
+			"O": { "x": -273.5, "y": 0.9, "width": 139, "height": 104 }
+		},
+		"Point": {
+			"Point": { "x": 441.97, "y": -37.1, "width": 36, "height": 28 }
+		},
+		"Point02": {
+			"Point": { "x": 516.18, "y": -37.1, "width": 36, "height": 28 }
+		},
+		"Point03": {
+			"Point": { "x": 589.61, "y": -37.1, "width": 36, "height": 28 }
+		}
+	}
+},
+"animations": {
+	"Loading": {
+		"slots": {
+			"A": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"D": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"G": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"I": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"L": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"N": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"O": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"Point": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"Point02": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"Point03": {
+				"color": [
+					{ "time": 0.1333, "color": "ffffffff" },
+					{ "time": 0.2333, "color": "ffffff9c", "curve": "stepped" },
+					{ "time": 0.4, "color": "ffffff9c" },
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"5G": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 84.73 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0.774, "y": 0.774 }
+				]
+			}
+		}
+	}
+}
+}

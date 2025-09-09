@@ -1,0 +1,55 @@
+
+ng_bkg_ani.png
+size: 628,628
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+butbkg_dark2
+  rotate: false
+  xy: 365, 456
+  size: 180, 170
+  orig: 180, 170
+  offset: 0, 0
+  index: -1
+glow_h1
+  rotate: true
+  xy: 428, 88
+  size: 116, 115
+  orig: 144, 143
+  offset: 14, 14
+  index: -1
+light_1
+  rotate: false
+  xy: 365, 206
+  size: 89, 248
+  orig: 89, 248
+  offset: 0, 0
+  index: -1
+light_2
+  rotate: false
+  xy: 365, 16
+  size: 61, 188
+  orig: 61, 188
+  offset: 0, 0
+  index: -1
+light_3
+  rotate: false
+  xy: 456, 235
+  size: 80, 219
+  orig: 80, 219
+  offset: 0, 0
+  index: -1
+mg_butbkg
+  rotate: false
+  xy: 2, 287
+  size: 361, 339
+  orig: 361, 339
+  offset: 0, 0
+  index: -1
+mg_topbkg
+  rotate: false
+  xy: 2, 2
+  size: 361, 283
+  orig: 361, 283
+  offset: 0, 0
+  index: -1
