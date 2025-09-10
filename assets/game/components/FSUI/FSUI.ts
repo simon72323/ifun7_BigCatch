@@ -18,30 +18,27 @@ export class FSUI extends Component {
     private freespin_remaining: Node;
 
     onLoad() {
-
         this.num_freeSpin = this.node.getChildByName("num_freeSpin").getComponent(Label);
         this.freespin_last = this.node.getChildByName("freespin_last");
         this.freespin_remaining = this.node.getChildByName("freespin_remaining");
 
+        //獲取語系字串
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
+
+        //設置語系圖片
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {
             this.freespin_last.getComponent(Sprite).spriteFrame = langRes[`freespin_last`];
             this.freespin_remaining.getComponent(Sprite).spriteFrame = langRes[`freespin_remaining`];
         });
 
-
-        //刷新剩餘次數
-        FSUI.refreshRemainTimes.on((fsRemainTimes: number) => {
-            this.freespin_last.active = fsRemainTimes === 0;
-            this.num_freeSpin.node.active = fsRemainTimes > 0;
-            this.freespin_remaining.active = fsRemainTimes > 0;
-
-            this.num_freeSpin.string = fsRemainTimes.toString();
-        }, this);
+        FSUI.refreshRemainTimes.on(this.onRefreshRemainTimes, this);//監聽刷新剩餘次數事件
     }
 
-    update(deltaTime: number) {
-
+    /**刷新剩餘次數事件 */
+    private onRefreshRemainTimes(fsRemainTimes: number): void {
+        this.freespin_last.active = fsRemainTimes === 0;
+        this.num_freeSpin.node.active = fsRemainTimes > 0;
+        this.freespin_remaining.active = fsRemainTimes > 0;
+        this.num_freeSpin.string = fsRemainTimes.toString();
     }
 }
-

@@ -37,6 +37,7 @@ export enum SymbolID {
     L4,
 }
 
+/**語系資源目錄 */
 export enum LangBundleDir {
     banner = "banner",
     bigwin = "bigwin",

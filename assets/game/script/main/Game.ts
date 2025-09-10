@@ -127,8 +127,10 @@ export class Game extends GameMain {
         CheatUI.activate = true;
     }
 
+    /**
+     * 子類別實作
+     */
     childOnStart() {
-
         CheatUI.registerButton.emit('槍客', '其他', '金框', () => {
             BigWinUI.show.emit(randomRangeInt(1000, 100000));
             CheatUI.hide.emit();

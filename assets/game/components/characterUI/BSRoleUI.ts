@@ -43,17 +43,22 @@ export class BSRoleUI extends Component {
         BSRoleUI.idle.on(this.onIdle, this);
         BSRoleUI.begin.on(this.onBegin, this);
         BSRoleUI.back.on(this.onBack, this);
-
+        BSRoleUI.scatterWin.on(this.onScatterWin, this);
+        
         this.onIdle();
 
         this.onChangeScene(ModuleID.BS);
 
         SlotMachine2.startMi.on(this.onStartMi, this);
         SlotMachine2.stopMi.on(this.onStopMi, this);
+    }
 
-        BSRoleUI.scatterWin.on((value) => {
-            this.isScatterWin = value;
-        }, this);
+    /**
+     * 設定散點中獎狀態
+     * @param value 
+     */
+    private onScatterWin(value: boolean): void {
+        this.isScatterWin = value;
     }
 
     /**
@@ -64,6 +69,9 @@ export class BSRoleUI extends Component {
         this.node.active = id === ModuleID.BS;
     }
 
+    /**
+     * 待機
+     */
     private onIdle(): void {
         XUtils.ClearSpine(this.spine);
         this.spine.setCompleteListener(() => {
@@ -77,6 +85,10 @@ export class BSRoleUI extends Component {
         }
     }
 
+    /**
+     * 播放開始
+     * @param multiplier 
+     */
     private onBegin(multiplier: number): void {
         let aniIdx: number = 0;
         this.curMultiplier = multiplier;
@@ -94,7 +106,6 @@ export class BSRoleUI extends Component {
         if (this.curPrefix !== this.prefixList[aniIdx]) {
             this.curPrefix = this.prefixList[aniIdx];
             XUtils.ClearSpine(this.spine);
-            this.spine.setCompleteListener(null);
             this.spine.addAnimation(0, GirlAni.ng_x_start.replace("#", this.curPrefix), false);
             this.spine.addAnimation(0, GirlAni.ng_x_loop.replace("#", this.curPrefix), true);
         }
@@ -124,12 +135,12 @@ export class BSRoleUI extends Component {
     }
 
     private isMi: boolean = false;
-    private onStartMi(): void {
+    
+    private async onStartMi(): Promise<void> {
         if (this.isMi) {
             return;
         }
         this.isMi = true;
-        this.spine.setCompleteListener(null);
         XUtils.ClearSpine(this.spine);
         this.spine.addAnimation(0, GirlAni.mipie_start, false);
         this.spine.addAnimation(0, GirlAni.mipie_loop, true);
@@ -142,7 +153,6 @@ export class BSRoleUI extends Component {
         this.isMi = false;
 
         XUtils.ClearSpine(this.spine);
-        this.spine.setCompleteListener(null);
         this.spine.setCompleteListener(() => {
             this.spine.setCompleteListener(null);
             this.onIdle();
@@ -167,18 +177,18 @@ enum GirlAni {
     mipie_to_fg = "mipie_to_fg",
     mipie_win = "mipie_win",
     ng_a_end = "ng_a_end",
-    ng_a_loop = "ng_a_loop",
-    ng_a_start = "ng_a_start",
-    ng_a_win = "ng_a_win",
-    ng_b_loop = "ng_b_loop",
-    ng_b_start = "ng_b_start",
-    ng_b_win = "ng_b_win",
-    ng_c_loop = "ng_c_loop",
-    ng_c_start = "ng_c_start",
-    ng_c_win = "ng_c_win",
-    ng_d_loop = "ng_d_loop",
-    ng_d_start = "ng_d_start",
-    ng_d_win = "ng_d_win",
+    // ng_a_loop = "ng_a_loop",
+    // ng_a_start = "ng_a_start",
+    // ng_a_win = "ng_a_win",
+    // ng_b_loop = "ng_b_loop",
+    // ng_b_start = "ng_b_start",
+    // ng_b_win = "ng_b_win",
+    // ng_c_loop = "ng_c_loop",
+    // ng_c_start = "ng_c_start",
+    // ng_c_win = "ng_c_win",
+    // ng_d_loop = "ng_d_loop",
+    // ng_d_start = "ng_d_start",
+    // ng_d_win = "ng_d_win",
 
     ng_x_start = "ng_#_start",
     ng_x_loop = "ng_#_loop",

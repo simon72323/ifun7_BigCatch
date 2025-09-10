@@ -269,14 +269,11 @@ export class Symbol2 extends BaseSymbol2 {
     }
 
     private reset(): void {
-        this.spine.node.active = false;
         this.normal.node.active = true;
-
+        this.spine.node.active = false;
         XUtils.ClearSpine(this.spine);
-        this.spine.setCompleteListener(null);
         this.wild.node.active = false;
         XUtils.ClearSpine(this.wild);
-        this.wild.setCompleteListener(null);
         this.addChildToLayer(SymbolLayer.Reel);
     }
 
@@ -320,8 +317,6 @@ export class Symbol2 extends BaseSymbol2 {
         this.spine.node.active = true;
         this.normal.node.active = false;
         this.addChildToLayer(SymbolLayer.Win);
-        this.spine.setCompleteListener(null);
-
         XUtils.ClearSpine(this.spine);
 
         //非loop動畫會監聽完成並回復normal

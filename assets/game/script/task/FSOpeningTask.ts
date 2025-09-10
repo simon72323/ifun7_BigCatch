@@ -2,7 +2,7 @@ import { GameTask } from "@/base/script/tasks/GameTask";
 import { ModuleID } from "@/base/script/types/BaseType";
 import { FSRoleUI } from "@/game/components/characterUI/FSRoleUI";
 import { RevolverUI } from "@/game/components/RevolverUI/RevolverUI";
-import { Stage } from "@/game/components/stage/Stage";
+import { GameStage } from "@/game/components/stage/GameStage";
 import { GameConst } from "@/game/script/constant/GameConst";
 
 /**
@@ -20,12 +20,12 @@ export class FSOpeningTask extends GameTask {
 
     execute(): void {
 
-        Stage.shake.emit();
+        GameStage.shake.emit();
 
         FSRoleUI.prepare.emit();
 
         RevolverUI.fsOpening.emit(GameConst.FS_INIT_MULTIPLIER, () => {
-            Stage.fsOpening.emit();
+            GameStage.fsOpening.emit();
             this.finish();
         });
 

@@ -21,9 +21,9 @@ export class RevolverUI extends Component {
     /**FS開場 */
     public static fsOpening: XEvent2<number, () => void> = new XEvent2();
 
-
     private spine: sp.Skeleton;
 
+    /**目前倍數 */
     private curMultiplier: number = 1;
 
     onLoad() {

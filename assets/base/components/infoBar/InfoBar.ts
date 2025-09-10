@@ -1,4 +1,4 @@
-import { _decorator, Button, Color, Component, Label, Node, Rect, Sprite, tween, Tween, Vec3 } from 'cc';
+import { _decorator, Button, Color, Component, EventTouch, Label, Node, Rect, Sprite, tween, Tween, Vec3 } from 'cc';
 import { BaseEvent } from '@/base/script/main/BaseEvent';
 import { XEvent, XEvent1 } from '@/base/script/utils/XEvent';
 import { AudioKey } from '../../script/audio/AudioKey';
@@ -40,111 +40,134 @@ export class InfoBar extends Component {
     /**啟用顏色 */
     private enableColor: Color = new Color(176, 224, 230, 255);
 
+    /**容器 */
     private container: Node;
+
     onLoad() {
-        //移到上方
-        InfoBar.moveToTop.on(() => {
-            this.container.setPosition(0, -414);
-            InfoBar.setEnabled.emit(true);
-
-        }, this);
-        //移到下方(禁止按鈕點擊)
-        InfoBar.moveToDown.on(() => {
-            this.container.setPosition(0, -608);
-            InfoBar.setEnabled.emit(false);
-        }, this);
-
         this.container = this.node.getChildByPath("Container");
         this.Credit = this.container.getChildByPath("Credit");
         this.CreditCCy = this.container.getChildByPath("CreditCurrency");
-
         this.Bet = this.container.getChildByPath("BtnBet");
         this.Win = this.container.getChildByPath("WinBtn");
 
-        //刷新餘額
-        BaseEvent.refreshCredit.on((value: number) => {
-            this.Credit.getComponent(Label).string = XUtils.NumberToCentString(value);
-        }, this);
+        BaseEvent.refreshCredit.on(this.refreshCredit, this);//監聽刷新餘額事件
+        BaseEvent.refreshBet.on(this.refreshBet, this);//監聽刷新下注事件
+        BaseEvent.refreshWin.on(this.refreshWin, this);//監聽刷新獲得事件
 
-        //刷新下注
-        BaseEvent.refreshBet.on((value: number) => {
-            const betNode = this.Bet.getChildByName("Bet");
-            Tween.stopAllByTarget(betNode);
-            let newBet = XUtils.NumberToCentString(value);
-            let oldBet = betNode.getComponent(Label).string;
-            //資料有異動才跳動
-            if (newBet != oldBet) {
-                tween(betNode)
-                    .to(0.15, { scale: new Vec3(1.2, 1.2, 1) })
-                    .to(0.15, { scale: new Vec3(1, 1, 1) })
-                    .start();
-            }
-            betNode.getComponent(Label).string = newBet;
-        }, this);
+        InfoBar.moveToTop.on(this.moveToTop, this);//監聽移到上方事件
+        InfoBar.moveToDown.on(this.moveToDown, this);//監聽移到下方事件(禁止按鈕點擊)
+        InfoBar.setEnabled.on(this.setEnabled, this);//監聽設定是否可用事件
+        InfoBar.setBlackBg.on(this.setBlackBg, this);//監聽設定是否顯示背景事件
 
-        //刷新獲得
-        BaseEvent.refreshWin.on((value: number) => {
-            this.Win.getChildByName("Win").getComponent(Label).string = XUtils.NumberToCentString(value);
-        }, this);
+        this.Win.on(Button.EventType.CLICK, this.onWinClick, this);//監聽贏分按鈕點擊事件
+        this.Bet.on(Button.EventType.CLICK, this.onBetClick, this);//監聽下注按鈕點擊事件
 
-        //設定是否可用
-        InfoBar.setEnabled.on((enabled) => {
-            if (enabled) {
+        this.loadCurrencyAssets();//刷新幣別資源
+    }
 
-                this.Credit.getComponent(Label).color = this.enableColor;
-                this.CreditCCy.getComponent(Sprite).color = this.enableColor;
+    /**移到上方 */
+    private moveToTop(): void {
+        this.container.setPosition(0, -414);
+        InfoBar.setEnabled.emit(true);
+    }
 
-                this.Bet.getChildByName("Bet").getComponent(Label).color = this.enableColor;
-                this.Win.getChildByName("Win").getComponent(Label).color = this.enableColor;
+    /**移到下方 */
+    private moveToDown(): void {
+        this.container.setPosition(0, -608);
+        InfoBar.setEnabled.emit(false);
+    }
 
-                this.Bet.getChildByName("BetCurrency").getComponent(Sprite).color = this.enableColor;
-                this.Win.getChildByName("WinCurrency").getComponent(Sprite).color = this.enableColor;
+    /**刷新餘額 */
+    private refreshCredit(value: number): void {
+        this.Credit.getComponent(Label).string = XUtils.NumberToCentString(value);
+    }
+
+    /**刷新下注 */
+    private refreshBet(value: number): void {
+        const betNode = this.Bet.getChildByName("Bet");
+        Tween.stopAllByTarget(betNode);
+        let newBet = XUtils.NumberToCentString(value);
+        let oldBet = betNode.getComponent(Label).string;
+        //資料有異動才跳動
+        if (newBet != oldBet) {
+            tween(betNode)
+                .to(0.15, { scale: new Vec3(1.2, 1.2, 1) })
+                .to(0.15, { scale: new Vec3(1, 1, 1) })
+                .start();
+        }
+        betNode.getComponent(Label).string = newBet;
+    }
+
+    private refreshWin(value: number): void {
+        this.Win.getChildByName("Win").getComponent(Label).string = XUtils.NumberToCentString(value);
+    }
+
+    /**設定是否可用 */
+    private setEnabled(enabled: boolean): void {
+        if (enabled) {
+
+            this.Credit.getComponent(Label).color = this.enableColor;
+            this.CreditCCy.getComponent(Sprite).color = this.enableColor;
+
+            this.Bet.getChildByName("Bet").getComponent(Label).color = this.enableColor;
+            this.Win.getChildByName("Win").getComponent(Label).color = this.enableColor;
+
+            this.Bet.getChildByName("BetCurrency").getComponent(Sprite).color = this.enableColor;
+            this.Win.getChildByName("WinCurrency").getComponent(Sprite).color = this.enableColor;
 
 
-                this.Bet.getComponent(Button).node.on("touch-start", this.onTouchBet, this);
-                this.Bet.getComponent(Button).node.on("touch-end", this.onTouchBet, this);
-                this.Bet.getComponent(Button).node.on("touch-cancel", this.onTouchBet, this);
+            this.Bet.getComponent(Button).node.on("touch-start", this.onTouchBet, this);
+            this.Bet.getComponent(Button).node.on("touch-end", this.onTouchBet, this);
+            this.Bet.getComponent(Button).node.on("touch-cancel", this.onTouchBet, this);
 
-                this.Win.getComponent(Button).node.on("touch-start", this.onTouchWin, this);
-                this.Win.getComponent(Button).node.on("touch-end", this.onTouchWin, this);
-                this.Win.getComponent(Button).node.on("touch-cancel", this.onTouchWin, this);
+            this.Win.getComponent(Button).node.on("touch-start", this.onTouchWin, this);
+            this.Win.getComponent(Button).node.on("touch-end", this.onTouchWin, this);
+            this.Win.getComponent(Button).node.on("touch-cancel", this.onTouchWin, this);
 
-            }
-            else {
+        }
+        else {
 
-                this.Credit.getComponent(Label).color = Color.WHITE;
-                this.CreditCCy.getComponent(Sprite).color = Color.WHITE;
+            this.Credit.getComponent(Label).color = Color.WHITE;
+            this.CreditCCy.getComponent(Sprite).color = Color.WHITE;
 
-                this.Bet.getChildByName("Bet").getComponent(Label).color = Color.WHITE;
-                this.Win.getChildByName("Win").getComponent(Label).color = Color.WHITE;
+            this.Bet.getChildByName("Bet").getComponent(Label).color = Color.WHITE;
+            this.Win.getChildByName("Win").getComponent(Label).color = Color.WHITE;
 
-                this.Bet.getChildByName("BetCurrency").getComponent(Sprite).color = Color.WHITE;
-                this.Win.getChildByName("WinCurrency").getComponent(Sprite).color = Color.WHITE;
+            this.Bet.getChildByName("BetCurrency").getComponent(Sprite).color = Color.WHITE;
+            this.Win.getChildByName("WinCurrency").getComponent(Sprite).color = Color.WHITE;
 
-                this.Bet.getComponent(Button).node.off("touch-start", this.onTouchBet, this);
-                this.Bet.getComponent(Button).node.off("touch-end", this.onTouchBet, this);
-                this.Bet.getComponent(Button).node.off("touch-cancel", this.onTouchBet, this);
+            this.Bet.getComponent(Button).node.off("touch-start", this.onTouchBet, this);
+            this.Bet.getComponent(Button).node.off("touch-end", this.onTouchBet, this);
+            this.Bet.getComponent(Button).node.off("touch-cancel", this.onTouchBet, this);
 
-                this.Win.getComponent(Button).node.off("touch-start", this.onTouchWin, this);
-                this.Win.getComponent(Button).node.off("touch-end", this.onTouchWin, this);
-                this.Win.getComponent(Button).node.off("touch-cancel", this.onTouchWin, this);
-            }
+            this.Win.getComponent(Button).node.off("touch-start", this.onTouchWin, this);
+            this.Win.getComponent(Button).node.off("touch-end", this.onTouchWin, this);
+            this.Win.getComponent(Button).node.off("touch-cancel", this.onTouchWin, this);
+        }
 
-            this.Bet.getComponent(Button).interactable = enabled;
-            this.Win.getComponent(Button).interactable = enabled;
+        this.Bet.getComponent(Button).interactable = enabled;
+        this.Win.getComponent(Button).interactable = enabled;
+    }
 
-        }, this);
+    /**設定是否顯示背景 */
+    private setBlackBg(enabled: boolean): void {
+        this.node.getChildByPath("Container/BlackBg").active = enabled;
+    }
 
-        this.Win.on(Button.EventType.CLICK, () => {
-            AudioManager.getInstance().play(AudioKey.BtnClick);
-            InfoBar.clickWin.emit();
-        }, this);
-        this.Bet.on(Button.EventType.CLICK, () => {
-            AudioManager.getInstance().play(AudioKey.BtnClick);
-            InfoBar.clickBet.emit();
-        }, this);
+    /**贏分按鈕點擊 */
+    private onWinClick(): void {
+        AudioManager.getInstance().play(AudioKey.BtnClick);
+        InfoBar.clickWin.emit();
+    }
+    
+    /**下注按鈕點擊 */
+    private onBetClick(): void {
+        AudioManager.getInstance().play(AudioKey.BtnClick);
+        InfoBar.clickBet.emit();
+    }
 
-        //刷新幣別
+    /**刷新幣別資源 */
+    private loadCurrencyAssets(): void {
         BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, "", (assets) => {
             let currency = BaseDataManager.getInstance().urlParam.currency;
             let Img = assets[currency];
@@ -169,22 +192,10 @@ export class InfoBar extends Component {
                 this.Win.getChildByName("WinCurrency").active = false;
             }
         });
-
-        InfoBar.setBlackBg.on((enabled) => {
-            this.node.getChildByPath("Container/BlackBg").active = enabled;
-        }, this);
     }
 
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-
-    }
-
-    // INFO
-    private onTouchBet(event) {
+    /**下注按鈕觸發 */
+    private onTouchBet(event: EventTouch) {
         if (event.type == "touch-start") {
             this.Bet.getChildByName("BetBg_On").active = false;
             this.Bet.getChildByName("BetBg_Off").active = true;
@@ -195,7 +206,8 @@ export class InfoBar extends Component {
         }
     }
 
-    private onTouchWin(event) {
+    /**贏分按鈕觸發 */
+    private onTouchWin(event: EventTouch) {
         if (event.type == "touch-start") {
             this.Win.getChildByName("WinBg_On").active = false;
             this.Win.getChildByName("WinBg_Off").active = true;
@@ -206,4 +218,3 @@ export class InfoBar extends Component {
         }
     }
 }
-

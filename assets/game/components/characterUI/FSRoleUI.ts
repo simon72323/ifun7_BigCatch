@@ -13,7 +13,6 @@ const { ccclass, property } = _decorator;
 @ccclass('FSRoleUI')
 export class FSRoleUI extends Component {
 
-
     /**待機 */
     public static idle: XEvent = new XEvent();
 
@@ -63,7 +62,6 @@ export class FSRoleUI extends Component {
 
     private onIdle(): void {
         XUtils.ClearSpine(this.spine);
-        this.spine.setCompleteListener(null);
         this.spine.setAnimation(0, FSAni.idel, true);
     }
 
@@ -85,7 +83,6 @@ export class FSRoleUI extends Component {
 
     private onPrepare(): void {
         XUtils.ClearSpine(this.spine);
-        this.spine.setCompleteListener(null);
         this.spine.addAnimation(0, FSAni.to_prepare, false);
         this.spine.addAnimation(0, FSAni.prepare, true);
 
@@ -118,7 +115,6 @@ export class FSRoleUI extends Component {
             }, 0.05);
         }, t));
 
-
         XUtils.ClearSpine(this.spine);
         this.spine.setCompleteListener(() => {
             this.spine.setCompleteListener(null);
@@ -140,7 +136,6 @@ export class FSRoleUI extends Component {
         }
 
         XUtils.ClearSpine(this.spine);
-        this.spine.setCompleteListener(null);
         this.spine.addAnimation(0, FSAni.fire_end, false);
         this.spine.addAnimation(0, FSAni.prepare, true);
 

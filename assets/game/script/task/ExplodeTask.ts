@@ -10,7 +10,7 @@ import { MultiplierUI } from "../../components/MultiplierUI/MultiplierUI";
 import { RevolverUI } from "../../components/RevolverUI/RevolverUI";
 import { BaseSymbolData2 } from "../../components/slotMachine2/base/slotMachine2/BaseSymbolData2";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { Stage } from "../../components/stage/Stage";
+import { GameStage } from "../../components/stage/GameStage";
 import { UIBlack } from "../../components/UIBlack";
 import { BlackKey, GameAudioKey, SlotMachineID } from "../constant/GameConst";
 import { GameData } from "../main/GameData";
@@ -43,7 +43,8 @@ export class ExplodeTask extends GameTask {
     /** */
     public playerCent: number;
 
-    execute(): void {
+    /**執行 */
+    public execute(): void {
 
         SlotMachine2.explode.emit(SlotMachineID.BS, this.winPos);
 
@@ -55,7 +56,7 @@ export class ExplodeTask extends GameTask {
             if (this.changeMap) {
                 SlotMachine2.change.emit(SlotMachineID.BS, this.changeMap);
             }
-            Stage.shake.emit();
+            GameStage.shake.emit();
 
             RevolverUI.setMultiplier.emit(this.newMultiplier);
             UIBlack.fadeOut.emit(BlackKey.UIBlack);

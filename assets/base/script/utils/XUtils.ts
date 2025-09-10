@@ -124,6 +124,7 @@ export class XUtils {
     public static ClearSpine(obj: sp.Skeleton) {
         obj.clearTracks();
         obj.setToSetupPose();
+        obj.setCompleteListener(null);
     }
 
     public static isEqual(obj1, obj2) {
