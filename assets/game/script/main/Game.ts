@@ -1,4 +1,4 @@
-import { _decorator,find, randomRangeInt, SpriteFrame } from 'cc';
+import { _decorator, find, randomRangeInt, SpriteFrame } from 'cc';
 import { CheatUI } from '@/base/components/cheat/CheatUI';
 import { AudioKey } from '@/base/script/audio/AudioKey';
 import { BaseConst } from '@/base/script/constant/BaseConst';
@@ -27,10 +27,11 @@ const { ccclass, property } = _decorator;
 export class Game extends GameMain {
 
     /**
-     * 子類別實作
+     * 遊戲初始化內容
      */
-    childOnLoad() {
-
+    protected initializeGame() {
+        
+        //配置遊戲資料
         BaseDataManager.getInstance().setData(new GameData());
 
         //封包處理
@@ -130,7 +131,7 @@ export class Game extends GameMain {
     /**
      * 子類別實作
      */
-    childOnStart() {
+    public childOnStart() {
         CheatUI.registerButton.emit('槍客', '其他', '金框', () => {
             BigWinUI.show.emit(randomRangeInt(1000, 100000));
             CheatUI.hide.emit();

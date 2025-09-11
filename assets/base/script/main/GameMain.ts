@@ -32,7 +32,7 @@ const { ccclass, property } = _decorator;
  * 共用遊戲主程式
  */
 @ccclass('GameMain')
-export class GameMain extends Component {
+export abstract class GameMain extends Component {
 
     private languageLader: BundleLoader;
 
@@ -87,7 +87,7 @@ export class GameMain extends Component {
         this.loadLanguage(BaseConst.BUNDLE_BASE_LANGUAGE, `${lang}/${BaseLangBundleDir.ui3_0}`, SpriteFrame);
         this.loadLanguage(BaseConst.BUNDLE_BASE_CURRENCY, "", SpriteFrame);
 
-        this.childOnLoad();
+        this.initializeGame();//執行初始化遊戲內容
 
         //Socket
         SocketEvent.open.on(this.onOpen, this);
@@ -152,9 +152,8 @@ export class GameMain extends Component {
     /**
      * 遊戲初始設定
      */
-    protected childOnLoad(): void {
-        //override
-    }
+    protected abstract initializeGame(): void;
+
     protected childOnStart(): void {
         //override
     }

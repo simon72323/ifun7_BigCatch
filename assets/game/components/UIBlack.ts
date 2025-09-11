@@ -66,5 +66,13 @@ export class UIBlack extends Component {
     update(deltaTime: number) {
 
     }
+
+    onDestroy() {
+        // 清理所有 XEvent 監聽器
+        UIBlack.fadeIn.off(this);
+        UIBlack.fadeOut.off(this);
+        UIBlack.show.off(this);
+        UIBlack.hide.off(this);
+    }
 }
 

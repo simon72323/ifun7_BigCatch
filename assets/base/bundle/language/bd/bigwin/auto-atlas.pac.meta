@@ -8,8 +8,8 @@
   ],
   "subMetas": {},
   "userData": {
-    "maxWidth": 1024,
-    "maxHeight": 1024,
+    "maxWidth": 2048,
+    "maxHeight": 2048,
     "padding": 2,
     "allowRotation": true,
     "forceSquared": false,
@@ -25,7 +25,7 @@
     "removeSpriteAtlasInBundle": true,
     "compressSettings": {
       "useCompressTexture": true,
-      "presetId": "69Jb0bOnVIsbv9KvKNUcBi"
+      "presetId": "e0uAaz6pRIb7LANoa9MhiP"
     },
     "textureSetting": {
       "wrapModeS": "repeat",

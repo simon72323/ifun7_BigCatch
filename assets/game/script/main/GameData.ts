@@ -2,7 +2,7 @@ import { BaseDataManager } from "@/base/script/main/BaseDataManager";
 import { BaseData } from "../../../base/script/main/BaseData";
 import { XUtils } from "../../../base/script/utils/XUtils";
 import { BaseSymbolData2 } from "../../components/slotMachine2/base/slotMachine2/BaseSymbolData2";
-import { BSSlotParser } from "../../components/slotMachine2/BSSlotParser";
+import { SlotParser } from "../../components/slotMachine2/SlotParser";
 import { GameConst } from "../constant/GameConst";
 
 export class GameData extends BaseData {
@@ -16,7 +16,7 @@ export class GameData extends BaseData {
   public fsInitialize: boolean = false;
 
   /**老虎機資料 */
-  public slotParser: BSSlotParser = new BSSlotParser();
+  public slotParser: SlotParser = new SlotParser();
 
   /** */
   public stripBadgeDataList: number[][] = [];

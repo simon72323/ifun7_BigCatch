@@ -45,7 +45,7 @@ export class SettingsPage1 extends BaseSettingsPage {
     public static clickSpin: XEvent = new XEvent();
     public static clickPlus: XEvent = new XEvent();
     public static clickAuto: XEvent = new XEvent();
-    public static clickMenu: XEvent = new XEvent();
+    public static clickMenu: XEvent = new XEvent();a
 
     /**設定免費轉次數 */
     public static setFreeSpinRemainCount: XEvent1<number> = new XEvent1();

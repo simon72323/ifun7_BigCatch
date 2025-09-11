@@ -7,14 +7,17 @@ import { BaseSymbolData2 } from "./base/slotMachine2/BaseSymbolData2";
 /**
  * BSX5軸 遊戲客製化分析盤面
  */
-export class BSSlotParser extends BaseSlotParser2 {
+export class SlotParser extends BaseSlotParser2 {
 
     public buyFS: boolean = false;
 
     private symbolPattern: number[];
     /**
      * 每一轉設定輪帶, 遇到scatter要隨機或依照最終盤面設定
-     * @param stripTable 
+     * @param stripTable 輪帶表，二維陣列，每個子陣列代表一軸的符號ID列表
+     * @param rngList RNG隨機數列表，用於決定每軸的起始位置
+     * @param symbolPattern 符號圖案，一維陣列，表示盤面上每個位置的符號ID
+     * @param goldenPattern 金框圖案，一維陣列，表示盤面上每個位置是否為金框(1)或普通(0)
      */
     public setStripTable(stripTable: number[][], rngList: number[], symbolPattern: number[], goldenPattern: number[]): void {
 
