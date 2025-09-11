@@ -1,16 +1,14 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
+import { BaseEvent } from "db://assets/base/script/main/BaseEvent";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { GameTask } from "../../../base/script/tasks/GameTask";
 import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
-import { FSRoleUI } from "../../components/characterUI/FSRoleUI";
 import { MultiplierUI } from "../../components/MultiplierUI/MultiplierUI";
 import { RevolverUI } from "../../components/RevolverUI/RevolverUI";
 import { BaseSymbolData2 } from "../../components/slotMachine2/base/slotMachine2/BaseSymbolData2";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { GameStage } from "../../components/stage/GameStage";
+import { Stage } from "../../components/stage/Stage";
 import { UIBlack } from "../../components/UIBlack";
 import { BlackKey, GameAudioKey, SlotMachineID } from "../constant/GameConst";
 import { GameData } from "../main/GameData";
@@ -43,8 +41,7 @@ export class ExplodeTask extends GameTask {
     /** */
     public playerCent: number;
 
-    /**執行 */
-    public execute(): void {
+    execute(): void {
 
         SlotMachine2.explode.emit(SlotMachineID.BS, this.winPos);
 
@@ -56,17 +53,10 @@ export class ExplodeTask extends GameTask {
             if (this.changeMap) {
                 SlotMachine2.change.emit(SlotMachineID.BS, this.changeMap);
             }
-            GameStage.shake.emit();
+            Stage.shake.emit();
 
             RevolverUI.setMultiplier.emit(this.newMultiplier);
             UIBlack.fadeOut.emit(BlackKey.UIBlack);
-
-            if (BaseDataManager.getInstance().isBS() === true) {
-                BSRoleUI.begin.emit(this.newMultiplier);
-            }
-            else {
-                FSRoleUI.shoot.emit(this.hitMultiplier);//FS是用hit倍數演示
-            }
 
             AudioManager.getInstance().play(GameAudioKey.lineShot);
 

@@ -1,6 +1,6 @@
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { AudioKey } from "db://assets/base/script/audio/AudioKey";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { GameTask } from "../../../base/script/tasks/GameTask";
 import { BannerUI } from "../../components/BannerUI/BannerUI";
 import { FSUI } from "../../components/FSUI/FSUI";

@@ -1,8 +1,8 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { SettingsPage1 } from "db://assets/base/components/settingsPage/SettingsPage1";
+import { AudioKey } from "db://assets/base/script/audio/AudioKey";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { BaseEvent } from "../../../base/script/main/BaseEvent";
 import { GameTask } from "../../../base/script/tasks/GameTask";
 import { BigWinType, SpinButtonState } from "../../../base/script/types/BaseType";

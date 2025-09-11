@@ -1,5 +1,5 @@
 import { _decorator, CCFloat, Node, Prefab, RealCurve } from "cc";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
 const { ccclass, property } = _decorator;
 /**
  * 軸參數
@@ -35,41 +35,41 @@ export class SlotReelConfig2 {
  */
 @ccclass('SpeedConfig2')
 export class SpeedConfig2 {
+    /**轉動軸間隔秒數 */
     @property({ type: CCFloat, tooltip: "轉動軸間隔秒數" })
     spinInterval: number = 0.1;
-    
-    @property({ type: CCFloat, tooltip: "停止軸間隔秒數" })
-    stopInterval: number = 1;
-    
+    @property({ type: CCFloat, tooltip: "轉動軸間隔秒數" })
+    stopInterval: number = 0;
+    /**啟動秒數 */
     @property({ type: CCFloat, tooltip: "啟動曲線秒數" })
     beginCurveTime: number = 0.5;
-    
+    /**循環秒數 */
     @property({ type: CCFloat, tooltip: "循環曲線秒數" })
     loopCurveTime: number = 0.05;
-    
+    /**結尾秒數 */
     @property({ type: CCFloat, tooltip: "結尾曲線秒數" })
     endCurveTime: number = 0.1;
-    
+    /**結尾秒數 */
     @property({ type: CCFloat, tooltip: "戲謔曲線秒數" })
     nudgeCurveTime: number = 1;
-    
+    /**至少滾動N秒 */
     @property({ type: CCFloat, tooltip: "至少滾動N秒" })
     spinTime: number = 1;
-    
+    /**轉動軸間隔秒數 */
     @property({ type: CCFloat, tooltip: "掉落軸間隔秒數" })
     dropInterval: number = 0.1;
-    
+    /**掉落秒數 */
     @property({ type: CCFloat, tooltip: "掉落秒數" })
     dropTime: number = 0.1;
-    
+    /**瞇牌秒數 */
     @property({ type: CCFloat, tooltip: "瞇牌秒數" })
     slowMotionTime: number = 3;
-    
+    /**瞇牌秒數 */
     @property({ type: CCFloat, tooltip: "瞇牌循環曲線秒數" })
     slowMotionLoopCurveTime: number = 0.08;
-    
     @property({ tooltip: "是否瞇全部軸" })
     miAllReel: boolean = true;
+
 }
 
 /**

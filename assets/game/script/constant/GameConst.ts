@@ -25,19 +25,19 @@ export class GameConst {
 }
 
 export enum SymbolID {
-    Wild = 0,
-    Scatter,
-    H1,
+    H1 = 1,
     H2,
     H3,
     H4,
-    L1,
+    H5,
+    L1 = 11,
     L2,
     L3,
     L4,
+    Scatter = 30,
+    Wild = 50,
 }
 
-/**語系資源目錄 */
 export enum LangBundleDir {
     banner = "banner",
     bigwin = "bigwin",

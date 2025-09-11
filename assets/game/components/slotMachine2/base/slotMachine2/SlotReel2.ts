@@ -1,5 +1,5 @@
 import { _decorator, CCInteger, Component, easing, instantiate, Node, tween, UIOpacity, UITransform, Vec3 } from 'cc';
-import { XUtils } from '@/base/script/utils/XUtils';
+import { XUtils } from 'db://assets/base/script/utils/XUtils';
 import { BaseSymbol2 } from './BaseSymbol2';
 import { BaseSymbolData2 } from './BaseSymbolData2';
 import { ReelState2, SlotReelConfig2, SymbolState2 } from './SlotType2';
@@ -109,7 +109,7 @@ export class SlotReel2 extends Component {
                 posNode.setPosition(layerPos);
             }
             else if (config.reelLayerList.length > 0) {
-                let layerPos = config.reelLayerList[reelIndex].getComponent(UITransform).convertToNodeSpaceAR(worldPos);
+                let layerPos = config.reelLayerList[0].getComponent(UITransform).convertToNodeSpaceAR(worldPos);
                 posNode.setPosition(layerPos);
             }
 

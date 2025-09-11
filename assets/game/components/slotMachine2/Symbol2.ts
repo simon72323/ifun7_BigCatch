@@ -1,9 +1,9 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame } from 'cc';
 
 import { Button, randomRangeInt, UITransform } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { XUtils } from '@/base/script/utils/XUtils';
+import { AudioManager } from 'db://assets/base/script/audio/AudioManager';
+import { BaseDataManager } from 'db://assets/base/script/main/BaseDataManager';
+import { XUtils } from 'db://assets/base/script/utils/XUtils';
 import { GameAudioKey, GameConst, SymbolID } from '../../script/constant/GameConst';
 import { GameData } from '../../script/main/GameData';
 import { PayTableUI } from '../PayTableUI/PayTableUI';
@@ -61,10 +61,27 @@ export class Symbol2 extends BaseSymbol2 {
 
     private isBadge: boolean = false;
 
+    /**symbolID對應圖片陣列 */
+    private symbolMap: Map<number, number> = new Map();
+
     /**
      * 初始化
      */
     onLoad() {
+
+        this.symbolMap = new Map();
+        this.symbolMap.set(SymbolID.Wild, 0);
+        this.symbolMap.set(SymbolID.Scatter, 1);
+        this.symbolMap.set(SymbolID.H1, 2);
+        this.symbolMap.set(SymbolID.H2, 3);
+        this.symbolMap.set(SymbolID.H3, 4);
+        this.symbolMap.set(SymbolID.H4, 5);
+        this.symbolMap.set(SymbolID.H5, 6);
+        this.symbolMap.set(SymbolID.L1, 7);
+        this.symbolMap.set(SymbolID.L2, 8);
+        this.symbolMap.set(SymbolID.L3, 9);
+        this.symbolMap.set(SymbolID.L4, 10);
+
         this.blur = this.node.getChildByName('Blur').getComponent(Sprite);
         this.normal = this.node.getChildByName('Normal').getComponent(Sprite);
         this.idLabel = this.node.getChildByName('idLabel').getComponent(Label);
@@ -147,9 +164,11 @@ export class Symbol2 extends BaseSymbol2 {
             if (stripIdx !== -1) {
                 this.isBadge = !!BaseDataManager.getInstance().getData<GameData>().stripBadgeDataList[this.grid.col][stripIdx];
             }
-            this.spine.skeletonData = this.spineDataList[newSymbolID];
-            this.normal.spriteFrame = this.isBadge ? this.normalBadgeImageList[newSymbolID] : this.normalImageList[newSymbolID];
-            this.blur.spriteFrame = this.isBadge ? this.blurBadgeImageList[newSymbolID] : this.blurImageList[newSymbolID];
+
+            let picID: number = this.symbolMap.get(newSymbolID);
+            this.spine.skeletonData = this.spineDataList[picID];
+            this.normal.spriteFrame = this.isBadge ? this.normalBadgeImageList[picID] : this.normalImageList[picID];
+            this.blur.spriteFrame = this.isBadge ? this.blurBadgeImageList[picID] : this.blurImageList[picID];
 
             if (this.isScatter() === true && this.isInView) {
                 this.addChildToLayer(SymbolLayer.Scatter);
@@ -226,9 +245,14 @@ export class Symbol2 extends BaseSymbol2 {
      * @param state 
      */
     public setState(state: SymbolState2): void {
-        this.state = state;
+        //TODO:先不處理其他狀態
+        this.normal.node.active = true;
         this.spine.node.active = false;
         this.wild.node.active = false;
+        this.blur.node.active = false;
+        return;
+
+        this.state = state;
 
         if (this.symbolID !== -1) {
             //scatter沒有模糊圖
@@ -269,11 +293,14 @@ export class Symbol2 extends BaseSymbol2 {
     }
 
     private reset(): void {
-        this.normal.node.active = true;
         this.spine.node.active = false;
+        this.normal.node.active = true;
+
         XUtils.ClearSpine(this.spine);
+        this.spine.setCompleteListener(null);
         this.wild.node.active = false;
         XUtils.ClearSpine(this.wild);
+        this.wild.setCompleteListener(null);
         this.addChildToLayer(SymbolLayer.Reel);
     }
 
@@ -317,6 +344,8 @@ export class Symbol2 extends BaseSymbol2 {
         this.spine.node.active = true;
         this.normal.node.active = false;
         this.addChildToLayer(SymbolLayer.Win);
+        this.spine.setCompleteListener(null);
+
         XUtils.ClearSpine(this.spine);
 
         //非loop動畫會監聽完成並回復normal

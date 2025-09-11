@@ -1,12 +1,11 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { SettingsPage1 } from "db://assets/base/components/settingsPage/SettingsPage1";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
 import { BaseEvent } from "../../../base/script/main/BaseEvent";
 import { GameTask } from "../../../base/script/tasks/GameTask";
 import { BigWinType, ModuleID, SpinButtonState } from "../../../base/script/types/BaseType";
 import { BannerUI } from "../../components/BannerUI/BannerUI";
 import { BigWinUI } from "../../components/BigWinUI/BigWinUI";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
 
 /**
  * 一局結束
@@ -33,13 +32,10 @@ export class EndGameTask extends GameTask {
             //BS單轉總分達到BigWin額外演示
             if (BaseDataManager.getInstance().getBigWinTypeByValue(this.win) != BigWinType.non) {
                 if (BaseDataManager.getInstance().isBS() === true) {
-                    BSRoleUI.back.emit(() => {
-                        //角色演完再播BigWin
-                        BigWinUI.complete.once(() => {
-                            this.showTotalWin();
-                        }, this);
-                        BigWinUI.show.emit(this.win);
-                    });
+                    BigWinUI.complete.once(() => {
+                        this.showTotalWin();
+                    }, this);
+                    BigWinUI.show.emit(this.win);
                 }
                 else {
                     BigWinUI.complete.once(() => {
@@ -51,9 +47,6 @@ export class EndGameTask extends GameTask {
             }
             //一般獎項
             else if (this.win > 0) {
-                if (BaseDataManager.getInstance().isBS() === true) {
-                    BSRoleUI.back.emit(null);
-                }
                 this.showTotalWin();
 
             }

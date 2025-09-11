@@ -1,10 +1,10 @@
-import { CheatUI } from "@/base/components/cheat/CheatUI";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { DelayTask } from "@/base/script/tasks/DelayTask";
-import { TaskManager } from "@/base/script/tasks/TaskManager";
-import { ModuleID } from "@/base/script/types/BaseType";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { CheatUI } from "db://assets/base/components/cheat/CheatUI";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
+import { BaseEvent } from "db://assets/base/script/main/BaseEvent";
+import { DelayTask } from "db://assets/base/script/tasks/DelayTask";
+import { TaskManager } from "db://assets/base/script/tasks/TaskManager";
+import { ModuleID } from "db://assets/base/script/types/BaseType";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
 import { SymbolData2 } from "../../components/slotMachine2/SymbolData2";
 import { GameConst, SlotMachineID, SymbolID } from "../constant/GameConst";
@@ -107,7 +107,7 @@ export class MessageHandler {
             preSymbolPattern = newSymbolPattern || [];
             newSymbolPattern = isSubResult ? slotResult.total_star_times[subIdx].times : slotResult.full_symbol_pattern;
             numScatterInPattern = newSymbolPattern.filter((symbolID) => symbolID === SymbolID.Scatter).length;
-            goldenPattern = slotResult.deadshot_wilds.golden_pattern[msgResultIndex].is_golden;
+            goldenPattern = [];
 
 
             //為了乘倍,移到這提早運算

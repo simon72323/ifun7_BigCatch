@@ -1,8 +1,8 @@
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { BaseIdleTask } from "@/base/script/tasks/BaseIdleTask";
-import { TimeoutManager } from "@/base/script/utils/TimeoutManager";
+import { AudioKey } from "db://assets/base/script/audio/AudioKey";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { BaseConst } from "db://assets/base/script/constant/BaseConst";
+import { BaseIdleTask } from "db://assets/base/script/tasks/BaseIdleTask";
+import { TimeoutManager } from "db://assets/base/script/utils/TimeoutManager";
 import { TaskManager } from "../../../base/script/tasks/TaskManager";
 import { SpinTask } from "./SpinTask";
 

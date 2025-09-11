@@ -1,13 +1,12 @@
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { TimeoutManager } from "@/base/script/utils/TimeoutManager";
+import { AudioKey } from 'db://assets/base/script/audio/AudioKey';
+import { BaseConst } from "db://assets/base/script/constant/BaseConst";
+import { TimeoutManager } from "db://assets/base/script/utils/TimeoutManager";
 import { AudioManager } from "../../../base/script/audio/AudioManager";
 import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
 import { BaseEvent } from "../../../base/script/main/BaseEvent";
 import { GameTask } from "../../../base/script/tasks/GameTask";
 import { AutoPlayMode, ModuleID } from "../../../base/script/types/BaseType";
 import { BannerUI } from '../../components/BannerUI/BannerUI';
-import { FSRoleUI } from '../../components/characterUI/FSRoleUI';
 import { FSUI } from '../../components/FSUI/FSUI';
 import { RevolverUI } from '../../components/RevolverUI/RevolverUI';
 import { SlotMachine2 } from '../../components/slotMachine2/base/slotMachine2/SlotMachine2';
@@ -65,7 +64,6 @@ export class TransTask extends GameTask {
                 let gameData = BaseDataManager.getInstance().getData<GameData>();
                 gameData.slotParser.setStripTable(BaseDataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
                 SlotMachine2.setup.emit(0, gameData.slotParser);
-                FSRoleUI.idle.emit();
 
             },
             () => {

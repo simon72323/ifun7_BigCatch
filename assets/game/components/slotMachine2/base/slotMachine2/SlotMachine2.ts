@@ -1,9 +1,9 @@
 import { _decorator, Component } from 'cc';
 
 import { CCInteger, Node, Prefab, RealCurve, tween, Tween } from 'cc';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { XEvent1, XEvent2, XEvent3, XEvent4 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
+import { BaseDataManager } from 'db://assets/base/script/main/BaseDataManager';
+import { XEvent1, XEvent2, XEvent3, XEvent4 } from 'db://assets/base/script/utils/XEvent';
+import { XUtils } from 'db://assets/base/script/utils/XUtils';
 import { BaseSlotParser2 } from './BaseSlotData2';
 import { BaseSymbolData2 } from './BaseSymbolData2';
 import { SlotReel2 } from './SlotReel2';
@@ -24,19 +24,23 @@ export class SlotMachine2 extends Component {
     private maxRow: number = 5;
 
     /**資料軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "資料軸清單(順序)" })
+    @property({ tooltip: "資料軸清單(順序)命名Reel#" })
+    public dataListString: string = "";
     public dataList: SlotReel2[] = [];
 
     /**轉動軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "轉動軸清單(順序)" })
+    @property({ tooltip: "轉動軸清單(順序)命名Reel#" })
+    public spinListString: string = "";
     public spinList: SlotReel2[] = [];
 
     /**掉落軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "掉落軸清單(順序)" })
+    @property({ tooltip: "掉落軸清單(順序)命名Reel#" })
+    public dropListString: string = "";
     public dropList: SlotReel2[] = [];
 
     /**新圖示掉落軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "新圖示掉落軸清單(順序)" })
+    @property({ tooltip: "新圖示掉落軸清單(順序)命名Reel#" })
+    public fillListString: string = "";
     public fillList: SlotReel2[] = [];
 
     /**層級 */
@@ -189,22 +193,59 @@ export class SlotMachine2 extends Component {
      * 建立物件
      */
     onLoad() {
-        let config = new SlotReelConfig2();
-        config.symbolPrefab = this.symbolPrefab;
-        config.beginCurve = this.beginCurve;
-        config.endCurve = this.endCurve;
-        config.nudgeCurveList = [this.nudgeCurve, this.nudgeCurve2];
-        config.speedConfigList = [this.normal, this.fast, this.turbo];
-        config.direction = this.direction;
-        config.layerList = this.layerList;
-        config.reelLayerList = this.reelLayerList;
-        config.maxRow = this.maxRow;
-        this.config = config;
+        //儲存dataList
+        let dataOrder = this.dataListString.split(',');
 
-        //軸初始化
-        this.dataList.forEach((reel, idx) => {
-            reel.init(idx, config);
-        }, this);
+        let rootList = this.reelLayerList.concat();
+        dataOrder.forEach((str, idx) => {
+
+            let config = new SlotReelConfig2();
+            config.symbolPrefab = this.symbolPrefab;
+            config.beginCurve = this.beginCurve;
+            config.endCurve = this.endCurve;
+            config.nudgeCurveList = [this.nudgeCurve, this.nudgeCurve2];
+            config.speedConfigList = [this.normal, this.fast, this.turbo];
+            config.direction = this.direction;
+            config.layerList = this.layerList;
+            config.reelLayerList = this.reelLayerList.concat();
+            config.maxRow = this.maxRow;
+            if (idx === 0) {
+                this.config = config;
+            }
+
+            let i = parseInt(str);
+            let reel = this.node.getChildByName(`Reel${i}`).getComponent(SlotReel2);
+            this.dataList[i] = reel;
+            rootList.forEach((root, rootIdx) => {
+                config.reelLayerList[rootIdx] = root.getChildByName(`Reel${i}`);
+            }, this);
+            reel.init(i, config);
+        });
+
+        //儲存spinList
+        let spinOrder = this.spinListString.split(',');
+        spinOrder.forEach((str, idx) => {
+            let i = parseInt(str);
+            let reel = this.node.getChildByName(`Reel${i}`).getComponent(SlotReel2);
+            this.spinList[i] = reel;
+        });
+
+        //儲存dropList
+        let dropOrder = this.dropListString.split(',');
+        dropOrder.forEach((str, idx) => {
+            let i = parseInt(str);
+            let reel = this.node.getChildByName(`Reel${i}`).getComponent(SlotReel2);
+            this.dropList[i] = reel;
+        });
+
+        //儲存fillList
+        let fillOrder = this.fillListString.split(',');
+        fillOrder.forEach((str, idx) => {
+            let i = parseInt(str);
+            let reel = this.node.getChildByName(`Reel${i}`).getComponent(SlotReel2);
+            this.fillList[i] = reel;
+        });
+
 
         SlotMachine2.setup.on(this.setupStripTableAndRng, this);
         SlotMachine2.changeStrip.on(this.changeStripTable, this);

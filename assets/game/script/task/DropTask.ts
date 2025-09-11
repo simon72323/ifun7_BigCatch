@@ -1,7 +1,6 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
 import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
 import { SymbolData2 } from "../../components/slotMachine2/SymbolData2";
 import { GameAudioKey, GameConst, SlotMachineID, SymbolID } from "../constant/GameConst";
@@ -27,9 +26,6 @@ export class DropTask extends GameTask {
     execute(): void {
 
         // BaseDataManager.getInstance().getData<GameData>().isLastPlane = this.isLastPlane;
-
-        //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
-        BSRoleUI.scatterWin.emit(this.isScatterWin);
 
         let fromAllToReel: SymbolData2[][] = [];
         let allToReel: SymbolData2[][] = [];

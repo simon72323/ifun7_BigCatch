@@ -1,11 +1,10 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { SpinButtonState } from "@/base/script/types/BaseType";
+import { SettingsPage1 } from "db://assets/base/components/settingsPage/SettingsPage1";
+import { AudioKey } from "db://assets/base/script/audio/AudioKey";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
+import { BaseEvent } from "db://assets/base/script/main/BaseEvent";
+import { SpinButtonState } from "db://assets/base/script/types/BaseType";
 import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
 import { SkipUI } from "../../components/SkipUI/SkipUI";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
 import { SlotMachineID } from "../constant/GameConst";
@@ -30,9 +29,6 @@ export class StopTask extends GameTask {
     execute(): void {
 
         BaseDataManager.getInstance().getData<GameData>().hasSkip = false;
-
-        //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
-        BSRoleUI.scatterWin.emit(this.isScatterWin);
 
         //單軸停止
         SlotMachine2.stopOnReel.on((id: number, col: number) => {

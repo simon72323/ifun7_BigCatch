@@ -1,4 +1,4 @@
-import { GameTask } from "@/base/script/tasks/GameTask";
+import { GameTask } from "db://assets/base/script/tasks/GameTask";
 import { FSUI } from "../../components/FSUI/FSUI";
 
 

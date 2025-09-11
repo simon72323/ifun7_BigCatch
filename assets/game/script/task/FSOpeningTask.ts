@@ -1,9 +1,8 @@
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { ModuleID } from "@/base/script/types/BaseType";
-import { FSRoleUI } from "@/game/components/characterUI/FSRoleUI";
-import { RevolverUI } from "@/game/components/RevolverUI/RevolverUI";
-import { GameStage } from "@/game/components/stage/GameStage";
-import { GameConst } from "@/game/script/constant/GameConst";
+import { GameTask } from "../../../base/script/tasks/GameTask";
+import { ModuleID } from "../../../base/script/types/BaseType";
+import { RevolverUI } from "../../components/RevolverUI/RevolverUI";
+import { Stage } from "../../components/stage/Stage";
+import { GameConst } from "../constant/GameConst";
 
 /**
  * FS開場
@@ -20,12 +19,10 @@ export class FSOpeningTask extends GameTask {
 
     execute(): void {
 
-        GameStage.shake.emit();
-
-        FSRoleUI.prepare.emit();
+        Stage.shake.emit();
 
         RevolverUI.fsOpening.emit(GameConst.FS_INIT_MULTIPLIER, () => {
-            GameStage.fsOpening.emit();
+            Stage.fsOpening.emit();
             this.finish();
         });
 

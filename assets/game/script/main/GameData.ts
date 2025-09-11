@@ -1,4 +1,4 @@
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
+import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
 import { BaseData } from "../../../base/script/main/BaseData";
 import { XUtils } from "../../../base/script/utils/XUtils";
 import { BaseSymbolData2 } from "../../components/slotMachine2/base/slotMachine2/BaseSymbolData2";
@@ -40,7 +40,7 @@ export class GameData extends BaseData {
     0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0,
   ];
-  public bsInitRng: number[] = [89, 77, 44, 44, 56, 39];
+  public bsInitRng: number[] = [89, 77, 44, 44, 56];
   public fsInitRng: number[] = [12, 3, 96, 44, 92, 74];
 
   /**BS最後盤面 */

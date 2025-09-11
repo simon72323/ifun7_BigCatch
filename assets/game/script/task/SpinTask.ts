@@ -1,11 +1,10 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseSpinTask } from "@/base/script/tasks/BaseSpinTask";
-import { TaskManager } from "@/base/script/tasks/TaskManager";
-import { APIManager } from "@/base/script/utils/APIManager";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
+import { BaseSpinTask } from "db://assets/base/script/tasks/BaseSpinTask";
+import { TaskManager } from "db://assets/base/script/tasks/TaskManager";
+import { APIManager } from "db://assets/base/script/utils/APIManager";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { FSRoleUI } from "../../components/characterUI/FSRoleUI";
 import { RevolverUI } from "../../components/RevolverUI/RevolverUI";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
 import { GameAudioKey, GameConst, SlotMachineID } from "../constant/GameConst";
@@ -36,9 +35,6 @@ export class SpinTask extends BaseSpinTask {
             if (BaseDataManager.getInstance().buyFs === false && APIManager.getInstance().getSpinLate() === false) {
                 SlotMachine2.spin.emit(SlotMachineID.BS);
             }
-        }
-        else {
-            FSRoleUI.reset.emit();
         }
     }
 

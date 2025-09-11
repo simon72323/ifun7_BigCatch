@@ -1,6 +1,6 @@
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
+import { GameTask } from "db://assets/base/script/tasks/GameTask";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { GameData } from "../main/GameData";
 
 /**

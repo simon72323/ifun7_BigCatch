@@ -1,6 +1,6 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { XUtils } from "@/base/script/utils/XUtils";
+import { AudioManager } from "db://assets/base/script/audio/AudioManager";
+import { GameTask } from "db://assets/base/script/tasks/GameTask";
+import { XUtils } from "db://assets/base/script/utils/XUtils";
 import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
 import { UIBlack } from "../../components/UIBlack";
 import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from "../constant/GameConst";
