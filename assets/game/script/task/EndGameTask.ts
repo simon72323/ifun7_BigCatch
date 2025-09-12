@@ -1,4 +1,4 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
+import { SettingsPage1 } from "../../../base/common/settingsPage/SettingsPage1";
 import { XUtils } from "@/base/script/utils/XUtils";
 import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
 import { BaseEvent } from "../../../base/script/main/BaseEvent";

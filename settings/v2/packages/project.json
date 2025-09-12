@@ -9,5 +9,6 @@
   "script": {
     "loose": false,
     "importMap": "project://import-map.json"
-  }
+  },
+  "custom_joint_texture_layouts": []
 }

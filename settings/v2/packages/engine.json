@@ -21,10 +21,10 @@
             "_value": false
           },
           "animation": {
-            "_value": true
+            "_value": false
           },
           "skeletal-animation": {
-            "_value": true
+            "_value": false
           },
           "3d": {
             "_value": true
@@ -198,7 +198,6 @@
           "2d",
           "3d",
           "affine-transform",
-          "animation",
           "audio",
           "base",
           "custom-pipeline",
@@ -212,7 +211,6 @@
           "particle-2d",
           "primitive",
           "profiler",
-          "skeletal-animation",
           "spine-3.8",
           "tween",
           "ui",
