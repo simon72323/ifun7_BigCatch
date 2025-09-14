@@ -1,11 +1,12 @@
-import { BaseConst } from "../constant/BaseConst";
-import { SocketManager } from "../socket/SocketManager";
-import { Auto, BaseLang, BaseLangSetting, BigWinType, CheatCodeData, CreditMode, DigitMode, FeatureBuyType, ModuleID, playAction, StripTable, TurboMode, UrlParam } from "../types/BaseType";
-import { APIManager } from "../utils/APIManager";
-import { ErrorCode, ErrorManager } from "../utils/ErrorManager";
-import { XUtils } from "../utils/XUtils";
-import { BaseData } from "./BaseData";
-import { BetData } from "./BetData";
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseData } from '@base/script/main/BaseData';
+import { BetData } from '@base/script/main/BetData';
+import { SocketManager } from '@base/script/socket/SocketManager';
+import { Auto, BaseLang, BaseLangSetting, BigWinType, CheatCodeData, CreditMode, DigitMode, FeatureBuyType, ModuleID, playAction, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
+import { APIManager } from '@base/script/utils/APIManager';
+import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
+import { XUtils } from '@base/script/utils/XUtils';
+
 
 /**
  * 遊戲資料控制器
@@ -20,6 +21,7 @@ export class BaseDataManager {
         }
         return BaseDataManager.instance;
     }
+
     /**是否要走API版本 */
     public useAPI: boolean = false;
 
@@ -39,7 +41,7 @@ export class BaseDataManager {
     public tempTurboMode: TurboMode = TurboMode.Normal;
 
     /**目前狀態 */
-    public curState: s5g.game.proto.ESTATEID;
+    // public curState: s5g.game.proto.ESTATEID;
 
     /**玩家金額(真實數字要再除100) */
     public playerCent: number = 0;
@@ -101,10 +103,10 @@ export class BaseDataManager {
     //TODO:不明
     public isMenuOn = false;
     //TODO:不明
-    public isPayTable = false
+    public isPayTable = false;
 
     /**狀態回復資料 */
-    public recoverData: s5g.game.proto.IRecoverData = null;
+    // public recoverData: s5g.game.proto.IRecoverData = null;
 
     /**8x12初始盤面 */
     public initFullSymbolPattern: number[] = [];
@@ -129,19 +131,19 @@ export class BaseDataManager {
 
     /**各語系設定檔 */
     public allLangSettings: Map<string, BaseLangSetting> = new Map([
-        [BaseLang.bd, { demoStr: "DEMO" }],
-        [BaseLang.sch, { demoStr: "试玩" }],
-        [BaseLang.tai, { demoStr: "สาธิต" }],
-        [BaseLang.ind, { demoStr: "DEMO" }],
-        [BaseLang.por, { demoStr: "DEMO" }],
-        [BaseLang.vie, { demoStr: "試玩" }],
-        [BaseLang.in, { demoStr: "DEMO" }],
-        [BaseLang.esp, { demoStr: "DEMO" }],
-        [BaseLang.jp, { demoStr: "DEMO" }],
-        [BaseLang.kor, { demoStr: "DEMO" }],
-        [BaseLang.tur, { demoStr: "DEMO" }],
-        [BaseLang.eng, { demoStr: "DEMO" }],
-        [BaseLang.tch, { demoStr: "DEMO" }],
+        [BaseLang.bd, { demoStr: 'DEMO' }],
+        [BaseLang.sch, { demoStr: '试玩' }],
+        [BaseLang.tai, { demoStr: 'สาธิต' }],
+        [BaseLang.ind, { demoStr: 'DEMO' }],
+        [BaseLang.por, { demoStr: 'DEMO' }],
+        [BaseLang.vie, { demoStr: '試玩' }],
+        [BaseLang.in, { demoStr: 'DEMO' }],
+        [BaseLang.esp, { demoStr: 'DEMO' }],
+        [BaseLang.jp, { demoStr: 'DEMO' }],
+        [BaseLang.kor, { demoStr: 'DEMO' }],
+        [BaseLang.tur, { demoStr: 'DEMO' }],
+        [BaseLang.eng, { demoStr: 'DEMO' }],
+        [BaseLang.tch, { demoStr: 'DEMO' }]
     ]);
 
     public getLangSetting(): BaseLangSetting {
@@ -150,57 +152,63 @@ export class BaseDataManager {
 
 
     /**
-     * 
+     * 初始化
      * @param config 
      */
     public init(config: any): void {
 
         if (this.initialize) {
-            return;
+            return;//已經初始化過
         }
         this.initialize = true;
 
-        this.parseUrlParams();
+        this.parseUrlParams();//解析網址參數
 
         //API版本(有token資料)
         if (this.urlParam.accessToken) {
             this.gameID = /.{3}-.{2}-\d{5}/.exec(window.location.pathname)[0];
             this.useAPI = true;
-            this.account = "guest";
-            this.password = "1234";
+            this.account = 'guest';
+            this.password = '1234';
         }
-        //preview, build版
+        //preview, 本地開發版本
         else {
             this.gameID = config.gameID;
             this.urlParam.lang = config.lang;
             this.defaultSocketUrl = config.socketUrl;
             this.useAPI = false;
-            this.urlParam.accessToken = config.token || "";
-            this.account = config.account || "guest";
-            this.password = config.password || "1234";
+            this.urlParam.accessToken = config.token || '';
+            this.account = config.account || 'guest';
+            this.password = config.password || '1234';
         }
 
-        let currency = this.creditMode == CreditMode.Dollar ? "USD" : "EUR";
-        let locale = this.digitMode == DigitMode.COMMA ? "vi-VN" : "en-US";
+        // 根據信用模式設定貨幣單位
+        let currency = this.creditMode == CreditMode.Dollar ? 'USD' : 'EUR';
+        // 根據數字模式設定地區格式
+        let locale = this.digitMode == DigitMode.COMMA ? 'vi-VN' : 'en-US';
+        // 初始化數字格式
         XUtils.initFormat(currency, locale);
     }
 
     /**
-     * 設置客製化資料
+     * 設置遊戲資料
      * @param data 
      */
     public setData<T extends BaseData>(data: T): void {
         this.data = data;
     }
 
+    /**
+     * 取得遊戲資料
+     * @param data 
+     * @returns 
+     */
     public getData<T extends BaseData>(): T {
         return this.data as T;
     }
 
     /**
-     * 解析網址
-     * @param sParam 
-     * @returns 
+     * 解析網址參數
      */
     private parseUrlParams() {
         let sPageURL = window.location.search.substring(1);
@@ -211,17 +219,17 @@ export class BaseDataManager {
         }
 
         //sm(0:小數點表示法, 1:逗號表示法, 2:彩金表示法)
-        this.creditMode = this.parseCreditMode(this.getUrlParam("sm"));
-        this.digitMode = this.parseDigitMode(this.getUrlParam("sm"));
-        this.urlParam.lang = this.getUrlParam("lang");
-        this.urlParam.currency = this.getUrlParam("ccy").toUpperCase() || "USD";
-        this.urlParam.return_url = this.getUrlParam("return_url");
-        this.urlParam.return_target = this.getUrlParam("return_target");
-        this.urlParam.playMode = this.getUrlParam("pm");
-        this.urlParam.accessToken = this.getUrlParam("access_token");
-        this.urlParam.langCode = this.getUrlParam("lc");
-        this.urlParam.isNewGameServer = parseInt(this.getUrlParam("ngf")) === 1;
-        this.urlParam.customParam = this.getUrlParam("cp").toLowerCase();
+        this.creditMode = this.parseCreditMode(this.getUrlParam('sm'));
+        this.digitMode = this.parseDigitMode(this.getUrlParam('sm'));
+        this.urlParam.lang = this.getUrlParam('lang');
+        this.urlParam.currency = this.getUrlParam('ccy').toUpperCase() || 'USD';
+        this.urlParam.return_url = this.getUrlParam('return_url');
+        this.urlParam.return_target = this.getUrlParam('return_target');
+        this.urlParam.playMode = this.getUrlParam('pm');
+        this.urlParam.accessToken = this.getUrlParam('access_token');
+        this.urlParam.langCode = this.getUrlParam('lc');
+        this.urlParam.isNewGameServer = parseInt(this.getUrlParam('ngf')) === 1;
+        this.urlParam.customParam = this.getUrlParam('cp').toLowerCase();
     }
 
     /**
@@ -292,14 +300,14 @@ export class BaseDataManager {
         return bigWinLevel;
     }
 
-    public isIdle(): boolean {
-        return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
-    }
+    // public isIdle(): boolean {
+    //     return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
+    // }
 
-    public setState(state: s5g.game.proto.ESTATEID): void {
-        this.curState = state;
-        SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eStateCall);
-    }
+    // public setState(state: s5g.game.proto.ESTATEID): void {
+    //     this.curState = state;
+    //     SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eStateCall);
+    // }
 
     /**
      * 
@@ -392,6 +400,7 @@ export class BaseDataManager {
         }
 
     }
+
     /**
      * 幸運一擊是否可用
      * @returns 幸運一擊購買金額 <= 幸運一擊限制購買金額(最大投注 x 幸運一擊限制倍率)
@@ -427,6 +436,7 @@ export class BaseDataManager {
     public getFeatureBuyNumOfCost(): number {
         return this.getCurFeatureBuyMultiple() / this.bet.getLineAt(0);
     }
+
     /**
      * 取得幸運一擊最大購買金額
      */
@@ -478,6 +488,7 @@ export class BaseDataManager {
     public setTurboMode(mode: TurboMode) {
         this.turboMode = mode;
     }
+
     public getTurboMode(): TurboMode {
         if (this.curModuleID != ModuleID.BS) {
             return TurboMode.Normal;

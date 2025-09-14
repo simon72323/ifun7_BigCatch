@@ -1,6 +1,6 @@
-import { logger } from "../utils/XUtils";
-import { XEvent1 } from "../utils/XEvent";
-import { GameTask } from "./GameTask";
+import { GameTask } from '@base/script/tasks/GameTask';
+import { XEvent1 } from '@base/script/utils/XEvent';
+import { logger } from '@base/script/utils/XUtils';
 
 /**
  * 任務管理
@@ -26,6 +26,7 @@ export class TaskManager {
     public constructor() {
         this.finishEvent.on(this.onFinishTask, this);
     }
+
     public addTask(task: GameTask) {
         this.tasks.push(task);
         if (!this.curTask) {
@@ -38,7 +39,7 @@ export class TaskManager {
         if (this.curTask) {
             //第一次進入該任務才執行baseExecute
             if (this.curTask.executed === false) {
-                logger("TaskManager 执行任務 " + this.curTask.getName());
+                logger('TaskManager 执行任務 ' + this.curTask.getName());
                 this.curTask.baseExecute();
             }
             else {
@@ -59,6 +60,7 @@ export class TaskManager {
 
         this.doNextTask();
     }
+
     /**
      * 換新任務
      */
@@ -68,7 +70,7 @@ export class TaskManager {
             logger('TaskManager 所有任務完成');
             return;
         }
-        logger("TaskManager 执行任務 " + this.curTask.getName());
+        logger('TaskManager 执行任務 ' + this.curTask.getName());
         this.curTask.baseExecute();
     }
 

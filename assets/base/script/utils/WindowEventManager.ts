@@ -15,7 +15,7 @@ export class WindowEventManager {
     }
 
     public constructor() {
-        window.addEventListener("message", this.webViewMessageHandler.bind(this));
+        window.addEventListener('message', this.webViewMessageHandler.bind(this));
     }
 
     public registerEventHandler(eventType: string, callback: Function) {
@@ -31,7 +31,7 @@ export class WindowEventManager {
         try {
             json = JSON.parse(e.data);
         }
-        catch (error) {
+        catch {
             //無法解析json
             return;
         }

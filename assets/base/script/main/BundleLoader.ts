@@ -1,7 +1,7 @@
-import { assetManager } from "cc";
+import { assetManager } from 'cc';
 
 /**
- * 
+ * bundle資源讀取器
  */
 export class BundleLoader {
 
@@ -35,8 +35,14 @@ export class BundleLoader {
         }
     }
 
-    public add(bundle: string, dir: string, type: any): void {
-        this.taskList.push({ bundleName: bundle, dir: dir, type: type });
+    /**
+     * 新增task
+     * @param bundleName 
+     * @param dir 
+     * @param type 
+     */
+    public add(bundleName: string, dir: string, type: any): void {
+        this.taskList.push({ bundleName, dir, type });
     }
 
     /**
@@ -45,19 +51,26 @@ export class BundleLoader {
      */
     public async load(waitAll: boolean = false): Promise<void> {
         if (waitAll) {
+            //等待所有task讀取完成
             let promiseList = [];
             this.taskList.forEach((task) => {
                 promiseList.push(this.loadTask(task));
-            })
+            });
             await Promise.all(promiseList);
         }
         else {
-            this.taskList.forEach((task) => this.loadTask(task));
+            //載入單一task後立即結束
+            this.taskList.forEach((task) =>  this.loadTask(task));
         }
     }
 
+    /**
+     * 讀取單一task
+     * @param task 
+     * @returns 
+     */
     private async loadTask(task: LoadTask): Promise<void> {
-        return new Promise<void>((res, rej) => {
+        return new Promise<void>((res) => {
             let bundle = assetManager.getBundle(task.bundleName);
 
             let loadDir = () => {
@@ -76,14 +89,14 @@ export class BundleLoader {
                         if (BundleLoader.eventMap.has(key)) {
                             BundleLoader.eventMap.get(key).forEach((callback) => {
                                 callback(langRes);
-                            })
+                            });
                         }
                         BundleLoader.bundleResMap.set(key, langRes);
                         BundleLoader.eventMap.delete(key);
                         res();
                     }
-                })
-            }
+                });
+            };
 
             //bundle都沒有的話, 要先讀取bundle
             if (!bundle) {
@@ -95,7 +108,7 @@ export class BundleLoader {
             else {
                 loadDir();
             }
-        })
+        });
     }
 }
 

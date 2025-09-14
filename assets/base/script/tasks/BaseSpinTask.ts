@@ -1,24 +1,24 @@
-import { InfoBar } from "@/base/components/infoBar/InfoBar";
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { AudioManager } from "../../../base/script/audio/AudioManager";
-import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { SocketManager } from "../../../base/script/socket/SocketManager";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { AutoPlayMode, SpinButtonState, TurboMode } from "../../../base/script/types/BaseType";
-import { BaseConst } from "../constant/BaseConst";
-import { TimeoutManager } from "../utils/TimeoutManager";
-import { logger } from "../utils/XUtils";
+import { InfoBar } from '@base/components/infoBar/InfoBar';
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { SocketManager } from '@base/script/socket/SocketManager';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { AutoPlayMode, SpinButtonState, TurboMode } from '@base/script/types/BaseType';
+import { TimeoutManager } from '@base/script/utils/TimeoutManager';
+import { logger } from '@base/script/utils/XUtils';
 /**
  * 共用開始轉動流程(成功送出Spin請求)
  */
 export abstract class BaseSpinTask extends GameTask {
 
-    protected name: string = "BaseSpinTask";
+    protected name: string = 'BaseSpinTask';
 
     execute(): void {
-        logger("==========================================新局開始==========================================");
+        logger('==========================================新局開始==========================================');
 
         TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_IDLE_MUTE.key);
         if (BaseDataManager.getInstance().isBS() == true) {
@@ -92,8 +92,9 @@ export abstract class BaseSpinTask extends GameTask {
 
 
     }
-    update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+
+    update(_deltaTime: number): void {
+        // throw new Error('Method not implemented.');
     }
 
     protected childExecute(): void {

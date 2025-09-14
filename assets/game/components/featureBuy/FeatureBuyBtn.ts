@@ -1,14 +1,17 @@
 import { _decorator, Button, Component, Input, Node, sp, Sprite, SpriteFrame } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { BaseAnimationName } from '@/base/script/types/BaseType';
-import { XEvent } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAudioKey, LangBundleDir } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseAnimationName } from '@base/script/types/BaseType';
+import { XEvent } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+
+const { ccclass } = _decorator;
 
 /**
  * 幸運一擊按鈕
@@ -31,7 +34,7 @@ export class FeatureBuyBtn extends Component {
 
     onLoad() {
         //點擊幸運一擊
-        this.FeatureBuyButton = this.node.getChildByName("btn");
+        this.FeatureBuyButton = this.node.getChildByName('btn');
         this.FeatureBuyButton.on(Button.EventType.CLICK, () => {
             AudioManager.getInstance().play(GameAudioKey.FeatureBuy);
             FeatureBuyBtn.click.emit();
@@ -53,8 +56,8 @@ export class FeatureBuyBtn extends Component {
             this.spine.setAnimation(0, 'loop', true);
         }, this);
 
-        this.sprite = this.node.getChildByPath("buyfeature_button_ani/btn_featurebuy").getComponent(Sprite);
-        this.spine = this.node.getChildByName("buyfeature_button_ani").getComponent(sp.Skeleton);
+        this.sprite = this.node.getChildByPath('buyfeature_button_ani/btn_featurebuy').getComponent(Sprite);
+        this.spine = this.node.getChildByName('buyfeature_button_ani').getComponent(sp.Skeleton);
         XUtils.ClearSpine(this.spine);
         this.spine.setAnimation(0, 'loop', true);
 
@@ -92,7 +95,7 @@ export class FeatureBuyBtn extends Component {
 
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
-            this.btnSpriteList = [langRes["btn_featurebuy_N"], langRes["btn_featurebuy_H"]];
+            this.btnSpriteList = [langRes['btn_featurebuy_N'], langRes['btn_featurebuy_H']];
             this.sprite.spriteFrame = this.btnSpriteList[0];
         });
 

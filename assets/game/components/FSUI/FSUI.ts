@@ -1,10 +1,13 @@
 import { _decorator, Component, Label, Node, Sprite } from 'cc';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { XEvent1 } from '@/base/script/utils/XEvent';
-import { LangBundleDir } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { XEvent1 } from '@base/script/utils/XEvent';
+
+import { LangBundleDir } from '@game/script/constant/GameConst';
+
+const { ccclass } = _decorator;
 
 @ccclass('FSUI')
 export class FSUI extends Component {
@@ -18,17 +21,17 @@ export class FSUI extends Component {
     private freespin_remaining: Node;
 
     onLoad() {
-        this.num_freeSpin = this.node.getChildByName("num_freeSpin").getComponent(Label);
-        this.freespin_last = this.node.getChildByName("freespin_last");
-        this.freespin_remaining = this.node.getChildByName("freespin_remaining");
+        this.num_freeSpin = this.node.getChildByName('num_freeSpin').getComponent(Label);
+        this.freespin_last = this.node.getChildByName('freespin_last');
+        this.freespin_remaining = this.node.getChildByName('freespin_remaining');
 
         //獲取語系字串
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
 
         //設置語系圖片
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {
-            this.freespin_last.getComponent(Sprite).spriteFrame = langRes[`freespin_last`];
-            this.freespin_remaining.getComponent(Sprite).spriteFrame = langRes[`freespin_remaining`];
+            this.freespin_last.getComponent(Sprite).spriteFrame = langRes['freespin_last'];
+            this.freespin_remaining.getComponent(Sprite).spriteFrame = langRes['freespin_remaining'];
         });
 
         FSUI.refreshRemainTimes.on(this.onRefreshRemainTimes, this);//監聽刷新剩餘次數事件

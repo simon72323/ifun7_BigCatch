@@ -1,6 +1,8 @@
 {
     "imports": {
-        "@common/": "./assets/common/",
+        "@common/": "./assets/slotGame001/common/",
+        "@game/": "./assets/game/",
+        "@base/": "./assets/base/",
         "@/": "./assets/"
     }
 }

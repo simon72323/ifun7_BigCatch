@@ -1,5 +1,6 @@
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { FSUI } from "../../components/FSUI/FSUI";
+import { GameTask } from '@base/script/tasks/GameTask';
+
+import { FSUI } from '@game/components/FSUI/FSUI';
 
 
 /**
@@ -7,7 +8,7 @@ import { FSUI } from "../../components/FSUI/FSUI";
  */
 export class FSUpdateRemainTimesTask extends GameTask {
 
-    protected name: string = "FSUpdateRemainTimesTask";
+    protected name: string = 'FSUpdateRemainTimesTask';
 
     /**免費轉次數 */
     public fsRemainTimes: number;
@@ -21,6 +22,6 @@ export class FSUpdateRemainTimesTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

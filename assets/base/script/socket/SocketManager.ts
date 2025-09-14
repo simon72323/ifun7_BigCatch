@@ -1,6 +1,7 @@
-import { logger } from "../utils/XUtils";
-import { ISocket } from "./ISocket";
-import { SocketEvent } from "./SocketEvent";
+
+import { ISocket } from '@base/script/socket/ISocket';
+import { SocketEvent } from '@base/script/socket/SocketEvent';
+import { logger } from '@base/script/utils/XUtils';
 
 /**
  * 連線管理
@@ -28,6 +29,7 @@ export class SocketManager {
 
     constructor() {
     }
+
     /**
      * 連線
      * @param url 
@@ -42,19 +44,19 @@ export class SocketManager {
         }
 
         this.socket = new WebSocket(url);
-        this.socket.binaryType = "arraybuffer";
+        this.socket.binaryType = 'arraybuffer';
 
         this.socket.onopen = () => {
-            logger("[SocketManager] Socket連線成功!");
+            logger('[SocketManager] Socket連線成功!');
             SocketEvent.open.emit();
-        }
+        };
         this.socket.onclose = () => {
-            logger("[SocketManager] Socket連線關閉!");
+            logger('[SocketManager] Socket連線關閉!');
             SocketEvent.close.emit();
-        }
+        };
         this.socket.onmessage = (event: MessageEvent) => {
             SocketEvent.message.emit(event.data);
-        }
+        };
     }
 
     /**
@@ -72,7 +74,7 @@ export class SocketManager {
             this.socket.send(buffer);
         }
         else {
-            logger("[SocketManager] 尚未建立Socket連線!");
+            logger('[SocketManager] 尚未建立Socket連線!');
 
         }
     }
@@ -85,6 +87,7 @@ export class SocketManager {
     public registerSendMessage(msg: ISendMessage): void {
         this.sendMessageList.push(msg);
     }
+
     /**
      * 註冊接收封包
      * @param msg 
@@ -103,7 +106,7 @@ export class SocketManager {
             if (sender.msgid == msgid) {
                 target = sender;
             }
-        })
+        });
         if (!target) {
             console.error(`發送封包 找不到封包ID:${msgid}`);
         }
@@ -113,6 +116,7 @@ export class SocketManager {
             this.send(buffer);
         }
     }
+
     /**
      * 接收封包
      */
@@ -124,7 +128,7 @@ export class SocketManager {
             if (receiver.msgid == header.msgid) {
                 target = receiver;
             }
-        })
+        });
 
         if (!target) {
             console.error(`接收封包 找不到封包ID:${header.msgid}`);

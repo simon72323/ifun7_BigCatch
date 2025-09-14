@@ -13,16 +13,16 @@ export class XEvent {
 
     public on(callback: XEventCallback, scope: any) {
         this.listeners.set(scope, callback.bind(scope));
-    };
+    }
 
     public once(callback: XEventCallback, scope: any) {
         this.listenersOnce.set(scope, callback.bind(scope));
-    };
+    }
 
     public off(scope: any) {
         this.listeners.delete(scope);
         this.listenersOnce.delete(scope);
-    };
+    }
 
     public emit() {
         //把 listeners Clone 出來，避免事件中 Map 被增減
@@ -36,7 +36,7 @@ export class XEvent {
 
             tempOnce.forEach(callback => callback());
         }
-    };
+    }
 
     public clear() {
         this.listeners.clear();
@@ -55,16 +55,16 @@ export class XEvent1<T1> {
 
     public on(callback: XEventCallback1<T1>, scope: any) {
         this.listeners.set(scope, callback.bind(scope));
-    };
+    }
 
     public once(callback: XEventCallback1<T1>, scope: any) {
         this.listenersOnce.set(scope, callback.bind(scope));
-    };
+    }
 
     public off(target: any) {
         this.listeners.delete(target);
         this.listenersOnce.delete(target);
-    };
+    }
 
     /**
      * 觸發事件
@@ -82,7 +82,7 @@ export class XEvent1<T1> {
 
             tempOnce.forEach(callback => callback(val1));
         }
-    };
+    }
 
     public clear() {
         this.listeners.clear();
@@ -101,16 +101,16 @@ export class XEvent2<T1, T2> {
 
     public on(callback: XEventCallback2<T1, T2>, scope: any) {
         this.listeners.set(scope, callback.bind(scope));
-    };
+    }
 
     public once(callback: XEventCallback2<T1, T2>, scope: any) {
         this.listenersOnce.set(scope, callback.bind(scope));
-    };
+    }
 
     public off(scope: any) {
         this.listeners.delete(scope);
         this.listenersOnce.delete(scope);
-    };
+    }
 
     public emit(val1: T1, val2: T2) {
         //把 listeners Clone 出來，避免事件中 Map 被增減
@@ -124,7 +124,7 @@ export class XEvent2<T1, T2> {
 
             tempOnce.forEach(callback => callback(val1, val2));
         }
-    };
+    }
 
     public clear() {
         this.listeners.clear();
@@ -143,16 +143,16 @@ export class XEvent3<T1, T2, T3> {
 
     public on(callback: XEventCallback3<T1, T2, T3>, scope: any) {
         this.listeners.set(scope, callback.bind(scope));
-    };
+    }
 
     public once(callback: XEventCallback3<T1, T2, T3>, scope: any) {
         this.listenersOnce.set(scope, callback.bind(scope));
-    };
+    }
 
     public off(scope: any) {
         this.listeners.delete(scope);
         this.listenersOnce.delete(scope);
-    };
+    }
 
     public emit(val1: T1, val2: T2, val3: T3) {
         //把 listeners Clone 出來，避免事件中 Map 被增減
@@ -166,7 +166,7 @@ export class XEvent3<T1, T2, T3> {
 
             tempOnce.forEach(callback => callback(val1, val2, val3));
         }
-    };
+    }
 
     public clear() {
         this.listeners.clear();
@@ -185,16 +185,16 @@ export class XEvent4<T1, T2, T3, T4> {
 
     public on(callback: XEventCallback4<T1, T2, T3, T4>, scope: any) {
         this.listeners.set(scope, callback.bind(scope));
-    };
+    }
 
     public once(callback: XEventCallback4<T1, T2, T3, T4>, scope: any) {
         this.listenersOnce.set(scope, callback.bind(scope));
-    };
+    }
 
     public off(scope: any) {
         this.listeners.delete(scope);
         this.listenersOnce.delete(scope);
-    };
+    }
 
     public emit(val1: T1, val2: T2, val3: T3, val4: T4) {
         //把 listeners Clone 出來，避免事件中 Map 被增減
@@ -208,7 +208,7 @@ export class XEvent4<T1, T2, T3, T4> {
 
             tempOnce.forEach(callback => callback(val1, val2, val3, val4));
         }
-    };
+    }
 
     public clear() {
         this.listeners.clear();
@@ -221,6 +221,7 @@ export class XEvent4<T1, T2, T3, T4> {
 export interface XEventCallback5<T1, T2, T3, T4, T5> {
     (val1: T1, val2: T2, val3: T3, val4: T4, val5: T5): any;
 }
+
 export class XEvent5<T1, T2, T3, T4, T5> {
 
     private listeners: Map<any, XEventCallback5<T1, T2, T3, T4, T5>> = new Map();
@@ -228,16 +229,16 @@ export class XEvent5<T1, T2, T3, T4, T5> {
 
     public on(callback: XEventCallback5<T1, T2, T3, T4, T5>, scope: any) {
         this.listeners.set(scope, callback.bind(scope));
-    };
+    }
 
     public once(callback: XEventCallback5<T1, T2, T3, T4, T5>, scope: any) {
         this.listenersOnce.set(scope, callback.bind(scope));
-    };
+    }
 
     public off(scope: any) {
         this.listeners.delete(scope);
         this.listenersOnce.delete(scope);
-    };
+    }
 
     public emit(val1: T1, val2: T2, val3: T3, val4: T4, val5: T5) {
         //把 listeners Clone 出來，避免事件中 Map 被增減
@@ -251,7 +252,7 @@ export class XEvent5<T1, T2, T3, T4, T5> {
 
             tempOnce.forEach(callback => callback(val1, val2, val3, val4, val5));
         }
-    };
+    }
 
     public clear() {
         this.listeners.clear();

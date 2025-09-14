@@ -1,9 +1,9 @@
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { ErrorCode, ErrorManager } from "@/base/script/utils/ErrorManager";
-import { TimeoutManager } from "@/base/script/utils/TimeoutManager";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { ISendMessage } from "../socket/SocketManager";
-import { PromoManager } from "../utils/PromoManager";
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { ISendMessage } from '@base/script/socket/SocketManager';
+import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
+import { PromoManager } from '@base/script/utils/PromoManager';
+import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 
 /**
  * 要求Spin結果

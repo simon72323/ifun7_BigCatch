@@ -1,5 +1,8 @@
-import { getToken } from '../managers/AuthManager';
-import { APIRequest, APIResponse, getNetworkManager } from './NetworkManager';
+
+
+import { getToken } from '@common/managers/AuthManager';
+import { APIRequest, APIResponse, getNetworkManager } from '@common/network/NetworkManager';
+
 
 /**
  * API 服務 - 實例模式
@@ -22,9 +25,9 @@ export class APIServices {
             command: 'spin',
             token: getToken(),
             data: {
-                bet: bet,
-                lines: lines,
-                coinValue: coinValue,
+                bet,
+                lines,
+                coinValue,
                 multiplier: multiplier || 1
             }
         };
@@ -40,9 +43,9 @@ export class APIServices {
             command: 'free_spin',
             token: getToken(),
             data: {
-                bet: bet,
-                lines: lines,
-                coinValue: coinValue,
+                bet,
+                lines,
+                coinValue,
                 multiplier: multiplier || 1
             }
         };
@@ -58,7 +61,7 @@ export class APIServices {
             command: 'buy_free_game',
             token: getToken(),
             data: {
-                multiplier: multiplier
+                multiplier
             }
         };
 

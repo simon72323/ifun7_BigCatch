@@ -1,15 +1,22 @@
 import { _decorator, Button, Component, Label, sp, Sprite, UIOpacity } from 'cc';
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { BaseAnimationName } from '@/base/script/types/BaseType';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { AudioManager } from '../../../base/script/audio/AudioManager';
-import { BaseEvent } from '../../../base/script/main/BaseEvent';
-import { XEvent, XEvent1 } from '../../../base/script/utils/XEvent';
-import { GameAudioKey, LangBundleDir } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseAnimationName } from '@base/script/types/BaseType';
+import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+
+enum BoxAni {
+    start = 'start'
+}
+
+const { ccclass } = _decorator;
 
 /**
  * 購買功能頁面
@@ -32,39 +39,39 @@ export class FeatureBuyPage extends Component {
     private costLabel: Label;
 
     onLoad() {
-        this.spine = this.node.getChildByPath("buyfeature_box_ani").getComponent(sp.Skeleton);
-        this.costLabel = this.node.getChildByPath("buyfeature_box_ani/num_totalwin").getComponent(Label);
+        this.spine = this.node.getChildByPath('buyfeature_box_ani').getComponent(sp.Skeleton);
+        this.costLabel = this.node.getChildByPath('buyfeature_box_ani/num_totalwin').getComponent(Label);
 
-        let buyBtn = this.node.getChildByPath("buyfeature_box_ani/btn_buy/btn").getComponent(Button);
+        let buyBtn = this.node.getChildByPath('buyfeature_box_ani/btn_buy/btn').getComponent(Button);
         buyBtn.node.on(Button.EventType.CLICK, this.onClickBuy, this);
 
-        let cancelBtn = this.node.getChildByPath("buyfeature_box_ani/btn_cancel/btn").getComponent(Button);
+        let cancelBtn = this.node.getChildByPath('buyfeature_box_ani/btn_cancel/btn').getComponent(Button);
         cancelBtn.node.on(Button.EventType.CLICK, () => {
             AudioManager.getInstance().play(AudioKey.BetClick);
             this.onClickCancel();
         }, this);
 
         //關閉
-        this.node.getChildByName("Block").on(Button.EventType.CLICK, this.onClickCancel, this);
+        this.node.getChildByName('Block').on(Button.EventType.CLICK, this.onClickCancel, this);
 
         FeatureBuyPage.show.on(this.show, this);
         FeatureBuyPage.hide.on(this.hide, this);
 
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${BaseDataManager.getInstance().urlParam.lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
 
-            this.node.getChildByPath("buyfeature_box_ani/label_featurebuy").getComponent(Sprite).spriteFrame = langRes["label_featurebuy"];
-            this.node.getChildByPath("buyfeature_box_ani/text_featurebuy").getComponent(Sprite).spriteFrame = langRes["text_featurebuy"];
-            this.node.getChildByPath("buyfeature_box_ani/title_featurebuy").getComponent(Sprite).spriteFrame = langRes["title_featurebuy"];
-            this.node.getChildByPath("buyfeature_box_ani/title_featurebuy_cost").getComponent(Sprite).spriteFrame = langRes["title_featurebuy_cost"];
+            this.node.getChildByPath('buyfeature_box_ani/label_featurebuy').getComponent(Sprite).spriteFrame = langRes['label_featurebuy'];
+            this.node.getChildByPath('buyfeature_box_ani/text_featurebuy').getComponent(Sprite).spriteFrame = langRes['text_featurebuy'];
+            this.node.getChildByPath('buyfeature_box_ani/title_featurebuy').getComponent(Sprite).spriteFrame = langRes['title_featurebuy'];
+            this.node.getChildByPath('buyfeature_box_ani/title_featurebuy_cost').getComponent(Sprite).spriteFrame = langRes['title_featurebuy_cost'];
 
-            XUtils.setButtonSprite(buyBtn, langRes["btn_buy_N"], langRes["btn_buy_H"]);
-            XUtils.setButtonSprite(cancelBtn, langRes["btn_cancel_N"], langRes["btn_cancel_H"]);
+            XUtils.setButtonSprite(buyBtn, langRes['btn_buy_N'], langRes['btn_buy_H']);
+            XUtils.setButtonSprite(cancelBtn, langRes['btn_cancel_N'], langRes['btn_cancel_H']);
         });
 
         this.node.active = false;
     }
 
-    update(deltaTime: number) {
+    update(_deltaTime: number) {
 
     }
 
@@ -135,8 +142,4 @@ export class FeatureBuyPage extends Component {
     private onClickCancel(): void {
         this.hide();
     }
-}
-
-enum BoxAni {
-    start = "start"
 }

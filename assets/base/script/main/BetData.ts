@@ -87,6 +87,7 @@ export class BetData {
         this.betIdx = this.TotalArrayX[this.TotalIndex][0];
         this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
     }
+
     public less(): void {
         this.TotalIndex = Math.max(this.TotalIndex - 1, 0);
         this.betIdx = this.TotalArrayX[this.TotalIndex][0];
@@ -174,6 +175,7 @@ export class BetData {
             return this.getBetAt(this.betIdx);
         }
     }
+
     public getCurLine(): number {
         return this.getLineAt(this.lineIdx);
     }
@@ -181,12 +183,15 @@ export class BetData {
     public getMaxRate(): number {
         return this.getRateAt(this.rateList.length - 1);
     }
+
     public getMaxBet(): number {
         return this.getBetAt(this.betList.length - 1);
     }
+
     public getMaxLine(): number {
         return this.getLineAt(this.lineList.length - 1);
     }
+
     public getMaxTotal(): number {
         return this.getMaxRate() * this.getMaxBet() * this.getMaxLine();
     }

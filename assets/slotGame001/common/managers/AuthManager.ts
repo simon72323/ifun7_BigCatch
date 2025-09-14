@@ -6,18 +6,18 @@ import { sys } from 'cc';
 export class AuthManager {
     private static _instance: AuthManager;
     private token: string = '';
-    
+
     private constructor() {
         this.initToken();
     }
-    
+
     public static getInstance(): AuthManager {
         if (!this._instance) {
             this._instance = new AuthManager();
         }
         return this._instance;
     }
-    
+
     /**
      * 初始化 Token
      */
@@ -25,7 +25,7 @@ export class AuthManager {
         // 從 URL 參數獲取 token
         const urlParams = this.getURLParameters();
         const paramToken = urlParams.get('token');
-        
+
         if (paramToken) {
             // 嘗試從 sessionStorage 獲取緩存的 token
             const cachedToken = sys.localStorage.getItem(paramToken);
@@ -36,7 +36,7 @@ export class AuthManager {
             }
         }
     }
-    
+
     /**
      * 獲取 URL 參數
      */
@@ -46,20 +46,20 @@ export class AuthManager {
         }
         return new URLSearchParams();
     }
-    
+
     /**
      * 獲取當前 Token
      */
     public getToken(): string {
         return this.token;
     }
-    
+
     /**
      * 設置 Token
      */
     public setToken(token: string) {
         this.token = token;
-        
+
         // 緩存到 sessionStorage
         const urlParams = this.getURLParameters();
         const paramToken = urlParams.get('token');
@@ -67,7 +67,7 @@ export class AuthManager {
             sys.localStorage.setItem(paramToken, token);
         }
     }
-    
+
     /**
      * 清除 Token
      */
@@ -79,14 +79,14 @@ export class AuthManager {
             sys.localStorage.removeItem(paramToken);
         }
     }
-    
+
     /**
      * 檢查是否已認證
      */
     public isAuthenticated(): boolean {
         return this.token.length > 0;
     }
-    
+
     /**
      * 獲取 URL 參數值
      */

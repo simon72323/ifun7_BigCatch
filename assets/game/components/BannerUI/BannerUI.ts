@@ -1,16 +1,38 @@
 import { _decorator, Animation, Component, Label, Node, sp, Sprite, SpriteFrame, Tween, Vec3 } from 'cc';
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { BaseLang, ModuleID } from '@/base/script/types/BaseType';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { BaseDataManager } from '../../../base/script/main/BaseDataManager';
-import { XEvent, XEvent1, XEvent2 } from '../../../base/script/utils/XEvent';
-import { GameAnimationName, GameAudioKey, LangBundleDir } from '../../script/constant/GameConst';
-import { BannerAD } from './BannerAD';
-const { ccclass, property } = _decorator;
+
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseLang, ModuleID } from '@base/script/types/BaseType';
+import { XEvent, XEvent1, XEvent2 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerAD } from '@game/components/BannerUI/BannerAD';
+import { GameAnimationName, GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+
+enum TitleType {
+    originWin = 0,
+    win,
+    totalWin
+}
+
+enum WinBarAnimation {
+    multiply = 'multiply',
+    multiply_loop = 'multiply_loop',
+    nomal = 'nomal',
+    none = 'none',
+    none_total_win = 'none_total_win',
+    total_win = 'total_win',
+    total_win_loop = 'total_win_loop',
+    win_end = 'win_end',
+    win_loop = 'win_loop',
+    win_start = 'win_start',
+}
+
+const { ccclass } = _decorator;
 
 /**
  * 橫幅
@@ -63,7 +85,7 @@ export class BannerUI extends Component {
     /**小獎(1:win_1), 10倍以上大獎(2:win_2) */
     private vfxLevel: number = 0;
     private totalWinData = {
-        currentValue: 0,
+        currentValue: 0
     };
 
     private retriggerPosMap: { [key: string]: number } = {
@@ -79,26 +101,26 @@ export class BannerUI extends Component {
         [BaseLang.kor]: -50,
         [BaseLang.tur]: -81,
         [BaseLang.eng]: 12,
-        [BaseLang.tch]: -84,
+        [BaseLang.tch]: -84
     };
 
     private info_bar_ani: sp.Skeleton;
     private info_bar_ani_bg: sp.Skeleton;
 
     onLoad(): void {
-        this.bannerAD = this.node.getChildByPath("BannerAD").getComponent(BannerAD);
-        this.BannerText = this.node.getChildByPath("BannerAD/BannerTextMask/BannerText").getComponent(Sprite);
+        this.bannerAD = this.node.getChildByPath('BannerAD').getComponent(BannerAD);
+        this.BannerText = this.node.getChildByPath('BannerAD/BannerTextMask/BannerText').getComponent(Sprite);
         this.originPos = this.BannerText.node.getPosition(this.originPos);
 
-        this.BannerWin = this.node.getChildByPath("BannerWin");
-        this.winLabel = this.node.getChildByPath("BannerWin/WinText").getComponent(Label);
-        this.text_win = this.node.getChildByPath("BannerWin/text_win");
-        this.text_totalwin = this.node.getChildByPath("BannerWin/text_totalwin");
+        this.BannerWin = this.node.getChildByPath('BannerWin');
+        this.winLabel = this.node.getChildByPath('BannerWin/WinText').getComponent(Label);
+        this.text_win = this.node.getChildByPath('BannerWin/text_win');
+        this.text_totalwin = this.node.getChildByPath('BannerWin/text_totalwin');
 
-        this.BannerRetrigger = this.node.getChildByPath("BannerRetrigger");
-        this.retriggerLabel = this.node.getChildByPath("BannerRetrigger/WinText").getComponent(Label);
-        this.info_bar_ani = this.node.getChildByPath("info_bar_ani").getComponent(sp.Skeleton);
-        this.info_bar_ani_bg = this.node.getChildByPath("info_bar_ani_bg").getComponent(sp.Skeleton);
+        this.BannerRetrigger = this.node.getChildByPath('BannerRetrigger');
+        this.retriggerLabel = this.node.getChildByPath('BannerRetrigger/WinText').getComponent(Label);
+        this.info_bar_ani = this.node.getChildByPath('info_bar_ani').getComponent(sp.Skeleton);
+        this.info_bar_ani_bg = this.node.getChildByPath('info_bar_ani_bg').getComponent(sp.Skeleton);
 
         BannerUI.showOriginWin.on(this.showOriginWin, this);
         BannerUI.showWin.on(this.showWin, this);
@@ -110,12 +132,12 @@ export class BannerUI extends Component {
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
 
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {
-            this.bannerReTextList.push(langRes["RetriggerInfo"]);
-            this.bannerReTextList.push(langRes["RetriggerMax"]);
+            this.bannerReTextList.push(langRes['RetriggerInfo']);
+            this.bannerReTextList.push(langRes['RetriggerMax']);
 
-            this.node.getChildByPath("BannerWin/text_win").getComponent(Sprite).spriteFrame = langRes["text_win"];
-            this.node.getChildByPath("BannerWin/text_totalwin").getComponent(Sprite).spriteFrame = langRes["text_totalwin"];
-            this.node.getChildByPath("BannerRetrigger/text_retrigger").getComponent(Sprite).spriteFrame = langRes["text_retrigger"];
+            this.node.getChildByPath('BannerWin/text_win').getComponent(Sprite).spriteFrame = langRes['text_win'];
+            this.node.getChildByPath('BannerWin/text_totalwin').getComponent(Sprite).spriteFrame = langRes['text_totalwin'];
+            this.node.getChildByPath('BannerRetrigger/text_retrigger').getComponent(Sprite).spriteFrame = langRes['text_retrigger'];
             this.retriggerLabel.node.setPosition(this.retriggerPosMap[lang], 0);
         });
 
@@ -164,6 +186,7 @@ export class BannerUI extends Component {
     private showOriginWin(value: number): void {
         this.showWinByType(TitleType.originWin, value, 0);
     }
+
     /**
      * 贏得XXX
      * @param level 
@@ -265,7 +288,7 @@ export class BannerUI extends Component {
         this.info_bar_ani_bg.addAnimation(0, WinBarAnimation.none_total_win, false);
         this.info_bar_ani_bg.addAnimation(0, WinBarAnimation.none, true);
 
-        //WinBar音效都是用在"共贏得"
+        //WinBar音效都是用在'共贏得'
         AudioManager.getInstance().play(this.vfxLevel == 1 ? AudioKey.WinBar1 : AudioKey.WinBar2);
 
         BannerUI.totalWinComplete.emit();
@@ -298,24 +321,4 @@ export class BannerUI extends Component {
 
         this.bannerAD.node.active = true;
     }
-}
-
-
-enum TitleType {
-    originWin = 0,
-    win,
-    totalWin
-}
-
-enum WinBarAnimation {
-    multiply = "multiply",
-    multiply_loop = "multiply_loop",
-    nomal = "nomal",
-    none = "none",
-    none_total_win = "none_total_win",
-    total_win = "total_win",
-    total_win_loop = "total_win_loop",
-    win_end = "win_end",
-    win_loop = "win_loop",
-    win_start = "win_start",
 }

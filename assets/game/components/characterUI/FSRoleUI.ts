@@ -1,11 +1,32 @@
 import { _decorator, Component, sp } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { ModuleID } from '@/base/script/types/BaseType';
-import { XEvent, XEvent1 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAudioKey, GameConst } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { ModuleID } from '@base/script/types/BaseType';
+import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameAudioKey, GameConst } from '@game/script/constant/GameConst';
+
+enum FSAni {
+    end_a = 'end_a',
+    end_b = 'end_b',
+    fire_end = 'fire_end',
+    fire_hit1 = 'fire_hit1',
+    fire_hit2 = 'fire_hit2',
+    fire_hit3 = 'fire_hit3',
+    fire_loop_A = 'fire_loop_A',
+    fire_loop_B = 'fire_loop_B',
+    fire_start = 'fire_start',
+    fire_win = 'fire_win',//
+    idel = 'idel',
+    prepare = 'prepare',
+    to_prepare = 'to_prepare',
+
+    fire_hitX = 'fire_hit#',
+}
+
+const { ccclass } = _decorator;
 
 /**
  * FS角色
@@ -30,14 +51,14 @@ export class FSRoleUI extends Component {
     private spine: sp.Skeleton = null;
 
     private multiplierList: number[] = [16, 64, 512];
-    private prefixList: string[] = ["1", "2", "3"];
-    private curPrefix: string = "";
+    private prefixList: string[] = ['1', '2', '3'];
+    private curPrefix: string = '';
     private hitMultiplier: number = -1;
     private soundTimeList: number[][] = [[0.4], [0.3, 0.6], [0.2, 0.4, 0.6]];
 
     onLoad() {
 
-        this.spine = this.node.getChildByName("fg_character_ani").getComponent(sp.Skeleton);
+        this.spine = this.node.getChildByName('fg_character_ani').getComponent(sp.Skeleton);
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
 
@@ -69,7 +90,7 @@ export class FSRoleUI extends Component {
         XUtils.ClearSpine(this.spine);
         this.spine.setCompleteListener(() => {
             this.onLoop();
-        })
+        });
         if (Math.random() <= 0.1) {
             this.spine.setAnimation(0, FSAni.fire_loop_B, false);
             this.scheduleOnce(() => {
@@ -102,13 +123,13 @@ export class FSRoleUI extends Component {
                 if (hitMultiplier >= value) {
                     aniIdx = idx;
                 }
-            })
+            });
             this.curPrefix = this.prefixList[aniIdx];
-            aniName = FSAni.fire_hitX.replace("#", this.curPrefix);
+            aniName = FSAni.fire_hitX.replace('#', this.curPrefix);
         }
 
         let timeList = this.soundTimeList[aniIdx];
-        timeList.forEach((t, idx) => this.scheduleOnce(() => {
+        timeList.forEach((t, _idx) => this.scheduleOnce(() => {
             AudioManager.getInstance().playOneShot(GameAudioKey.hitGun);
             this.scheduleOnce(() => {
                 AudioManager.getInstance().playOneShot(GameAudioKey.shot);
@@ -143,12 +164,12 @@ export class FSRoleUI extends Component {
         AudioManager.getInstance().play(GameAudioKey.laughing);
 
         this.hitMultiplier = -1;
-        this.curPrefix = "";
+        this.curPrefix = '';
     }
 
     private onFinal(onComplete): void {
         let timeList = this.soundTimeList[2];
-        timeList.forEach((t, idx) => this.scheduleOnce(() => {
+        timeList.forEach((t, _idx) => this.scheduleOnce(() => {
             AudioManager.getInstance().playOneShot(GameAudioKey.hitGun);
             this.scheduleOnce(() => {
                 AudioManager.getInstance().playOneShot(GameAudioKey.shot);
@@ -166,24 +187,4 @@ export class FSRoleUI extends Component {
         });
         this.spine.setAnimation(0, endAni, false);
     }
-}
-
-
-enum FSAni {
-    end_a = "end_a",
-    end_b = "end_b",
-    fire_end = "fire_end",
-    fire_hit1 = "fire_hit1",
-    fire_hit2 = "fire_hit2",
-    fire_hit3 = "fire_hit3",
-    fire_loop_A = "fire_loop_A",
-    fire_loop_B = "fire_loop_B",
-    fire_start = "fire_start",
-    fire_win = "fire_win",//
-    idel = "idel",
-    prepare = "prepare",
-    to_prepare = "to_prepare",
-
-    fire_hitX = "fire_hit#",
-
 }

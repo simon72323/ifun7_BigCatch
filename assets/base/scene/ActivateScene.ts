@@ -1,10 +1,12 @@
 import { _decorator, Component, director, SpriteFrame } from 'cc';
-import { BaseConst } from '../../base/script/constant/BaseConst';
-import { BaseDataManager } from '../../base/script/main/BaseDataManager';
-import { BundleLoader } from '../../base/script/main/BundleLoader';
-import { BaseLangBundleDir } from '../../base/script/types/BaseType';
-import { logger } from '../../base/script/utils/XUtils';
-const { ccclass, property } = _decorator;
+
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseLangBundleDir } from '@base/script/types/BaseType';
+import { logger } from '@base/script/utils/XUtils';
+
+const { ccclass } = _decorator;
 
 @ccclass('ActivateScene')
 export class ActivateScene extends Component {
@@ -24,31 +26,31 @@ export class ActivateScene extends Component {
             this.checkComplete();
         }, 1);
 
-        const baseLoadingLoader = new BundleLoader();
-        baseLoadingLoader.add(BaseConst.BUNDLE_BASE_LANGUAGE, `${BaseDataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.loading}`, SpriteFrame);
-        await baseLoadingLoader.load(true);
+        const lang = BaseDataManager.getInstance().urlParam.lang;
 
-        const gameLoadingLoader = new BundleLoader();
-        gameLoadingLoader.add(BaseConst.BUNDLE_LANGUAGE, BaseDataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING, SpriteFrame);
-        await gameLoadingLoader.load(true);
+        const loadingLoader = new BundleLoader();
+        //加載幣別符號
+        loadingLoader.add(BaseConst.BUNDLE_BASE_CURRENCY, `${lang}/${BaseLangBundleDir.loading}`, SpriteFrame);
+        //加載載入頁語系
+        loadingLoader.add(BaseConst.BUNDLE_LANGUAGE, `${lang}/${BaseConst.DIR_LOADING}`, SpriteFrame);
+        await loadingLoader.load(true);
 
         this.bundleComplete = true;
         this.checkComplete();
 
     }
 
+    /**
+     * 檢查是否完成
+     */
     private checkComplete(): void {
         if (!this.spineComplete || !this.bundleComplete) return;
-
-        director.loadScene("load", () => {
-            if (document.getElementById("loading")) {
-                document.getElementById("loading").parentNode.removeChild(document.getElementById("loading"));
-            }
-            logger("[ActivateScene] loadScene 完成!");
+        //載入載入頁
+        director.loadScene('load', () => {
+            //移除loading元素
+            document.getElementById('loading')?.remove();
+            logger('[ActivateScene] loadScene 完成!');
         });
-    }
-    update(deltaTime: number) {
-
     }
 }
 

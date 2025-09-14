@@ -1,18 +1,18 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { SymbolData2 } from "../../components/slotMachine2/SymbolData2";
-import { GameAudioKey, GameConst, SlotMachineID, SymbolID } from "../constant/GameConst";
-import { GameData } from "../main/GameData";
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { GameTask } from '@base/script/tasks/GameTask';
 
+import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
+import { GameAudioKey, GameConst, SlotMachineID, SymbolID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 /**
  * 掉落
  */
 export class DropTask extends GameTask {
 
-    protected name: string = "DropTask";
+    protected name: string = 'DropTask';
 
     public preSymbolPattern: number[];
 
@@ -77,6 +77,6 @@ export class DropTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

@@ -1,4 +1,4 @@
-import { BaseDataManager } from "../main/BaseDataManager";
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
 
 export class APIManager {
     private static instance: APIManager;
@@ -39,15 +39,19 @@ export class APIManager {
     public getPSImages(): string {
         return this.callWindow('getPSImages')();//psapi.hostInfo.host_resource
     }
+
     public getPSEvents(): string {
         return this.callWindow('getPSEvents')();//psapi.hostInfo.eventInfo
     }
+
     public goHome(): string {
         return this.callWindow('goHome')();
     }
+
     public openRecord(): void {
         return this.callWindow('openRecord')();
     }
+
     public getGameVersion(): number {
         return this.callWindow('getGameVersion')();
     }
@@ -58,7 +62,7 @@ export class APIManager {
         }
         else {
             console.error(`window 找不到 ${funcName}`);
-            return () => { }
+            return () => { };
         }
     }
 
@@ -85,14 +89,14 @@ export class APIManager {
      */
     private setupHostSocket(): void {
         let game_type = this.psAPI.hostInfo.game_type.toLowerCase();
-        let type_idx = this.psAPI.hostInfo.type_id.toLowerCase();
+        // let type_idx = this.psAPI.hostInfo.type_id.toLowerCase();
         if (this.psAPI.hostInfo.server_info[game_type] instanceof Array) {
             for (let i = 0; i < this.psAPI.hostInfo.server_info[game_type].length; i++) {
-                this.socketUrl.push(this.psAPI.hostInfo.server_info[game_type][i].replace("@ORIGIN_DOMAIN@", location.hostname));
+                this.socketUrl.push(this.psAPI.hostInfo.server_info[game_type][i].replace('@ORIGIN_DOMAIN@', location.hostname));
             }
         }
         else {
-            this.socketUrl.push(this.psAPI.hostInfo.server_info[game_type].replace("@ORIGIN_DOMAIN@", location.hostname));
+            this.socketUrl.push(this.psAPI.hostInfo.server_info[game_type].replace('@ORIGIN_DOMAIN@', location.hostname));
         }
 
         for (let i = 0; i < this.socketUrl.length; i++) {
@@ -106,7 +110,7 @@ export class APIManager {
     //psAPI相關內容使用時需要預防沒有psAPI=================================================================================
 
     public getVersion(): string {
-        return this.psAPI ? `ver:${this.psAPI.hostInfo.game_version.rev} build:${this.psAPI.hostInfo.game_version.build}` : "none";
+        return this.psAPI ? `ver:${this.psAPI.hostInfo.game_version.rev} build:${this.psAPI.hostInfo.game_version.build}` : 'none';
     }
 
     /**
@@ -118,20 +122,20 @@ export class APIManager {
     }
 
     public getSocketUrl(): string {
-        return this.psAPI ? this.socketUrl[0] : "";
+        return this.psAPI ? this.socketUrl[0] : '';
     }
 
     public getRecordUrl(): string {
-        let url = "";
+        let url = '';
         if (this.psAPI) {
             url = this.psAPI.hostInfo.history_url;
-            url = (!url || url == "") ? `${this.psAPI.origin}/gamehistory/` : url
-            url = `${url}?host_id=${this.psAPI.hostInfo.host_id}`
-            url += `&lang=${this.psAPI.hostInfo.lang}`
-            url += `&game_id=${this.psAPI.hostInfo.game_id}`
-            url += `&count=20`
-            url += `&page=1`
-            url += `&uid=${this.getURLParameter("uid")}`;
+            url = (!url || url == '') ? `${this.psAPI.origin}/gamehistory/` : url;
+            url = `${url}?host_id=${this.psAPI.hostInfo.host_id}`;
+            url += `&lang=${this.psAPI.hostInfo.lang}`;
+            url += `&game_id=${this.psAPI.hostInfo.game_id}`;
+            url += '&count=20';
+            url += '&page=1';
+            url += `&uid=${this.getURLParameter('uid')}`;
         }
         return url;
     }
@@ -147,22 +151,22 @@ export class APIManager {
             //新架構
             if (BaseDataManager.getInstance().urlParam.isNewGameServer) {
                 url = this.psAPI.hostInfo.history_url;
-                url = (!url || url == "") ? `${this.psAPI.origin}/GameHelp/GameInfo/` : url
-                url += `?lang=${this.psAPI.hostInfo.lang}`
-                url += `&game_id=${this.psAPI.hostInfo.game_id}`
+                url = (!url || url == '') ? `${this.psAPI.origin}/GameHelp/GameInfo/` : url;
+                url += `?lang=${this.psAPI.hostInfo.lang}`;
+                url += `&game_id=${this.psAPI.hostInfo.game_id}`;
             }
             //舊架構
             else {
                 let code = BaseDataManager.getInstance().urlParam.langCode;
                 code = code == 'po-BR' ? 'pt-BR' : code;
-                url = `${this.psAPI.origin}/gamehistory/GameHelp/GameInfo?lang=${code}&game_id=${this.psAPI.hostInfo.game_id}`
+                url = `${this.psAPI.origin}/gamehistory/GameHelp/GameInfo?lang=${code}&game_id=${this.psAPI.hostInfo.game_id}`;
             }
         }
         //本地
         else {
-            url += "https://platform-dev.5gg.win/#/game_info";
-            url += `?lang=sch`
-            url += `&game_id=${BaseDataManager.getInstance().gameID}`
+            url += 'https://platform-dev.5gg.win/#/game_info';
+            url += '?lang=sch';
+            url += `&game_id=${BaseDataManager.getInstance().gameID}`;
         }
         return url;
     }
@@ -170,12 +174,12 @@ export class APIManager {
     public getPromoReminderUrl(): string {
         let url = '';
         if (this.psAPI) {
-            url = `${this.psAPI.origin}/campaign/promo`
-            url += `?lang=${this.psAPI.hostInfo.lang}`
+            url = `${this.psAPI.origin}/campaign/promo`;
+            url += `?lang=${this.psAPI.hostInfo.lang}`;
         }
         else {
             url += 'https://platform-dev.5gg.win/#/promo';
-            url += `?lang=zh-TW`
+            url += '?lang=zh-TW';
         }
         return url;
     }
@@ -183,24 +187,24 @@ export class APIManager {
     public getPromoInfoUrl(): string {
         let url = '';
         if (this.psAPI) {
-            url = `${this.psAPI.origin}/campaign/promo_info`
-            url += `?lang=${this.psAPI.hostInfo.lang}`
+            url = `${this.psAPI.origin}/campaign/promo_info`;
+            url += `?lang=${this.psAPI.hostInfo.lang}`;
         }
         else {
             url += 'https://platform-dev.5gg.win/#/promo/info';
-            url += `?lang=zh-TW`
+            url += '?lang=zh-TW';
         }
         return url;
     }
 
     private getURLParameter = function (param) {
         if (!this.psAPI) {
-            return "";
+            return '';
         }
         else {
-            return this.psAPI.queryString.hasOwnProperty(param) ? this.psAPI.queryString[param] : '';
+            return Object.hasOwn(this.psAPI.queryString, param) ? this.psAPI.queryString[param] : '';
         }
-    }
+    };
 
     /**
      * 返回類型(5g館return_type = 2)

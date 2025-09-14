@@ -1,4 +1,4 @@
-import { ISendMessage } from "../socket/SocketManager";
+import { ISendMessage } from '@base/script/socket/SocketManager';
 
 /**
  * 請求取得指定活動內容

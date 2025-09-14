@@ -1,7 +1,9 @@
 import { _decorator, Animation, Component, UIOpacity } from 'cc';
-import { BaseAnimationName } from '@/base/script/types/BaseType';
-import { XEvent1 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
+
+import { BaseAnimationName } from '@base/script/types/BaseType';
+import { XEvent1 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
 const { ccclass, property } = _decorator;
 
 /**
@@ -27,7 +29,7 @@ export class UIBlack extends Component {
                 return;
             }
             this.node.active = true;
-            XUtils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.3)
+            XUtils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.3);
         }, this);
 
         UIBlack.fadeOut.on((name) => {
@@ -37,7 +39,7 @@ export class UIBlack extends Component {
 
             XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.3, () => {
                 this.node.active = false;
-            })
+            });
         }, this);
 
         UIBlack.show.on((name) => {
@@ -59,13 +61,6 @@ export class UIBlack extends Component {
 
         }, this);
     }
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-
-    }
 
     onDestroy() {
         // 清理所有 XEvent 監聽器
@@ -75,4 +70,3 @@ export class UIBlack extends Component {
         UIBlack.hide.off(this);
     }
 }
-

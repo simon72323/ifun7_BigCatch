@@ -1,7 +1,8 @@
 import { _decorator, Component, Node } from 'cc';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { ModuleID } from '@/base/script/types/BaseType';
-const { ccclass, property } = _decorator;
+
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { ModuleID } from '@base/script/types/BaseType';
+const { ccclass } = _decorator;
 
 /**
  * 背景UI
@@ -13,8 +14,8 @@ export class BackgroundUI extends Component {
     private ng_bkg: Node;
 
     onLoad() {
-        this.ng_bkg = this.node.getChildByName("ng_bkg_ani");
-        this.fg_bkg = this.node.getChildByName("fg_bkg_ani");
+        this.ng_bkg = this.node.getChildByName('ng_bkg_ani');
+        this.fg_bkg = this.node.getChildByName('fg_bkg_ani');
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
 

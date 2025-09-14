@@ -1,21 +1,32 @@
 import { _decorator, Animation, Component, easing, Node, sp, tween, Tween, Vec3 } from 'cc';
-import { AutoPage } from '@/base/components/autoPage/AutoPage';
-import { GameHelpWebView } from '@/base/components/gameHelp/GameHelpWebView';
-import { SettingsPage1 } from '@/base/components/settingsPage/SettingsPage1';
-import { SettingsPage2 } from '@/base/components/settingsPage/SettingsPage2';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { TaskManager } from '@/base/script/tasks/TaskManager';
-import { ModuleID } from '@/base/script/types/BaseType';
-import { XEvent } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAnimationName, GameAudioKey } from '../../script/constant/GameConst';
-import { GameData } from '../../script/main/GameData';
-import { IdleTask } from '../../script/task/IdleTask';
-import { FeatureBuyBtn } from '../featureBuy/FeatureBuyBtn';
-import { FeatureBuyPage } from '../featureBuy/FeatureBuyPage';
-import { SlotMachine2 } from '../slotMachine2/base/slotMachine2/SlotMachine2';
+
+import { AutoPage } from '@base/components/autoPage/AutoPage';
+import { GameHelpWebView } from '@base/components/gameHelp/GameHelpWebView';
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { TaskManager } from '@base/script/tasks/TaskManager';
+import { ModuleID } from '@base/script/types/BaseType';
+import { XEvent } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
+import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { GameAnimationName, GameAudioKey } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
+import { IdleTask } from '@game/script/task/IdleTask';
+
+enum RollerAni {
+    fg_mipie = 'fg_mipie',
+    fg_roller = 'fg_roller',
+    intofg_roller = 'intofg_roller',
+    ng_mipie = 'ng_mipie',
+    ng_roller = 'ng_roller',
+}
+
 const { ccclass, property } = _decorator;
 
 @ccclass('GameStage')
@@ -31,8 +42,8 @@ export class GameStage extends Component {
     private isMi: boolean = false;
     private scaleNode: Node;
     onLoad() {
-        this.roller_ani = this.node.getChildByPath("ScaleNode/roller_ani").getComponent(sp.Skeleton);
-        this.scaleNode = this.node.getChildByName("ScaleNode");
+        this.roller_ani = this.node.getChildByPath('ScaleNode/roller_ani').getComponent(sp.Skeleton);
+        this.scaleNode = this.node.getChildByName('ScaleNode');
 
         BaseEvent.initMessageComplete.once(this.netReady, this);//監聽網路準備完成事件(一次)
         BaseEvent.changeScene.on(this.onChangeScene, this);//監聽切換場景事件
@@ -74,7 +85,7 @@ export class GameStage extends Component {
         this.isMi = true;
         tween(this.scaleNode)
             .to(3, { scale: new Vec3(0.95, 0.95, 1) }, { easing: easing.circOut })
-            .start()
+            .start();
 
         XUtils.ClearSpine(this.roller_ani);
         if (BaseDataManager.getInstance().isBS() === true) {
@@ -94,7 +105,7 @@ export class GameStage extends Component {
         Tween.stopAllByTarget(this.scaleNode);
         tween(this.scaleNode)
             .to(1.5, { scale: new Vec3(1, 1, 1) })
-            .start()
+            .start();
 
         XUtils.ClearSpine(this.roller_ani);
         if (BaseDataManager.getInstance().isBS() === true) {
@@ -128,8 +139,6 @@ export class GameStage extends Component {
         if (BaseDataManager.getInstance().recoverData) {
             // let recoverTask = new RecoverTask();
         }
-        else {
-        }
 
         //監聽開始遊戲事件 --------------------------------------------------------
         BaseEvent.startGame.once(() => {
@@ -158,21 +167,13 @@ export class GameStage extends Component {
      * @param id 
      */
     private onChangeScene(id: ModuleID) {
-        this.node.getChildByPath("ScaleNode/BSUI1").active = id === ModuleID.BS;
-        this.node.getChildByPath("ScaleNode/BSUI2").active = id === ModuleID.BS;
-        this.node.getChildByPath("ScaleNode/FSUI").active = id !== ModuleID.BS;
+        this.node.getChildByPath('ScaleNode/BSUI1').active = id === ModuleID.BS;
+        this.node.getChildByPath('ScaleNode/BSUI2').active = id === ModuleID.BS;
+        this.node.getChildByPath('ScaleNode/FSUI').active = id !== ModuleID.BS;
 
         if (id === ModuleID.BS) {
             XUtils.ClearSpine(this.roller_ani);
             this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
         }
     }
-}
-
-enum RollerAni {
-    fg_mipie = "fg_mipie",
-    fg_roller = "fg_roller",
-    intofg_roller = "intofg_roller",
-    ng_mipie = "ng_mipie",
-    ng_roller = "ng_roller",
 }

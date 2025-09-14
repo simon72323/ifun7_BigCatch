@@ -1,11 +1,11 @@
-import { GameTask } from "@/base/script/tasks/GameTask";
+import { GameTask } from '@base/script/tasks/GameTask';
 
 /**
  * 更新免費遊戲次數
  */
 export class UpdateFreeTimesTask extends GameTask {
 
-    protected name: string = "UpdateFreeTimesTask";
+    protected name: string = 'UpdateFreeTimesTask';
 
     /**目標次數 */
     public times: number;
@@ -16,7 +16,8 @@ export class UpdateFreeTimesTask extends GameTask {
         // FeatureGameUI.refreshRemainTimes.emit(this.times);
         this.finish();
     }
+
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

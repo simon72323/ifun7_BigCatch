@@ -1,4 +1,4 @@
-import { logger } from "./XUtils";
+import { logger } from '@base/script/utils/XUtils';
 
 /**
  * 逾時處理器
@@ -23,7 +23,7 @@ export class TimeoutManager {
             this.remove(name);
         }
         let timeout = setTimeout(callback, seconds * 1000);
-        this.timeoutMap.set(name, { key: timeout, callback: callback });
+        this.timeoutMap.set(name, { key: timeout, callback });
     }
 
     /**

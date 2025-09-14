@@ -1,8 +1,45 @@
-import { FreeSpinBonus } from "../../components/campaign/FreeSpinBonus";
-import { FreeSpinInfoBtn } from "../../components/campaign/FreeSpinInfoBtn";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { BaseEvent } from "../main/BaseEvent";
-import { SocketManager } from "../socket/SocketManager";
+import { FreeSpinBonus } from '@base/components/campaign/FreeSpinBonus';
+import { FreeSpinInfoBtn } from '@base/components/campaign/FreeSpinInfoBtn';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { SocketManager } from '@base/script/socket/SocketManager';
+
+export enum CampaignStatusEnum {
+    /// <summary>
+    /// 尚未開始
+    /// </summary>
+    CampaignStatusEnum_NotStartYet = 1,
+
+    /// <summary>
+    /// 即將開始
+    /// </summary>
+    CampaignStatusEnum_ComingSoon = 2,
+
+    /// <summary>
+    /// 進行中
+    /// </summary>
+    CampaignStatusEnum_Running = 3,
+
+    /// <summary>
+    /// 暫停中
+    /// </summary>
+    CampaignStatusEnum_Suspend = 4,
+
+    /// <summary>
+    /// 強制終止
+    /// </summary>
+    CampaignStatusEnum_Terminate = 5,
+
+    /// <summary>
+    /// 已結束
+    /// </summary>
+    CampaignStatusEnum_End = 6,
+
+    /// <summary>
+    /// 結算中
+    /// </summary>
+    CampaignStatusEnum_Result = 7,
+}
 
 /**
  * 活動管理
@@ -43,7 +80,7 @@ export class PromoManager {
             FreeSpinBonus.clickPlayNow.once(() => {
                 window.location.replace(window.location.href.replace(BaseDataManager.getInstance().gameID, curCampaign.redirect_game_id));
             }, this);
-            FreeSpinBonus.clickClose
+            // FreeSpinBonus.clickClose
             BaseDataManager.getInstance().isMenuOn = true;
             this.isWebViewOpen = true;
             FreeSpinBonus.showReminder.emit(curCampaign.campaign_id, -1);
@@ -119,7 +156,7 @@ export class PromoManager {
         }
         //放到通知清單, 如果待機狀態就直接跳, 否則等回待機再跳
         else {
-            this.notifiable_campaign_list.push({ campaign_id: campaign_id, event_type: event_type, redirect_game_id: '' });
+            this.notifiable_campaign_list.push({ campaign_id, event_type, redirect_game_id: '' });
 
             if (BaseDataManager.getInstance().isIdle() === true) {
                 this.checkReminder();
@@ -147,11 +184,11 @@ export class PromoManager {
 
     /**
      * 通知玩家獲得贏分
-     * @param campaign_id 
-     * @param campaign_type 
-     * @param total_win 
+     * @param _campaign_id 
+     * @param _campaign_type 
+     * @param _total_win 
      */
-    public notifyWin(campaign_id: string, campaign_type: number, total_win: number): void {
+    public notifyWin(_campaign_id: string, _campaign_type: number, _total_win: number): void {
         this.waitingPayout = false;
         let fn = this.payoutCallback;
         fn?.();
@@ -162,16 +199,16 @@ export class PromoManager {
      * 檢查是否需要主動提示
      */
     public checkReminder(): void {
-        console.log("檢查reminder:" + JSON.stringify(this.notifiable_campaign_list));
+        console.log('檢查reminder:' + JSON.stringify(this.notifiable_campaign_list));
 
         //有結算訊息優先顯示, 結束再檢查其他活動異動訊息
-        if (this.curCampaignID != "") {
+        if (this.curCampaignID != '') {
             BaseDataManager.getInstance().isMenuOn = true;
             this.isWebViewOpen = true;
             FreeSpinBonus.showReminder.emit(this.curCampaignID, -1);
             this.reset();
 
-            //開啟reminder後, 只有可能"關閉"或"開始Spin"
+            //開啟reminder後, 只有可能'關閉'或'開始Spin'
             FreeSpinBonus.clickClose.once(() => {
                 this.hideFreeSpinBonus();
                 this.checkReminder();
@@ -184,7 +221,7 @@ export class PromoManager {
             BaseDataManager.getInstance().isMenuOn = true;
             this.isWebViewOpen = true;
             FreeSpinBonus.showReminder.emit(curCampaign.campaign_id, curCampaign.event_type);
-            //開啟reminder後, 只有可能"關閉"或"開始Spin"
+            //開啟reminder後, 只有可能'關閉'或'開始Spin'
             FreeSpinBonus.clickClose.once(() => {
                 this.hideFreeSpinBonus();
 
@@ -219,48 +256,10 @@ export class PromoManager {
     }
 
     public isFreeSpin(): boolean {
-        return this.curCampaignID !== "";
+        return this.curCampaignID !== '';
     }
 
     public hasNotifyCampaign(): boolean {
         return this.notifiable_campaign_list.length > 0;
     }
-}
-
-
-export enum CampaignStatusEnum {
-    /// <summary>
-    /// 尚未開始
-    /// </summary>
-    CampaignStatusEnum_NotStartYet = 1,
-
-    /// <summary>
-    /// 即將開始
-    /// </summary>
-    CampaignStatusEnum_ComingSoon = 2,
-
-    /// <summary>
-    /// 進行中
-    /// </summary>
-    CampaignStatusEnum_Running = 3,
-
-    /// <summary>
-    /// 暫停中
-    /// </summary>
-    CampaignStatusEnum_Suspend = 4,
-
-    /// <summary>
-    /// 強制終止
-    /// </summary>
-    CampaignStatusEnum_Terminate = 5,
-
-    /// <summary>
-    /// 已結束
-    /// </summary>
-    CampaignStatusEnum_End = 6,
-
-    /// <summary>
-    /// 結算中
-    /// </summary>
-    CampaignStatusEnum_Result = 7,
 }

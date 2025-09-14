@@ -1,22 +1,23 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { SpinButtonState } from "../../../base/script/types/BaseType";
-import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { UIBlack } from "../../components/UIBlack";
-import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from "../constant/GameConst";
-import { GameData } from "../main/GameData";
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { SpinButtonState } from '@base/script/types/BaseType';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { UIBlack } from '@game/components/UIBlack';
+import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * 顯示贏分
  */
 export class ShowWinTask extends GameTask {
 
-    protected name: string = "ShowWinTask";
+    protected name: string = 'ShowWinTask';
 
 
     /**中獎位置 */
@@ -89,6 +90,6 @@ export class ShowWinTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

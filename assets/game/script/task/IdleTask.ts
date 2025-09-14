@@ -1,10 +1,11 @@
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { BaseIdleTask } from "@/base/script/tasks/BaseIdleTask";
-import { TimeoutManager } from "@/base/script/utils/TimeoutManager";
-import { TaskManager } from "../../../base/script/tasks/TaskManager";
-import { SpinTask } from "./SpinTask";
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseIdleTask } from '@base/script/tasks/BaseIdleTask';
+import { TaskManager } from '@base/script/tasks/TaskManager';
+import { TimeoutManager } from '@base/script/utils/TimeoutManager';
+
+import { SpinTask } from '@game/script/task/SpinTask';
 
 /**
  * 待機
@@ -31,6 +32,7 @@ export class IdleTask extends BaseIdleTask {
         }
 
     }
+
     protected childFinish(): void {
         let task = new SpinTask();
         TaskManager.getInstance().addTask(task);

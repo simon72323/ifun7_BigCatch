@@ -1,5 +1,5 @@
-import { BaseDataManager } from "../main/BaseDataManager";
-import { ISendMessage } from "../socket/SocketManager";
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { ISendMessage } from '@base/script/socket/SocketManager';
 
 /**
  * 要求配置資料

@@ -1,6 +1,6 @@
-import { ISocket } from "@/base/script/socket/ISocket";
-import { SocketEvent } from "@/base/script/socket/SocketEvent";
-import { SocketManager } from "@/base/script/socket/SocketManager";
+import { ISocket } from '@base/script/socket/ISocket';
+import { SocketEvent } from '@base/script/socket/SocketEvent';
+import { SocketManager } from '@base/script/socket/SocketManager';
 
 /**
  * 假Server範本
@@ -11,9 +11,9 @@ export class FakeSocketTemplate implements ISocket {
 
     /**
      * 實現connect接口
-     * @param url 
+     * @param _url 
      */
-    connect(url: string): void {
+    connect(_url: string): void {
         //一定要發open事件, 模擬連線完成
         SocketEvent.open.emit();
     }
@@ -26,22 +26,16 @@ export class FakeSocketTemplate implements ISocket {
         const header = s5g.game.proto.Header.decode(uint8);
 
         //也可以用此方法取得receiveMessageList, 再找出對應的handler
-        let receiveMessageList = SocketManager.getInstance()["receiveMessageList"];
+        let receiveMessageList = SocketManager.getInstance()['receiveMessageList'];
 
         //方法一：模擬LoginRecall
         if (header.msgid == s5g.game.proto.EMSGID.eLoginCall) {
             let fakeLoginRecall: s5g.game.proto.ILoginRecall = new s5g.game.proto.LoginRecall();
             fakeLoginRecall.msgid = s5g.game.proto.EMSGID.eLoginRecall;
-            fakeLoginRecall.token = "XXXX";
+            fakeLoginRecall.token = 'XXXX';
             fakeLoginRecall.status_code = s5g.game.proto.Status.Code.kSuccess;
             let buffer = s5g.game.proto.LoginRecall.encode(fakeLoginRecall).finish();
             receiveMessageList[0].decode(buffer);
-        }
-        else if (header.msgid == s5g.game.proto.EMSGID.eConfigCall) {
-
-        }
-        else if (header.msgid == s5g.game.proto.EMSGID.eStripsCall) {
-
         }
         //方法二：發自定義事件
         else if (header.msgid == s5g.game.proto.EMSGID.eResultCall) {

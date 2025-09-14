@@ -1,4 +1,19 @@
-import { Timeout } from "../types/BaseType";
+import { Timeout } from '@base/script/types/BaseType';
+
+export enum BaseFont {
+    /**一般數字 ['0123456789|2', '.,|1'] */
+    number = 'number',
+}
+
+export enum OperatorName {
+    BP = 'bp',
+}
+
+export enum WebViewEnum {
+    GameHistory = 0,
+    GameHelp,
+    Promo
+}
 
 /**
  * 全域常數(絕對不會改的資料放這, 若放BaseDataManager容易出現循環引用問題)
@@ -29,19 +44,19 @@ export class BaseConst {
     public static BIG_WIN_END_DELAY: number = 2;
 
     /**讀取畫面逾時設定(2分鐘) */
-    public static TIMEOUT_LOADING: Timeout = { key: "Loading", seconds: 120 };
+    public static TIMEOUT_LOADING: Timeout = { key: 'Loading', seconds: 120 };
     /**待機5秒後靜音 */
-    public static TIMEOUT_IDLE_MUTE: Timeout = { key: "IdleMute", seconds: 5 };
+    public static TIMEOUT_IDLE_MUTE: Timeout = { key: 'IdleMute', seconds: 5 };
     /**FS10秒自動進入 */
-    public static TIMEOUT_FEATURE_WAIT_START: Timeout = { key: "FeatureWaitStart", seconds: 10 };
+    public static TIMEOUT_FEATURE_WAIT_START: Timeout = { key: 'FeatureWaitStart', seconds: 10 };
     /**spin30秒內需回應 */
-    public static TIMEOUT_RESULT_RECALL: Timeout = { key: "ResultRecall", seconds: 30 };
+    public static TIMEOUT_RESULT_RECALL: Timeout = { key: 'ResultRecall', seconds: 30 };
 
-    public static BUNDLE_BASE_LANGUAGE: string = "baseLanguage";
-    public static BUNDLE_BASE_CURRENCY: string = "currency";
-    public static BUNDLE_LANGUAGE: string = "language";
+    public static BUNDLE_BASE_LANGUAGE: string = 'baseLanguage';
+    public static BUNDLE_BASE_CURRENCY: string = 'currency';
+    public static BUNDLE_LANGUAGE: string = 'language';
 
-    public static DIR_LOADING: string = "loading";
+    public static DIR_LOADING: string = 'loading';
 
     /**
      * 跑分隨機值
@@ -58,19 +73,4 @@ export class BaseConst {
             return t;
         }
     }
-}
-
-export enum BaseFont {
-    /**一般數字 ['0123456789|2', '.,|1'] */
-    number = "number",
-}
-
-export enum OperatorName {
-    BP = "bp",
-}
-
-export enum WebViewEnum {
-    GameHistory = 0,
-    GameHelp,
-    Promo
 }

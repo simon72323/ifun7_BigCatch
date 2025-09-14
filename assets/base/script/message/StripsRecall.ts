@@ -1,10 +1,10 @@
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { SettingsPage1 } from "../../components/settingsPage/SettingsPage1";
-import { AudioManager } from "../audio/AudioManager";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { IReceiveMessage } from "../socket/SocketManager";
-import { ModuleID, StripTable } from "../types/BaseType";
-import { ErrorCode, ErrorManager } from "../utils/ErrorManager";
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { IReceiveMessage } from '@base/script/socket/SocketManager';
+import { ModuleID, StripTable } from '@base/script/types/BaseType';
+import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 
 /**
  * 輪帶封包

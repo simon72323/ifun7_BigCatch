@@ -1,11 +1,11 @@
-import { GameTask } from "./GameTask";
+import { GameTask } from '@base/script/tasks/GameTask';
 
 /**
  * 等待任務
  */
 export class DelayTask extends GameTask {
 
-    protected name: string = "DelayTask";
+    protected name: string = 'DelayTask';
 
     /**等待秒數 */
     public delaySeconds: number;
@@ -20,7 +20,8 @@ export class DelayTask extends GameTask {
             this.finish();
         }, 1000 * this.delaySeconds);
     }
-    update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+
+    update(_deltaTime: number): void {
+        // throw new Error('Method not implemented.');
     }
 }

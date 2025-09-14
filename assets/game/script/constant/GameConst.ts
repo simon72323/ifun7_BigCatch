@@ -39,23 +39,23 @@ export enum SymbolID {
 
 /**語系資源目錄 */
 export enum LangBundleDir {
-    banner = "banner",
-    bigwin = "bigwin",
-    board = "board",
-    featureBuy = "featureBuy",
-    fs = "fs",
-    paytable = "paytable",
+    banner = 'banner',
+    bigwin = 'bigwin',
+    board = 'board',
+    featureBuy = 'featureBuy',
+    fs = 'fs',
+    paytable = 'paytable',
 }
 
 export enum GameAnimationName {
     /**scale:0(0s)->scale:1.2(in 0.2s)->scale:1(in 0.1s) */
-    scaleTxt = "scaleTxt",
-    ScaleJumpWinTxt = "ScaleJumpWinTxt",
-    ScaleJumpMultipleTxt = "ScaleJumpMultTxt",
-    gameShakeUp = "gameShakeUp",
-    gameShakeLeft = "gameShakeLeft",
-    fadeInSpine = "fadeInSpine",
-    fadeOutSpine = "fadeOutSpine",
+    scaleTxt = 'scaleTxt',
+    ScaleJumpWinTxt = 'ScaleJumpWinTxt',
+    ScaleJumpMultipleTxt = 'ScaleJumpMultTxt',
+    gameShakeUp = 'gameShakeUp',
+    gameShakeLeft = 'gameShakeLeft',
+    fadeInSpine = 'fadeInSpine',
+    fadeOutSpine = 'fadeOutSpine',
 }
 
 /**
@@ -64,90 +64,90 @@ export enum GameAnimationName {
 export enum GameAudioKey {
     //BGM----------------------------
     /**BS BGM */
-    MG = "MG",
+    MG = 'MG',
     /**BS BGM2 */
-    noBtn = "noBtn",
+    noBtn = 'noBtn',
     /**FS BGM */
-    FG = "FG",
+    FG = 'FG',
 
     //老虎機----------------------------
     /**瞇牌 */
-    waiting = "waiting",
+    waiting = 'waiting',
     /**第一軸掉落到定位 */
-    down = "down",
+    down = 'down',
 
     //FS轉場----------------------------
     /**FS點開始 */
-    FgStart = "FgStart",
+    FgStart = 'FgStart',
     /**FS轉場 */
-    FgTran = "FgTran",
+    FgTran = 'FgTran',
     /**FS面板 */
-    confrats = "confrats",
+    confrats = 'confrats',
 
     //準心----------------------------
     /**準心 */
-    line = "line",
+    line = 'line',
     /**準心開槍 */
-    lineShot = "lineShot",
+    lineShot = 'lineShot',
 
     //scatter----------------------------
     /**scatter出現 */
-    scatter = "scatter",
+    scatter = 'scatter',
     /**SC中獎 */
-    st = "st",
+    st = 'st',
 
     //左輪----------------------------
     /**左輪補彈匣 */
-    reloading = "reloading",
+    reloading = 'reloading',
 
     //FS----------------------------
     /**FS結算 */
-    TW = "TW",
+    TW = 'TW',
     /**拔槍 */
-    dg = "dg",
+    dg = 'dg',
     /**拍槍 */
-    hitGun = "hitGun",
+    hitGun = 'hitGun',
     /**開槍 */
-    shot = "shot",
+    shot = 'shot',
     /**收槍 */
-    putaway = "putaway",
+    putaway = 'putaway',
     /**轉槍 */
-    rotation = "rotation",
+    rotation = 'rotation',
     /**壞人笑 */
-    laughing = "laughing",
+    laughing = 'laughing',
     /**壞人死 */
-    die = "die",
+    die = 'die',
 
     //幸運一擊----------------------------
     /**幸運一擊按鈕 */
-    FeatureBuy = "FeatureBuy",
+    FeatureBuy = 'FeatureBuy',
     /**幸運一擊購買按鈕 */
-    buy = "buy",
+    buy = 'buy',
 
     //其他----------------------------
     /**倍數出現 */
-    combine = "combine",
+    combine = 'combine',
     /**贏得 */
-    win = "win",
+    win = 'win',
     /**共贏得 */
-    wt = "wt",
+    wt = 'wt',
     /**炸彈引信 */
-    fuse = "fuse",
+    fuse = 'fuse',
     /**字母*/
-    Letter = "Letter",
+    Letter = 'Letter',
     /**FS輪軸發光*/
-    scExpand = "scExpand",
+    scExpand = 'scExpand',
     /**手槍*/
-    symbolGun = "symbolGun",
+    symbolGun = 'symbolGun',
     /**帽子*/
-    symbolHat = "symbolHat",
+    symbolHat = 'symbolHat',
     /**轉軸啟動*/
-    in = "in",
+    in = 'in',
 }
 
 export enum BlackKey {
-    DiceBlack = "DiceBlack",
-    UIBlack = "UIBlack",
+    DiceBlack = 'DiceBlack',
+    UIBlack = 'UIBlack',
 
 }
 

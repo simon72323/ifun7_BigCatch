@@ -1,26 +1,27 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
-import { FSRoleUI } from "../../components/characterUI/FSRoleUI";
-import { MultiplierUI } from "../../components/MultiplierUI/MultiplierUI";
-import { RevolverUI } from "../../components/RevolverUI/RevolverUI";
-import { BaseSymbolData2 } from "../../components/slotMachine2/base/slotMachine2/BaseSymbolData2";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { GameStage } from "../../components/stage/GameStage";
-import { UIBlack } from "../../components/UIBlack";
-import { BlackKey, GameAudioKey, SlotMachineID } from "../constant/GameConst";
-import { GameData } from "../main/GameData";
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
+import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
+import { MultiplierUI } from '@game/components/MultiplierUI/MultiplierUI';
+import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { GameStage } from '@game/components/stage/GameStage';
+import { UIBlack } from '@game/components/UIBlack';
+import { BlackKey, GameAudioKey, SlotMachineID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * 爆炸
  */
 export class ExplodeTask extends GameTask {
 
-    protected name: string = "ExplodeTask";
+    protected name: string = 'ExplodeTask';
 
     /**消去位置 */
     public winPos: number[];
@@ -116,6 +117,6 @@ export class ExplodeTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

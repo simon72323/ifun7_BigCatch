@@ -1,5 +1,6 @@
 import { _decorator } from 'cc';
-import { getToken } from '../managers/AuthManager';
+
+import { getToken } from '@common/managers/AuthManager';
 
 /**
  * API 回應

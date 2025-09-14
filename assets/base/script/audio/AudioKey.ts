@@ -6,77 +6,77 @@ export enum AudioKey {
     /**Button ******************************/
 
     /**玩家按下除spin外的任何按鈕時播放 */
-    BtnClick = "BtnClick",
+    BtnClick = 'BtnClick',
     /**點擊spin按鈕 */
-    SpinClick = "SpinClick",
+    SpinClick = 'SpinClick',
     /**spin按鈕旋轉中 */
-    SpinLoop = "SpinLoop",
+    SpinLoop = 'SpinLoop',
     /**點擊閃電模式 */
-    TurboClick = "TurboClick",
+    TurboClick = 'TurboClick',
     /**押注頁面箭頭按鈕 */
-    BetClick = "BetClick",
+    BetClick = 'BetClick',
     /**押注確認按鈕 */
-    CheckClick = "CheckClick",
+    CheckClick = 'CheckClick',
     /**最大押注按鈕 */
-    FestBet = "FestBet",
+    FestBet = 'FestBet',
 
     /**ScStop */
-    ScStop = "ScStop",
-    SlowMotion = "SlowMotion",
-    SlowMotion2 = "SlowMotion2",
+    ScStop = 'ScStop',
+    SlowMotion = 'SlowMotion',
+    SlowMotion2 = 'SlowMotion2',
 
     /**BS */
-    BsMusic = "BsMusic",
-    Trigger = "Trigger",
-    CheckBonus = "CheckBonus",
-    FiveLine = "FiveLine",
+    BsMusic = 'BsMusic',
+    Trigger = 'Trigger',
+    CheckBonus = 'CheckBonus',
+    FiveLine = 'FiveLine',
 
     /**FS */
-    FsMusic = "FsMusic",
-    Retrigger = "Retrigger",
+    FsMusic = 'FsMusic',
+    Retrigger = 'Retrigger',
 
-    ReelStop = "ReelStop",
+    ReelStop = 'ReelStop',
 
     /** Spread *****************************/
-    SparkB = "SparkB",
-    SparkC = "SparkC",
+    SparkB = 'SparkB',
+    SparkC = 'SparkC',
 
     /**Feature Buy ******************************/
-    Open = "Open",
-    Close = "Close",
-    Trans = "Trans",
-    Buy = "Buy",
+    Open = 'Open',
+    Close = 'Close',
+    Trans = 'Trans',
+    Buy = 'Buy',
 
     /**WinBar *****************************/
-    /**小贏分"共贏得" */
-    WinBar1 = "WinBar1",
-    /**大贏分"共贏得" */
-    WinBar2 = "WinBar2",
-    LevelUpA = "LevelUpA",
-    LevelUpB = "LevelUpB",
-    LevelUpC = "LevelUpC",
+    /**小贏分'共贏得' */
+    WinBar1 = 'WinBar1',
+    /**大贏分'共贏得' */
+    WinBar2 = 'WinBar2',
+    LevelUpA = 'LevelUpA',
+    LevelUpB = 'LevelUpB',
+    LevelUpC = 'LevelUpC',
 
     /**BigWin ******************************/
     /**大獎背景音 */
-    Win = "Win",
+    Win = 'Win',
     /**大獎背景音結束 */
-    WinEnd = "WinEnd",
+    WinEnd = 'WinEnd',
     /**UltimateWin 等級音效 */
-    UltimateWin = "UltimateWin",
+    UltimateWin = 'UltimateWin',
     /**UltraWin 等級音效 */
-    UltraWin = "UltraWin",
+    UltraWin = 'UltraWin',
     /**SuperWin 等級音效 */
-    SuperWin = "SuperWin",
+    SuperWin = 'SuperWin',
     /**MegaWin 等級音效 */
-    MegaWin = "MegaWin",
+    MegaWin = 'MegaWin',
     /**BigWin 等級音效 */
-    BigWin = "BigWin",
+    BigWin = 'BigWin',
     /**大獎跑分 */
-    WinRolling = "WinRolling",
+    WinRolling = 'WinRolling',
     /**大獎跑分結束 */
-    WinRollingEnd = "WinRollingEnd",
+    WinRollingEnd = 'WinRollingEnd',
 
     /**Symbol *****************************/
-    Expend = "Expend",
-    Explo = "Explo",
+    Expend = 'Expend',
+    Explo = 'Explo',
 }

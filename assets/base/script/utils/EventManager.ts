@@ -1,5 +1,4 @@
-import { BaseEvent } from "../main/BaseEvent";
-import { XEvent, XEvent1, XEvent2, XEvent3, XEvent4, XEvent5 } from "./XEvent";
+import { XEvent, XEvent1, XEvent2, XEvent3, XEvent4, XEvent5 } from '@base/script/utils/XEvent';
 
 /**
  * 事件管理工具類
@@ -9,17 +8,17 @@ export class EventManager {
     /**
      * 清除所有 BaseEvent 的事件監聽
      */
-    public static clearAllBaseEvents(): void {
-        BaseEvent.clearAll();
-    }
+    // public static clearAllBaseEvents(): void {
+    //     BaseEvent.clearAll();
+    // }
 
     /**
      * 清除特定對象的所有 BaseEvent 監聽
      * @param target 要清除的對象
      */
-    public static clearBaseEventsForTarget(target: any): void {
-        BaseEvent.clearAllForTarget(target);
-    }
+    // public static clearBaseEventsForTarget(target: any): void {
+    //     BaseEvent.clearAllForTarget(target);
+    // }
 
     /**
      * 清除多個事件的所有監聽器

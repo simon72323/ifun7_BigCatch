@@ -1,13 +1,21 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, UIOpacity } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { BaseAnimationName } from '@/base/script/types/BaseType';
-import { XEvent, XEvent1, XEvent3 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAudioKey, LangBundleDir } from '../../script/constant/GameConst';
+
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseAnimationName } from '@base/script/types/BaseType';
+import { XEvent, XEvent1, XEvent3 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+
+enum BkgAnimation {
+    loop = 'loop',
+    end = 'end'
+}
+
 const { ccclass, property } = _decorator;
 
 /**
@@ -47,22 +55,22 @@ export class TransUI extends Component {
      */
     onLoad() {
 
-        this.trans_ani = this.node.getChildByPath("trans_ani").getComponent(sp.Skeleton);
-        this.freegame_box_ani = this.node.getChildByPath("freegame_box_ani").getComponent(sp.Skeleton);
-        this.num_freespinwin = this.node.getChildByPath("freegame_box_ani/num_freespinwin").getComponent(Label);
-        this.start_btn = this.node.getChildByPath("freegame_box_ani/start_btn").getComponent(Button);
-        this.sens = this.node.getChildByPath("Sens");
-        this.black = this.node.getChildByPath("SpriteSplash");
+        this.trans_ani = this.node.getChildByPath('trans_ani').getComponent(sp.Skeleton);
+        this.freegame_box_ani = this.node.getChildByPath('freegame_box_ani').getComponent(sp.Skeleton);
+        this.num_freespinwin = this.node.getChildByPath('freegame_box_ani/num_freespinwin').getComponent(Label);
+        this.start_btn = this.node.getChildByPath('freegame_box_ani/start_btn').getComponent(Button);
+        this.sens = this.node.getChildByPath('Sens');
+        this.black = this.node.getChildByPath('SpriteSplash');
         this.sens.active = false;
 
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
-            this.node.getChildByPath("freegame_box_ani/title_congrats").getComponent(Sprite).spriteFrame = langRes["title_congrats"];
-            this.node.getChildByPath("freegame_box_ani/title_freesin").getComponent(Sprite).spriteFrame = langRes["title_freesin"];
-            this.node.getChildByPath("freegame_box_ani/title_youwon").getComponent(Sprite).spriteFrame = langRes["title_youwon"];
+            this.node.getChildByPath('freegame_box_ani/title_congrats').getComponent(Sprite).spriteFrame = langRes['title_congrats'];
+            this.node.getChildByPath('freegame_box_ani/title_freesin').getComponent(Sprite).spriteFrame = langRes['title_freesin'];
+            this.node.getChildByPath('freegame_box_ani/title_youwon').getComponent(Sprite).spriteFrame = langRes['title_youwon'];
         });
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${BaseConst.DIR_LOADING}`, (langRes: any) => {
-            XUtils.setButtonSprite(this.start_btn, langRes["start_btn_N"], langRes["start_btn_H"]);
+            XUtils.setButtonSprite(this.start_btn, langRes['start_btn_N'], langRes['start_btn_H']);
         });
 
 
@@ -91,7 +99,7 @@ export class TransUI extends Component {
             this.trans_ani.setCompleteListener(() => {
                 this.onFadeInComplete();
             });
-            this.trans_ani.setAnimation(0, "animation", false);
+            this.trans_ani.setAnimation(0, 'animation', false);
 
             //全遮蔽時顯示轉場次數面板
             this.scheduleOnce(() => {
@@ -165,9 +173,4 @@ export class TransUI extends Component {
         }, this);
 
     }
-}
-
-enum BkgAnimation {
-    loop = "loop",
-    end = "end"
 }

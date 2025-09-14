@@ -1,16 +1,14 @@
-//js
-//ts
-import { Notice } from "@/base/components/notice/Notice";
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { BaseEvent } from "../main/BaseEvent";
-import { IReceiveMessage } from "../socket/SocketManager";
-import { ModuleID } from "../types/BaseType";
-import { APIManager } from "../utils/APIManager";
-import { ErrorCode, ErrorManager } from "../utils/ErrorManager";
-import { PromoManager } from "../utils/PromoManager";
-import { TimeoutManager } from "../utils/TimeoutManager";
-import { XUtils } from "../utils/XUtils";
+import { Notice } from '@base/components/notice/Notice';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { IReceiveMessage } from '@base/script/socket/SocketManager';
+import { ModuleID } from '@base/script/types/BaseType';
+import { APIManager } from '@base/script/utils/APIManager';
+import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
+import { PromoManager } from '@base/script/utils/PromoManager';
+import { TimeoutManager } from '@base/script/utils/TimeoutManager';
+import { XUtils } from '@base/script/utils/XUtils';
 
 /**
  * Spin結果回傳
@@ -62,7 +60,7 @@ export class ResultRecall implements IReceiveMessage {
         }
 
         if (message.campaign_data) {
-            console.log("SR活動資訊: " + JSON.stringify(message.campaign_data));
+            console.log('SR活動資訊: ' + JSON.stringify(message.campaign_data));
             PromoManager.getInstance().updateResultCallCampaign(message.campaign_data);
         }
 

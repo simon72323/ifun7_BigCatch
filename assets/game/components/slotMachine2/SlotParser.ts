@@ -1,8 +1,9 @@
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { GameConst, SymbolID } from "../../script/constant/GameConst";
-import { GameData } from "../../script/main/GameData";
-import { BaseSlotParser2 } from "./base/slotMachine2/BaseSlotData2";
-import { BaseSymbolData2 } from "./base/slotMachine2/BaseSymbolData2";
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+
+import { BaseSlotParser2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSlotData2';
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
+import { GameConst, SymbolID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * BSX5軸 遊戲客製化分析盤面
@@ -89,7 +90,7 @@ export class SlotParser extends BaseSlotParser2 {
         let scatterCount: number = 0;
         fromMap.forEach((symbolOfReel: BaseSymbolData2[], col) => {
             scatterCount += symbolOfReel.filter((symbolData: BaseSymbolData2) => symbolData.symbolID === SymbolID.Scatter).length;
-        })
+        });
 
         if (scatterCount >= GameConst.BONUS_WIN_COUNT - 1) {
             miList = [];
@@ -103,6 +104,7 @@ export class SlotParser extends BaseSlotParser2 {
         }
         return miList;
     }
+
     public getNudgeTypeList(): number[] {
         return null;
     }

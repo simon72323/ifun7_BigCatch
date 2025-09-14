@@ -1,13 +1,26 @@
-import { _decorator, Component } from 'cc';
+import { _decorator, Component, CCInteger, Node, Prefab, tween, Tween, RealCurve } from 'cc';
 
-import { CCInteger, Node, Prefab, RealCurve, tween, Tween } from 'cc';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { XEvent1, XEvent2, XEvent3, XEvent4 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { BaseSlotParser2 } from './BaseSlotData2';
-import { BaseSymbolData2 } from './BaseSymbolData2';
-import { SlotReel2 } from './SlotReel2';
-import { SlotReelConfig2, SpeedConfig2 } from './SlotType2';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { XEvent1, XEvent2, XEvent3, XEvent4 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BaseSlotParser2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSlotData2';
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
+import { SlotReel2 } from '@game/components/slotMachine2/base/slotMachine2/SlotReel2';
+import { SlotReelConfig2, SpeedConfig2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
+
+enum SlotMachineState2 {
+    /**待機 */
+    IDLE = 0,
+    /**啟動 */
+    BEGIN,
+    /**循環 */
+    LOOP,
+    /**停止中 */
+    STOP,
+    /**結尾 */
+    END
+}
 
 const { ccclass, property } = _decorator;
 
@@ -17,26 +30,26 @@ const { ccclass, property } = _decorator;
 @ccclass('SlotMachine2')
 export class SlotMachine2 extends Component {
 
-    @property({ type: CCInteger, tooltip: "老虎機ID" })
+    @property({ type: CCInteger, tooltip: '老虎機ID' })
     private id: number = 0;
 
-    @property({ type: CCInteger, tooltip: "最大列數" })
+    @property({ type: CCInteger, tooltip: '最大列數' })
     private maxRow: number = 5;
 
     /**資料軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "資料軸清單(順序)" })
+    @property({ type: SlotReel2, tooltip: '資料軸清單(順序)' })
     public dataList: SlotReel2[] = [];
 
     /**轉動軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "轉動軸清單(順序)" })
+    @property({ type: SlotReel2, tooltip: '轉動軸清單(順序)' })
     public spinList: SlotReel2[] = [];
 
     /**掉落軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "掉落軸清單(順序)" })
+    @property({ type: SlotReel2, tooltip: '掉落軸清單(順序)' })
     public dropList: SlotReel2[] = [];
 
     /**新圖示掉落軸清單(順序) */
-    @property({ type: SlotReel2, tooltip: "新圖示掉落軸清單(順序)" })
+    @property({ type: SlotReel2, tooltip: '新圖示掉落軸清單(順序)' })
     public fillList: SlotReel2[] = [];
 
     /**層級 */
@@ -51,71 +64,69 @@ export class SlotMachine2 extends Component {
     @property({ type: Prefab })
     private symbolPrefab: Prefab = null;
 
-    @property({
-        type: RealCurve, tooltip:
-            "運動曲線\n" +
-            "[啟動] 時間:(0.00 ~ 0.50), 值:(-0.5 ~ 0)"
-    })
+    @property({ type: RealCurve, tooltip: '運動曲線\n[啟動] 時間:(0.00 ~ 0.50), 值:(-0.5 ~ 0)' })
     private beginCurve = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }],
-        ]);
-        return curve;
-    })();
-    @property({
-        type: RealCurve, tooltip:
-            "運動曲線\n" +
-            "[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n"
-    })
-    private endCurve = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }],
-        ]);
-        return curve;
-    })();
+            const curve = new RealCurve();
+            curve.assignSorted([
+                [0, { value: 0 }],
+                [1, { value: 1 }]
+            ]);
+            return curve;
+        })();
 
     @property({
         type: RealCurve, tooltip:
-            "戲謔曲線\n" +
-            "[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n"
+            '運動曲線\n' +
+            '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n'
+    })
+
+    private endCurve = (() => {
+            const curve = new RealCurve();
+            curve.assignSorted([
+                [0, { value: 0 }],
+                [1, { value: 1 }]
+            ]);
+            return curve;
+        })();
+
+    @property({
+        type: RealCurve, tooltip:
+            '戲謔曲線\n' +
+            '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n'
     })
     private nudgeCurve = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }],
-        ]);
-        return curve;
-    })();
+            const curve = new RealCurve();
+            curve.assignSorted([
+                [0, { value: 0 }],
+                [1, { value: 1 }]
+            ]);
+            return curve;
+        })();
 
     @property({
         type: RealCurve, tooltip:
-            "戲謔曲線2\n" +
-            "[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n"
+            '戲謔曲線2\n' +
+            '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n'
     })
     private nudgeCurve2 = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }],
-        ]);
-        return curve;
-    })();
+            const curve = new RealCurve();
+            curve.assignSorted([
+                [0, { value: 0 }],
+                [1, { value: 1 }]
+            ]);
+            return curve;
+        })();
 
-    // @property({ type: CCInteger, tooltip: "方向(1:向下,-1:向上" })//暫時沒用
+    // @property({ type: CCInteger, tooltip: '方向(1:向下,-1:向上' })//暫時沒用
     private direction: number = 1;
 
-    @property({ type: SpeedConfig2, tooltip: "一般參數", group: "一般" })
+    @property({ type: SpeedConfig2, tooltip: '一般參數', group: '一般' })
     private normal: SpeedConfig2 = new SpeedConfig2();
 
-    @property({ type: SpeedConfig2, tooltip: "閃電參數", group: "閃電" })
+    @property({ type: SpeedConfig2, tooltip: '閃電參數', group: '閃電' })
     private fast: SpeedConfig2 = new SpeedConfig2();
 
-    @property({ type: SpeedConfig2, tooltip: "Turbo參數", group: "Turbo" })
+    @property({ type: SpeedConfig2, tooltip: 'Turbo參數', group: 'Turbo' })
     private turbo: SpeedConfig2 = new SpeedConfig2();
 
     /**初始化老虎機(id, parser) */
@@ -289,7 +300,7 @@ export class SlotMachine2 extends Component {
             //依序啟動
             script.call(() => {
                 this.spinList[i].spin();
-            })
+            });
             script.delay(speedConfig.spinInterval);
         }
 
@@ -304,6 +315,7 @@ export class SlotMachine2 extends Component {
         this.parser.forceResult = forceResult;
         this.dataList.forEach((reel, index) => reel.setForceResult(forceResult[index]));
     }
+
     /**
      * 要求停輪
      * @param rngList 
@@ -430,7 +442,7 @@ export class SlotMachine2 extends Component {
                         this.stopMiAll();
                     }
 
-                    this.spinList.map((reel) => { reel.onStop() });
+                    this.spinList.map((reel) => { reel.onStop();});
 
                     this.state = SlotMachineState2.IDLE;
                     this.requestStop = false;
@@ -444,7 +456,7 @@ export class SlotMachine2 extends Component {
             script.call(() => {
                 let dataIdx = this.dataList.indexOf(this.spinList[col]);
                 this.spinList[col].stop(rngList[dataIdx]);
-            })
+            });
             //加入軸間隔時間
             let stopDelay = miList[col + 1] ? speedConfig.slowMotionTime : speedConfig.stopInterval;
             script.delay(stopDelay);
@@ -464,7 +476,7 @@ export class SlotMachine2 extends Component {
         }
 
         if (this.dropList.length <= 0) {
-            throw new Error("未設置dropList!");
+            throw new Error('未設置dropList!');
         }
         let speedConfig = this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()];
 
@@ -475,7 +487,7 @@ export class SlotMachine2 extends Component {
         let count: number = this.dropList.length;
         this.dropList.forEach((reel, order) => {
             reel.node.once(SlotReel2.DROP_COMPLETE, (idx: number) => {
-                console.log("dropComplete ", idx);
+                console.log('dropComplete ', idx);
                 count -= 1;
                 if (count <= 0) {
                     onComplete?.();
@@ -485,7 +497,7 @@ export class SlotMachine2 extends Component {
             //依序掉落
             script.call(() => {
                 reel.drop();
-            })
+            });
             script.delay(speedConfig.dropInterval);
         }, this);
 
@@ -504,12 +516,12 @@ export class SlotMachine2 extends Component {
         }
 
         if (this.fillList.length <= 0) {
-            throw new Error("未設置fillList!");
+            throw new Error('未設置fillList!');
         }
 
         let speedConfig = this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()];
         let miList = this.parser.getMiList2(fromMap);
-        let realMiList = this.fillList.map((reel) => { return miList[reel.reelIndex] && reel.getNumEmpty() > 0 });
+        let realMiList = this.fillList.map((reel) => { return miList[reel.reelIndex] && reel.getNumEmpty() > 0;});
 
         Tween.stopAllByTarget(this.node);
         let script = tween(this.node);
@@ -547,14 +559,14 @@ export class SlotMachine2 extends Component {
                     //通知所有軸開始瞇牌
                     this.startMiAllAt(reel.reelIndex);
                 }
-            })
+            });
             script.delay(miDelay);
 
             //依序開始填充缺空圖示
             script.call(() => {
                 let dataIdx = this.dataList.indexOf(this.fillList[order]);
                 reel.fill(toMap?.[dataIdx], 0);
-            })
+            });
 
             let fillDelay = realMiList[order] ? speedConfig.dropInterval + 0.2 : speedConfig.dropInterval;
             script.delay(fillDelay);
@@ -580,7 +592,7 @@ export class SlotMachine2 extends Component {
                 if (grid.col == i) {
                     reelErase.push(p);
                 }
-            })
+            });
             this.dataList[i].explode(reelErase);
         }
     }
@@ -609,7 +621,7 @@ export class SlotMachine2 extends Component {
                 if (grid.col == i) {
                     reelWin.push(p);
                 }
-            })
+            });
             this.dataList[i].showWin(reelWin);
         }
     }
@@ -646,10 +658,10 @@ export class SlotMachine2 extends Component {
      */
     private startMiAllAt(reelIndex: number): void {
         if (this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()].miAllReel) {
-            this.dataList.map((reel, index) => { reel.setIsMi(true) });
+            this.dataList.map((reel, index) => { reel.setIsMi(true); });
         }
         else {
-            this.dataList.map((reel, index) => { reel.setIsMi(index === reelIndex) });
+            this.dataList.map((reel, index) => { reel.setIsMi(index === reelIndex); });
         }
         SlotMachine2.startMi.emit(this.id, reelIndex);
     }
@@ -658,20 +670,7 @@ export class SlotMachine2 extends Component {
      * 停止瞇牌
      */
     private stopMiAll(): void {
-        this.dataList.map((reel) => { reel.setIsMi(false) });
+        this.dataList.map((reel) => { reel.setIsMi(false); });
         SlotMachine2.stopMi.emit(this.id);
     }
-}
-
-enum SlotMachineState2 {
-    /**待機 */
-    IDLE = 0,
-    /**啟動 */
-    BEGIN,
-    /**循環 */
-    LOOP,
-    /**停止中 */
-    STOP,
-    /**結尾 */
-    END
 }

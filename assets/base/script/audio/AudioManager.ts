@@ -1,5 +1,6 @@
-import { AudioSource, Node, tween, Tween } from "cc";
-import { logger } from "../utils/XUtils";
+import { AudioSource, Node, tween, Tween } from 'cc';
+
+import { logger } from '@base/script/utils/XUtils';
 
 /**
  * 遊戲音樂音效管理
@@ -31,6 +32,7 @@ export class AudioManager {
     public initialize(audioNode: Node): void {
         this.audioNode = audioNode;
     }
+
     /**
      * 註冊
      * @param key 
@@ -108,7 +110,7 @@ export class AudioManager {
             if (duration) {
                 tween(source)
                     .to(duration, { volume: 0 * this.systemVolume })
-                    .call(() => { source.stop() })
+                    .call(() => { source.stop(); })
                     .start();
             }
             //直接停
@@ -125,7 +127,7 @@ export class AudioManager {
     public setMute(mute: boolean): void {
         this.isMute = mute;
         this.systemVolume = mute ? 0 : 1;
-        this.soundMap.forEach((value, key) => {
+        this.soundMap.forEach((value, _key) => {
             value.volume = value.volume * this.systemVolume;
         });
     }

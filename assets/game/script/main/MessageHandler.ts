@@ -1,29 +1,31 @@
-import { CheatUI } from "@/base/components/cheat/CheatUI";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { DelayTask } from "@/base/script/tasks/DelayTask";
-import { TaskManager } from "@/base/script/tasks/TaskManager";
-import { ModuleID } from "@/base/script/types/BaseType";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { SymbolData2 } from "../../components/slotMachine2/SymbolData2";
-import { GameConst, SlotMachineID, SymbolID } from "../constant/GameConst";
-import { AutoSpinDelayTask } from "../task/AutoSpinDelayTask";
-import { BackBSSettleTask } from "../task/BackBSSettleTask";
-import { DropTask } from "../task/DropTask";
-import { EndGameTask } from "../task/EndGameTask";
-import { ExplodeTask } from "../task/ExplodeTask";
-import { FSOpeningTask } from "../task/FSOpeningTask";
-import { FSSettleTask } from "../task/FSSettleTask";
-import { FSUpdateRemainTimesTask } from "../task/FSUpdateRemainTimesTask";
-import { IdleTask } from "../task/IdleTask";
-import { RetriggerTask } from "../task/RetriggerTask";
-import { ScatterWinTask } from "../task/ScatterWinTask";
-import { ShowWinTask } from "../task/ShowWinTask";
-import { SpinTask } from "../task/SpinTask";
-import { StopTask } from "../task/StopTask";
-import { TransTask } from "../task/TransTask";
-import { GameData } from "./GameData";
+import { CheatUI } from '@base/components/cheat/CheatUI';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { DelayTask } from '@base/script/tasks/DelayTask';
+import { TaskManager } from '@base/script/tasks/TaskManager';
+import { ModuleID } from '@base/script/types/BaseType';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
+import { GameConst, SlotMachineID, SymbolID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
+import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
+import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
+import { DropTask } from '@game/script/task/DropTask';
+import { EndGameTask } from '@game/script/task/EndGameTask';
+import { ExplodeTask } from '@game/script/task/ExplodeTask';
+import { FSOpeningTask } from '@game/script/task/FSOpeningTask';
+import { FSSettleTask } from '@game/script/task/FSSettleTask';
+import { FSUpdateRemainTimesTask } from '@game/script/task/FSUpdateRemainTimesTask';
+import { IdleTask } from '@game/script/task/IdleTask';
+import { RetriggerTask } from '@game/script/task/RetriggerTask';
+import { ScatterWinTask } from '@game/script/task/ScatterWinTask';
+import { ShowWinTask } from '@game/script/task/ShowWinTask';
+import { SpinTask } from '@game/script/task/SpinTask';
+import { StopTask } from '@game/script/task/StopTask';
+import { TransTask } from '@game/script/task/TransTask';
+
 /**
  * 消息處理
  */
@@ -124,12 +126,12 @@ export class MessageHandler {
                     winSymbolID.push(winLineGroup.symbol_id);
                     planeOriginalWin += winLineGroup.credit;
                     planeWin += winLineGroup.credit_long;
-                })
+                });
             }
             winPos = XUtils.uniq(winPos);//只取前六個位置
             let errorWinPos = winPos.filter((pos, idx, arr) => pos % 10 >= 6);//只取前六個位置
             if (errorWinPos.length > 0) {
-                throw new Error("winPos異常!!");
+                throw new Error('winPos異常!!');
             }
 
 

@@ -1,22 +1,23 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { SpinButtonState } from "@/base/script/types/BaseType";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
-import { SkipUI } from "../../components/SkipUI/SkipUI";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { SlotMachineID } from "../constant/GameConst";
-import { GameData } from "../main/GameData";
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { SpinButtonState } from '@base/script/types/BaseType';
+
+import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
+import { SkipUI } from '@game/components/SkipUI/SkipUI';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { SlotMachineID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * 老虎機停輪
  */
 export class StopTask extends GameTask {
 
-    protected name: string = "StopTask";
+    protected name: string = 'StopTask';
 
     /**輪帶索引 */
     public rngList: number[];
@@ -78,6 +79,6 @@ export class StopTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

@@ -1,16 +1,17 @@
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { ModuleID } from "@/base/script/types/BaseType";
-import { FSRoleUI } from "@/game/components/characterUI/FSRoleUI";
-import { RevolverUI } from "@/game/components/RevolverUI/RevolverUI";
-import { GameStage } from "@/game/components/stage/GameStage";
-import { GameConst } from "@/game/script/constant/GameConst";
+import { GameTask } from '@base/script/tasks/GameTask';
+import { ModuleID } from '@base/script/types/BaseType';
+
+import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
+import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
+import { GameStage } from '@game/components/stage/GameStage';
+import { GameConst } from '@game/script/constant/GameConst';
 
 /**
  * FS開場
  */
 export class FSOpeningTask extends GameTask {
 
-    protected name: string = "FSOpeningTask";
+    protected name: string = 'FSOpeningTask';
 
     /**轉場目標 */
     public to: ModuleID;
@@ -30,7 +31,8 @@ export class FSOpeningTask extends GameTask {
         });
 
     }
+
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

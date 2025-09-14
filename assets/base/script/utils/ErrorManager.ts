@@ -1,8 +1,6 @@
-import { find } from "cc";
-import { Notice } from "../../components/notice/Notice";
-import { AudioManager } from "../audio/AudioManager";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { SocketManager } from "../socket/SocketManager";
+import { Notice } from '@base/components/notice/Notice';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { SocketManager } from '@base/script/socket/SocketManager';
 
 /**
  * 錯誤處理

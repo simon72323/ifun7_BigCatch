@@ -1,20 +1,21 @@
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { BaseEvent } from "@/base/script/main/BaseEvent";
-import { ModuleID } from "@/base/script/types/BaseType";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { FSRoleUI } from "../../components/characterUI/FSRoleUI";
-import { RevolverUI } from "../../components/RevolverUI/RevolverUI";
-import { FSSettleUI } from "../../components/SettleUI/FSSettleUI";
-import { GameConst } from "../constant/GameConst";
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { ModuleID } from '@base/script/types/BaseType';
+
+import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
+import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
+import { FSSettleUI } from '@game/components/SettleUI/FSSettleUI';
+import { GameConst } from '@game/script/constant/GameConst';
 
 /**
  * FS總結算
  */
 export class FSSettleTask extends GameTask {
 
-    protected name: string = "FSSettleTask";
+    protected name: string = 'FSSettleTask';
 
     /**目前累計獲得金額 */
     public win: number;
@@ -39,6 +40,6 @@ export class FSSettleTask extends GameTask {
 
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

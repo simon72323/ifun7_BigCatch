@@ -1,5 +1,5 @@
-import { IReceiveMessage } from "../socket/SocketManager";
-import { PromoManager } from "../utils/PromoManager";
+import { IReceiveMessage } from '@base/script/socket/SocketManager';
+import { PromoManager } from '@base/script/utils/PromoManager';
 
 /**
  * 回應指定的活動內容
@@ -9,7 +9,7 @@ export class CampaignRecall implements IReceiveMessage {
 
     public decode(uint8: Uint8Array): void {
         const message = s5g.game.proto.CampaignRecall.decode(uint8);
-        console.log("SR活動詢問結果: " + JSON.stringify(message));
+        console.log('SR活動詢問結果: ' + JSON.stringify(message));
 
         //詢問活動失敗
         if (message.status_code !== s5g.game.proto.Status.Code.kSuccess) {

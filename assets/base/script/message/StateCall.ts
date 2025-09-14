@@ -1,6 +1,6 @@
-import { logger } from "@/base/script/utils/XUtils";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { ISendMessage } from "../socket/SocketManager";
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { ISendMessage } from '@base/script/socket/SocketManager';
+import { logger } from '@base/script/utils/XUtils';
 
 /**
  * 要求輪帶資料
@@ -14,7 +14,7 @@ export class StateCall implements ISendMessage {
         msg.token = BaseDataManager.getInstance().urlParam.accessToken;
         msg.stateid = BaseDataManager.getInstance().curState;
         msg.reserved = [];
-        logger("[@StateCall] stateid " + msg.stateid);
+        logger('[@StateCall] stateid ' + msg.stateid);
         return s5g.game.proto.StateCall.encode(msg).finish();
 
     }

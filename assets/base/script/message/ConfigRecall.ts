@@ -1,8 +1,8 @@
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { ErrorCode, ErrorManager } from "@/base/script/utils/ErrorManager";
-import { BaseEvent } from "../main/BaseEvent";
-import { IReceiveMessage, SocketManager } from "../socket/SocketManager";
-import { logger, XUtils } from "../utils/XUtils";
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { IReceiveMessage, SocketManager } from '@base/script/socket/SocketManager';
+import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
+import { logger, XUtils } from '@base/script/utils/XUtils';
 
 export class ConfigRecall implements IReceiveMessage {
     msgid: s5g.game.proto.EMSGID = s5g.game.proto.EMSGID.eConfigRecall;
@@ -13,7 +13,7 @@ export class ConfigRecall implements IReceiveMessage {
      */
     public decode(uint8: Uint8Array): void {
         const message = s5g.game.proto.ConfigRecall.decode(uint8);
-        logger("[@ConfigRecall] status_code " + message.status_code);
+        logger('[@ConfigRecall] status_code ' + message.status_code);
         //Config失敗
         if (message.status_code !== s5g.game.proto.Status.Code.kSuccess) {
             if (message.status_code == s5g.game.proto.Status.Code.kHostError) {

@@ -1,16 +1,41 @@
-import { _decorator, Label, sp, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Label, sp, Sprite, SpriteFrame, Button, randomRangeInt, UITransform } from 'cc';
 
-import { Button, randomRangeInt, UITransform } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAudioKey, GameConst, SymbolID } from '../../script/constant/GameConst';
-import { GameData } from '../../script/main/GameData';
-import { PayTableUI } from '../PayTableUI/PayTableUI';
-import { BaseSymbol2 } from './base/slotMachine2/BaseSymbol2';
-import { SlotMachine2 } from './base/slotMachine2/SlotMachine2';
-import { SymbolState2 } from './base/slotMachine2/SlotType2';
-import { SymbolData2 } from './SymbolData2';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { PayTableUI } from '@game/components/PayTableUI/PayTableUI';
+import { BaseSymbol2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbol2';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
+import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
+import { GameAudioKey, GameConst, SymbolID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
+
+enum SymbolLayer {
+    Reel = 0,
+    Scatter,
+    Win
+}
+
+enum ScatterAni {
+    got = 'got',
+    loop = 'loop',
+    start = 'start',
+    mipie = 'mipie',
+}
+enum SymbolAni {
+    drop = 'drop',
+    explo = 'explo',
+    win = 'win',
+    /**open WILD才有 */
+    open = 'open',
+    /**badge 一般圖示才有 */
+    explo_badge = 'explo_badge',
+    win_badge = 'win_badge',
+    drop_badge = 'drop_badge',
+}
+
 const { ccclass, property } = _decorator;
 
 @ccclass('Symbol2')
@@ -27,11 +52,10 @@ export class Symbol2 extends BaseSymbol2 {
     /**圖示(模糊狀態) */
     @property({ type: SpriteFrame })
     private blurImageList: SpriteFrame[] = [];
+
     /**徽章圖示(模糊狀態) */
     @property({ type: SpriteFrame })
     private blurBadgeImageList: SpriteFrame[] = [];
-
-
 
     /**圖示Spine動畫 */
     @property({ type: sp.SkeletonData })
@@ -70,11 +94,11 @@ export class Symbol2 extends BaseSymbol2 {
         this.idLabel = this.node.getChildByName('idLabel').getComponent(Label);
         this.posLabel = this.node.getChildByName('posLabel').getComponent(Label);
 
-        this.spine = this.node.getChildByName("Spine").getComponent(sp.Skeleton);
-        this.wild = this.node.getChildByName("Wild").getComponent(sp.Skeleton);
+        this.spine = this.node.getChildByName('Spine').getComponent(sp.Skeleton);
+        this.wild = this.node.getChildByName('Wild').getComponent(sp.Skeleton);
         // this.spine.node.active = false;
 
-        this.node.getChildByName("Sens").on(Button.EventType.CLICK, () => {
+        this.node.getChildByName('Sens').on(Button.EventType.CLICK, () => {
             if (BaseDataManager.getInstance().isIdle() === false || BaseDataManager.getInstance().isMenuOn == true || BaseDataManager.getInstance().auto.isAutoPlay() == true) {
                 return;
             }
@@ -195,7 +219,7 @@ export class Symbol2 extends BaseSymbol2 {
                 XUtils.ClearSpine(this.wild);
                 this.wild.setCompleteListener(() => {
                     this.setSymbolID(data.symbolID, -1);
-                })
+                });
                 this.wild.setAnimation(0, SymbolAni.open, false);
             }
         }
@@ -335,7 +359,7 @@ export class Symbol2 extends BaseSymbol2 {
             });
         }
 
-        this.spine.setAnimation(0, this.isBadge ? name + "_badge" : name, loop);
+        this.spine.setAnimation(0, this.isBadge ? name + '_badge' : name, loop);
     }
 
     /**
@@ -348,6 +372,7 @@ export class Symbol2 extends BaseSymbol2 {
     private isScatter(): boolean {
         return this.symbolID === SymbolID.Scatter;
     }
+
     private isWild(): boolean {
         return this.symbolID === SymbolID.Wild;
     }
@@ -373,28 +398,4 @@ export class Symbol2 extends BaseSymbol2 {
         });
         sortChildren.forEach((a, i) => a.setSiblingIndex(i));
     }
-}
-
-enum SymbolLayer {
-    Reel = 0,
-    Scatter,
-    Win
-}
-
-enum ScatterAni {
-    got = "got",
-    loop = "loop",
-    start = "start",
-    mipie = "mipie",
-}
-enum SymbolAni {
-    drop = "drop",
-    explo = "explo",
-    win = "win",
-    /**open WILD才有 */
-    open = "open",
-    /**badge 一般圖示才有 */
-    explo_badge = "explo_badge",
-    win_badge = "win_badge",
-    drop_badge = "drop_badge",
 }

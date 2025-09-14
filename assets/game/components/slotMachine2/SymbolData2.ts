@@ -1,5 +1,6 @@
 import { _decorator } from 'cc';
-import { BaseSymbolData2 } from './base/slotMachine2/BaseSymbolData2';
+
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
 const { ccclass, property } = _decorator;
 
 /**

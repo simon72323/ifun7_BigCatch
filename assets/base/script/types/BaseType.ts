@@ -1,5 +1,6 @@
-import { Vec2 } from "cc";
-import { BaseEvent } from "../main/BaseEvent";
+import { Vec2 } from 'cc';
+
+import { BaseEvent } from '@base/script/main/BaseEvent';
 
 /**
  * 大獎類型
@@ -11,7 +12,7 @@ export enum BigWinType {
     ultra = 3,
     ultimate = 4,
     non = 5
-};
+}
 
 
 /**場景類型 */
@@ -83,6 +84,7 @@ export class StripTable {
     constructor(id: ModuleID) {
         this._id = id;
     }
+
     public setStrips(strips: number[][]) {
         this._strips = strips;
         this._strips_length = [];
@@ -108,34 +110,34 @@ export type HelpTextData = {
 
 
 export type HostInfo = {
-    access_token: string,//"eyJpdiI6Im9...""
+    access_token: string,//'eyJpdiI6Im9...''
     banking_url: string,
     bill_currency: any,//空
     eventDrawInfo: any,//空
     eventInfo: any,//[]
-    fullscr: string,//"1"
+    fullscr: string,//'1'
     game_enable: boolean,
-    game_id: string,//"S5G-H5-99969"
-    game_type: string,//"SLOT"
+    game_id: string,//'S5G-H5-99969'
+    game_type: string,//'SLOT'
     game_version: { br: string, build: number, major: number, rev: number }//{major: 46, rev: 118, build: 1532, br: 'main'}
     history_enable: boolean,//true
-    history_url: string,//""
-    host_id: string,//"89228c3fdf4072d8a554dc212a18207d"
+    history_url: string,//''
+    host_id: string,//'89228c3fdf4072d8a554dc212a18207d'
     host_image: any,//{}
-    host_name: string,//"1ky"
+    host_name: string,//'1ky'
     host_resource: number[],//[0, 0, 0, 0, 0]
-    lang: string,//"sch"
-    lang_code: string,//"zh-CN"
+    lang: string,//'sch'
+    lang_code: string,//'zh-CN'
     loading_logo_enable: number,//0
-    lobby_turntable: string,//"0"
-    logo: string,//""
+    lobby_turntable: string,//'0'
+    logo: string,//''
     min_rev: number,//0
     reel_spin: number,//0
     return_type: number,//2
     server_info: any,//{slot:'wss://uat-gs.5gg.dev:2052'}
-    site_name: string,//"1ky"
-    subgame_id: string,//"0"
-    type_id: string,//"CC"
+    site_name: string,//'1ky'
+    subgame_id: string,//'0'
+    type_id: string,//'CC'
     windows_resize: number,//0
     windows_rotation: number,//0
 }
@@ -144,11 +146,13 @@ export enum CreditMode {
     Cent = 0,
     Dollar = 1,
     Credit = 2
-};
+}
+
 export enum DigitMode {
     DOT = 0,
     COMMA = 1
-};
+}
+
 export enum EVENTTYPE {
     COMMON = 0,
     REEL = 1,
@@ -156,7 +160,7 @@ export enum EVENTTYPE {
     STATE = 3,
     ACTIONS = 4,
     OTHER = 5
-};
+}
 
 /**
  * 自動轉狀態
@@ -170,7 +174,7 @@ export enum AutoPlayMode {
     tillBonus = 2,
     /**轉N次 */
     num = 3,
-};
+}
 
 /**
  * 快速模式
@@ -179,7 +183,7 @@ export enum TurboMode {
     Normal = 0,
     Speed = 1,
     Turbo = 2
-};
+}
 
 /**
  * 擴散動畫物件
@@ -269,37 +273,37 @@ export type Timeout = {
  * 共用bundle資料
  */
 export enum BaseLangBundleDir {
-    bigWin = "bigwin",
-    ui3_0 = "ui3.0",
-    loading = "loading",
+    bigWin = 'bigwin',
+    ui3_0 = 'ui3.0',
+    loading = 'loading',
 }
 
 /**
  * 共用Animation
  */
 export enum BaseAnimationName {
-    fadeInOpacity = "fadeInOpacity",
-    fadeOutOpacity = "fadeOutOpacity",
-    fadeInAndOut = "fadeIn&Out",
+    fadeInOpacity = 'fadeInOpacity',
+    fadeOutOpacity = 'fadeOutOpacity',
+    fadeInAndOut = 'fadeIn&Out',
 }
 
 /**
  * 語系代號
  */
 export enum BaseLang {
-    sch = "sch",
-    tch = "tch",
-    ind = "ind",
-    por = "por",
-    tai = "tai",
-    vie = "vie",
-    in = "in",
-    esp = "esp",
-    jp = "jp",
-    kor = "kor",
-    tur = "tur",
-    bd = "bd",
-    eng = "eng",
+    sch = 'sch',
+    tch = 'tch',
+    ind = 'ind',
+    por = 'por',
+    tai = 'tai',
+    vie = 'vie',
+    in = 'in',
+    esp = 'esp',
+    jp = 'jp',
+    kor = 'kor',
+    tur = 'tur',
+    bd = 'bd',
+    eng = 'eng',
 }
 
 export type BaseLangSetting = {

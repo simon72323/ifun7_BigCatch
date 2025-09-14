@@ -1,4 +1,4 @@
-import { BaseFont } from "../constant/BaseConst";
+import { BaseFont } from '@base/script/constant/BaseConst';
 
 /**
  * LabelAtlas字型管理
@@ -13,7 +13,7 @@ export class FontManager {
         return FontManager.instance;
     }
 
-    private ascii: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    private ascii: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
     private fontMap: { [key: string]: { [key: string]: string } } = {};
 
     public constructor() {
@@ -23,17 +23,17 @@ export class FontManager {
     /**
      * 註冊labelAtlas
      * @param fontName 
-     * @param fontSetting 字串陣列,依圖片順序設定字串|ascii長度(ex:"012|2" 表示0,1,2對應的ascii長度為2)
+     * @param fontSetting 字串陣列,依圖片順序設定字串|ascii長度(ex:'012|2' 表示0,1,2對應的ascii長度為2)
      */
     public registerFont(fontName: string, fontSetting: string[]) {
-        let map: { [key: string]: string } = {}
+        let map: { [key: string]: string } = {};
         let asciiIdx: number = 0;
-        fontSetting.forEach((setting, settingIdx) => {
+        fontSetting.forEach((setting, _settingIdx) => {
             let settingData = setting.split('|');
             let content = settingData[0];
             let len = parseInt(settingData[1]);
             let contentList = content.split('');
-            contentList.forEach((content, index) => {
+            contentList.forEach((content, _index) => {
                 map[content] = this.ascii.substring(asciiIdx, asciiIdx + len);
                 asciiIdx += len;
             }, this);
@@ -41,13 +41,14 @@ export class FontManager {
         });
         this.fontMap[fontName] = map;
     }
+
     public convertToAsciiString(fontName: string, str: string): string {
         let strList = str.split('');
         let result = '';
         let map = this.fontMap[fontName];
-        strList.forEach((str, index) => {
+        strList.forEach((str, _index) => {
             result += map[str];
-        })
+        });
         return result;
     }
 }

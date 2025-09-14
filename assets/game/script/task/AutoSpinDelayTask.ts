@@ -1,7 +1,8 @@
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { GameData } from "../main/GameData";
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * 自動轉等待時間

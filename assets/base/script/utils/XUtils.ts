@@ -1,6 +1,16 @@
-import { Animation, AnimationState, Button, director, Node, Scheduler, sp, SpriteFrame, Vec3 } from "cc";
-import { BaseConst } from "../constant/BaseConst";
-import { Grid, SpreadObject } from "../types/BaseType";
+import { Animation, AnimationState, Button, director, Node, Scheduler, sp, SpriteFrame, Vec3 } from 'cc';
+
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { Grid, SpreadObject } from '@base/script/types/BaseType';
+
+/**
+ * 軸
+ */
+export enum Axis {
+    X = 'x',
+    Y = 'y',
+    Z = 'z',
+}
 
 /**
  * 共用工具方法類
@@ -17,12 +27,16 @@ export class XUtils {
     public static convertToLong(data: number | { low: number, high: number, unsigned: boolean }): number {
         if (typeof data === 'object' && 'low' in data && 'high' in data) {
             const { low, high, unsigned } = data;
-            data.low = data.low | 0;
-            data.high = data.high | 0;
-            data.unsigned = !!data.unsigned;
-            if (data.unsigned)
-                return ((data.high >>> 0) * 4294967296) + (data.low >>> 0);
-            return data.high * 4294967296 + (data.low >>> 0);
+            const normalizedData = {
+                low: low | 0,
+                high: high | 0,
+                unsigned: !!unsigned
+            };
+
+            if (normalizedData.unsigned) {
+                return ((normalizedData.high >>> 0) * 4294967296) + (normalizedData.low >>> 0);
+            }
+            return normalizedData.high * 4294967296 + (normalizedData.low >>> 0);
         }
         else {
             return data;
@@ -73,10 +87,11 @@ export class XUtils {
      */
     public static getSplit(text: string, split: string = '', index: number = 0): string {
         let textArr = text.split(split);
-        if (index < 0) {
-            index = textArr.length + index;
+        let actualIndex = index;
+        if (actualIndex < 0) {
+            actualIndex = textArr.length + actualIndex;
         }
-        return textArr[index];
+        return textArr[actualIndex];
     }
 
     /**
@@ -86,10 +101,10 @@ export class XUtils {
      */
     public static getWinPosColumns(pos: number[]): number[] {
         let result: number[] = [];
-        pos.forEach((pos, index) => {
+        pos.forEach((pos, _index) => {
             let col: number = Math.floor(pos / 10);
             result.indexOf(col) == -1 && result.push(col);
-        })
+        });
         return result;
     }
 
@@ -101,7 +116,7 @@ export class XUtils {
     public static posToGrid(pos: number): Grid {
         let col = Math.floor(pos / 10);
         let row = (pos % 10) - 1;
-        return { col: col, row: row };
+        return { col, row };
     }
 
     public static chunk<T>(arr: T[], size: number): T[][] {
@@ -134,6 +149,7 @@ export class XUtils {
     public static scheduleOnce(callback: (dt?: number) => void, delay: number, scope: any) {
         XUtils.schedule(callback, scope, 0, 0, delay);
     }
+
     public static schedule(callback: (dt?: number) => void, scope: any, interval: number, repeat?: number, delay?: number) {
         Scheduler.enableForTarget(scope);
         director.getScheduler().schedule(callback, scope, interval, repeat, delay, false);
@@ -163,36 +179,36 @@ export class XUtils {
             //加入右邊節點
             target = root.pos + 10;
             if (winLine.indexOf(target) != -1 && checkedPos.indexOf(target) == -1) {
-                result.push(new SpreadObject(target, "right"));
+                result.push(new SpreadObject(target, 'right'));
                 checkedPos.push(target);
             }
             //加入左邊節點
             target = root.pos - 10;
             if (winLine.indexOf(target) != -1 && checkedPos.indexOf(target) == -1) {
-                result.push(new SpreadObject(target, "left"));
+                result.push(new SpreadObject(target, 'left'));
                 checkedPos.push(target);
             }
             //加入上方節點
             target = root.pos - 1;
             if (winLine.indexOf(target) != -1 && checkedPos.indexOf(target) == -1) {
-                result.push(new SpreadObject(target, "up"));
+                result.push(new SpreadObject(target, 'up'));
                 checkedPos.push(target);
             }
             //加入下方節點
             target = root.pos + 1;
             if (winLine.indexOf(target) != -1 && checkedPos.indexOf(target) == -1) {
-                result.push(new SpreadObject(target, "down"));
+                result.push(new SpreadObject(target, 'down'));
                 checkedPos.push(target);
             }
             return result;
 
-        }
+        };
         //第一欄起點
         let roots = [];
         winLine.forEach(pos => {
             //第一欄動畫方向為right
             if (pos < 11) {
-                roots.push(new SpreadObject(pos, "right"));
+                roots.push(new SpreadObject(pos, 'right'));
                 checkedPos.push(pos);
             }
         }, this);
@@ -202,7 +218,7 @@ export class XUtils {
                 //先加入當前節點, 並找出可擴展節點下一回合使用
                 round.push(root);
                 nextRoots = nextRoots.concat(findNextRoots(root));
-            })
+            });
             result.push(round);
             //替換roots,直到再無節點為止
             roots = nextRoots;
@@ -226,7 +242,7 @@ export class XUtils {
         document.body.removeChild(el);
 
         //複製完要把focus還給遊戲
-        let game = document.getElementById("GameCanvas");
+        let game = document.getElementById('GameCanvas');
         game.focus();
     }
 
@@ -246,25 +262,26 @@ export class XUtils {
      * @returns 
      */
     public static convertToKMB(value: number, digit: number = 1): string {
-
         let result: string;
+        let processedValue = value;
+
         //B
-        if (value >= 1_000_000_000) {
-            value = XUtils.floorToDecimal(value / 1_000_000_000, digit);
-            result = this.fmtKMB.format(value) + 'B';
+        if (processedValue >= 1_000_000_000) {
+            processedValue = XUtils.floorToDecimal(processedValue / 1_000_000_000, digit);
+            result = this.fmtKMB.format(processedValue) + 'B';
         }
         //M
-        else if (value >= 1_000_000) {
-            value = XUtils.floorToDecimal(value / 1_000_000, digit);
-            result = this.fmtKMB.format(value) + 'M';
+        else if (processedValue >= 1_000_000) {
+            processedValue = XUtils.floorToDecimal(processedValue / 1_000_000, digit);
+            result = this.fmtKMB.format(processedValue) + 'M';
         }
         //K
-        else if (value >= 1_000) {
-            value = XUtils.floorToDecimal(value / 1_000, digit);
-            result = this.fmtKMB.format(value) + 'K';
+        else if (processedValue >= 1_000) {
+            processedValue = XUtils.floorToDecimal(processedValue / 1_000, digit);
+            result = this.fmtKMB.format(processedValue) + 'K';
         }
         else {
-            result = this.fmtKMB.format(value);
+            result = this.fmtKMB.format(processedValue);
         }
 
         return result;
@@ -279,32 +296,33 @@ export class XUtils {
      */
     public static convertToKMB2(value: number, minDigits: number, maxDigits: number): string {
 
+        let processedValue = value;
         //Ai表示動態生成的效能很小可以不計
         let fmt = new Intl.NumberFormat(XUtils.locale, {
-            style: "decimal", // 可選：currency（貨幣）、percent（百分比）或單純數字
-            currency: XUtils.currency,   // 貨幣類型，如 "USD", "EUR"
+            style: 'decimal', // 可選：currency（貨幣）、percent（百分比）或單純數字
+            currency: XUtils.currency,   // 貨幣類型，如 'USD', 'EUR'
             minimumFractionDigits: minDigits, // 最小小數位數
             maximumFractionDigits: maxDigits  // 最大小數位數
         });
 
         let result: string;
         //B
-        if (value >= 1_000_000_000) {
-            value = XUtils.floorToDecimal(value / 1_000_000_000, maxDigits);
-            result = fmt.format(value) + 'B';
+        if (processedValue >= 1_000_000_000) {
+            processedValue = XUtils.floorToDecimal(processedValue / 1_000_000_000, maxDigits);
+            result = fmt.format(processedValue) + 'B';
         }
         //M
-        else if (value >= 1_000_000) {
-            value = XUtils.floorToDecimal(value / 1_000_000, maxDigits);
-            result = fmt.format(value) + 'M';
+        else if (processedValue >= 1_000_000) {
+            processedValue = XUtils.floorToDecimal(processedValue / 1_000_000, maxDigits);
+            result = fmt.format(processedValue) + 'M';
         }
         //K
-        else if (value >= 1_000) {
-            value = XUtils.floorToDecimal(value / 1_000, maxDigits);
-            result = fmt.format(value) + 'K';
+        else if (processedValue >= 1_000) {
+            processedValue = XUtils.floorToDecimal(processedValue / 1_000, maxDigits);
+            result = fmt.format(processedValue) + 'K';
         }
         else {
-            result = fmt.format(value);
+            result = fmt.format(processedValue);
         }
 
         return result;
@@ -323,7 +341,7 @@ export class XUtils {
     private static locale: string;
 
     /**
-     * 初始化
+     * 初始化數字格式
      * @param currency 
      * @param locale 
      */
@@ -331,21 +349,24 @@ export class XUtils {
         XUtils.currency = currency;
         XUtils.locale = locale;
 
+        // 小數位數2-2：固定顯示2位小數 (例如: 1,234.56)
         this.fmtCent = new Intl.NumberFormat(locale, {
-            style: "decimal", // 可選：currency（貨幣）、percent（百分比）或單純數字
-            currency: currency,   // 貨幣類型，如 "USD", "EUR"
+            style: 'decimal', // 可選：currency（貨幣）、percent（百分比）或單純數字
+            currency,   // 貨幣類型，如 'USD', 'EUR'
             minimumFractionDigits: 2, // 最小小數位數
             maximumFractionDigits: 2  // 最大小數位數
         });
+        // 小數位數0-2：可選小數位，最多2位 (例如: 1,234 或 1,234.5)
         this.fmtCentNoDigit = new Intl.NumberFormat(locale, {
-            style: "decimal", // 可選：currency（貨幣）、percent（百分比）或單純數字
-            currency: currency,   // 貨幣類型，如 "USD", "EUR"
+            style: 'decimal', // 可選：currency（貨幣）、percent（百分比）或單純數字
+            currency,   // 貨幣類型，如 'USD', 'EUR'
             minimumFractionDigits: 0, // 最小小數位數
             maximumFractionDigits: 2  // 最大小數位數
         });
+        // 小數位數0-1：K/M/B格式，最多1位小數 (例如: 1.2K, 3.4M)
         this.fmtKMB = new Intl.NumberFormat(locale, {
-            style: "decimal", // 可選：currency（貨幣）、percent（百分比）或單純數字
-            currency: currency,   // 貨幣類型，如 "USD", "EUR"
+            style: 'decimal', // 可選：currency（貨幣）、percent（百分比）或單純數字
+            currency,   // 貨幣類型，如 'USD', 'EUR'
             minimumFractionDigits: 0, // 最小小數位數
             maximumFractionDigits: 1  // 最大小數位數
         });
@@ -354,7 +375,7 @@ export class XUtils {
 
     /**
      * 測試網址 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
-     * locale決定千分位用","或"."
+     * locale決定千分位用','或'.'
      * @param value 
      * @param 是否保留小數
      * @returns 帶入資料會以除100後格式化顯示 ex:123456 = 1,234.56
@@ -377,7 +398,7 @@ export class XUtils {
         const factor = Math.pow(10, decimalPlaces);
         const epsilon = 1e-10; // 小小修正值
         return Math.floor((val + epsilon) * factor) / factor;
-    };
+    }
 
     /**
      * 格式化
@@ -421,13 +442,13 @@ export class XUtils {
                     state.stop();
                 }
             }
-        })
+        });
         let state = anim.getState(clipName);
 
         if (!state) {
             const clip = anim.clips.find(c => c.name === clipName);
             if (!clip) {
-                console.warn(`AnimationClip "${clipName}" not found on node: ${node.name}`);
+                console.warn(`AnimationClip '${clipName}' not found on node: ${node.name}`);
                 return;
             }
             state = anim.createState(clip);
@@ -436,7 +457,7 @@ export class XUtils {
         // 換算 speed
         const originalDuration = state.duration;
         if (originalDuration === 0) {
-            console.warn(`AnimationClip "${clipName}" has zero duration.`);
+            console.warn(`AnimationClip '${clipName}' has zero duration.`);
             return;
         }
 
@@ -491,7 +512,7 @@ export class XUtils {
      */
     public static setButtonSprite(btn: Button, normal: SpriteFrame, press: SpriteFrame): void {
         if (!normal || !press) {
-            throw new Error("圖片素材不存在!!");
+            throw new Error('圖片素材不存在!!');
         }
         btn.normalSprite = btn.hoverSprite = normal;
         btn.pressedSprite = btn.disabledSprite = press;
@@ -561,20 +582,11 @@ export class XUtils {
         else {
             result = XUtils.format(floorRatePay, false);
         }
-        result = result.replace(/,/g, "");
+        result = result.replace(/,/g, '');
         return result;
     }
 }
 
 export function logger(str: string) {
     console.warn(`logger:${str}`);
-}
-
-/**
- * 軸
- */
-export enum Axis {
-    X = 'x',
-    Y = 'y',
-    Z = 'z',
 }

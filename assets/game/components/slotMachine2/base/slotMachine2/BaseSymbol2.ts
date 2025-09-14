@@ -1,9 +1,11 @@
 import { _decorator, Component, Node } from 'cc';
-import { Grid } from '@/base/script/types/BaseType';
-import { BaseSymbolData2 } from './BaseSymbolData2';
-import { SymbolState2 } from './SlotType2';
 
-const { ccclass, property } = _decorator;
+import { Grid } from '@base/script/types/BaseType';
+
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
+import { SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
+
+const { ccclass } = _decorator;
 
 /**
  * Symbol介面
@@ -49,7 +51,7 @@ export class BaseSymbol2 extends Component {
      * 設定圖示ID
      * @param newSymbolID 
      */
-    public setSymbolID(newSymbolID: number, stripIdx: number, isFinal: boolean = false): void {
+    public setSymbolID(_newSymbolID: number, _stripIdx: number, _isFinal: boolean = false): void {
         //override
     }
 
@@ -57,14 +59,15 @@ export class BaseSymbol2 extends Component {
      * 設定圖示ID
      * @param newSymbolID 
      */
-    public setSymbolData(data: BaseSymbolData2): void {
+    public setSymbolData(_data: BaseSymbolData2): void {
         //override
     }
+
     /**
      * 設定圖示ID
      * @param newSymbolID 
      */
-    public changeSymbolData(data: BaseSymbolData2): void {
+    public changeSymbolData(_data: BaseSymbolData2): void {
         //override
     }
 
@@ -72,7 +75,7 @@ export class BaseSymbol2 extends Component {
      * 設定圖示狀態
      * @param newSymbolID 
      */
-    public setState(state: SymbolState2): void {
+    public setState(_state: SymbolState2): void {
         //override
     }
 
@@ -115,7 +118,7 @@ export class BaseSymbol2 extends Component {
     }
 
     /**掉落到盤面時(轉動消去都會觸發, 只有畫面內的symbol會觸發) */
-    public hit(isInView: boolean): void {
+    public hit(_isInView: boolean): void {
         //override
     }
 
@@ -130,11 +133,12 @@ export class BaseSymbol2 extends Component {
     }
 
     /**開始瞇牌 */
-    public setIsMi(isMi: boolean): void {
+    public setIsMi(_isMi: boolean): void {
         //override
     }
+
     /**設定是否可見 */
-    public setVisible(visible: boolean): void {
+    public setVisible(_visible: boolean): void {
         //override
     }
 }

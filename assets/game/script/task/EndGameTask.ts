@@ -1,19 +1,20 @@
-import { SettingsPage1 } from "../../../base/common/settingsPage/SettingsPage1";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BigWinType, ModuleID, SpinButtonState } from "../../../base/script/types/BaseType";
-import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { BigWinUI } from "../../components/BigWinUI/BigWinUI";
-import { BSRoleUI } from "../../components/characterUI/BSRoleUI";
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { BigWinType, ModuleID, SpinButtonState } from '@base/script/types/BaseType';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
+import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
 
 /**
  * 一局結束
  */
 export class EndGameTask extends GameTask {
 
-    protected name: string = "EndGameTask";
+    protected name: string = 'EndGameTask';
 
     /**單轉總贏分(尚未xRate) */
     public win: number = 0;
@@ -24,7 +25,7 @@ export class EndGameTask extends GameTask {
 
     execute(): void {
 
-        //如果是即將進入FS的最後一轉不顯示"共贏得", 因為贏分會帶到FS內
+        //如果是即將進入FS的最後一轉不顯示'共贏得', 因為贏分會帶到FS內
         if (BaseDataManager.getInstance().isBS() === true && BaseDataManager.getInstance().nextModuleID !== ModuleID.BS) {
             this.finish();
         }
@@ -66,7 +67,7 @@ export class EndGameTask extends GameTask {
 
     update(deltaTime: number): void {
         // throw 
-        // new Error("Method not implemented.");
+        // new Error('Method not implemented.');
     }
 
     private showTotalWin(): void {

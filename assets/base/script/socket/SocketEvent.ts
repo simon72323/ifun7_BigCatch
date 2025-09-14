@@ -1,4 +1,4 @@
-import { XEvent, XEvent1 } from "../utils/XEvent";
+import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
 export class SocketEvent {
     public static open: XEvent = new XEvent();

@@ -1,17 +1,18 @@
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { FSUI } from "../../components/FSUI/FSUI";
-import { GameConst } from "../constant/GameConst";
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { FSUI } from '@game/components/FSUI/FSUI';
+import { GameConst } from '@game/script/constant/GameConst';
 
 /**
  * 增加次數
  */
 export class RetriggerTask extends GameTask {
 
-    protected name: string = "RetriggerTask";
+    protected name: string = 'RetriggerTask';
 
     /**當前剩餘次數 */
     public from: number;
@@ -43,7 +44,8 @@ export class RetriggerTask extends GameTask {
             }, GameConst.BONUS_TIME_ADD_INTERVAL * (round + 1), this);
         }
     }
+
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

@@ -1,15 +1,15 @@
-import { Notice } from "@/base/components/notice/Notice";
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { TimeoutManager } from "@/base/script/utils/TimeoutManager";
-import { AudioManager } from "../../../base/script/audio/AudioManager";
-import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { AutoPlayMode, ModuleID, SpinButtonState } from "../../../base/script/types/BaseType";
-import { InfoBar } from "../../components/infoBar/InfoBar";
-import { AudioKey } from "../audio/AudioKey";
-import { PromoManager } from "../utils/PromoManager";
+import { InfoBar } from '@base/components/infoBar/InfoBar';
+import { Notice } from '@base/components/notice/Notice';
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { AutoPlayMode, ModuleID, SpinButtonState } from '@base/script/types/BaseType';
+import { PromoManager } from '@base/script/utils/PromoManager';
+import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 
 
 /**
@@ -17,7 +17,7 @@ import { PromoManager } from "../utils/PromoManager";
  */
 export abstract class BaseIdleTask extends GameTask {
 
-    protected name: string = "IdleTask";
+    protected name: string = 'IdleTask';
 
     /**是否為首次Idle */
     private static isFirstIdle: boolean = true;
@@ -33,6 +33,7 @@ export abstract class BaseIdleTask extends GameTask {
             this.execute2();
         }
     }
+
     execute2(): void {
         BaseDataManager.getInstance().curModuleID = ModuleID.BS;
 
@@ -96,7 +97,7 @@ export abstract class BaseIdleTask extends GameTask {
 
         BaseEvent.clickSpin.on(() => {
             this.onSpin(false);
-        }, this)
+        }, this);
 
         //購買功能
         BaseEvent.buyFeature.on(() => {
@@ -176,13 +177,14 @@ export abstract class BaseIdleTask extends GameTask {
         this.childFinish();
     }
 
-    public update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+    public update(_deltaTime: number): void {
+        // throw new Error('Method not implemented.');
     }
 
     protected childExecute(): void {
         //由子類別覆寫, 處理閒置狀態額外需要的動作
     }
+
     protected childFinish(): void {
         //由子類別覆寫, 自行決定任務完成後要添加什麼Task或執行其他動作
     }

@@ -1,23 +1,25 @@
 import { _decorator, find, randomRangeInt, SpriteFrame } from 'cc';
-import { CheatUI } from '@/base/components/cheat/CheatUI';
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { CheatCodeData, ModuleID } from '@/base/script/types/BaseType';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { GameMain } from '@/base/script/main/GameMain';
-import { BannerUI } from '@/game/components/BannerUI/BannerUI';
-import { BigWinUI } from '@/game/components/BigWinUI/BigWinUI';
-import { FSRoleUI } from '@/game/components/characterUI/FSRoleUI';
-import { FSSettleUI } from '@/game/components/SettleUI/FSSettleUI';
-import { SlotMachine2 } from '@/game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { SlotReelConfig2 } from '@/game/components/slotMachine2/base/slotMachine2/SlotType2';
-import { TransUI } from '@/game/components/TransUI/TransUI';
-import { GameAudioKey, LangBundleDir } from '../constant/GameConst';
-import { GameData } from '@/game/script/main/GameData';
-import { MessageHandler } from '@/game/script/main/MessageHandler';
+
+import { CheatUI } from '@base/components/cheat/CheatUI';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameMain } from '@base/script/main/GameMain';
+import { CheatCodeData, ModuleID } from '@base/script/types/BaseType';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
+import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
+import { FSSettleUI } from '@game/components/SettleUI/FSSettleUI';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { SlotReelConfig2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
+import { TransUI } from '@game/components/TransUI/TransUI';
+import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
+import { MessageHandler } from '@game/script/main/MessageHandler';
 const { ccclass, property } = _decorator;
 
 /**
@@ -30,7 +32,7 @@ export class Game extends GameMain {
      * 遊戲初始化內容
      */
     protected initializeGame() {
-        
+
         //配置遊戲資料
         BaseDataManager.getInstance().setData(new GameData());
 
@@ -146,13 +148,13 @@ export class Game extends GameMain {
 
                 },
                 () => {
-                    console.log(`轉場進場完成`);
+                    console.log('轉場進場完成');
                     this.scheduleOnce(() => {
                         TransUI.fadeOut.emit(() => {
-                            console.log(`轉場出場完成`);
-                        })
+                            console.log('轉場出場完成');
+                        });
                     }, 1);
-                })
+                });
             CheatUI.hide.emit();
         });
 

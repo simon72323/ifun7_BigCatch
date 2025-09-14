@@ -1,6 +1,7 @@
-import { EventKeyboard, input, Input, KeyCode } from "cc";
-import { BaseEvent } from "../main/BaseEvent";
-import { BaseDataManager } from "../main/BaseDataManager";
+import { EventKeyboard, input, Input } from 'cc';
+
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
 
 /**
  * 鍵盤控制器
@@ -23,6 +24,7 @@ export class KeyboardManager {
     public initialize(): void {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
     }
+
     /**
      * 
      * @param event 

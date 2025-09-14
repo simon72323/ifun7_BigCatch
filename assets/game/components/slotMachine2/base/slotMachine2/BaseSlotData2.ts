@@ -1,4 +1,4 @@
-import { BaseSymbolData2 } from "./BaseSymbolData2";
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
 
 /**
  * 老虎機資料&解析盤面

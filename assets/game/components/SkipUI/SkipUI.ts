@@ -1,7 +1,9 @@
 import { _decorator, Button, Component } from 'cc';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { XEvent } from '@/base/script/utils/XEvent';
-const { ccclass, property } = _decorator;
+
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { XEvent } from '@base/script/utils/XEvent';
+
+const { ccclass } = _decorator;
 
 @ccclass('SkipUI')
 export class SkipUI extends Component {
@@ -23,7 +25,7 @@ export class SkipUI extends Component {
         this.node.active = false;
     }
 
-    update(deltaTime: number) {
+    update(_deltaTime: number) {
 
     }
 }

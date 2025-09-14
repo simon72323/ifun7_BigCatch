@@ -1,10 +1,23 @@
 import { _decorator, Component, sp } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { ModuleID } from '@/base/script/types/BaseType';
-import { XEvent1, XEvent2 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAudioKey } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { ModuleID } from '@base/script/types/BaseType';
+import { XEvent1, XEvent2 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameAudioKey } from '@game/script/constant/GameConst';
+
+enum RevolverAni {
+    fg_back_xN = 'fg_back_x#',
+    hit_xN = 'hit_x#',
+    ng_back_xN = 'ng_back_x#',
+    to_xN = 'to_x#',
+    loop_xN = 'x#',
+    fg_back_x_none = 'fg_back_x_none',
+    ng_back_x_none = 'ng_back_x_none',
+    into_fg = 'into_fg',
+}
+const { ccclass } = _decorator;
 
 /**
  * BS左上倍數UI
@@ -27,9 +40,9 @@ export class RevolverUI extends Component {
     private curMultiplier: number = 1;
 
     onLoad() {
-        this.spine = this.node.getChildByName("revolver").getComponent(sp.Skeleton);
+        this.spine = this.node.getChildByName('revolver').getComponent(sp.Skeleton);
 
-        this.spine.setAnimation(0, RevolverAni.loop_xN.replace("#", this.curMultiplier.toString()), true);
+        this.spine.setAnimation(0, RevolverAni.loop_xN.replace('#', this.curMultiplier.toString()), true);
 
         //倍數演示
         RevolverUI.setMultiplier.on((multiplier) => {
@@ -43,9 +56,9 @@ export class RevolverUI extends Component {
 
 
             XUtils.ClearSpine(this.spine);
-            this.spine.addAnimation(0, RevolverAni.hit_xN.replace("#", this.curMultiplier.toString()), false);
-            this.spine.addAnimation(0, RevolverAni.to_xN.replace("#", multiplier.toString()), false);
-            this.spine.addAnimation(0, RevolverAni.loop_xN.replace("#", multiplier.toString()), true);
+            this.spine.addAnimation(0, RevolverAni.hit_xN.replace('#', this.curMultiplier.toString()), false);
+            this.spine.addAnimation(0, RevolverAni.to_xN.replace('#', multiplier.toString()), false);
+            this.spine.addAnimation(0, RevolverAni.loop_xN.replace('#', multiplier.toString()), true);
             this.curMultiplier = multiplier;
         }, this);
 
@@ -60,8 +73,8 @@ export class RevolverUI extends Component {
 
             XUtils.ClearSpine(this.spine);
             let backAni = moduleID === ModuleID.BS ? RevolverAni.ng_back_xN : RevolverAni.fg_back_xN;
-            this.spine.addAnimation(0, backAni.replace("#", this.curMultiplier.toString()), false);
-            this.spine.addAnimation(0, RevolverAni.loop_xN.replace("#", multiplier.toString()), true);
+            this.spine.addAnimation(0, backAni.replace('#', this.curMultiplier.toString()), false);
+            this.spine.addAnimation(0, RevolverAni.loop_xN.replace('#', multiplier.toString()), true);
             this.curMultiplier = multiplier;
         }, this);
 
@@ -73,10 +86,10 @@ export class RevolverUI extends Component {
                 this.spine.setCompleteListener(null);
                 //清除會瞬間閃一下異常畫面, 暫時不清除
                 // XUtils.ClearSpine(this.spine);
-                this.spine.addAnimation(0, RevolverAni.loop_xN.replace("#", this.curMultiplier.toString()), true);
+                this.spine.addAnimation(0, RevolverAni.loop_xN.replace('#', this.curMultiplier.toString()), true);
 
                 onComplete();
-            })
+            });
             this.spine.setAnimation(0, RevolverAni.into_fg, false);
 
             //3發子彈
@@ -89,18 +102,7 @@ export class RevolverUI extends Component {
         }, this);
     }
 
-    update(deltaTime: number) {
+    update(_deltaTime: number) {
 
     }
-}
-
-enum RevolverAni {
-    fg_back_xN = "fg_back_x#",
-    hit_xN = "hit_x#",
-    ng_back_xN = "ng_back_x#",
-    to_xN = "to_x#",
-    loop_xN = "x#",
-    fg_back_x_none = "fg_back_x_none",
-    ng_back_x_none = "ng_back_x_none",
-    into_fg = "into_fg",
 }

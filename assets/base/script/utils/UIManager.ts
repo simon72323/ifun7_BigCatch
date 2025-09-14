@@ -1,18 +1,19 @@
-import { KeyCode } from "cc";
-import { AutoPage } from "../../components/autoPage/AutoPage";
-import { BackGame } from "../../components/backGame/BackGame";
-import { BetPage } from "../../components/betPage/BetPage";
-import { GameHistory } from "../../components/gameHistory/GameHistory";
-import { InfoBar } from "../../components/infoBar/InfoBar";
-import { Notice } from "../../components/notice/Notice";
-import { SettingsPage1 } from "../../components/settingsPage/SettingsPage1";
-import { SettingsPage2 } from "../../components/settingsPage/SettingsPage2";
-import { AudioKey } from "../audio/AudioKey";
-import { AudioManager } from "../audio/AudioManager";
-import { BaseDataManager } from "../main/BaseDataManager";
-import { BaseEvent } from "../main/BaseEvent";
-import { AutoPlayMode, ModuleID, SpinButtonState, TurboMode } from "../types/BaseType";
-import { APIManager } from "./APIManager";
+import { KeyCode } from 'cc';
+
+import { AutoPage } from '@base/components/autoPage/AutoPage';
+import { BackGame } from '@base/components/backGame/BackGame';
+import { BetPage } from '@base/components/betPage/BetPage';
+import { GameHistory } from '@base/components/gameHistory/GameHistory';
+import { InfoBar } from '@base/components/infoBar/InfoBar';
+import { Notice } from '@base/components/notice/Notice';
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { AutoPlayMode, ModuleID, SpinButtonState, TurboMode } from '@base/script/types/BaseType';
+import { APIManager } from '@base/script/utils/APIManager';
 
 /**
  * 共用UI管理
@@ -29,6 +30,7 @@ export class UIManager {
         }
         return UIManager.instance;
     }
+
     /**
      * 初始化
      */

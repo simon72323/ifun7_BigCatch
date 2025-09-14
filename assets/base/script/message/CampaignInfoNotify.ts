@@ -1,5 +1,5 @@
-import { IReceiveMessage } from "../socket/SocketManager";
-import { PromoManager } from "../utils/PromoManager";
+import { IReceiveMessage } from '@base/script/socket/SocketManager';
+import { PromoManager } from '@base/script/utils/PromoManager';
 
 /**
  * 通知目前活動的相關資訊
@@ -9,7 +9,7 @@ export class CampaignInfoNotify implements IReceiveMessage {
 
     public decode(uint8: Uint8Array): void {
         const message = s5g.game.proto.CampaignInfoNotify.decode(uint8);
-        console.log("SR活動資訊: " + JSON.stringify(message));
+        console.log('SR活動資訊: ' + JSON.stringify(message));
 
         PromoManager.getInstance().campaign_list = message.campaign_list;
         PromoManager.getInstance().notifiable_campaign_list = [];

@@ -6,8 +6,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('BannerAD')
 export class BannerAD extends Component {
-    @property({ tooltip: "最大寬度(超過寬度以跑馬燈演示)" })
-    maxWidth: number = 720; // 自訂最大寬度
+    @property({ tooltip: '最大寬度(超過寬度以跑馬燈演示)' })
+    public maxWidth: number = 720; // 自訂最大寬度
 
     private spriteFrames: SpriteFrame[] = [];
 

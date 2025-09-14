@@ -1,15 +1,69 @@
 import { _decorator, Button, Color, Component, KeyCode, Label, Node, sp, Sprite, tween, Tween } from 'cc';
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { AudioManager } from '../../../base/script/audio/AudioManager';
-import { BaseDataManager } from '../../../base/script/main/BaseDataManager';
-import { BaseAnimationName, BigWinType } from '../../../base/script/types/BaseType';
-import { XEvent, XEvent1 } from '../../../base/script/utils/XEvent';
-import { XUtils } from '../../../base/script/utils/XUtils';
-import { LangBundleDir } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseAnimationName, BigWinType } from '@base/script/types/BaseType';
+import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { LangBundleDir } from '@game/script/constant/GameConst';
+
+type BigWinConfig = {
+    /**音效 */
+    sound: AudioKey,
+    /**begin動畫 */
+    begin: string,
+    /**loop動畫 */
+    loop: string,
+    /**end動畫 */
+    end: string,
+    /**標題索引 */
+    titleIdx: number,
+    /**是否有副標題 */
+    hasSlogan: boolean,
+    /**標題skin(需要再依照語系替換#符號) */
+    titleSkin: string,
+    /**跑分時間 */
+    duration: number
+}
+
+type ScrollingData = {
+    currentRateValue: number,
+    endRateValue: number,
+    finalRateValue: number,
+    currentType: BigWinType,
+    finalType: BigWinType,
+}
+
+enum CoinAnimation {
+    end = 'end',
+    loop = 'loop',
+    start = 'start',
+}
+
+enum WinAnimation {
+    big_end = 'big_end',
+    big_loop = 'big_loop',
+    big_start = 'big_start',
+    mega_end = 'mega_end',
+    mega_loop = 'mega_loop',
+    mega_start = 'mega_start',
+    super_end = 'super_end',
+    super_loop = 'super_loop',
+    super_start = 'super_start',
+    ultra_end = 'ultra_end',
+    ultra_loop = 'ultra_loop',
+    ultra_start = 'ultra_start',
+    ultumate_end = 'ultumate_end',
+    ultumate_loop = 'ultumate_loop',
+    ultumate_start = 'ultumate_start',
+}
+
+const { ccclass } = _decorator;
 
 /**
  * BigWin演示
@@ -45,7 +99,7 @@ export class BigWinUI extends Component {
             end: WinAnimation.big_end,
             titleIdx: 0,
             hasSlogan: false,
-            titleSkin: "bigwin",
+            titleSkin: 'bigwin',
             duration: 4.517
 
         },
@@ -56,7 +110,7 @@ export class BigWinUI extends Component {
             end: WinAnimation.mega_end,
             titleIdx: 1,
             hasSlogan: false,
-            titleSkin: "megawin",
+            titleSkin: 'megawin',
             duration: 4.36
         }, {
             sound: AudioKey.SuperWin,
@@ -65,7 +119,7 @@ export class BigWinUI extends Component {
             end: WinAnimation.super_end,
             titleIdx: 2,
             hasSlogan: false,
-            titleSkin: "superwin",
+            titleSkin: 'superwin',
             duration: 4.37
         }, {
             sound: AudioKey.UltraWin,
@@ -74,7 +128,7 @@ export class BigWinUI extends Component {
             end: WinAnimation.ultra_end,
             titleIdx: 3,
             hasSlogan: false,
-            titleSkin: "ultrawin",
+            titleSkin: 'ultrawin',
             duration: 4.361
         }, {
             sound: AudioKey.UltimateWin,
@@ -83,7 +137,7 @@ export class BigWinUI extends Component {
             end: WinAnimation.ultumate_end,
             titleIdx: 4,
             hasSlogan: false,
-            titleSkin: "ultimatewin",
+            titleSkin: 'ultimatewin',
             duration: 5.956
         }
     ];
@@ -94,8 +148,8 @@ export class BigWinUI extends Component {
         finalType: BigWinType.non,
         currentRateValue: 0,
         endRateValue: 0,
-        finalRateValue: 0,
-    }
+        finalRateValue: 0
+    };
 
     /**
      * 
@@ -105,18 +159,18 @@ export class BigWinUI extends Component {
         BigWinUI.show.on(this.onShow, this);
         // BigWin.hide.on(this.onHide, this);
 
-        this.winSpine = this.node.getChildByName("announce_win_ani").getComponent(sp.Skeleton);
-        this.announce_coin_ani = this.node.getChildByName("announce_coin_ani").getComponent(sp.Skeleton);
+        this.winSpine = this.node.getChildByName('announce_win_ani').getComponent(sp.Skeleton);
+        this.announce_coin_ani = this.node.getChildByName('announce_coin_ani').getComponent(sp.Skeleton);
 
-        this.label = this.node.getChildByPath("announce_win_ani/Slot/num_totalwin").getComponent(Label);
+        this.label = this.node.getChildByPath('announce_win_ani/Slot/num_totalwin').getComponent(Label);
 
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.bigwin}`, (langRes: any) => {
-            this.titleNodeList[0].getComponent(Sprite).spriteFrame = langRes[`title_bigwin`];
-            this.titleNodeList[1].getComponent(Sprite).spriteFrame = langRes[`title_megawin`];
-            this.titleNodeList[2].getComponent(Sprite).spriteFrame = langRes[`title_superwin`];
-            this.titleNodeList[3].getComponent(Sprite).spriteFrame = langRes[`title_ultrawin`];
-            this.titleNodeList[4].getComponent(Sprite).spriteFrame = langRes[`title_ultimatewin`];
+            this.titleNodeList[0].getComponent(Sprite).spriteFrame = langRes['title_bigwin'];
+            this.titleNodeList[1].getComponent(Sprite).spriteFrame = langRes['title_megawin'];
+            this.titleNodeList[2].getComponent(Sprite).spriteFrame = langRes['title_superwin'];
+            this.titleNodeList[3].getComponent(Sprite).spriteFrame = langRes['title_ultrawin'];
+            this.titleNodeList[4].getComponent(Sprite).spriteFrame = langRes['title_ultimatewin'];
         });
 
         for (let i: number = 0; i < 5; ++i) {
@@ -133,7 +187,7 @@ export class BigWinUI extends Component {
     private onShow(value: number): void {
 
         //skip
-        this.node.getChildByPath("SkipSensor").once(Button.EventType.CLICK, this.onSkip, this);
+        this.node.getChildByPath('SkipSensor').once(Button.EventType.CLICK, this.onSkip, this);
         BaseEvent.keyDown.once((code: KeyCode) => {
             if (code === KeyCode.SPACE) {
                 this.onSkip();
@@ -151,7 +205,7 @@ export class BigWinUI extends Component {
         this.isPlaying = true;
         this.isSkip = false;
 
-        this.label.string = "";
+        this.label.string = '';
         this.label.color = Color.WHITE;
 
         XUtils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.3);
@@ -262,7 +316,7 @@ export class BigWinUI extends Component {
      */
     private onSkip() {
 
-        this.node.getChildByPath("SkipSensor").off(Button.EventType.CLICK, this.onSkip, this);
+        this.node.getChildByPath('SkipSensor').off(Button.EventType.CLICK, this.onSkip, this);
         BaseEvent.keyDown.off(this);
 
         //正在播放才能skip
@@ -340,53 +394,3 @@ export class BigWinUI extends Component {
     }
 }
 
-type BigWinConfig = {
-    /**音效 */
-    sound: AudioKey,
-    /**begin動畫 */
-    begin: string,
-    /**loop動畫 */
-    loop: string,
-    /**end動畫 */
-    end: string,
-    /**標題索引 */
-    titleIdx: number,
-    /**是否有副標題 */
-    hasSlogan: boolean,
-    /**標題skin(需要再依照語系替換#符號) */
-    titleSkin: string,
-    /**跑分時間 */
-    duration: number
-}
-
-type ScrollingData = {
-    currentRateValue: number,
-    endRateValue: number,
-    finalRateValue: number,
-    currentType: BigWinType,
-    finalType: BigWinType,
-}
-
-enum CoinAnimation {
-    end = "end",
-    loop = "loop",
-    start = "start",
-}
-
-enum WinAnimation {
-    big_end = "big_end",
-    big_loop = "big_loop",
-    big_start = "big_start",
-    mega_end = "mega_end",
-    mega_loop = "mega_loop",
-    mega_start = "mega_start",
-    super_end = "super_end",
-    super_loop = "super_loop",
-    super_start = "super_start",
-    ultra_end = "ultra_end",
-    ultra_loop = "ultra_loop",
-    ultra_start = "ultra_start",
-    ultumate_end = "ultumate_end",
-    ultumate_loop = "ultumate_loop",
-    ultumate_start = "ultumate_start",
-}

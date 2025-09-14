@@ -1,23 +1,24 @@
-import { SettingsPage1 } from "@/base/components/settingsPage/SettingsPage1";
-import { AudioKey } from "@/base/script/audio/AudioKey";
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { BaseDataManager } from "@/base/script/main/BaseDataManager";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BigWinType, SpinButtonState } from "../../../base/script/types/BaseType";
-import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { BigWinUI } from "../../components/BigWinUI/BigWinUI";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { SlotMachineID } from "../constant/GameConst";
-import { GameData } from "../main/GameData";
+import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { BigWinType, SpinButtonState } from '@base/script/types/BaseType';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { SlotMachineID } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * FS返回NG總結算(先BigWin再橫幅)
  */
 export class BackBSSettleTask extends GameTask {
 
-    protected name: string = "BackBSSettleTask";
+    protected name: string = 'BackBSSettleTask';
 
     /**目前累計獲得金額(右下角Win) */
     public sumWin: number;
@@ -77,6 +78,6 @@ export class BackBSSettleTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

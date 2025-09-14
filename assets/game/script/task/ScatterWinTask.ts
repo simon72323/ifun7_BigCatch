@@ -1,15 +1,17 @@
-import { AudioManager } from "@/base/script/audio/AudioManager";
-import { GameTask } from "@/base/script/tasks/GameTask";
-import { XUtils } from "@/base/script/utils/XUtils";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { UIBlack } from "../../components/UIBlack";
-import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from "../constant/GameConst";
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { UIBlack } from '@game/components/UIBlack';
+import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from '@game/script/constant/GameConst';
+
 /**
  * Scatter中獎
  */
 export class ScatterWinTask extends GameTask {
 
-    protected name: string = "ScatterWinTask";
+    protected name: string = 'ScatterWinTask';
 
     /**最終盤視覺盤面資料 */
     public symbolPattern: number[];
@@ -40,6 +42,6 @@ export class ScatterWinTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

@@ -1,26 +1,27 @@
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { BaseConst } from "@/base/script/constant/BaseConst";
-import { TimeoutManager } from "@/base/script/utils/TimeoutManager";
-import { AudioManager } from "../../../base/script/audio/AudioManager";
-import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { AutoPlayMode, ModuleID } from "../../../base/script/types/BaseType";
-import { BannerUI } from '../../components/BannerUI/BannerUI';
-import { FSRoleUI } from '../../components/characterUI/FSRoleUI';
-import { FSUI } from '../../components/FSUI/FSUI';
-import { RevolverUI } from '../../components/RevolverUI/RevolverUI';
-import { SlotMachine2 } from '../../components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { TransUI } from '../../components/TransUI/TransUI';
-import { GameAudioKey, GameConst } from '../constant/GameConst';
-import { GameData } from '../main/GameData';
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { GameTask } from '@base/script/tasks/GameTask';
+import { AutoPlayMode, ModuleID } from '@base/script/types/BaseType';
+import { TimeoutManager } from '@base/script/utils/TimeoutManager';
+
+import { BannerUI } from '@game/components/BannerUI/BannerUI';
+import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
+import { FSUI } from '@game/components/FSUI/FSUI';
+import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { TransUI } from '@game/components/TransUI/TransUI';
+import { GameAudioKey, GameConst } from '@game/script/constant/GameConst';
+import { GameData } from '@game/script/main/GameData';
 
 /**
  * 轉場
  */
 export class TransTask extends GameTask {
 
-    protected name: string = "TransTask";
+    protected name: string = 'TransTask';
 
     /**轉場目標 */
     public to: ModuleID;
@@ -76,7 +77,7 @@ export class TransTask extends GameTask {
                 //10秒自動進入
                 TimeoutManager.getInstance().register(BaseConst.TIMEOUT_FEATURE_WAIT_START.key, BaseConst.TIMEOUT_FEATURE_WAIT_START.seconds, () => {
                     this.onTransEnd();
-                })
+                });
             });
     }
 
@@ -96,6 +97,6 @@ export class TransTask extends GameTask {
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

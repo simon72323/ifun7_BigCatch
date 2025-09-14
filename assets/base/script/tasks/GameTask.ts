@@ -1,4 +1,4 @@
-import { TaskManager } from "./TaskManager";
+import { TaskManager } from '@base/script/tasks/TaskManager';
 
 /**
  * 遊戲任務

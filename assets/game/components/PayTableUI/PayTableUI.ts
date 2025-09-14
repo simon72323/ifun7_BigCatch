@@ -1,10 +1,13 @@
 import { _decorator, Button, Component, Label, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { Grid } from '@/base/script/types/BaseType';
-import { BaseDataManager } from '../../../base/script/main/BaseDataManager';
-import { XEvent5 } from '../../../base/script/utils/XEvent';
-import { LangBundleDir, SymbolID } from '../../script/constant/GameConst';
+
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { Grid } from '@base/script/types/BaseType';
+import { XEvent5 } from '@base/script/utils/XEvent';
+
+import { LangBundleDir, SymbolID } from '@game/script/constant/GameConst';
+
 const { ccclass, property } = _decorator;
 
 /**
@@ -32,20 +35,20 @@ export class PayTableUI extends Component {
      */
     onLoad() {
 
-        this.black = this.node.getChildByName("Black");
-        this.sensor = this.node.getChildByName("Sensor");
-        this.paySymbol = this.node.getChildByPath("PaySymbol");
+        this.black = this.node.getChildByName('Black');
+        this.sensor = this.node.getChildByName('Sensor');
+        this.paySymbol = this.node.getChildByPath('PaySymbol');
 
         PayTableUI.show.on(this.onShow, this);
         this.black.on(Button.EventType.CLICK, this.onHide, this);
 
         let lang = BaseDataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.paytable}`, (langRes: any) => {
-            this.node.getChildByPath("PaySymbol/Scatter/L/bg").getComponent(Sprite).spriteFrame = langRes["paytable_left_2"];
-            this.node.getChildByPath("PaySymbol/Scatter/R/bg").getComponent(Sprite).spriteFrame = langRes["paytable_right_2"];
+            this.node.getChildByPath('PaySymbol/Scatter/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_2'];
+            this.node.getChildByPath('PaySymbol/Scatter/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_2'];
 
-            this.node.getChildByPath("PaySymbol/Wild/L/bg").getComponent(Sprite).spriteFrame = langRes["paytable_left_1"];
-            this.node.getChildByPath("PaySymbol/Wild/R/bg").getComponent(Sprite).spriteFrame = langRes["paytable_right_1"];
+            this.node.getChildByPath('PaySymbol/Wild/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_1'];
+            this.node.getChildByPath('PaySymbol/Wild/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_1'];
 
         });
 

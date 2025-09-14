@@ -1,9 +1,18 @@
 import { _decorator, Color, Component, sp } from 'cc';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAnimationName, GameAudioKey } from '@/game/script/constant/GameConst';
-import { SlotMachine2 } from '../slotMachine2/base/slotMachine2/SlotMachine2';
+
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+import { GameAnimationName, GameAudioKey } from '@game/script/constant/GameConst';
+
+enum SlowMotionAnimation {
+    begin = 'begin',
+    end = 'end',
+    loop = 'loop',
+}
+
 const { ccclass, property } = _decorator;
 
 @ccclass('SlowMotionUI')
@@ -56,10 +65,4 @@ export class SlowMotionUI extends Component {
         }, this);
         this.curIdx = target;
     }
-}
-
-enum SlowMotionAnimation {
-    begin = "begin",
-    end = "end",
-    loop = "loop",
 }

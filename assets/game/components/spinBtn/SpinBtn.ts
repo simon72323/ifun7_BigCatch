@@ -1,8 +1,19 @@
 import { _decorator, Label, Node, sp } from 'cc';
-import { BaseSpinBtn } from '@/base/components/settingsPage/BaseSpinBtn';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { AutoPlayMode, SpinButtonState } from '@/base/script/types/BaseType';
-import { XUtils } from '@/base/script/utils/XUtils';
+
+import { BaseSpinBtn } from '@base/components/settingsPage/BaseSpinBtn';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { AutoPlayMode, SpinButtonState } from '@base/script/types/BaseType';
+import { XUtils } from '@base/script/utils/XUtils';
+
+enum SpinAnimation {
+    arrows = 'arrows',
+    disable = 'disable',
+    game = 'game',
+    idle = 'idel',
+    infinity = 'infinity',
+    rotate = 'rotate',
+    stop = 'stop',
+}
 
 const { ccclass, property } = _decorator;
 
@@ -24,14 +35,14 @@ export class SpinBtn extends BaseSpinBtn {
     private autoNode: Node;
 
     onLoad() {
-        this.normalNode = this.node.getChildByName("Normal");
-        this.spinAnm = this.normalNode.getChildByName("spin_button_ani").getComponent(sp.Skeleton);
+        this.normalNode = this.node.getChildByName('Normal');
+        this.spinAnm = this.normalNode.getChildByName('spin_button_ani').getComponent(sp.Skeleton);
         XUtils.ClearSpine(this.spinAnm);
         this.spinAnm.addAnimation(0, SpinAnimation.arrows, true);
 
-        this.autoNode = this.node.getChildByName("Auto");
-        this.autoSpinAnm = this.autoNode.getChildByName("spin_button_ani").getComponent(sp.Skeleton);
-        this.autoLabel = this.autoNode.getChildByPath("spin_button_ani/Slot/SpinNum").getComponent(Label);
+        this.autoNode = this.node.getChildByName('Auto');
+        this.autoSpinAnm = this.autoNode.getChildByName('spin_button_ani').getComponent(sp.Skeleton);
+        this.autoLabel = this.autoNode.getChildByPath('spin_button_ani/Slot/SpinNum').getComponent(Label);
         this.autoNode.active = false;
     }
 
@@ -91,17 +102,7 @@ export class SpinBtn extends BaseSpinBtn {
                 this.spinAnm.setAnimation(0, SpinAnimation.disable, true);
                 break;
             default:
-                break
+                break;
         }
     }
-}
-
-enum SpinAnimation {
-    arrows = 'arrows',
-    disable = 'disable',
-    game = 'game',
-    idle = 'idel',
-    infinity = 'infinity',
-    rotate = 'rotate',
-    stop = 'stop',
 }

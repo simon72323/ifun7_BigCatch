@@ -1,14 +1,24 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, SpriteFrame, tween, Tween } from 'cc';
-import { AudioKey } from '@/base/script/audio/AudioKey';
-import { AudioManager } from '@/base/script/audio/AudioManager';
-import { BaseConst } from '@/base/script/constant/BaseConst';
-import { BaseDataManager } from '@/base/script/main/BaseDataManager';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { BundleLoader } from '@/base/script/main/BundleLoader';
-import { XEvent, XEvent3 } from '@/base/script/utils/XEvent';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { GameAudioKey, LangBundleDir } from '../../script/constant/GameConst';
-const { ccclass, property } = _decorator;
+
+import { AudioKey } from '@base/script/audio/AudioKey';
+import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BundleLoader } from '@base/script/main/BundleLoader';
+import { XEvent, XEvent3 } from '@base/script/utils/XEvent';
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+
+enum TotalWinAnimation {
+    ttw_loop = 'ttw_loop',
+    ttw_loop_none = 'ttw_loop_none',
+    ttw_start = 'ttw_start',
+    ttw_start_none = 'ttw_start_none',
+}
+
+const { ccclass } = _decorator;
 
 /**
  * FS結算UI
@@ -41,9 +51,9 @@ export class FSSettleUI extends Component {
     private cbComplete: () => void;
 
     onLoad() {
-        this.totalwin_ani = this.node.getChildByPath("totalwin_ani").getComponent(sp.Skeleton);
-        this.num_totalwin = this.node.getChildByPath("totalwin_ani/num_totalwin").getComponent(Label);
-        this.sens = this.node.getChildByPath("Sens");
+        this.totalwin_ani = this.node.getChildByPath('totalwin_ani').getComponent(sp.Skeleton);
+        this.num_totalwin = this.node.getChildByPath('totalwin_ani/num_totalwin').getComponent(Label);
+        this.sens = this.node.getChildByPath('Sens');
 
 
         //結算演示
@@ -62,7 +72,7 @@ export class FSSettleUI extends Component {
             this.num_totalwin.string = '';
             this.num_totalwin.node.active = value > 0;
 
-            this.node.getChildByPath("totalwin_ani/title_totalwin").getComponent(Sprite).spriteFrame = value > 0 ? this.title_totalwin : this.title_fgend;
+            this.node.getChildByPath('totalwin_ani/title_totalwin').getComponent(Sprite).spriteFrame = value > 0 ? this.title_totalwin : this.title_fgend;
 
             XUtils.ClearSpine(this.totalwin_ani);
             let start = value > 0 ? TotalWinAnimation.ttw_start : TotalWinAnimation.ttw_start_none;
@@ -83,7 +93,7 @@ export class FSSettleUI extends Component {
 
             tween(this.settleObj)
                 .to(2, { currentValue: value }, {
-                    onUpdate: (target) => {
+                    onUpdate: (_target) => {
                         this.num_totalwin.getComponent(Label).string = XUtils.NumberToCentString(this.settleObj.currentValue);
                     },
                     easing: BaseConst.noisyEasing
@@ -101,8 +111,8 @@ export class FSSettleUI extends Component {
 
         let lang: string = BaseDataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
-            this.title_totalwin = langRes["title_totalwin"];
-            this.title_fgend = langRes["title_fgend"];
+            this.title_totalwin = langRes['title_totalwin'];
+            this.title_fgend = langRes['title_fgend'];
         });
 
         this.node.active = false;
@@ -140,14 +150,7 @@ export class FSSettleUI extends Component {
             .start();
     }
 
-    update(deltaTime: number) {
+    update(_deltaTime: number) {
 
     }
-}
-
-enum TotalWinAnimation {
-    ttw_loop = "ttw_loop",
-    ttw_loop_none = "ttw_loop_none",
-    ttw_start = "ttw_start",
-    ttw_start_none = "ttw_start_none",
 }

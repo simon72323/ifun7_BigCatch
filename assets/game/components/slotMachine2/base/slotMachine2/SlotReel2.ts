@@ -1,8 +1,10 @@
 import { _decorator, CCInteger, Component, easing, instantiate, Node, tween, UIOpacity, UITransform, Vec3 } from 'cc';
-import { XUtils } from '@/base/script/utils/XUtils';
-import { BaseSymbol2 } from './BaseSymbol2';
-import { BaseSymbolData2 } from './BaseSymbolData2';
-import { ReelState2, SlotReelConfig2, SymbolState2 } from './SlotType2';
+
+import { XUtils } from '@base/script/utils/XUtils';
+
+import { BaseSymbol2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbol2';
+import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
+import { ReelState2, SlotReelConfig2, SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
 
 const { ccclass, property } = _decorator;
 
@@ -13,19 +15,20 @@ const { ccclass, property } = _decorator;
 @ccclass('SlotReel2')
 export class SlotReel2 extends Component {
 
-    @property({ type: CCInteger, tooltip: "畫面列數" })
+    @property({ type: CCInteger, tooltip: '畫面列數' })
     public viewRow: number = 3;
-    @property({ type: CCInteger, tooltip: "上下保留列數" })
+
+    @property({ type: CCInteger, tooltip: '上下保留列數' })
     public keepRow: number = 2;
 
     /**啟動完成 */
-    public static BEGIN_COMPLETE: string = "BEGIN_COMPLETE";
+    public static BEGIN_COMPLETE: string = 'BEGIN_COMPLETE';
     /**停止完成 */
-    public static STOP_COMPLETE: string = "STOP_COMPLETE";
+    public static STOP_COMPLETE: string = 'STOP_COMPLETE';
     /**掉落完成 */
-    public static DROP_COMPLETE: string = "DROP_COMPLETE";
+    public static DROP_COMPLETE: string = 'DROP_COMPLETE';
     /**新盤面掉落完成 */
-    public static FILL_COMPLETE: string = "FILL_COMPLETE";
+    public static FILL_COMPLETE: string = 'FILL_COMPLETE';
 
     /**第一軸走的顆數,後面的軸要停輪時至少要走到相等顆數才能停, 否則有可能後面的軸先停 */
     public static firstReelCount: number = 0;
@@ -137,11 +140,11 @@ export class SlotReel2 extends Component {
         this.setStrip(strip);
 
         this.currentRng = this.getRng(rng - 1);
-        this.symbolList.forEach((symbol, idx) => {
+        this.symbolList.forEach((symbol, _idx) => {
             let stripIdx = this.getRng(this.currentRng - this.keepRow + symbol.getPosIndex());
             symbol.isInView = this.isInView(symbol.getPosIndex());
             symbol.setSymbolID(this.strip[stripIdx], stripIdx);
-        })
+        });
         this.setSymbolState(SymbolState2.Normal);
     }
 
@@ -202,7 +205,7 @@ export class SlotReel2 extends Component {
         this.symbolList.forEach((symbol, idx) => {
             let stripIdx = this.getRng(this.currentRng - this.keepRow + symbol.getPosIndex() + this.config.direction);
             symbol.setSymbolID(this.strip[stripIdx], stripIdx);
-        })
+        });
     }
 
     /**
@@ -218,15 +221,16 @@ export class SlotReel2 extends Component {
         this.curveTime += deltaTime;
         //閒置
         if (this.reelState === ReelState2.IDLE) {
+            return;
         }
         //啟動
         else if (this.reelState === ReelState2.BEGIN) {
-            this.debug("BEGIN");
+            this.debug('BEGIN');
             this.updateBeginState();
         }
         //循環(線性)
         else if (this.reelState === ReelState2.LOOP) {
-            this.debug("LOOP");
+            this.debug('LOOP');
             //累積spin時間
             this.curSpinTime += deltaTime;
             this.updateLoopState();
@@ -242,17 +246,17 @@ export class SlotReel2 extends Component {
         }
         //最後N顆(線性)
         else if (this.reelState === ReelState2.STOPPING) {
-            this.debug("STOPPING");
+            this.debug('STOPPING');
             this.updateStoppingState();
         }
         //煞車
         else if (this.reelState === ReelState2.END) {
-            this.debug("END");
+            this.debug('END');
             this.updateEndState();
         }
         //煞車
         else if (this.reelState === ReelState2.NUDGE) {
-            this.debug("NUDGE");
+            this.debug('NUDGE');
             this.updateEndState();
         }
 
@@ -278,9 +282,9 @@ export class SlotReel2 extends Component {
      * @returns 
      */
     private getCurveValue(time: number): number {
-        let curve;
-        let curveTime;
-        let curveValue;
+        let curve: any;
+        let curveTime: number;
+        let curveValue: number;
         switch (this.reelState) {
             case ReelState2.BEGIN:
                 curve = this.config.beginCurve;
@@ -416,7 +420,7 @@ export class SlotReel2 extends Component {
                 //針對畫面內、外圖示演示到定位動畫
                 let isInView = this.isInView(symbol.getPosIndex());
                 symbol.hit(isInView);
-            })
+            });
             //停輪時強制刷新盤面, 否則下次spin開始時, 畫面上的symbol會與輪帶資料不符
             this.setCurrentRng(this.finalRng, true);
             this.reset();
@@ -429,7 +433,7 @@ export class SlotReel2 extends Component {
     }
 
     private getRng(value: number): number {
-        return (value + this.strip.length) % this.strip.length
+        return (value + this.strip.length) % this.strip.length;
     }
 
     /**
@@ -484,7 +488,7 @@ export class SlotReel2 extends Component {
     private setSymbolState(state: SymbolState2): void {
         this.symbolList.forEach((symbol, idx) => {
             symbol.setState(state);
-        })
+        });
     }
 
     private debug(data: any): void {
@@ -500,10 +504,10 @@ export class SlotReel2 extends Component {
         //該軸消去顆數
         let numDrop = this.getNumDrop();
 
-        console.log("drop empty ", this.reelIndex, numDrop);
+        console.log('drop empty ', this.reelIndex, numDrop);
         //沒有空格
         if (numDrop <= 0) {
-            console.log("reel drop none complete ", this.reelIndex);
+            console.log('reel drop none complete ', this.reelIndex);
             this.node.emit(SlotReel2.DROP_COMPLETE, this.reelIndex);
             return;
         }
@@ -527,7 +531,7 @@ export class SlotReel2 extends Component {
             }
 
             //找到空心圖示
-            this.debug(`位置 ${this.reelIndex},${toPos} 已空`)
+            this.debug(`位置 ${this.reelIndex},${toPos} 已空`);
 
             //從該位置向上找實心圖示
             solidPos = toPos - 1;
@@ -586,7 +590,7 @@ export class SlotReel2 extends Component {
                     numExpectDrop--;
                     //該軸實心圖示掉落完成
                     if (numExpectDrop <= 0) {
-                        console.log("reel drop complete ", this.reelIndex);
+                        console.log('reel drop complete ', this.reelIndex);
 
                         this.node.emit(SlotReel2.DROP_COMPLETE, this.reelIndex);
                     }
@@ -597,7 +601,7 @@ export class SlotReel2 extends Component {
     }
 
     public getNumEmpty(): number {
-        return this.symbolList.filter(symbol => symbol.getIsEmpty() == true).length
+        return this.symbolList.filter(symbol => symbol.getIsEmpty() == true).length;
     }
 
     public getNumDrop(): number {
@@ -618,6 +622,7 @@ export class SlotReel2 extends Component {
         }
         return count;
     }
+
     /**
      * 
      * @param toMap 
@@ -628,7 +633,7 @@ export class SlotReel2 extends Component {
         let numEmpty = this.getNumEmpty();
         //沒有空格
         if (numEmpty <= 0) {
-            console.log("reel fill none complete ", this.reelIndex);
+            console.log('reel fill none complete ', this.reelIndex);
             this.node.emit(SlotReel2.FILL_COMPLETE, this.reelIndex);
             return;
         }
@@ -652,7 +657,7 @@ export class SlotReel2 extends Component {
             }
 
             //找到空心圖示
-            this.debug(`位置 ${this.reelIndex},${toPos} 已空`)
+            this.debug(`位置 ${this.reelIndex},${toPos} 已空`);
 
             //從該位置向上找實心圖示
             solidPos = toPos - 1;
@@ -735,7 +740,7 @@ export class SlotReel2 extends Component {
                             v.setIsEmpty(false);
                         }, this);
 
-                        console.log("reel fill complete ", this.reelIndex);
+                        console.log('reel fill complete ', this.reelIndex);
 
                         this.node.emit(SlotReel2.FILL_COMPLETE, this.reelIndex);
                     }
@@ -776,7 +781,7 @@ export class SlotReel2 extends Component {
             let posIdx = symbol.getPosIndex();
             if (explodeRow.indexOf(posIdx) !== -1) {
                 if (this.isInView(posIdx) === false) {
-                    throw new Error("資料異常:消去畫面外圖示!!")
+                    throw new Error('資料異常:消去畫面外圖示!!');
                 }
                 symbol.setIsEmpty(true);
                 symbol.setSymbolID(-1, -1);
@@ -845,6 +850,7 @@ export class SlotReel2 extends Component {
             symbol.setIsMi(mi);
         }, this);
     }
+
     public setNudgeType(type: number): void {
         this.nudgeType = type;
     }
