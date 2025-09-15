@@ -6,7 +6,7 @@ import { BaseConst } from '@base/script/constant/BaseConst';
 import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseLang, BaseLangBundleDir } from '@base/script/types/BaseType';
+import { BaseLang, BaseLangBundleDir, OrientationID } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
@@ -65,7 +65,7 @@ export class LoadingScene extends Component {
      */
     async onLoad() {
 
-        //尝试使当前屏幕进入全屏模式，很多浏览器不允许程序触发这样的行为，必须在一个用户交互回调中才会生效。 如果进入全屏失败，会在下一次用户发生交互时，再次尝试进入全屏。
+        // 尝试使当前屏幕进入全屏模式，很多浏览器不允许程序触发这样的行为，必须在一个用户交互回调中才会生效。 如果进入全屏失败，会在下一次用户发生交互时，再次尝试进入全屏。
         // if (sys.isMobile == true && sys.os != sys.OS.IOS && screen.fullScreen() == false) {
         //     screen.autoFullScreen(null, null);
         // }
@@ -73,17 +73,8 @@ export class LoadingScene extends Component {
         //在一開始就帶入(用localhost判斷是否要用api)
         BaseDataManager.getInstance().init(window['gameConfig']);
 
-        //監聽畫面大小變化
-        view.on('resize', () => {
-            const screenSize = view.getVisibleSize();
-            const aspectRatio = screenSize.width / screenSize.height;
-
-            if (aspectRatio > 1) {
-                view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
-            } else {
-                view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
-            }
-        });
+        // 監聽畫面大小變化
+        view.on('resize', this.handleResize);
 
         //將此節點加入常駐節點
         director.addPersistRootNode(this.node);
@@ -118,11 +109,11 @@ export class LoadingScene extends Component {
         this.node.getChildByPath('WidthBg/blackLayer').active = this.useBlack;
 
         //監聽強制關閉loading
-        BaseEvent.hideLoading.on(() => {
-            this.isInitMessageComplete = true;
-            //如果是狀態回復要強制關閉loading, 直接設定對應flag
-            this.tryHideLoading(BaseDataManager.getInstance().recoverData !== null);
-        }, this);
+        // BaseEvent.hideLoading.on(() => {
+        //     this.isInitMessageComplete = true;
+        //     //如果是狀態回復要強制關閉loading, 直接設定對應flag
+        //     this.tryHideLoading(BaseDataManager.getInstance().recoverData !== null);
+        // }, this);
 
         //監聽遊戲資源讀取完成通知
         BaseEvent.initResourceComplete.on(() => {
@@ -202,6 +193,9 @@ export class LoadingScene extends Component {
         }
     }
 
+    /**
+     * 嘗試載入API
+     */
     private tryLoadAPI() {
         if (APIManager.getInstance().isReady() === true) {
             APIManager.getInstance().setup();
@@ -212,6 +206,27 @@ export class LoadingScene extends Component {
             setTimeout(() => {
                 this.tryLoadAPI();
             }, 100);
+        }
+    }
+
+    /** 銷毀 */
+    onDestroy() {
+        view.off('resize', this.handleResize);// 清理監聽器
+    }
+
+    /** 處理畫面大小變化 */
+    private handleResize() {
+        const screenSize = view.getVisibleSize();
+        const aspectRatio = screenSize.width / screenSize.height;
+
+        if (aspectRatio > 1) {
+            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
+            BaseDataManager.getInstance().isLandscape = true;
+            BaseEvent.changeOrientation.emit(OrientationID.Landscape);
+        } else {
+            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
+            BaseDataManager.getInstance().isLandscape = false;
+            BaseEvent.changeOrientation.emit(OrientationID.Portrait);
         }
     }
 

@@ -59,9 +59,9 @@ export class BaseEvent {
     public static onStopAuto: XEvent = new XEvent();
 
     /**Config回應 */
-    public static onConfigRecall: XEvent1<s5g.game.proto.ConfigRecall> = new XEvent1();
-    /**結果回應 */
-    public static onResultRecall: XEvent1<s5g.game.proto.ResultRecall> = new XEvent1();
+    // public static onConfigRecall: XEvent1<s5g.game.proto.ConfigRecall> = new XEvent1();
+    // /**結果回應 */
+    // public static onResultRecall: XEvent1<s5g.game.proto.ResultRecall> = new XEvent1();
 
     /**淡入FeatureBuy */
     public static fadeInFeatureBuy: XEvent = new XEvent();
@@ -72,6 +72,7 @@ export class BaseEvent {
      * 清除所有 BaseEvent 的事件監聽
      */
     public static clearAll(): void {
+        BaseEvent.changeOrientation.clear();
         BaseEvent.showStartBtn.clear();
         BaseEvent.initMessageComplete.clear();
         BaseEvent.initResourceComplete.clear();
@@ -90,8 +91,8 @@ export class BaseEvent {
         BaseEvent.changeScene.clear();
         BaseEvent.keyDown.clear();
         BaseEvent.onStopAuto.clear();
-        BaseEvent.onConfigRecall.clear();
-        BaseEvent.onResultRecall.clear();
+        // BaseEvent.onConfigRecall.clear();
+        // BaseEvent.onResultRecall.clear();
         BaseEvent.fadeInFeatureBuy.clear();
         BaseEvent.fadeOutFeatureBuy.clear();
     }

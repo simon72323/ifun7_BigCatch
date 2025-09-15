@@ -22,6 +22,9 @@ export class BaseDataManager {
         return BaseDataManager.instance;
     }
 
+    /**是否為橫式 */
+    public isLandscape: boolean = false;
+
     /**是否要走API版本 */
     public useAPI: boolean = false;
 

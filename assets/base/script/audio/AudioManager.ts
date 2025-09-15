@@ -132,11 +132,20 @@ export class AudioManager {
         });
     }
 
+    /**
+     * 是否靜音
+     * @returns 
+     */
     public getIsMute(): boolean {
         return this.isMute;
     }
 
 
+    /**
+     * 是否正在播放
+     * @param key 
+     * @returns 
+     */
     public isPlaying(key: string): boolean {
         let source = this.getAudioSource(key);
         if (source) {
@@ -145,6 +154,12 @@ export class AudioManager {
         return false;
     }
 
+    /**
+     * 編輯音量
+     * @param key 
+     * @param volume 
+     * @param duration 
+     */
     public edit(key: string, volume?: number, duration?: number): void {
         let source = this.getAudioSource(key);
         if (source) {
@@ -164,6 +179,11 @@ export class AudioManager {
         }
     }
 
+    /**
+     * 取得音效來源
+     * @param key 
+     * @returns 
+     */
     private getAudioSource(key: string): AudioSource {
         let source = this.soundMap.get(key);
         if (source) {
