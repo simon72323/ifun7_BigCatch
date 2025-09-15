@@ -14,6 +14,14 @@ export enum BigWinType {
     non = 5
 }
 
+/**場景類型 */
+export enum OrientationID {
+    /**直式 */
+    Portrait = 'Portrait',
+    /**橫式 */
+    Landscape = 'Landscape',
+}
+
 
 /**場景類型 */
 export enum ModuleID {

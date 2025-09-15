@@ -1,6 +1,6 @@
 import { KeyCode } from 'cc';
 
-import { ModuleID } from '@base/script/types/BaseType';
+import { ModuleID, OrientationID } from '@base/script/types/BaseType';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
 /**
@@ -10,6 +10,9 @@ export class BaseEvent {
 
     /**開啟'開始遊戲'按鈕 */
     public static showStartBtn: XEvent = new XEvent();
+
+    /**切換直橫式 */
+    public static changeOrientation: XEvent1<OrientationID> = new XEvent1();
 
     /**初始化封包完成 */
     public static initMessageComplete: XEvent = new XEvent();
@@ -46,7 +49,7 @@ export class BaseEvent {
     /**刷新額度 */
     public static refreshBet: XEvent1<number> = new XEvent1<number>();
 
-    /**切換場景 */
+    /**切換場景(BS/FS) */
     public static changeScene: XEvent1<ModuleID> = new XEvent1();
 
     /**按下鍵盤 */

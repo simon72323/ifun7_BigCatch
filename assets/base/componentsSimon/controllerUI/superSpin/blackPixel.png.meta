@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "59860cb7-2a45-4a24-85cd-53e5ef592074",
+  "uuid": "67850913-dc41-46e5-9919-df83463b7bc7",
   "files": [
     ".json",
     ".png"
@@ -10,20 +10,20 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "59860cb7-2a45-4a24-85cd-53e5ef592074@6c48a",
-      "displayName": "font_WIN_0",
+      "uuid": "67850913-dc41-46e5-9919-df83463b7bc7@6c48a",
+      "displayName": "blackPixel",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "59860cb7-2a45-4a24-85cd-53e5ef592074",
-        "isUuid": true,
-        "visible": false,
         "minfilter": "linear",
         "magfilter": "linear",
         "mipfilter": "none",
-        "anisotropy": 0
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "67850913-dc41-46e5-9919-df83463b7bc7",
+        "visible": false
       },
       "ver": "1.0.22",
       "imported": true,
@@ -34,22 +34,22 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "59860cb7-2a45-4a24-85cd-53e5ef592074@f9941",
-      "displayName": "font_WIN_0",
+      "uuid": "67850913-dc41-46e5-9919-df83463b7bc7@f9941",
+      "displayName": "blackPixel",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
-        "trimType": "auto",
+        "trimType": "none",
         "trimThreshold": 1,
         "rotated": false,
-        "offsetX": -17.5,
-        "offsetY": 24.5,
+        "offsetX": 0,
+        "offsetY": 0,
         "trimX": 0,
-        "trimY": 1,
-        "width": 695,
-        "height": 679,
-        "rawWidth": 730,
-        "rawHeight": 730,
+        "trimY": 0,
+        "width": 6,
+        "height": 4,
+        "rawWidth": 6,
+        "rawHeight": 4,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -61,17 +61,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -347.5,
-            -339.5,
+            -3,
+            -2,
             0,
-            347.5,
-            -339.5,
+            3,
+            -2,
             0,
-            -347.5,
-            339.5,
+            -3,
+            2,
             0,
-            347.5,
-            339.5,
+            3,
+            2,
             0
           ],
           "indexes": [
@@ -84,38 +84,39 @@
           ],
           "uv": [
             0,
-            729,
-            695,
-            729,
+            4,
+            6,
+            4,
             0,
-            50,
-            695,
-            50
+            0,
+            6,
+            0
           ],
           "nuv": [
             0,
-            0.0684931506849315,
-            0.952054794520548,
-            0.0684931506849315,
             0,
-            0.9986301369863013,
-            0.952054794520548,
-            0.9986301369863013
+            1,
+            0,
+            0,
+            1,
+            1,
+            1
           ],
           "minPos": [
-            -347.5,
-            -339.5,
+            -3,
+            -2,
             0
           ],
           "maxPos": [
-            347.5,
-            339.5,
+            3,
+            2,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "59860cb7-2a45-4a24-85cd-53e5ef592074@6c48a",
-        "atlasUuid": ""
+        "imageUuidOrDatabaseUri": "67850913-dc41-46e5-9919-df83463b7bc7@6c48a",
+        "atlasUuid": "",
+        "mipfilter": "none"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -126,9 +127,13 @@
     }
   },
   "userData": {
-    "type": "sprite-frame",
-    "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "59860cb7-2a45-4a24-85cd-53e5ef592074@6c48a"
+    "hasAlpha": false,
+    "type": "sprite-frame",
+    "redirect": "67850913-dc41-46e5-9919-df83463b7bc7@6c48a",
+    "compressSettings": {
+      "useCompressTexture": true,
+      "presetId": "69Jb0bOnVIsbv9KvKNUcBi"
+    }
   }
 }
