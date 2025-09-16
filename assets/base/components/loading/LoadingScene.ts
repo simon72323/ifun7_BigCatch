@@ -209,7 +209,9 @@ export class LoadingScene extends Component {
         }
     }
 
-    /** 銷毀 */
+    /**
+     * 銷毀
+     */
     onDestroy() {
         view.off('resize', this.handleResize);// 清理監聽器
     }

@@ -3,10 +3,10 @@ import { _decorator, Animation, Button, CCBoolean, Component, Node, screen } fro
 import { EDITOR } from 'cc/env';
 
 import { AudioManager } from '@base/script/audio/AudioManager';
+import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { OrientationID } from '@base/script/types/BaseType';
+import { AudioMode, OrientationID, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent } from '@base/script/utils/XUtils';
-
 
 /**
  * 切換直橫式的UI節點
@@ -24,18 +24,6 @@ enum ChangeUIs {
     FavoritesBtn = 'favoritesBtn',
     InformationBtn = 'informationBtn',
     SuperSpinUI = 'superSpinUI',
-}
-
-/**
- * 音效狀態枚舉
- */
-enum AudioState {
-    /** 開啟音效 */
-    AudioOn = 0,
-    /** 關閉背景音 */
-    MusicOff = 1,
-    /** 關閉所有聲音 */
-    AudioOff = 2
 }
 
 const { ccclass, property } = _decorator;
@@ -82,8 +70,8 @@ export class ControllerUI extends Component {
     @property({ type: Node, tooltip: '自動按鈕' })
     private autoBtn: Node = null;
 
-    @property({ type: Node, tooltip: '速度按鈕' })
-    private speedBtn: Node = null;
+    @property({ type: Node, tooltip: '加速按鈕' })
+    private turboBtn: Node = null;
 
     @property({ type: Node, tooltip: '選項按鈕' })
     private optionBtn: Node = null;
@@ -115,7 +103,8 @@ export class ControllerUI extends Component {
 
     private isOpenOption: boolean = false;//是否開啟選單
     private isFullScreen: boolean = false;//是否全螢幕
-    private audioState: number = AudioState.AudioOn;//音效狀態
+    private audioMode: number = AudioMode.AudioOn;//音效模式
+    private turboMode: number = TurboMode.Normal;//加速模式
 
     onLoad() {
         BaseEvent.changeOrientation.on(this.onChangeOrientation, this);
@@ -133,7 +122,7 @@ export class ControllerUI extends Component {
         addBtnClickEvent(this.spinBtn, scriptName, this.spinBtn.getComponent(Button), this.onSpin);
         addBtnClickEvent(this.repeatAutoBtn, scriptName, this.repeatAutoBtn.getComponent(Button), this.onRepeatAuto);
         addBtnClickEvent(this.autoBtn, scriptName, this.autoBtn.getComponent(Button), this.onAuto);
-        addBtnClickEvent(this.speedBtn, scriptName, this.speedBtn.getComponent(Button), this.onSpeed);
+        addBtnClickEvent(this.turboBtn, scriptName, this.turboBtn.getComponent(Button), this.onTurbo);
         addBtnClickEvent(this.optionBtn, scriptName, this.optionBtn.getComponent(Button), this.onOption);
         addBtnClickEvent(this.screenBtn, scriptName, this.screenBtn.getComponent(Button), this.onScreen);
         addBtnClickEvent(this.audioBtn, scriptName, this.audioBtn.getComponent(Button), this.onAudio);
@@ -160,6 +149,80 @@ export class ControllerUI extends Component {
         });
     }
 
+
+    /**
+     * 按鍵設定
+     * @todo 空白鍵進行 Spin
+     */
+    // protected onKeySpaceDown(event: EventKeyboard) { 
+    //     switch ( event.keyCode ) {
+    //         case KeyCode.SPACE:
+    //             AutoSpin.StopAutoSpin();
+    //             this.clickSpin();
+    //             return;
+    //         case KeyCode.ENTER:
+    //         case KeyCode.NUM_ENTER:
+    //             this.clickRepeatAuto();
+    //             return;
+    //     }
+    // }
+
+    // /**
+    //  * 禁用全螢幕
+    //  * @returns {boolean} 是否禁用全螢幕
+    //  */
+    // private iphoneDisableFullScreen() : boolean {
+    //     if ( sys.isMobile === false ) return false;
+    //     if ( sys.os !== 'iOS' )       return false;
+
+    //     const fullScreen = this.props['fullScreen'];
+    //     fullScreen['fullscreen_p'][DATA_TYPE.NODE].active        = false;
+    //     fullScreen['fullscreen_exit_p'][DATA_TYPE.NODE].active   = false;
+    //     fullScreen['fullscreen_l'][DATA_TYPE.NODE].active        = false;
+    //     fullScreen['fullscreen_exit_l'][DATA_TYPE.NODE].active   = false;
+    //     fullScreen['fullscreen_p'][DATA_TYPE.NODE].parent.active = false;
+    //     fullScreen['fullscreen_l'][DATA_TYPE.NODE].parent.active = false;
+
+    //     this.props['soundMode_p']['content'][DATA_TYPE.NODE].setPosition(150, 10, 0);
+    //     this.props['buttons']['Record'][DATA_TYPE.NODE].setPosition(0, 10, 0);
+    //     this.props['buttons']['InGameMenu'][DATA_TYPE.NODE].setPosition(-150, 10, 0);
+    //     this.props['buttons']['InGameMenuLandscape'][DATA_TYPE.NODE].setPosition(0, 90, 0);
+
+    //     return true;
+    // }
+
+    /**
+     * 啟用/禁用超級 SPIN 模式
+     * @param active {boolean} 啟用/禁用
+     */
+    // public activeSuperSpinMode(active) {
+    //     if ( active === true ) {
+    //         this.properties['speedMode'][Machine.SPIN_MODE.NORMAL]['next'] = Machine.SPIN_MODE.QUICK;
+    //         this.properties['speedMode'][Machine.SPIN_MODE.QUICK]['next']  = Machine.SPIN_MODE.TURBO;
+    //         this.properties['speedMode'][Machine.SPIN_MODE.TURBO]['next'] = Machine.SPIN_MODE.SUPER;
+    //         this.properties['speedMode'][Machine.SPIN_MODE.SUPER]['next'] = Machine.SPIN_MODE.NORMAL;
+    //     } else {
+    //         this.properties['speedMode'][Machine.SPIN_MODE.NORMAL]['next'] = Machine.SPIN_MODE.QUICK;
+    //         this.properties['speedMode'][Machine.SPIN_MODE.QUICK]['next']  = Machine.SPIN_MODE.TURBO;
+    //         this.properties['speedMode'][Machine.SPIN_MODE.TURBO]['next'] = Machine.SPIN_MODE.NORMAL;
+    //     }
+
+    //     this.props['superSpin']['winParticle'] = {
+    //         'idx' : 0,
+    //         'particles': [
+    //             this.props['superSpin']['winParticle1'][DATA_TYPE.COMPONENT],
+    //             this.props['superSpin']['winParticle2'][DATA_TYPE.COMPONENT],
+    //             this.props['superSpin']['winParticle3'][DATA_TYPE.COMPONENT],
+    //             this.props['superSpin']['winParticle4'][DATA_TYPE.COMPONENT],
+    //             this.props['superSpin']['winParticle5'][DATA_TYPE.COMPONENT],
+    //         ]
+    //     };
+    //     const copy = instantiate(this.props['superSpin']['win'].node);
+    //     ObjectPool.registerNode('winLabelClone', copy);
+    // }
+
+    //============================= 按鈕事件 =============================
+
     private onSpin() {
         BaseEvent.clickSpin.emit(true);
     }
@@ -169,11 +232,47 @@ export class ControllerUI extends Component {
     }
 
     private onAuto() {
+        //出現AutoSpinUI，使用xevent
         // BaseEvent.clickAuto.emit(true);
     }
 
-    private onSpeed() {
-        // BaseEvent.clickSpeed.emit(true);
+    /**
+     * 切換加速模式
+     */
+    private onTurbo() {
+        this.turboMode = (this.turboMode + 1) % 4;
+        const normalNode = this.audioBtn.getChildByName('Normal');
+        const speedNode = this.audioBtn.getChildByName('Speed');
+        const turboNode = this.audioBtn.getChildByName('Turbo');
+        const superNode = this.audioBtn.getChildByName('Super');
+
+        // 先隱藏所有狀態圖示
+        normalNode.active = false;
+        speedNode.active = false;
+        turboNode.active = false;
+        superNode.active = false;
+
+        // 根據當前狀態顯示對應圖示
+        switch (this.turboMode) {
+            case TurboMode.Normal:
+                normalNode.active = true;
+                BaseDataManager.getInstance().setTurboMode(TurboMode.Normal);
+                break;
+            case TurboMode.Speed:
+                speedNode.active = true;
+                BaseDataManager.getInstance().setTurboMode(TurboMode.Speed);
+                break;
+            case TurboMode.Turbo:
+                turboNode.active = true;
+                BaseDataManager.getInstance().setTurboMode(TurboMode.Turbo);
+                break;
+            case TurboMode.Super:
+                superNode.active = true;
+                BaseDataManager.getInstance().setTurboMode(TurboMode.Super);
+                //觸發點擊超級SPIN事件
+                BaseEvent.clickSuperSpin.emit(true);
+                break;
+        }
     }
 
     /**
@@ -214,43 +313,57 @@ export class ControllerUI extends Component {
      * 切換音效狀態
      */
     private onAudio() {
-        this.audioState = (this.audioState + 1) % 3;
-        const audioOn = this.audioBtn.getChildByName('AudioOn');
-        const musicOff = this.audioBtn.getChildByName('MusicOff');
-        const audioOff = this.audioBtn.getChildByName('AudioOff');
+        this.audioMode = (this.audioMode + 1) % 3;
+        const audioOnNode = this.audioBtn.getChildByName('AudioOn');
+        const musicOffNode = this.audioBtn.getChildByName('MusicOff');
+        const audioOffNode = this.audioBtn.getChildByName('AudioOff');
 
         // 先隱藏所有狀態圖示
-        audioOn.active = false;
-        musicOff.active = false;
-        audioOff.active = false;
+        audioOnNode.active = false;
+        musicOffNode.active = false;
+        audioOffNode.active = false;
 
         // 根據當前狀態顯示對應圖示
-        switch (this.audioState) {
-            case AudioState.AudioOn:
-                audioOn.active = true;
+        switch (this.audioMode) {
+            case AudioMode.AudioOn:
+                audioOnNode.active = true;
                 AudioManager.getInstance().setMute(false);
                 break;
-            case AudioState.MusicOff:
-                musicOff.active = true;
+            case AudioMode.MusicOff:
+                musicOffNode.active = true;
                 AudioManager.getInstance().stop('bgm');
                 break;
-            case AudioState.AudioOff:
-                audioOff.active = true;
+            case AudioMode.AudioOff:
+                audioOffNode.active = true;
                 AudioManager.getInstance().setMute(true);
                 break;
         }
     }
 
+    /**
+     * 開啟下注紀錄
+     */
     private onRecord() {
-        // BaseEvent.clickRecord.emit(true);
+        const betrecordurl = BaseDataManager.getInstance().getFullBetrecordurl();
+        window.open(betrecordurl, '_blank');
     }
 
+    /**
+     * 開啟我的最愛視窗
+     */
     private onFavorites() {
-        // BaseEvent.clickFavorites.emit(true);
+        // 開啟我的最愛視窗
     }
 
+    /**
+     * 開啟遊戲說明
+     */
     private onInformation() {
-        // BaseEvent.clickInformation.emit(true);
+        // 發送xevent 開啟遊戲說明
+        // if (this.machine.isBusy === true) return;
+        // this.clickOptionBack();
+        // Utils.GoogleTag('ClickInformation', { 'event_category': 'Information', 'event_label': 'ClickInformation' });
+        // GameInformationUI.OpenUI();
     }
 
 }

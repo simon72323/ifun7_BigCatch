@@ -190,7 +190,17 @@ export enum AutoPlayMode {
 export enum TurboMode {
     Normal = 0,
     Speed = 1,
-    Turbo = 2
+    Turbo = 2,
+    Super = 3
+}
+
+/**
+ * 音效模式
+ */
+export enum AudioMode {
+    AudioOn = 0,
+    MusicOff = 1,
+    AudioOff = 2
 }
 
 /**
@@ -240,6 +250,12 @@ export class UrlParam {
     public isNewGameServer: boolean;
     /**客製化參數 */
     public customParam: string;
+    /**下注紀錄網址 */
+    public betrecordurl: string;
+    /**token */
+    public token: string;
+    /**serverurl */
+    public serverurl: string;
 }
 
 /**

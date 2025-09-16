@@ -233,6 +233,20 @@ export class BaseDataManager {
         this.urlParam.langCode = this.getUrlParam('lc');
         this.urlParam.isNewGameServer = parseInt(this.getUrlParam('ngf')) === 1;
         this.urlParam.customParam = this.getUrlParam('cp').toLowerCase();
+
+        //ifun7相關
+        this.urlParam.betrecordurl = this.getUrlParam('betrecordurl');
+        this.urlParam.token = this.getUrlParam('token');
+        this.urlParam.serverurl = this.getUrlParam('serverurl');
+    }
+
+    /**
+     * 取得完整下注紀錄網址
+     * @returns 
+     */
+    public getFullBetrecordurl(): string {
+        const { betrecordurl, token, serverurl, lang } = this.urlParam;
+        return `${betrecordurl}?token=${token}&lang=${lang}&serverurl=${serverurl}`;
     }
 
     /**
@@ -465,15 +479,29 @@ export class BaseDataManager {
         }
     }
 
+    /**
+     * 取得幸運一擊購買倍率
+     * @param type 
+     * @returns 
+     */
     public getFeatureBuyMultipleByType(type: number): number {
         return this.featureBuyMultipleList[type] / this.bet.getLineAt(0);
     }
 
+    /**
+     * 是否為Demo模式
+     * @returns 
+     */
     public isDemoMode(): boolean {
         return this.urlParam.playMode == '1';
     }
 
     //TODO:太多地方用, 還不確定明確用途, 暫時保留
+    /**
+     * 測試溢位
+     * @param value 
+     * @returns 
+     */
     public TestOverFlow(value: number): boolean {
         if (value < 1000000000000) {
             return true;
@@ -484,14 +512,26 @@ export class BaseDataManager {
         }
     }
 
+    /**
+     * 是否為BS模式
+     * @returns 
+     */
     public isBS(): boolean {
         return this.curModuleID === ModuleID.BS;
     }
 
+    /**
+     * 設定加速模式
+     * @param mode 
+     */
     public setTurboMode(mode: TurboMode) {
         this.turboMode = mode;
     }
 
+    /**
+     * 取得加速模式
+     * @returns 
+     */
     public getTurboMode(): TurboMode {
         if (this.curModuleID != ModuleID.BS) {
             return TurboMode.Normal;

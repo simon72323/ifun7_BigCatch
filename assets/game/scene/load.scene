@@ -9190,7 +9190,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Speed_Pos",
+    "_name": "Turbo_Pos",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -9239,7 +9239,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Speed",
+    "_name": "Turbo",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -9524,7 +9524,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Quick",
+    "_name": "Speed",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -18051,7 +18051,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Speed_Pos",
+    "_name": "Turbo_Pos",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -18859,7 +18859,7 @@
     "autoBtn": {
       "__id__": 312
     },
-    "speedBtn": {
+    "turboBtn": {
       "__id__": 324
     },
     "optionBtn": {
@@ -18868,7 +18868,9 @@
     "screenBtn": {
       "__id__": 370
     },
-    "audioBtn": null,
+    "audioBtn": {
+      "__id__": 385
+    },
     "recordBtn": {
       "__id__": 403
     },
@@ -18881,7 +18883,9 @@
     "superSpinUI": {
       "__id__": 442
     },
-    "backBtn": null,
+    "backBtn": {
+      "__id__": 359
+    },
     "_id": "2cLegG8SRDeKsYRWMoJxM8"
   },
   {

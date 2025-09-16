@@ -28,6 +28,8 @@ export class BaseEvent {
 
     /**點擊SPIN */
     public static clickSpin: XEvent1<boolean> = new XEvent1();
+    /**點擊超級SPIN */
+    public static clickSuperSpin: XEvent1<boolean> = new XEvent1();
     /**點擊SKIP */
     public static clickSkip: XEvent = new XEvent();
 
