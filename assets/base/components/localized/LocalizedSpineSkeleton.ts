@@ -1,32 +1,18 @@
 /**
- * 【LocalizedSpineSkeleton 使用說明】
- * 
- * 功能說明：
- * - 自動根據設定的 spineName 從 LanguageManager 獲取對應的多語言spineSkeletonData
- * - 如果勾選isLoading，則會從 loadingPage 資料夾中獲取spineSkeletonData，否則從 gameCore 資料夾中獲取spineSkeletonData
- * 
  * 使用步驟：
  * 1. 將此組件直接掛載在包含 cc.sp.Skeleton 組件的節點上
- * 2. 在屬性檢查器中設置對應的spineName
- * 3. 確保 LanguageManager 中已經載入了對應的spineSkeleton資源
- * 
- * 注意事項：
- * - spineName 不能為空
- * - 節點必須包含 cc.sp.Skeleton 組件
- * - 依賴 LanguageManager 的正確初始化
+ * 2. 設置對應的資源路徑folderPath
+ * 3. 確保 LanguageManager 已設置bundleName
  */
 import { _decorator, Component, sp } from 'cc';
 
-import { LanguageManager } from '@base/script/utils/LanguageManager';
+import { LanguageManager } from '../../script/utils/LanguageManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('LocalizedSpineSkeleton')
 export class LocalizedSpineSkeleton extends Component {
-    @property({ tooltip: '語系子資料夾名稱' })
-    public folderName: string = '';
-
-    @property({ tooltip: 'spineName' })
-    public spineName: string = '';
+    @property({ tooltip: 'bundle語系名稱下的資源路徑' })
+    public folderPath: string = '';
 
     onEnable() {
         this.setSpineSkeleton();//啟動時設置spine語系
@@ -34,13 +20,10 @@ export class LocalizedSpineSkeleton extends Component {
 
     //設置spine資源，由LanguageManager觸發
     public async setSpineSkeleton() {
-        if (this.spineName === '') {
-            // console.error('spineName is empty');
-            return;
-        }
+        if (this.folderPath === '') return;
         const skeleton = this.getComponent(sp.Skeleton);
         if (skeleton) {
-            skeleton.skeletonData = await LanguageManager.getInstance().getSkeletonData(this.folderName, this.spineName);
+            skeleton.skeletonData = await LanguageManager.getInstance().getSkeletonData(this.folderPath);
         }
     }
 }
