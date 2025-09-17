@@ -9,8 +9,8 @@
   "subMetas": {},
   "userData": {
     "_fntConfig": {
-      "commonHeight": 32,
-      "fontSize": 32,
+      "commonHeight": 236,
+      "fontSize": 236,
       "atlasName": "font_WIN_0.png",
       "fontDefDictionary": {
         "36": {
@@ -28,23 +28,23 @@
           "rect": {
             "x": 116,
             "y": 0,
-            "width": 115,
+            "width": 79,
             "height": 236
           },
-          "xOffset": 0,
+          "xOffset": -16,
           "yOffset": 0,
-          "xAdvance": 115
+          "xAdvance": 79
         },
         "46": {
           "rect": {
             "x": 232,
             "y": 0,
-            "width": 115,
+            "width": 79,
             "height": 236
           },
-          "xOffset": 0,
+          "xOffset": -16,
           "yOffset": 0,
-          "xAdvance": 115
+          "xAdvance": 79
         },
         "48": {
           "rect": {
@@ -159,7 +159,7 @@
       },
       "kerningDict": {}
     },
-    "fontSize": 32,
+    "fontSize": 236,
     "textureUuid": "59860cb7-2a45-4a24-85cd-53e5ef592074"
   }
 }
