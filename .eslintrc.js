@@ -14,7 +14,7 @@ module.exports = {
                 map: [
                     ['@base', './assets/base'], // @base 目錄別名
                     ['@game', './assets/game'], // @game 目錄別名
-                    ['@common', './assets/slotGame001/common'], // @common 目錄別名
+                    ['@common', './assets/common'], // @common 目錄別名
                     ['@', './assets'], // @ 根目錄別名
                 ],
                 extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] // 支援的檔案副檔名
@@ -58,7 +58,7 @@ module.exports = {
         // ==================== 禁止的語法 ====================
         'no-restricted-syntax': [
             ERROR,
-            'ForInStatement', // 禁止 for...in 語句
+            // 'ForInStatement', // 禁止 for...in 語句
             'LabeledStatement', // 禁止標籤語句
             'WithStatement' // 禁止 with 語句
         ],
@@ -182,15 +182,16 @@ module.exports = {
 
         // ==================== TypeScript 類別成員規則 ====================
         '@typescript-eslint/no-dupe-class-members': ERROR, // 禁止重複的類別成員
-        '@typescript-eslint/no-use-before-define': [
-            ERROR,
-            {
-                ignoreTypeReferences: true, // 忽略類型引用
-                typedefs: false, // 不忽略類型定義
-                functions: false, // 不忽略函數
-                variables: false // 不忽略變數
-            }
-        ],
+        // '@typescript-eslint/no-use-before-define': [
+        //     ERROR,
+        //     {
+        //         ignoreTypeReferences: true, // 忽略類型引用
+        //         typedefs: false, // 不忽略類型定義
+        //         functions: false, // 不忽略函數
+        //         variables: false, // 不忽略變數
+        //         classes: true // 忽略類別定義
+        //     }
+        // ],
 
         // ==================== TypeScript 介面規則 ====================
         '@typescript-eslint/no-empty-interface': [

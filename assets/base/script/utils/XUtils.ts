@@ -588,6 +588,27 @@ export class XUtils {
 
 }
 
+/**
+ * 延遲
+ * @param ms 
+ * @returns 
+ */
+export async function delay(ms: number): Promise<void> {
+    return new Promise<void>(resolve => {
+        XUtils.scheduleOnce(() => resolve(), ms, null);
+    });
+}
+
+/**
+ * 等待下一幀
+ * @returns 
+ */
+export async function waitNextFrame(): Promise<void> {
+    return new Promise<void>(resolve => {
+        XUtils.scheduleOnce(() => resolve(), 0, null);
+    });
+}
+
 export function logger(str: string) {
     console.warn(`logger:${str}`);
 }

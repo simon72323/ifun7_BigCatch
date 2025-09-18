@@ -1,6 +1,6 @@
 {
     "imports": {
-        "@common/": "./assets/slotGame001/common/",
+        "@common/": "./assets/common/",
         "@game/": "./assets/game/",
         "@base/": "./assets/base/",
         "@/": "./assets/"

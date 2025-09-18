@@ -18,7 +18,7 @@
 	"paths": {
         "@base/*": ["./assets/base/*"],
         "@game/*": ["./assets/game/*"],
-        "@common/*": ["./assets/slotGame001/common/*"]
+        "@common/*": ["./assets/common/*"]
     }
   }
 }

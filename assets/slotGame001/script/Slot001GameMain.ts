@@ -1,6 +1,6 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component } from 'cc';
 
-import { getNetworkManager } from '@common/network/NetworkManager';
+import { getNetworkManager } from '@common/script/network/NetworkManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Slot001GameMain')

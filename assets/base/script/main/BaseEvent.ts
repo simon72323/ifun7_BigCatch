@@ -76,28 +76,15 @@ export class BaseEvent {
      * 清除所有 BaseEvent 的事件監聽
      */
     public static clearAll(): void {
-        BaseEvent.changeOrientation.clear();
-        BaseEvent.showStartBtn.clear();
-        BaseEvent.initMessageComplete.clear();
-        BaseEvent.initResourceComplete.clear();
-        BaseEvent.hideLoading.clear();
-        BaseEvent.startGame.clear();
-        BaseEvent.clickStart.clear();
-        BaseEvent.clickSpin.clear();
-        BaseEvent.clickSkip.clear();
-        BaseEvent.spinResult.clear();
-        BaseEvent.buyFeature.clear();
-        BaseEvent.buyFeatureVisible.clear();
-        BaseEvent.buyFeatureEnabled.clear();
-        BaseEvent.refreshWin.clear();
-        BaseEvent.refreshCredit.clear();
-        BaseEvent.refreshBet.clear();
-        BaseEvent.changeScene.clear();
-        BaseEvent.keyDown.clear();
-        BaseEvent.onStopAuto.clear();
-        // BaseEvent.onConfigRecall.clear();
-        // BaseEvent.onResultRecall.clear();
-        BaseEvent.fadeInFeatureBuy.clear();
-        BaseEvent.fadeOutFeatureBuy.clear();
+        //獲取 BaseEvent 類別的所有靜態屬性名稱
+        const eventKeys = Object.getOwnPropertyNames(BaseEvent);
+
+        //清空所有事件
+        eventKeys.forEach(key => {
+            const event = (BaseEvent as any)[key];
+            if (event && event.clear) {
+                event.clear();
+            }
+        });
     }
 }
