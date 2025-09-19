@@ -26,7 +26,7 @@ export class BaseEvent {
     /**點擊開始 */
     public static clickStart: XEvent = new XEvent();
 
-    /**點擊SPIN */
+    /**點擊SPIN(ture=超級spin,false=普通spin) */
     public static clickSpin: XEvent1<boolean> = new XEvent1();
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();

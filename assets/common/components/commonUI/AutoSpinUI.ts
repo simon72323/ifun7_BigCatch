@@ -19,16 +19,7 @@ export class AutoSpinUI extends Component {
     private spinTimesBtn: Node = null;//轉次數按鈕
     private dropDownBtn: Node = null;//下拉按鈕
 
-
-    //語系相關
-    private titleLabel: Label= null;//標題文字
-    private startLabel: Label= null;//開始文字
-    private stopUntilFeatureLabel: Label= null;//停止直到功能文字
-    private quickSpinLabel: Label= null;//快速轉文字
-    private turboSpinLabel: Label= null;//加速轉文字
-    private spinTimesLabel: Label= null;//轉次數文字
-
-    private dropDownLabel: Label= null;//下拉文字
+    // private dropDownLabel: Label= null;//下拉文字
 
     onLoad() {
         BaseEvent.clickAutoSpin.on(this.onAutoSpinMode, this);
@@ -45,15 +36,7 @@ export class AutoSpinUI extends Component {
         this.spinTimesBtn = this.content.getChildByPath('SpinTimes/SpinTimesBtn');
         this.dropDownBtn = this.content.getChildByPath('SpinTimes/DropDownBtn');
 
-        //語系相關
-        this.titleLabel = this.content.getChildByPath('Title').getComponent(Label);
-        this.startLabel = this.content.getChildByPath('StartBtn/Start').getComponent(Label);
-        this.stopUntilFeatureLabel = this.content.getChildByPath('Settings/StopUntilFeatureLabel').getComponent(Label);
-        this.quickSpinLabel = this.content.getChildByPath('Settings/QuickSpinLabel').getComponent(Label);
-        this.turboSpinLabel = this.content.getChildByPath('Settings/TurboSpinLabel').getComponent(Label);
-        this.spinTimesLabel = this.content.getChildByPath('SpinTimes/SpinTimesLabel').getComponent(Label);
-
-        this.dropDownLabel = this.content.getChildByPath('SpinTimes/DropDownBtn/DisplayItem/Label').getComponent(Label);
+        // this.dropDownLabel = this.content.getChildByPath('SpinTimes/DropDownBtn/DisplayItem/Label').getComponent(Label);
 
         this.setupBtnEvent();
     }

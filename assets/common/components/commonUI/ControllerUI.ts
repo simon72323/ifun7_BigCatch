@@ -47,6 +47,12 @@ export class ControllerUI extends Component {
     @property({ type: Node, tooltip: '返回按鈕' })
     private backBtn: Node = null;
 
+    private superSpin: Node = null;//超級SPIN節點
+    private content: Node = null;//超級SPIN內容
+    private preMessage: Node = null;//超級SPIN預先訊息
+    private BsBg: Node = null;//超級SPIN BS背景
+    private FsBg: Node = null;//超級SPIN FS背景
+
     private porControllerBtns: Node = null;//直式控制器
     private porOptionMenuBtns: Node = null;//直式選單
     private landOptionMenuBtns: Node = null;//橫式選單
@@ -60,6 +66,12 @@ export class ControllerUI extends Component {
      * 初始化
      */
     onLoad() {
+        this.superSpin = this.node.getChildByName('SuperSpin');
+        this.content = this.superSpin.getChildByName('Content');
+        this.preMessage = this.superSpin.getChildByName('PreMessage');
+        this.BsBg = this.superSpin.getChildByName('BsBg');
+        this.FsBg = this.superSpin.getChildByName('FsBg');
+
         this.porControllerBtns = this.node.getChildByPath('Por_ControllerBtns');
         this.porOptionMenuBtns = this.node.getChildByPath('Por_OptionMenuBtns');
         this.landOptionMenuBtns = this.node.getChildByPath('Land_OptionMenuBtns');
@@ -126,11 +138,39 @@ export class ControllerUI extends Component {
     //     return true;
     // }
 
+    /**
+     * 啟用/禁用超級 SPIN 模式
+     * @param active {boolean} 啟用/禁用
+     */
+    private onSuperSpinMode(active: boolean) {
+        this.superSpin.active = active;
+        this.content.active = !active;
+        this.preMessage.active = active;
+        const isBS = BaseDataManager.getInstance().isBS();
+        this.BsBg.active = isBS;
+        this.FsBg.active = !isBS;
+        // const copy = instantiate(this.props['superSpin']['win'].node);
+        // ObjectPool.registerNode('winLabelClone', copy);
+    }
+
+    /**
+     * 顯示超級SPIN
+     */
+    private showSuperSpin() {
+        this.content.active = this.preMessage.active;
+        this.preMessage.active = !this.preMessage.active;
+    }
+
 
     //============================= 按鈕事件 =============================
 
     private onSpin() {
-        BaseEvent.clickSpin.emit(true);
+        if (this.superSpin.active) {
+            BaseEvent.clickSpin.emit(true);
+            this.showSuperSpin();
+        } else {
+            BaseEvent.clickSpin.emit(false);
+        }
     }
 
     private onRepeatAuto() {
@@ -158,8 +198,8 @@ export class ControllerUI extends Component {
         turboNode.active = false;
         superNode.active = false;
 
-        //發送判斷超級SPIN事件
-        BaseEvent.clickTurbo.emit(this.turboMode === TurboMode.Super);
+        //判斷超級SPIN開關
+        this.onSuperSpinMode(this.turboMode === TurboMode.Super);
 
         // 根據當前狀態顯示對應圖示
         switch (this.turboMode) {
@@ -272,7 +312,4 @@ export class ControllerUI extends Component {
         // Utils.GoogleTag('ClickInformation', { 'event_category': 'Information', 'event_label': 'ClickInformation' });
         // GameInformationUI.OpenUI();
     }
-
 }
-
-

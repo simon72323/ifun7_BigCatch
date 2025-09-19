@@ -1,4 +1,4 @@
-import { Animation, AnimationState, Button, Component, director, Node, Scheduler, sp, SpriteFrame, Vec3 } from 'cc';
+import { Animation, AnimationState, Button, Component, director, game, Node, Scheduler, sp, SpriteFrame, Vec3 } from 'cc';
 
 import { BaseConst } from '@base/script/constant/BaseConst';
 import { Grid, SpreadObject } from '@base/script/types/BaseType';
@@ -41,6 +41,15 @@ export class XUtils {
         else {
             return data;
         }
+    }
+
+    /**
+     * 添加手型懸停事件(滑鼠)
+     * @param target 
+     */
+    public static AddHandHoverEvent ( target: Node ) {
+        target.on( Node.EventType.MOUSE_ENTER, () => { game.canvas.style.cursor = 'pointer'; } );
+        target.on( Node.EventType.MOUSE_LEAVE, () => { game.canvas.style.cursor = 'default'; } );
     }
 
     /**
