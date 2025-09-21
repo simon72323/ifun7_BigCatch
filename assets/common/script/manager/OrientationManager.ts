@@ -1,5 +1,5 @@
 
-import { _decorator, CCBoolean, Component, Node, Vec3 } from 'cc';
+import { _decorator, CCBoolean, Component, Node, Size, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 import { EDITOR } from 'cc/env';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
@@ -12,7 +12,7 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('OrientationNode')
 class OrientationNode {
-    @property({ type: Node, tooltip: '需要搬移的節點' })
+    @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
     @property({ type: Node, tooltip: '直式位置節點' })
@@ -27,7 +27,7 @@ class OrientationNode {
  */
 @ccclass('OrientationScale')
 class OrientationScale {
-    @property({ type: Node, tooltip: '需要縮放的節點' })
+    @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
     @property({ type: Vec3, tooltip: '直式縮放比例' })
@@ -42,7 +42,7 @@ class OrientationScale {
  */
 @ccclass('OrientationPosition')
 class OrientationPosition {
-    @property({ type: Node, tooltip: '需要縮放的節點' })
+    @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
     @property({ type: Vec3, tooltip: '直式位置' })
@@ -50,6 +50,21 @@ class OrientationPosition {
 
     @property({ type: Vec3, tooltip: '橫式位置' })
     public landscapePosition: Vec3 = new Vec3(0, 0, 0);
+}
+
+/**
+ * 直橫式貼圖
+ */
+@ccclass('OrientationSpriteFrame')
+class OrientationSpriteFrame {
+    @property({ type: Node, tooltip: '目標節點' })
+    public target: Node = null!;
+
+    @property({ type: SpriteFrame, tooltip: '直式貼圖' })
+    public portraitSpriteFrame: SpriteFrame = null!;
+
+    @property({ type: SpriteFrame, tooltip: '橫式貼圖' })
+    public landscapeSpriteFrame: SpriteFrame = null!;
 }
 
 
@@ -79,6 +94,9 @@ export class OrientationManager extends Component {
 
     @property({ type: [OrientationPosition], tooltip: '直橫式位置控制' })
     private orientationPosition: OrientationPosition[] = [];
+
+    @property({ type: [OrientationSpriteFrame], tooltip: '直橫式貼圖控制' })
+    private orientationSpriteFrame: OrientationSpriteFrame[] = [];
 
     onLoad() {
         //監聽直橫式切換事件
@@ -113,6 +131,15 @@ export class OrientationManager extends Component {
             const positionValue = orientation === OrientationID.Portrait ? position.portraitPosition : position.landscapePosition;
             if (target) {
                 target.setPosition(positionValue);
+            }
+        });
+
+        //節點貼圖
+        this.orientationSpriteFrame.forEach((spriteFrame, index) => {
+            const target = spriteFrame.target;
+            const spriteFrameValue = orientation === OrientationID.Portrait ? spriteFrame.portraitSpriteFrame : spriteFrame.landscapeSpriteFrame;
+            if (target) {
+                target.getComponent(Sprite).spriteFrame = spriteFrameValue;
             }
         });
     }

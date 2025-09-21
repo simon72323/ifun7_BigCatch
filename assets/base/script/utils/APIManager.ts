@@ -109,6 +109,10 @@ export class APIManager {
     //psAPI相關內容使用時需要預防沒有psAPI=================================================================================
     //psAPI相關內容使用時需要預防沒有psAPI=================================================================================
 
+    /**
+     * 取得版本
+     * @returns 
+     */
     public getVersion(): string {
         return this.psAPI ? `ver:${this.psAPI.hostInfo.game_version.rev} build:${this.psAPI.hostInfo.game_version.build}` : 'none';
     }
@@ -121,10 +125,18 @@ export class APIManager {
         return this.psAPI ? this.psAPI.hostInfo.reel_spin == 0 : true;
     }
 
+    /**
+     * 取得socket網址
+     * @returns 
+     */
     public getSocketUrl(): string {
         return this.psAPI ? this.socketUrl[0] : '';
     }
 
+    /**
+     * 取得記錄網址
+     * @returns 
+     */
     public getRecordUrl(): string {
         let url = '';
         if (this.psAPI) {
@@ -171,6 +183,10 @@ export class APIManager {
         return url;
     }
 
+    /**
+     * 取得推廣提醒網址
+     * @returns 
+     */
     public getPromoReminderUrl(): string {
         let url = '';
         if (this.psAPI) {
@@ -184,6 +200,10 @@ export class APIManager {
         return url;
     }
 
+    /**
+     * 取得推廣資訊網址
+     * @returns 
+     */
     public getPromoInfoUrl(): string {
         let url = '';
         if (this.psAPI) {
@@ -197,14 +217,19 @@ export class APIManager {
         return url;
     }
 
-    private getURLParameter = function (param) {
+    /**
+     * 取得URL參數
+     * @param param {string} 參數名稱
+     * @returns 
+     */
+    private getURLParameter(param: string): string {
         if (!this.psAPI) {
             return '';
         }
         else {
             return Object.hasOwn(this.psAPI.queryString, param) ? this.psAPI.queryString[param] : '';
         }
-    };
+    }
 
     /**
      * 返回類型(5g館return_type = 2)
@@ -214,10 +239,18 @@ export class APIManager {
         return this.psAPI ? this.psAPI.hostInfo.return_type : -1;
     }
 
+    /**
+     * 取得歷史紀錄SN啟用
+     * @returns 
+     */
     public getHistorySnEnabled(): boolean {
         return (this.psAPI && this.psAPI.hostInfo.history_sn_enabled !== undefined) ? this.psAPI.hostInfo.history_sn_enabled : false;
     }
 
+    /**
+     * 取得載入logo啟用
+     * @returns 
+     */
     public getLoadingLogoEnabled(): boolean {
         return (this.psAPI && this.psAPI.hostInfo.loading_logo_enable !== undefined) ? this.psAPI.hostInfo.loading_logo_enable : false;
     }

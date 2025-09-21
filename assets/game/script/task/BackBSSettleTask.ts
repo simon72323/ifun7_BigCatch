@@ -66,12 +66,12 @@ export class BackBSSettleTask extends GameTask {
         //要多等一秒
         XUtils.scheduleOnce(() => {
 
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SHOWWIN);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_WAIT);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_ENDGAME);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SHOWWIN);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_WAIT);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_ENDGAME);
 
             this.finish();
         }, 1, this);

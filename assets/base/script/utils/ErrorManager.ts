@@ -1,6 +1,6 @@
 import { Notice } from '@base/components/notice/Notice';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { SocketManager } from '@base/script/socket/SocketManager';
+// import { SocketManager } from '@base/script/socket/SocketManager';
 
 /**
  * 錯誤處理
@@ -31,7 +31,7 @@ export class ErrorManager {
         this.dead = true;
 
         Notice.showError.emit(code.toString());
-        SocketManager.getInstance().disconnect();
+        // SocketManager.getInstance().disconnect();
         AudioManager.getInstance().setMute(true);
     }
 }

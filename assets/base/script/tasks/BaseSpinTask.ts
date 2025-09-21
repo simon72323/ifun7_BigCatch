@@ -5,7 +5,7 @@ import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
 import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { SocketManager } from '@base/script/socket/SocketManager';
+// import { SocketManager } from '@base/script/socket/SocketManager';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { AutoPlayMode, SpinButtonState, TurboMode } from '@base/script/types/BaseType';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
@@ -80,12 +80,12 @@ export abstract class BaseSpinTask extends GameTask {
             this.finish();
         }, this);
         if (BaseDataManager.getInstance().isBS() === true) {
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SPIN);
-            SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eResultCall);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SPIN);
+            // SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eResultCall);
         }
         else {
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SPIN);
-            SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eResultCall);
+            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SPIN);
+            // SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eResultCall);
         }
 
         this.childExecute();

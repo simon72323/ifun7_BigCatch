@@ -139,10 +139,10 @@ export class ControllerUI extends Component {
     // }
 
     /**
-     * 啟用/禁用超級 SPIN 模式
-     * @param active {boolean} 啟用/禁用
+     * 顯示/關閉超級 SPIN 模式
+     * @param active {boolean} 顯示/關閉
      */
-    private onSuperSpinMode(active: boolean) {
+    private onSuperSpinModel(active: boolean) {
         this.superSpin.active = active;
         this.content.active = !active;
         this.preMessage.active = active;
@@ -154,9 +154,9 @@ export class ControllerUI extends Component {
     }
 
     /**
-     * 顯示超級SPIN
+     * 顯示超級SPIN畫面
      */
-    private showSuperSpin() {
+    private showSuperSpinContent() {
         this.content.active = this.preMessage.active;
         this.preMessage.active = !this.preMessage.active;
     }
@@ -164,19 +164,28 @@ export class ControllerUI extends Component {
 
     //============================= 按鈕事件 =============================
 
+    /**
+     * 執行Spin
+     */
     private onSpin() {
         if (this.superSpin.active) {
             BaseEvent.clickSpin.emit(true);
-            this.showSuperSpin();
+            this.showSuperSpinContent();
         } else {
             BaseEvent.clickSpin.emit(false);
         }
     }
 
+    /**
+     * 執行重複下注
+     */
     private onRepeatAuto() {
         // BaseEvent.clickRepeatAuto.emit(true);
     }
 
+    /**
+     * 執行自動下注
+     */
     private onAuto() {
         //出現AutoSpinUI，使用xevent
         // BaseEvent.clickAuto.emit(true);

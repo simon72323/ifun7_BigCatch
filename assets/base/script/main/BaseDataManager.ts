@@ -1,7 +1,7 @@
 import { BaseConst } from '@base/script/constant/BaseConst';
 import { BaseData } from '@base/script/main/BaseData';
 import { BetData } from '@base/script/main/BetData';
-import { SocketManager } from '@base/script/socket/SocketManager';
+// import { SocketManager } from '@base/script/socket/SocketManager';
 import { Auto, BaseLang, BaseLangSetting, BigWinType, CheatCodeData, CreditMode, DigitMode, FeatureBuyType, ModuleID, playAction, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
@@ -317,9 +317,10 @@ export class BaseDataManager {
         return bigWinLevel;
     }
 
-    // public isIdle(): boolean {
-    //     return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
-    // }
+    public isIdle(): boolean {
+        return false;
+        // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
+    }
 
     // public setState(state: s5g.game.proto.ESTATEID): void {
     //     this.curState = state;

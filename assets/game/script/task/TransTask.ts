@@ -38,9 +38,9 @@ export class TransTask extends GameTask {
             BaseDataManager.getInstance().auto.stopAuto();
         }
 
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWSCATTERWIN);
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRANSLATE);
+        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
+        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWSCATTERWIN);
+        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRANSLATE);
 
         //設定初始次數
         // FeatureGameUI.refreshRemainTimes.emit(this.times);

@@ -2,7 +2,7 @@ import { FreeSpinBonus } from '@base/components/campaign/FreeSpinBonus';
 import { FreeSpinInfoBtn } from '@base/components/campaign/FreeSpinInfoBtn';
 import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { SocketManager } from '@base/script/socket/SocketManager';
+// import { SocketManager } from '@base/script/socket/SocketManager';
 
 export enum CampaignStatusEnum {
     /// <summary>
@@ -140,47 +140,47 @@ export class PromoManager {
      * 刷新當前活動狀態
      * @param campaignData 
      */
-    public updateResultCallCampaign(campaignData: s5g.game.proto.ICampaignData): void {
-        this.curCampaignRemainCount = campaignData.fsb_remaining_count;
-    }
+    // public updateResultCallCampaign(campaignData: s5g.game.proto.ICampaignData): void {
+    //     this.curCampaignRemainCount = campaignData.fsb_remaining_count;
+    // }
 
     /**
      * 刷新當前活動狀態
      * @param campaignData 
      */
-    public updateCampaignEvent(campaign_id: string, campaign_type: number, campaign_status: number, event_type: number): void {
+    // public updateCampaignEvent(campaign_id: string, campaign_type: number, campaign_status: number, event_type: number): void {
 
-        //正在開啟就刷新資訊
-        if (this.isWebViewOpen) {
-            FreeSpinBonus.update.emit(campaign_id, event_type);
-        }
-        //放到通知清單, 如果待機狀態就直接跳, 否則等回待機再跳
-        else {
-            this.notifiable_campaign_list.push({ campaign_id, event_type, redirect_game_id: '' });
+    //     //正在開啟就刷新資訊
+    //     if (this.isWebViewOpen) {
+    //         FreeSpinBonus.update.emit(campaign_id, event_type);
+    //     }
+    //     //放到通知清單, 如果待機狀態就直接跳, 否則等回待機再跳
+    //     else {
+    //         this.notifiable_campaign_list.push({ campaign_id, event_type, redirect_game_id: '' });
 
-            if (BaseDataManager.getInstance().isIdle() === true) {
-                this.checkReminder();
-            }
-        }
+    //         if (BaseDataManager.getInstance().isIdle() === true) {
+    //             this.checkReminder();
+    //         }
+    //     }
 
-        //進行中:添加到活動清單, 再次檢查info按鈕
-        if (campaign_status === CampaignStatusEnum.CampaignStatusEnum_Running) {
-            if (this.campaign_list.indexOf(campaign_id) === -1) {
-                this.campaign_list.push(campaign_id);
-            }
-            this.checkInfoBtn();
-        }
-        //強制終止:從活動清單中移除, 再次檢查info按鈕
-        else if (campaign_status === CampaignStatusEnum.CampaignStatusEnum_Terminate) {
-            //因為活動終止還要保留3天info按鈕, 所以不能移除
-            // let idx = this.campaign_list.indexOf(campaign_id);
-            // if (idx !== -1) {
-            //     this.campaign_list.splice(idx, 1);
-            // }
-            // this.checkInfoBtn();
-        }
+    //     //進行中:添加到活動清單, 再次檢查info按鈕
+    //     if (campaign_status === CampaignStatusEnum.CampaignStatusEnum_Running) {
+    //         if (this.campaign_list.indexOf(campaign_id) === -1) {
+    //             this.campaign_list.push(campaign_id);
+    //         }
+    //         this.checkInfoBtn();
+    //     }
+    //     //強制終止:從活動清單中移除, 再次檢查info按鈕
+    //     else if (campaign_status === CampaignStatusEnum.CampaignStatusEnum_Terminate) {
+    //         //因為活動終止還要保留3天info按鈕, 所以不能移除
+    //         // let idx = this.campaign_list.indexOf(campaign_id);
+    //         // if (idx !== -1) {
+    //         //     this.campaign_list.splice(idx, 1);
+    //         // }
+    //         // this.checkInfoBtn();
+    //     }
 
-    }
+    // }
 
     /**
      * 通知玩家獲得贏分
@@ -230,7 +230,7 @@ export class PromoManager {
             FreeSpinBonus.clickPlayNow.once(() => {
                 this.hideFreeSpinBonus();
 
-                SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eCampaignCall, curCampaign.campaign_id);
+                // SocketManager.getInstance().sendMessage(s5g.game.proto.EMSGID.eCampaignCall, curCampaign.campaign_id);
             }, this);
         }
     }

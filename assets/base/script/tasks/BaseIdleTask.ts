@@ -37,7 +37,7 @@ export abstract class BaseIdleTask extends GameTask {
     execute2(): void {
         BaseDataManager.getInstance().curModuleID = ModuleID.BS;
 
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
+        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
 
         SettingsPage1.setSpinState.emit(SpinButtonState.Idle);
 
@@ -151,7 +151,7 @@ export abstract class BaseIdleTask extends GameTask {
                 featureBuyTotal = BaseDataManager.getInstance().lawMinBet;
             }
             BaseDataManager.getInstance().auto.stopAuto();
-            Notice.showSpinMin.emit(featureBuyTotal, BaseDataManager.getInstance().lawMinBet);
+            // Notice.showSpinMin.emit(featureBuyTotal, BaseDataManager.getInstance().lawMinBet);
             this.idleState();
         }
         // 餘額不足

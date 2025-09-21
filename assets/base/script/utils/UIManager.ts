@@ -91,8 +91,8 @@ export class UIManager {
             BaseDataManager.getInstance().webViewVisible = false;
         }, this);
 
-        //錯誤訊息
-        Notice.clickError.on(() => {
+        //監聽點擊重新載入
+        Notice.clickReload.on(() => {
             window.location.reload();
         }, this);
 
@@ -208,7 +208,7 @@ export class UIManager {
                 if (featureBuyTotal < BaseDataManager.getInstance().lawMinBet) {
                     featureBuyTotal = BaseDataManager.getInstance().lawMinBet;
                 }
-                Notice.showSpinMin.emit(featureBuyTotal, BaseDataManager.getInstance().lawMinBet);
+                // Notice.showSpinMin.emit(featureBuyTotal, BaseDataManager.getInstance().lawMinBet);
             }
             else {
                 BaseDataManager.getInstance().isMenuOn = true;
