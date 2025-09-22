@@ -5,8 +5,8 @@
 
 // const { ccclass, property } = _decorator;
 
-// @ccclass('SuperSpinUI')
-// export class SuperSpinUI extends Component {
+// @ccclass('SuperSpin')
+// export class SuperSpin extends Component {
 //     private superSpin: Node = null;//超級SPIN節點
 //     private content: Node = null;//超級SPIN內容
 //     private preMessage: Node = null;//超級SPIN預先訊息

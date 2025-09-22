@@ -14,12 +14,18 @@ export enum BigWinType {
     non = 5
 }
 
-/**場景類型 */
-export enum OrientationID {
+/**場景方向模式 */
+export enum OrientationtMode {
     /**直式 */
     Portrait = 'Portrait',
     /**橫式 */
     Landscape = 'Landscape',
+}
+
+/**SPIN模式 */
+export enum SpinMode {
+    Normal = 'Normal',
+    Super = 'Super',
 }
 
 
@@ -189,9 +195,9 @@ export enum AutoPlayMode {
  */
 export enum TurboMode {
     Normal = 0,
-    Speed = 1,
-    Turbo = 2,
-    Super = 3
+    Speed,
+    Turbo,
+    Super
 }
 
 /**
@@ -199,8 +205,8 @@ export enum TurboMode {
  */
 export enum AudioMode {
     AudioOn = 0,
-    MusicOff = 1,
-    AudioOff = 2
+    MusicOff,
+    AudioOff
 }
 
 /**

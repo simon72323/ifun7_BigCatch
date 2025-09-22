@@ -1,6 +1,6 @@
 import { KeyCode } from 'cc';
 
-import { ModuleID, OrientationID } from '@base/script/types/BaseType';
+import { ModuleID, OrientationtMode, SpinMode } from '@base/script/types/BaseType';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
 /**
@@ -12,7 +12,7 @@ export class BaseEvent {
     public static showStartBtn: XEvent = new XEvent();
 
     /**切換直橫式 */
-    public static changeOrientation: XEvent1<OrientationID> = new XEvent1();
+    public static changeOrientation: XEvent1<OrientationtMode> = new XEvent1();
 
     /**初始化封包完成 */
     public static initMessageComplete: XEvent = new XEvent();
@@ -26,8 +26,8 @@ export class BaseEvent {
     /**點擊開始 */
     public static clickStart: XEvent = new XEvent();
 
-    /**點擊SPIN(ture=超級spin,false=普通spin) */
-    public static clickSpin: XEvent1<boolean> = new XEvent1();
+    /**點擊SPIN */
+    public static clickSpin: XEvent1<SpinMode> = new XEvent1();
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();
     /**點擊自動轉 */

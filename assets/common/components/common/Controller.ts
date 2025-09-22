@@ -1,16 +1,16 @@
-import { _decorator, Animation, Button, Component, EventKeyboard, KeyCode, Node, screen } from 'cc';
+import { _decorator, Animation, Button, Component, EventKeyboard, KeyCode, Node, screen, tween, UITransform, Vec3 } from 'cc';
 
 import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { AudioMode, ModuleID, TurboMode } from '@base/script/types/BaseType';
+import { AudioMode, SpinMode, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent } from '@base/script/utils/XUtils';
 
 import { AudioManager } from '@common/script/manager/AudioManager';
 
 const { ccclass, property } = _decorator;
 
-@ccclass('ControllerUI')
-export class ControllerUI extends Component {
+@ccclass('Controller')
+export class Controller extends Component {
     @property({ type: Node, tooltip: 'bet資訊' })
     private betInfo: Node = null;
 
@@ -60,7 +60,7 @@ export class ControllerUI extends Component {
     private isOpenOption: boolean = false;//是否開啟選單
     private isFullScreen: boolean = false;//是否全螢幕
     private audioMode: number = AudioMode.AudioOn;//音效模式
-    private turboMode: number = TurboMode.Normal;//加速模式
+    // private turboMode: TurboMode = TurboMode.Normal;//加速模式
 
     /**
      * 初始化
@@ -142,7 +142,7 @@ export class ControllerUI extends Component {
      * 顯示/關閉超級 SPIN 模式
      * @param active {boolean} 顯示/關閉
      */
-    private onSuperSpinModel(active: boolean) {
+    private onSuperSpinMode(active: boolean) {
         this.superSpin.active = active;
         this.content.active = !active;
         this.preMessage.active = active;
@@ -168,11 +168,15 @@ export class ControllerUI extends Component {
      * 執行Spin
      */
     private onSpin() {
+        if (!BaseDataManager.getInstance().isBS()) return;
+        const spinImage = this.spinBtn.getChildByName('Image');
+        tween(spinImage).to(0.1, { scale: new Vec3(0.6, 0.6, 1) }).to(0.15, { scale: Vec3.ONE }, { easing: 'backOut' }).start();
+
         if (this.superSpin.active) {
-            BaseEvent.clickSpin.emit(true);
+            BaseEvent.clickSpin.emit(SpinMode.Super);
             this.showSuperSpinContent();
         } else {
-            BaseEvent.clickSpin.emit(false);
+            BaseEvent.clickSpin.emit(SpinMode.Normal);
         }
     }
 
@@ -195,7 +199,9 @@ export class ControllerUI extends Component {
      * 切換加速模式
      */
     private onTurbo() {
-        this.turboMode = (this.turboMode + 1) % 4;
+        let turboMode = BaseDataManager.getInstance().curTurboMode;
+        turboMode = (turboMode + 1) % 4;
+        BaseDataManager.getInstance().curTurboMode = turboMode;
         const normalNode = this.turboBtn.getChildByName('Normal');
         const speedNode = this.turboBtn.getChildByName('Speed');
         const turboNode = this.turboBtn.getChildByName('Turbo');
@@ -208,10 +214,10 @@ export class ControllerUI extends Component {
         superNode.active = false;
 
         //判斷超級SPIN開關
-        this.onSuperSpinMode(this.turboMode === TurboMode.Super);
+        this.onSuperSpinMode(turboMode === TurboMode.Super);
 
         // 根據當前狀態顯示對應圖示
-        switch (this.turboMode) {
+        switch (turboMode) {
             case TurboMode.Normal:
                 normalNode.active = true;
                 BaseDataManager.getInstance().setTurboMode(TurboMode.Normal);

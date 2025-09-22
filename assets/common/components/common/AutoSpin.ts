@@ -6,8 +6,8 @@ import { addBtnClickEvent } from '@base/script/utils/XUtils';
 
 const { ccclass, property } = _decorator;
 
-@ccclass('AutoSpinUI')
-export class AutoSpinUI extends Component {
+@ccclass('AutoSpin')
+export class AutoSpin extends Component {
     private autoSpin: Node = null;//自動轉節點
     private content: Node = null;//內容
 

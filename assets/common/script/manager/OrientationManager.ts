@@ -3,7 +3,6 @@ import { _decorator, CCBoolean, Component, Node, Size, Sprite, SpriteFrame, UITr
 import { EDITOR } from 'cc/env';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { OrientationID } from '@base/script/types/BaseType';
 
 const { ccclass, property } = _decorator;
 
@@ -81,7 +80,7 @@ export class OrientationManager extends Component {
             this._isLandscape = value;
             // 在編輯器模式下觸發方向切換
             if (EDITOR) {
-                this.onChangeOrientation(value ? OrientationID.Landscape : OrientationID.Portrait);
+                this.onChangeOrientation();
             }
         }
     }
@@ -105,21 +104,18 @@ export class OrientationManager extends Component {
 
     /**
      * 執行直橫式切換
-     * @param orientation 
      */
-    private onChangeOrientation(orientation: OrientationID) {
+    private onChangeOrientation() {
         //節點搬移
         this.orientationNode.forEach((node, index) => {
             const target = node.target;
-            const portraitPos = node.portraitPos;
-            const landscapePos = node.landscapePos;
-            target.parent = orientation === OrientationID.Portrait ? portraitPos : landscapePos;
+            target.parent = this._isLandscape ? node.landscapePos : node.portraitPos;
         });
 
         //節點縮放
         this.orientationScale.forEach((scale, index) => {
             const target = scale.target;
-            const scaleValue = orientation === OrientationID.Portrait ? scale.portraitScale : scale.landscapeScale;
+            const scaleValue = this._isLandscape ? scale.landscapeScale : scale.portraitScale;
             if (target) {
                 target.setScale(scaleValue);
             }
@@ -128,7 +124,7 @@ export class OrientationManager extends Component {
         //節點位置
         this.orientationPosition.forEach((position, index) => {
             const target = position.target;
-            const positionValue = orientation === OrientationID.Portrait ? position.portraitPosition : position.landscapePosition;
+            const positionValue = this._isLandscape ? position.landscapePosition : position.portraitPosition;
             if (target) {
                 target.setPosition(positionValue);
             }
@@ -137,7 +133,7 @@ export class OrientationManager extends Component {
         //節點貼圖
         this.orientationSpriteFrame.forEach((spriteFrame, index) => {
             const target = spriteFrame.target;
-            const spriteFrameValue = orientation === OrientationID.Portrait ? spriteFrame.portraitSpriteFrame : spriteFrame.landscapeSpriteFrame;
+            const spriteFrameValue = this._isLandscape ? spriteFrame.landscapeSpriteFrame : spriteFrame.portraitSpriteFrame;
             if (target) {
                 target.getComponent(Sprite).spriteFrame = spriteFrameValue;
             }

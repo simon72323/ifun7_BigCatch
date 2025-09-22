@@ -2,7 +2,7 @@ import { BaseConst } from '@base/script/constant/BaseConst';
 import { BaseData } from '@base/script/main/BaseData';
 import { BetData } from '@base/script/main/BetData';
 // import { SocketManager } from '@base/script/socket/SocketManager';
-import { Auto, BaseLang, BaseLangSetting, BigWinType, CheatCodeData, CreditMode, DigitMode, FeatureBuyType, ModuleID, playAction, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
+import { Auto, BaseLang, BaseLangSetting, BigWinType, CheatCodeData, CreditMode, DigitMode, FeatureBuyType, ModuleID, OrientationtMode, playAction, SpinMode, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { XUtils } from '@base/script/utils/XUtils';
@@ -22,8 +22,21 @@ export class BaseDataManager {
         return BaseDataManager.instance;
     }
 
-    /**是否為橫式 */
-    public isLandscape: boolean = false;
+    /**當前SPIN模式 */
+    public curSpinMode: SpinMode = SpinMode.Normal;
+
+    /**當前方向模式 */
+    public curOrientationMode: OrientationtMode = OrientationtMode.Portrait;
+
+    /**當前模式 */
+    public curModuleID: ModuleID = ModuleID.BS;
+
+    /**下一模式 */
+    public nextModuleID: ModuleID = ModuleID.BS;
+
+    public curTurboMode: TurboMode = TurboMode.Speed;
+
+
 
     /**是否要走API版本 */
     public useAPI: boolean = false;
@@ -81,12 +94,6 @@ export class BaseDataManager {
 
     //遊戲資料 (如果沒有呼叫setData就用預設)
     private data: BaseData = new BaseData();
-
-    /**當前模式 */
-    public curModuleID: ModuleID = ModuleID.BS;
-
-    /**下一模式 */
-    public nextModuleID: ModuleID = ModuleID.BS;
 
     /**輪帶資料 */
     public stripTables: StripTable[] = [];

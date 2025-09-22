@@ -2,7 +2,7 @@ import { _decorator, Component, director, Label, ProgressBar, ResolutionPolicy, 
 
 import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { OrientationID } from '@base/script/types/BaseType';
+import { OrientationtMode } from '@base/script/types/BaseType';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { NetworkManager } from '@common/script/network/NetworkManager';
@@ -70,12 +70,12 @@ export class Loading extends Component {
 
         if (aspectRatio > 1) {
             view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
-            BaseDataManager.getInstance().isLandscape = true;
-            BaseEvent.changeOrientation.emit(OrientationID.Landscape);
+            BaseDataManager.getInstance().curOrientation = OrientationtMode.Landscape;
+            BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
             view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
-            BaseDataManager.getInstance().isLandscape = false;
-            BaseEvent.changeOrientation.emit(OrientationID.Portrait);
+            BaseDataManager.getInstance().curOrientation = OrientationtMode.Portrait;
+            BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
     }
 

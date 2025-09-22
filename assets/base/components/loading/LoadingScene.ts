@@ -6,7 +6,7 @@ import { BaseConst } from '@base/script/constant/BaseConst';
 import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseLang, BaseLangBundleDir, OrientationID } from '@base/script/types/BaseType';
+import { BaseLang, BaseLangBundleDir, OrientationtMode } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
@@ -223,12 +223,12 @@ export class LoadingScene extends Component {
 
         if (aspectRatio > 1) {
             view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
-            BaseDataManager.getInstance().isLandscape = true;
-            BaseEvent.changeOrientation.emit(OrientationID.Landscape);
+            BaseDataManager.getInstance().curOrientationMode = OrientationtMode.Landscape;
+            BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
             view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
-            BaseDataManager.getInstance().isLandscape = false;
-            BaseEvent.changeOrientation.emit(OrientationID.Portrait);
+            BaseDataManager.getInstance().curOrientationMode = OrientationtMode.Portrait;
+            BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
     }
 
