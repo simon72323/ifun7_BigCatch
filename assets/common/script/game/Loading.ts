@@ -1,9 +1,5 @@
 import { _decorator, Component, director, Label, ProgressBar, ResolutionPolicy, sp, view } from 'cc';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
-import { BaseEvent } from '@base/script/main/BaseEvent';
-import { OrientationtMode } from '@base/script/types/BaseType';
-
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { i18n } from '@common/script/utils/i18n';
@@ -31,15 +27,10 @@ export class Loading extends Component {
 
     protected onLoad() {
         // E2ETest.E2EStartLoading();
-        // 監聽畫面大小變化
-        view.on('resize', this.handleResize.bind(this));
-        console.log('aaaaaaaaaaaaaaahandleResize');
 
         this.initUI();
-        // this.getCurrencyJson();//獲取幣別資料
-        // i18n.init(UrlParameters.lang);//初始化語言
-
-
+        this.getCurrencyJson();//獲取幣別資料
+        i18n.init(UrlParameters.lang);//初始化語言
 
         // GoogleAnalytics.instance.initialize();
     }
@@ -53,30 +44,6 @@ export class Loading extends Component {
         this.logoSpine = this.node.getChildByPath('Logo').getComponent(sp.Skeleton);
         this.logoSpine.addAnimation(0, 'in', false);
         this.logoSpine.addAnimation(0, 'loop', true);
-    }
-
-    /**
-     * 銷毀
-     */
-    onDestroy() {
-        view.off('resize', this.handleResize.bind(this));// 清理監聽器
-    }
-
-    /** 處理畫面大小變化 */
-    private handleResize() {
-        console.log('aaaaaaaaaaaaaaahandleResize');
-        const screenSize = view.getVisibleSize();
-        const aspectRatio = screenSize.width / screenSize.height;
-
-        if (aspectRatio > 1) {
-            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
-            BaseDataManager.getInstance().curOrientation = OrientationtMode.Landscape;
-            BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
-        } else {
-            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
-            BaseDataManager.getInstance().curOrientation = OrientationtMode.Portrait;
-            BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
-        }
     }
 
     /**

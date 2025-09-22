@@ -26,7 +26,7 @@ export class BaseDataManager {
     public curSpinMode: SpinMode = SpinMode.Normal;
 
     /**當前方向模式 */
-    public curOrientationMode: OrientationtMode = OrientationtMode.Portrait;
+    // public curOrientationMode: OrientationtMode = OrientationtMode.Portrait;
 
     /**當前模式 */
     public curModuleID: ModuleID = ModuleID.BS;

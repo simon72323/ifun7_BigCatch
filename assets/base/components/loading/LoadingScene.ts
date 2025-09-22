@@ -11,6 +11,7 @@ import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 import { logger } from '@base/script/utils/XUtils';
+import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 
 const { ccclass, property } = _decorator;
 @ccclass('LoadingScene')
@@ -72,9 +73,6 @@ export class LoadingScene extends Component {
 
         //在一開始就帶入(用localhost判斷是否要用api)
         BaseDataManager.getInstance().init(window['gameConfig']);
-
-        // 監聽畫面大小變化
-        view.on('resize', this.handleResize);
 
         //將此節點加入常駐節點
         director.addPersistRootNode(this.node);
@@ -206,29 +204,6 @@ export class LoadingScene extends Component {
             setTimeout(() => {
                 this.tryLoadAPI();
             }, 100);
-        }
-    }
-
-    /**
-     * 銷毀
-     */
-    onDestroy() {
-        view.off('resize', this.handleResize);// 清理監聽器
-    }
-
-    /** 處理畫面大小變化 */
-    private handleResize() {
-        const screenSize = view.getVisibleSize();
-        const aspectRatio = screenSize.width / screenSize.height;
-
-        if (aspectRatio > 1) {
-            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
-            BaseDataManager.getInstance().curOrientationMode = OrientationtMode.Landscape;
-            BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
-        } else {
-            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
-            BaseDataManager.getInstance().curOrientationMode = OrientationtMode.Portrait;
-            BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
     }
 
