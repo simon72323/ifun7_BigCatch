@@ -3,12 +3,13 @@ import { _decorator, Button, Color, Component, EventHandler, instantiate, Label,
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseLangBundleDir, CreditMode, ScrollEventType } from '@base/script/types/BaseType';
 import { XEvent } from '@base/script/utils/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass } = _decorator;
 
@@ -23,25 +24,25 @@ class ScrollIndex {
 
     public setRate(rateIdx: number) {
         this.Rate = rateIdx;
-        this.Rate = Math.min(this.Rate, BaseDataManager.getInstance().bet.getRateLength() - 1);
+        this.Rate = Math.min(this.Rate, DataManager.getInstance().bet.getRateLength() - 1);
         this.Rate = Math.max(this.Rate, 0);
 
-        this.Total = BaseDataManager.getInstance().bet.getTotalIndexByRateAndBet(this.Rate, this.Bet);
+        this.Total = DataManager.getInstance().bet.getTotalIndexByRateAndBet(this.Rate, this.Bet);
     }
 
     public setBet(betIdx: number) {
         this.Bet = betIdx;
-        this.Bet = Math.min(this.Bet, BaseDataManager.getInstance().bet.getBetLength() - 1);
+        this.Bet = Math.min(this.Bet, DataManager.getInstance().bet.getBetLength() - 1);
         this.Bet = Math.max(this.Bet, 0);
 
-        this.Total = BaseDataManager.getInstance().bet.getTotalIndexByRateAndBet(this.Rate, this.Bet);
+        this.Total = DataManager.getInstance().bet.getTotalIndexByRateAndBet(this.Rate, this.Bet);
     }
 
     public setTotal(totalIdx: number) {
         this.Total = totalIdx;
-        this.Total = Math.min(this.Total, BaseDataManager.getInstance().bet.getTotalLength() - 1);
+        this.Total = Math.min(this.Total, DataManager.getInstance().bet.getTotalLength() - 1);
         this.Total = Math.max(this.Total, 0);
-        let totalX = BaseDataManager.getInstance().bet.getTotalXAt(this.Total);
+        let totalX = DataManager.getInstance().bet.getTotalXAt(this.Total);
         this.Bet = totalX[0];
         this.Rate = totalX[1];
     }
@@ -96,7 +97,7 @@ export class BetPage extends Component {
      * 
      */
     onLoad() {
-        BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${BaseDataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.ui3_0}`, (langRes: any) => {
+        BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${DataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.ui3_0}`, (langRes: any) => {
             this.container.getChildByPath('ScrollBg/text1').getComponent(Sprite).spriteFrame = langRes['bet_title'];
             this.container.getChildByPath('ScrollBg/text2').getComponent(Sprite).spriteFrame = langRes['bet_title_1'];
             this.container.getChildByPath('MaxBetAnm/MaxBetTxt').getComponent(Sprite).spriteFrame = langRes['maxBet'];
@@ -148,7 +149,7 @@ export class BetPage extends Component {
         });
 
         this.container.getChildByPath('MaxBetAnm/BetCheck').on(Button.EventType.CLICK, () => {
-            BaseDataManager.getInstance().bet.setTotalIndexByRateAndBet(this.ScrollIndex.getRate(), this.ScrollIndex.getBet());
+            DataManager.getInstance().bet.setTotalIndexByRateAndBet(this.ScrollIndex.getRate(), this.ScrollIndex.getBet());
             this.onClickClose();
             AudioManager.getInstance().play(AudioKey.CheckClick);
             BetPage.onBetCheck.emit();
@@ -172,15 +173,15 @@ export class BetPage extends Component {
         // RateScroll
         let ScrollRateItem = this.container.getChildByPath('ScrollR/view/content/item');
         let ScrollRateContent = this.container.getChildByPath('ScrollR/view/content');
-        for (let i = 0; i < BaseDataManager.getInstance().bet.getRateLength(); i++) {
+        for (let i = 0; i < DataManager.getInstance().bet.getRateLength(); i++) {
             if (i == 0) {
-                ScrollRateItem.getComponent(Label).string = XUtils.NumberToCentString(BaseDataManager.getInstance().bet.getRateAt(0), false);
+                ScrollRateItem.getComponent(Label).string = XUtils.NumberToCentString(DataManager.getInstance().bet.getRateAt(0), false);
                 this.ScrollItemArray.Rate.push(ScrollRateItem);
             }
             else {
                 let instance = instantiate(ScrollRateItem);
                 instance.setPosition(0, (-100 - 50 * i));
-                instance.getComponent(Label).string = XUtils.NumberToCentString(BaseDataManager.getInstance().bet.getRateAt(i), false);
+                instance.getComponent(Label).string = XUtils.NumberToCentString(DataManager.getInstance().bet.getRateAt(i), false);
                 if (i == 1) {
                     instance.getComponent(Label).fontSize = 30;
                     instance.getComponent(Label).color = this.ScrollColor.Bet_2;
@@ -191,7 +192,7 @@ export class BetPage extends Component {
                 ScrollRateContent.addChild(instance);
                 this.ScrollItemArray.Rate.push(instance);
 
-                if (i == BaseDataManager.getInstance().bet.getRateLength() - 1) {
+                if (i == DataManager.getInstance().bet.getRateLength() - 1) {
                     let instance = instantiate(this.container.getChildByPath('ScrollR/view/content/-'));
                     instance.setPosition(0, (-100 - 50 * (i + 1)));
                     ScrollRateContent.addChild(instance);
@@ -202,15 +203,15 @@ export class BetPage extends Component {
         // BetScroll
         let ScrollBetItem = this.container.getChildByPath('ScrollB/view/content/item');
         let ScrollBetContent = this.container.getChildByPath('ScrollB/view/content');
-        for (let i = 0; i < BaseDataManager.getInstance().bet.getBetLength(); i++) {
+        for (let i = 0; i < DataManager.getInstance().bet.getBetLength(); i++) {
             if (i == 0) {
-                ScrollBetItem.getComponent(Label).string = BaseDataManager.getInstance().bet.getBetAt(0).toString();
+                ScrollBetItem.getComponent(Label).string = DataManager.getInstance().bet.getBetAt(0).toString();
                 this.ScrollItemArray.Bet.push(ScrollBetItem);
             }
             else {
                 let instance = instantiate(ScrollBetItem);
                 instance.setPosition(0, (-100 - 50 * i));
-                instance.getComponent(Label).string = BaseDataManager.getInstance().bet.getBetAt(i).toString();
+                instance.getComponent(Label).string = DataManager.getInstance().bet.getBetAt(i).toString();
                 if (i == 1) {
                     instance.getComponent(Label).getComponent(Label).fontSize = 30;
                     instance.getComponent(Label).color = this.ScrollColor.Bet_2;
@@ -221,7 +222,7 @@ export class BetPage extends Component {
                 ScrollBetContent.addChild(instance);
                 this.ScrollItemArray.Bet.push(instance);
 
-                if (i == BaseDataManager.getInstance().bet.getBetLength() - 1) {
+                if (i == DataManager.getInstance().bet.getBetLength() - 1) {
                     let instance = instantiate(this.container.getChildByPath('ScrollB/view/content/-'));
                     instance.setPosition(0, (-100 - 50 * (i + 1)));
                     ScrollBetContent.addChild(instance);
@@ -231,19 +232,19 @@ export class BetPage extends Component {
         }
         // LineScroll
         let ScrollLineItem = this.container.getChildByPath('ScrollL/view/content/item');
-        ScrollLineItem.getComponent(Label).string = BaseDataManager.getInstance().bet.getLineAt(0).toString();
+        ScrollLineItem.getComponent(Label).string = DataManager.getInstance().bet.getLineAt(0).toString();
 
         // BetScroll
         let ScrollTotalItem = this.container.getChildByPath('ScrollT/view/content/item');
         let ScrollTotalContent = this.container.getChildByPath('ScrollT/view/content');
-        for (let i = 0; i < BaseDataManager.getInstance().bet.getTotalLength(); i++) {
+        for (let i = 0; i < DataManager.getInstance().bet.getTotalLength(); i++) {
             if (i == 0) {
-                ScrollTotalItem.getComponent(Label).string = XUtils.NumberToCentString(BaseDataManager.getInstance().bet.getTotalAt(0), false);
+                ScrollTotalItem.getComponent(Label).string = XUtils.NumberToCentString(DataManager.getInstance().bet.getTotalAt(0), false);
                 this.ScrollItemArray.Total.push(ScrollTotalItem);
             } else {
                 let instance = instantiate(ScrollTotalItem);
                 instance.setPosition(0, (-100 - 50 * i));
-                instance.getComponent(Label).string = XUtils.NumberToCentString(BaseDataManager.getInstance().bet.getTotalAt(i), false);
+                instance.getComponent(Label).string = XUtils.NumberToCentString(DataManager.getInstance().bet.getTotalAt(i), false);
                 if (i == 1) {
                     instance.getComponent(Label).fontSize = 30;
                     instance.getComponent(Label).color = this.ScrollColor.Total_2;
@@ -254,7 +255,7 @@ export class BetPage extends Component {
                 ScrollTotalContent.addChild(instance);
                 this.ScrollItemArray.Total.push(instance);
 
-                if (i == BaseDataManager.getInstance().bet.getTotalLength() - 1) {
+                if (i == DataManager.getInstance().bet.getTotalLength() - 1) {
                     let instance = instantiate(this.container.getChildByPath('ScrollT/view/content/-'));
                     instance.setPosition(0, (-100 - 50 * (i + 1)));
                     ScrollTotalContent.addChild(instance);
@@ -268,18 +269,18 @@ export class BetPage extends Component {
      * 面板開啟
      */
     private onShow(): void {
-        this.ScrollIndex.setRate(BaseDataManager.getInstance().bet.getRateIdx());
-        this.ScrollIndex.setBet(BaseDataManager.getInstance().bet.getBetIdx());
+        this.ScrollIndex.setRate(DataManager.getInstance().bet.getRateIdx());
+        this.ScrollIndex.setBet(DataManager.getInstance().bet.getBetIdx());
 
         this.refreshContent();
 
         //最大投注
         let MaxBetNum = this.container.getChildByPath('MaxBetNum');
-        if (BaseDataManager.getInstance().creditMode === CreditMode.Credit) {
-            MaxBetNum.getComponent(Label).string = BaseDataManager.getInstance().bet.getMaxTotal().toString();
+        if (DataManager.getInstance().creditMode === CreditMode.Credit) {
+            MaxBetNum.getComponent(Label).string = DataManager.getInstance().bet.getMaxTotal().toString();
         }
         else {
-            MaxBetNum.getComponent(Label).string = (BaseDataManager.getInstance().bet.getMaxTotal() / 100).toString();
+            MaxBetNum.getComponent(Label).string = (DataManager.getInstance().bet.getMaxTotal() / 100).toString();
         }
 
         this.node.active = true;

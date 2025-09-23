@@ -2,7 +2,7 @@ import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, UIOpac
 
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseAnimationName } from '@base/script/types/BaseType';
@@ -63,7 +63,7 @@ export class TransUI extends Component {
         this.black = this.node.getChildByPath('SpriteSplash');
         this.sens.active = false;
 
-        let lang: string = BaseDataManager.getInstance().urlParam.lang;
+        let lang: string = DataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
             this.node.getChildByPath('freegame_box_ani/title_congrats').getComponent(Sprite).spriteFrame = langRes['title_congrats'];
             this.node.getChildByPath('freegame_box_ani/title_freesin').getComponent(Sprite).spriteFrame = langRes['title_freesin'];

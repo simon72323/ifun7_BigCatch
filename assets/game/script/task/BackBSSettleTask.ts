@@ -1,7 +1,7 @@
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { BigWinType, SpinButtonState } from '@base/script/types/BaseType';
@@ -32,12 +32,12 @@ export class BackBSSettleTask extends GameTask {
         AudioManager.getInstance().play(AudioKey.BsMusic);
 
         //回復盤面
-        SlotMachine2.change.emit(SlotMachineID.BS, BaseDataManager.getInstance().getData<GameData>().bsLastMap);
+        SlotMachine2.change.emit(SlotMachineID.BS, DataManager.getInstance().getData<GameData>().bsLastMap);
         // UIController
         SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
 
         //達到BigWin額外演示
-        if (BaseDataManager.getInstance().getBigWinTypeByValue(this.sumWin) != BigWinType.non) {
+        if (DataManager.getInstance().getBigWinTypeByValue(this.sumWin) != BigWinType.non) {
             BigWinUI.complete.once(() => {
                 this.onTaskEnd();
             }, this);
@@ -55,23 +55,23 @@ export class BackBSSettleTask extends GameTask {
     private onTaskEnd(): void {
 
         BaseEvent.refreshCredit.emit(this.playerCent);
-        BaseEvent.refreshWin.emit(this.sumWin * BaseDataManager.getInstance().bet.getCurRate());
+        BaseEvent.refreshWin.emit(this.sumWin * DataManager.getInstance().bet.getCurRate());
 
         //橫幅贏分
         if (this.sumWin > 0) {
-            let multiple: number = BaseDataManager.getInstance().getWinMultipleByValue(this.sumWin);
-            BannerUI.showTotalWin.emit(this.sumWin * BaseDataManager.getInstance().bet.getCurRate(), multiple);
+            let multiple: number = DataManager.getInstance().getWinMultipleByValue(this.sumWin);
+            BannerUI.showTotalWin.emit(this.sumWin * DataManager.getInstance().bet.getCurRate(), multiple);
         }
 
         //要多等一秒
         XUtils.scheduleOnce(() => {
 
-            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
-            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
-            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);
-            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SHOWWIN);
-            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_WAIT);
-            // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_ENDGAME);
+            // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
+            // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
+            // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);
+            // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SHOWWIN);
+            // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_WAIT);
+            // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_ENDGAME);
 
             this.finish();
         }, 1, this);

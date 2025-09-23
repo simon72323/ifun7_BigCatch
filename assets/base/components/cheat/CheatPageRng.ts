@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, EditBox, instantiate, Label, Node, Pool, Prefab } from 'cc';
 
 import { BaseRngItem } from '@base/components/cheat/BaseRngItem';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { CheatCodeData } from '@base/script/types/BaseType';
 
 const { ccclass } = _decorator;
@@ -66,7 +66,7 @@ export class CheatPageRng extends Component {
 
             let data = new CheatCodeData();
             data.rngList = this.rngList;
-            BaseDataManager.getInstance().cheatCodeData = data;
+            DataManager.getInstance().cheatCodeData = data;
         });
     }
 

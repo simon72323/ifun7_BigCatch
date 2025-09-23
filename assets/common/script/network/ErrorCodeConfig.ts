@@ -77,6 +77,6 @@ export class ErrorCodeConfig {
         [ 290, 'CodeGetExtraDataError' ],
         [ 291, 'CodeGetBetRecordError' ],
         [ 292, 'CodeGetGameDataError' ],
-        [ 293, 'CodeGetUserDataError' ],
+        [ 293, 'CodeGetUserDataError' ]
     ] );
 }

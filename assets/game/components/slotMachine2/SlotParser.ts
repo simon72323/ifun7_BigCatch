@@ -1,4 +1,4 @@
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 
 import { BaseSlotParser2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSlotData2';
 import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
@@ -29,10 +29,10 @@ export class SlotParser extends BaseSlotParser2 {
         if (!goldenPattern) {
             return;
         }
-        let stripDataList = BaseDataManager.getInstance().getData<GameData>().stripBadgeDataList;
+        let stripDataList = DataManager.getInstance().getData<GameData>().stripBadgeDataList;
         stripDataList.length = 0;
 
-        let numRow = BaseDataManager.getInstance().getData().REEL_ROW;
+        let numRow = DataManager.getInstance().getData().REEL_ROW;
         let numCol: number = stripTable.length;
         for (let col: number = 0; col < numCol; ++col) {
             let strip = stripTable[col];
@@ -45,7 +45,7 @@ export class SlotParser extends BaseSlotParser2 {
         }
 
         //轉動隨機金框
-        let goldenReel: number[] = BaseDataManager.getInstance().getData<GameData>().getGoldenReelRange();
+        let goldenReel: number[] = DataManager.getInstance().getData<GameData>().getGoldenReelRange();
         goldenReel.forEach((col) => {
             let strip = stripTable[col];
             strip.forEach((symbolID, rng) => {
@@ -62,7 +62,7 @@ export class SlotParser extends BaseSlotParser2 {
      * @returns 
      */
     public getMiList(): boolean[] {
-        let gameData = BaseDataManager.getInstance().getData<GameData>();
+        let gameData = DataManager.getInstance().getData<GameData>();
 
         let miList: boolean[] = [];
         let scatterCount: number = 0;
@@ -85,7 +85,7 @@ export class SlotParser extends BaseSlotParser2 {
      * @returns 
      */
     public getMiList2(fromMap: BaseSymbolData2[][]): boolean[] {
-        let gameData = BaseDataManager.getInstance().getData<GameData>();
+        let gameData = DataManager.getInstance().getData<GameData>();
         let miList: boolean[] = [];
         let scatterCount: number = 0;
         fromMap.forEach((symbolOfReel: BaseSymbolData2[], col) => {

@@ -1,6 +1,6 @@
 import { _decorator, CCFloat, Node, Prefab, RealCurve } from 'cc';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 
 /**
  * 圖示狀態
@@ -59,7 +59,7 @@ export class SlotReelConfig2 {
     public maxRow: number = 0;
 
     public getSpeedConfig(): SpeedConfig2 {
-        let turboMode = BaseDataManager.getInstance().getTurboMode();
+        let turboMode = DataManager.getInstance().getTurboMode();
         return this.speedConfigList[turboMode];
     }
 }

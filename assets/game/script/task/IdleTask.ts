@@ -18,7 +18,7 @@ export class IdleTask extends BaseIdleTask {
         // let data = new CheatCodeData();
         // data.rngList = [[45, 84, 55, 76, 80, 40]];
         // data.rngList = [[78, 70, 55, 0, 79, 62]];
-        // BaseDataManager.getInstance().cheatCodeData = data;
+        // DataManager.getInstance().cheatCodeData = data;
 
         //待機過久淡出音樂
         TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_IDLE_MUTE.key);

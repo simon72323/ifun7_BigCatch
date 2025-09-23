@@ -1,5 +1,5 @@
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseSpinTask } from '@base/script/tasks/BaseSpinTask';
 import { TaskManager } from '@base/script/tasks/TaskManager';
 import { APIManager } from '@base/script/utils/APIManager';
@@ -21,8 +21,8 @@ export class SpinTask extends BaseSpinTask {
     protected childExecute(): void {
 
         XUtils.scheduleOnce(() => {
-            let initMultiplier = GameConst.multiplierList[BaseDataManager.getInstance().getData<GameData>().getInitMultiplierIdx()];
-            RevolverUI.reset.emit(BaseDataManager.getInstance().curModuleID, initMultiplier);
+            let initMultiplier = GameConst.multiplierList[DataManager.getInstance().getData<GameData>().getInitMultiplierIdx()];
+            RevolverUI.reset.emit(DataManager.getInstance().curModuleID, initMultiplier);
         }, 0.3, this);
 
         //還原廣告狀態
@@ -33,9 +33,9 @@ export class SpinTask extends BaseSpinTask {
             AudioManager.getInstance().play(GameAudioKey.in);
         }, this);
 
-        if (BaseDataManager.getInstance().isBS() === true) {
+        if (DataManager.getInstance().isBS() === true) {
             //先轉型(幸運一擊直接給結果不轉動)
-            if (BaseDataManager.getInstance().buyFs === false && APIManager.getInstance().getSpinLate() === false) {
+            if (DataManager.getInstance().buyFs === false && APIManager.getInstance().getSpinLate() === false) {
                 SlotMachine2.spin.emit(SlotMachineID.BS);
             }
         }
@@ -45,7 +45,7 @@ export class SpinTask extends BaseSpinTask {
     }
 
     public childSpinFailed(): void {
-        if (BaseDataManager.getInstance().isBS() === true) {
+        if (DataManager.getInstance().isBS() === true) {
             TaskManager.getInstance().addTask(new IdleTask());
         }
     }

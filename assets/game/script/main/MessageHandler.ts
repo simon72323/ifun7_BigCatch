@@ -1,5 +1,5 @@
 // import { CheatUI } from '@base/components/cheat/CheatUI';
-// import { BaseDataManager } from '@base/script/main/BaseDataManager';
+// import { DataManager } from '@common/script/data/DataManager';;
 // import { BaseEvent } from '@base/script/main/BaseEvent';
 // import { DelayTask } from '@base/script/tasks/DelayTask';
 // import { TaskManager } from '@base/script/tasks/TaskManager';
@@ -68,13 +68,13 @@
 //      */
 //     public parseBSResult(slotResult: s5g.game.proto.ISlotResult, fsRemainTimes: number = -1): void {
 
-//         let gameData = BaseDataManager.getInstance().getData<GameData>();
-//         BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SPINSTOPING);
+//         let gameData = DataManager.getInstance().getData<GameData>();
+//         DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SPINSTOPING);
 
 //         //過程計算加總用(右下角win用)
-//         let sumWin: number = BaseDataManager.getInstance().isBS() ? 0 : BaseDataManager.getInstance().winTotal;
-//         if (BaseDataManager.getInstance().isBS() === true) {
-//             BaseDataManager.getInstance().winTotal = 0;
+//         let sumWin: number = DataManager.getInstance().isBS() ? 0 : DataManager.getInstance().winTotal;
+//         if (DataManager.getInstance().isBS() === true) {
+//             DataManager.getInstance().winTotal = 0;
 //         }
 
 //         //中獎位置
@@ -98,7 +98,7 @@
 //         let goldenPattern: number[];
 
 //         //盤面起始倍數
-//         let curMultiplierIdx: number = BaseDataManager.getInstance().getData<GameData>().getInitMultiplierIdx();
+//         let curMultiplierIdx: number = DataManager.getInstance().getData<GameData>().getInitMultiplierIdx();
 
 //         allResult.forEach((temp, msgResultIndex) => {
 //             let isSubResult = (temp as s5g.game.proto.SlotResult.SubResult).sub_game_id !== undefined;
@@ -138,15 +138,15 @@
 //             //首次停輪
 //             if (isSubResult === false) {
 
-//                 if (BaseDataManager.getInstance().isBS() === false) {
+//                 if (DataManager.getInstance().isBS() === false) {
 //                     let fsTask = new FSUpdateRemainTimesTask();
 //                     fsTask.fsRemainTimes = --gameData.fsRemainTimes;
 //                     TaskManager.getInstance().addTask(fsTask);
 //                 }
 
 //                 //因為要處理輪帶金框, 只有第一轉設定, 否則slotParser內的資料會被子盤面覆蓋
-//                 gameData.slotParser.setStripTable(BaseDataManager.getInstance().getStripTable()._strips, slotResult.rng, newSymbolPattern, goldenPattern);
-//                 gameData.slotParser.buyFS = BaseDataManager.getInstance().buyFs;
+//                 gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, slotResult.rng, newSymbolPattern, goldenPattern);
+//                 gameData.slotParser.buyFS = DataManager.getInstance().buyFs;
 //                 SlotMachine2.changeStrip.emit(SlotMachineID.BS, gameData.slotParser);
 
 //                 let stop = new StopTask();
@@ -181,7 +181,7 @@
 //                 winTask.winPos = winPos;
 //                 winTask.winSymbolID = winSymbolID;
 //                 winTask.sumWin = sumWin + planeOriginalWin;//還不能真的加入
-//                 winTask.playerCent = BaseDataManager.getInstance().playerCent + planeOriginalWin * BaseDataManager.getInstance().bet.getCurRate();//還不能真的加入
+//                 winTask.playerCent = DataManager.getInstance().playerCent + planeOriginalWin * DataManager.getInstance().bet.getCurRate();//還不能真的加入
 //                 TaskManager.getInstance().addTask(winTask);
 
 //                 //檢查消去位置是否有金框, 遇到金框要轉換WILD
@@ -204,8 +204,8 @@
 //                 }, this);
 
 //                 sumWin += planeWin;
-//                 BaseDataManager.getInstance().winTotal += planeWin;
-//                 BaseDataManager.getInstance().playerCent += planeWin * BaseDataManager.getInstance().bet.getCurRate();
+//                 DataManager.getInstance().winTotal += planeWin;
+//                 DataManager.getInstance().playerCent += planeWin * DataManager.getInstance().bet.getCurRate();
 
 //                 //爆炸
 //                 let preMultiplierIdx = curMultiplierIdx;
@@ -217,7 +217,7 @@
 //                 explode.changeMap = changeMap;
 //                 explode.win = planeWin;
 //                 explode.sumWin = sumWin;
-//                 explode.playerCent = BaseDataManager.getInstance().playerCent;
+//                 explode.playerCent = DataManager.getInstance().playerCent;
 //                 TaskManager.getInstance().addTask(explode);
 //             }
 
@@ -227,15 +227,15 @@
 //         let end = new EndGameTask();
 //         let spinWin = XUtils.convertToLong(slotResult.credit);
 //         end.win = spinWin;
-//         end.playerCent = BaseDataManager.getInstance().playerCent;
+//         end.playerCent = DataManager.getInstance().playerCent;
 //         TaskManager.getInstance().addTask(end);
 
 //         gameData.fsWin += spinWin;
 
 //         //BS:檢查是否要進FS
-//         if (BaseDataManager.getInstance().curModuleID === ModuleID.BS) {
+//         if (DataManager.getInstance().curModuleID === ModuleID.BS) {
 //             //進入FS
-//             if (BaseDataManager.getInstance().nextModuleID !== ModuleID.BS) {
+//             if (DataManager.getInstance().nextModuleID !== ModuleID.BS) {
 
 //                 gameData.bsLastMap.length = 0;
 //                 for (let col: number = 0; col < gameData.REEL_COL; ++col) {
@@ -258,7 +258,7 @@
 //                 gameData.fsRemainTimes = (slotResult.win_bonus_group && slotResult.win_bonus_group.length > 0) ? slotResult.win_bonus_group[0].times : 0;
 
 //                 let trans = new TransTask();
-//                 trans.to = BaseDataManager.getInstance().nextModuleID;
+//                 trans.to = DataManager.getInstance().nextModuleID;
 //                 trans.times = gameData.fsRemainTimes;
 //                 TaskManager.getInstance().addTask(trans);
 
@@ -266,8 +266,8 @@
 //                 let fsOpen = new FSOpeningTask();
 //                 TaskManager.getInstance().addTask(fsOpen);
 
-//                 BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT_START);
-//                 BaseDataManager.getInstance().buyFs = false;
+//                 DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT_START);
+//                 DataManager.getInstance().buyFs = false;
 //                 let task = new SpinTask();
 //                 TaskManager.getInstance().addTask(task);
 //             }
@@ -290,14 +290,14 @@
 //             }
 
 //             //返回BS
-//             if (BaseDataManager.getInstance().nextModuleID === ModuleID.BS) {
+//             if (DataManager.getInstance().nextModuleID === ModuleID.BS) {
 //                 let settle = new FSSettleTask();
 //                 settle.win = gameData.fsWin;
 //                 TaskManager.getInstance().addTask(settle);
 
 //                 let backBSSettle = new BackBSSettleTask();
-//                 backBSSettle.sumWin = BaseDataManager.getInstance().winTotal;
-//                 backBSSettle.playerCent = BaseDataManager.getInstance().playerCent;
+//                 backBSSettle.sumWin = DataManager.getInstance().winTotal;
+//                 backBSSettle.playerCent = DataManager.getInstance().playerCent;
 //                 TaskManager.getInstance().addTask(backBSSettle);
 
 //                 TaskManager.getInstance().addTask(new IdleTask());

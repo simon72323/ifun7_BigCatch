@@ -7,12 +7,13 @@ import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass } = _decorator;
 
@@ -68,7 +69,7 @@ export class InfoBar extends Component {
         this.Win.on(Button.EventType.CLICK, this.onWinClick, this);//監聽贏分按鈕點擊事件
         this.Bet.on(Button.EventType.CLICK, this.onBetClick, this);//監聽下注按鈕點擊事件
 
-        this.loadCurrencyAssets();//刷新幣別資源
+        // this.loadCurrencyAssets();//刷新幣別資源
     }
 
     /**移到上方 */
@@ -173,32 +174,32 @@ export class InfoBar extends Component {
     }
 
     /**刷新幣別資源 */
-    private loadCurrencyAssets(): void {
-        BundleLoader.onLoaded(BaseConst.CURRENCY, '', (assets) => {
-            let currency = BaseDataManager.getInstance().urlParam.currency;
-            let Img = assets[currency];
-            if (Img) {
-                let Img = assets[currency];
-                //TODO:未開放屬性,先這樣處理避免紅字, 可考慮用Img.width?
-                let rect: Rect = Img['_rect'];
-                this.Credit.getComponent(TextAdjust).setContentWidth(rect.width);
-                this.Credit.setPosition((-210 + rect.width / 2), -1);
-                this.CreditCCy.getComponent(Sprite).spriteFrame = Img;
-                this.Bet.getChildByName('Bet').getComponent(TextAdjust).setContentWidth(rect.width);
-                this.Bet.getChildByName('Bet').setPosition((33 + rect.width / 2), -1);
-                this.Win.getChildByName('Win').getComponent(TextAdjust).setContentWidth(rect.width);
-                this.Win.getChildByName('Win').setPosition((31 + rect.width / 2), -1);
+    // private loadCurrencyAssets(): void {
+    //     BundleLoader.onLoaded(BaseConst.CURRENCY, '', (assets) => {
+    //         let currency = DataManager.getInstance().urlParam.currency;
+    //         let Img = assets[currency];
+    //         if (Img) {
+    //             let Img = assets[currency];
+    //             //TODO:未開放屬性,先這樣處理避免紅字, 可考慮用Img.width?
+    //             let rect: Rect = Img['_rect'];
+    //             this.Credit.getComponent(TextAdjust).setContentWidth(rect.width);
+    //             this.Credit.setPosition((-210 + rect.width / 2), -1);
+    //             this.CreditCCy.getComponent(Sprite).spriteFrame = Img;
+    //             this.Bet.getChildByName('Bet').getComponent(TextAdjust).setContentWidth(rect.width);
+    //             this.Bet.getChildByName('Bet').setPosition((33 + rect.width / 2), -1);
+    //             this.Win.getChildByName('Win').getComponent(TextAdjust).setContentWidth(rect.width);
+    //             this.Win.getChildByName('Win').setPosition((31 + rect.width / 2), -1);
 
-                this.Bet.getChildByName('BetCurrency').getComponent(Sprite).spriteFrame = Img;
-                this.Win.getChildByName('WinCurrency').getComponent(Sprite).spriteFrame = Img;
-            }
-            else {
-                this.CreditCCy.active = false;
-                this.Bet.getChildByName('BetCurrency').active = false;
-                this.Win.getChildByName('WinCurrency').active = false;
-            }
-        });
-    }
+    //             this.Bet.getChildByName('BetCurrency').getComponent(Sprite).spriteFrame = Img;
+    //             this.Win.getChildByName('WinCurrency').getComponent(Sprite).spriteFrame = Img;
+    //         }
+    //         else {
+    //             this.CreditCCy.active = false;
+    //             this.Bet.getChildByName('BetCurrency').active = false;
+    //             this.Win.getChildByName('WinCurrency').active = false;
+    //         }
+    //     });
+    // }
 
     /**下注按鈕觸發 */
     private onTouchBet(event: EventTouch) {

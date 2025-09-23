@@ -3,7 +3,7 @@ import { _decorator, Component, easing, instantiate, Node, Prefab, Tween, tween,
 import { BaseDropSlotParser } from '@base/components/dropSlotMachine/BaseDropSlotParser';
 import { BaseDropSymbol } from '@base/components/dropSlotMachine/BaseDropSymbol';
 import { BaseDropSymbolData } from '@base/components/dropSlotMachine/BaseDropSymbolData';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { TurboMode } from '@base/script/types/BaseType';
 import { XEvent, XEvent1, XEvent2 } from '@base/script/utils/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
@@ -149,7 +149,7 @@ export class DropSlotMachine extends Component {
         DropSlotMachine.mainDrop.on((map: BaseDropSymbolData[], complete) => {
             //重置資料
             this.parser.reset();
-            let turboMode = BaseDataManager.getInstance().getTurboMode();
+            let turboMode = DataManager.getInstance().getTurboMode();
             this.curSpeedConfig = this.normal;
             if (turboMode === TurboMode.Speed) {
                 this.curSpeedConfig = this.speed;

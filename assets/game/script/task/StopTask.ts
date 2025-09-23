@@ -1,7 +1,7 @@
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { SpinButtonState } from '@base/script/types/BaseType';
@@ -30,7 +30,7 @@ export class StopTask extends GameTask {
 
     execute(): void {
 
-        BaseDataManager.getInstance().getData<GameData>().hasSkip = false;
+        DataManager.getInstance().getData<GameData>().hasSkip = false;
 
         //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
         BSRoleUI.scatterWin.emit(this.isScatterWin);
@@ -71,7 +71,7 @@ export class StopTask extends GameTask {
     }
 
     private onSkip(): void {
-        BaseDataManager.getInstance().getData<GameData>().hasSkip = true;
+        DataManager.getInstance().getData<GameData>().hasSkip = true;
         SkipUI.hide.emit();
         BaseEvent.clickSkip.off(this);
         SlotMachine2.skip.emit(SlotMachineID.BS);

@@ -1,4 +1,4 @@
-export const BaseConfig = {
+export const GameConfig = {
     /** 網站 */
     Sites: {
         /** 開發網站 */

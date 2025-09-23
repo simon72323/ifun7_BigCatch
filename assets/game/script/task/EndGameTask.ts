@@ -1,5 +1,5 @@
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { BigWinType, ModuleID, SpinButtonState } from '@base/script/types/BaseType';
@@ -26,14 +26,14 @@ export class EndGameTask extends GameTask {
     execute(): void {
 
         //如果是即將進入FS的最後一轉不顯示'共贏得', 因為贏分會帶到FS內
-        if (BaseDataManager.getInstance().isBS() === true && BaseDataManager.getInstance().nextModuleID !== ModuleID.BS) {
+        if (DataManager.getInstance().isBS() === true && DataManager.getInstance().nextModuleID !== ModuleID.BS) {
             this.finish();
         }
         else {
 
             //BS單轉總分達到BigWin額外演示
-            if (BaseDataManager.getInstance().getBigWinTypeByValue(this.win) != BigWinType.non) {
-                if (BaseDataManager.getInstance().isBS() === true) {
+            if (DataManager.getInstance().getBigWinTypeByValue(this.win) != BigWinType.non) {
+                if (DataManager.getInstance().isBS() === true) {
                     BSRoleUI.back.emit(() => {
                         //角色演完再播BigWin
                         BigWinUI.complete.once(() => {
@@ -52,7 +52,7 @@ export class EndGameTask extends GameTask {
             }
             //一般獎項
             else if (this.win > 0) {
-                if (BaseDataManager.getInstance().isBS() === true) {
+                if (DataManager.getInstance().isBS() === true) {
                     BSRoleUI.back.emit(null);
                 }
                 this.showTotalWin();
@@ -73,8 +73,8 @@ export class EndGameTask extends GameTask {
     private showTotalWin(): void {
         SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
 
-        let rateWin = this.win * BaseDataManager.getInstance().bet.getCurRate();
-        let multiple: number = BaseDataManager.getInstance().getWinMultipleByValue(this.win);
+        let rateWin = this.win * DataManager.getInstance().bet.getCurRate();
+        let multiple: number = DataManager.getInstance().getWinMultipleByValue(this.win);
         BaseEvent.refreshCredit.emit(this.playerCent);
 
         //因為可能要跑分, 收到totalWinComplete才能完成任務

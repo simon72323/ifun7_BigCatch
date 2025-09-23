@@ -1,6 +1,6 @@
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { SpinButtonState } from '@base/script/types/BaseType';
@@ -71,7 +71,7 @@ export class ShowWinTask extends GameTask {
         UIBlack.show.emit(BlackKey.UIBlack);
 
         //橫幅贏分
-        let rateOriginWin = this.originalWin * BaseDataManager.getInstance().bet.getCurRate();
+        let rateOriginWin = this.originalWin * DataManager.getInstance().bet.getCurRate();
         if (this.curMultiplier > 1) {
             BannerUI.showOriginWin.emit(rateOriginWin);
         }
@@ -79,14 +79,14 @@ export class ShowWinTask extends GameTask {
             BannerUI.showWin.emit(rateOriginWin, this.curMultiplier);
 
             //同參考:一倍時才顯示WIN及刷新贏分
-            let rateSumWin = this.sumWin * BaseDataManager.getInstance().bet.getCurRate();
+            let rateSumWin = this.sumWin * DataManager.getInstance().bet.getCurRate();
             BaseEvent.refreshWin.emit(rateSumWin);
             BaseEvent.refreshCredit.emit(this.playerCent);
         }
 
         XUtils.scheduleOnce(() => {
             this.finish();
-        }, BaseDataManager.getInstance().getData<GameData>().getTurboSetting().showWinDuration, this);
+        }, DataManager.getInstance().getData<GameData>().getTurboSetting().showWinDuration, this);
     }
 
     update(deltaTime: number): void {

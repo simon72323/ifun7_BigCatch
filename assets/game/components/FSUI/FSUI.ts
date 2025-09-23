@@ -1,7 +1,7 @@
 import { _decorator, Component, Label, Node, Sprite } from 'cc';
 
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { XEvent1 } from '@base/script/utils/XEvent';
 
@@ -26,7 +26,7 @@ export class FSUI extends Component {
         this.freespin_remaining = this.node.getChildByName('freespin_remaining');
 
         //獲取語系字串
-        let lang: string = BaseDataManager.getInstance().urlParam.lang;
+        let lang: string = DataManager.getInstance().urlParam.lang;
 
         //設置語系圖片
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {

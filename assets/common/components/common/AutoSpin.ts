@@ -1,8 +1,9 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { addBtnClickEvent } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass, property } = _decorator;
 

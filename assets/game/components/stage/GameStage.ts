@@ -5,7 +5,7 @@ import { GameHelpWebView } from '@base/components/gameHelp/GameHelpWebView';
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { TaskManager } from '@base/script/tasks/TaskManager';
 import { ModuleID } from '@base/script/types/BaseType';
@@ -88,7 +88,7 @@ export class GameStage extends Component {
             .start();
 
         XUtils.ClearSpine(this.roller_ani);
-        if (BaseDataManager.getInstance().isBS() === true) {
+        if (DataManager.getInstance().isBS() === true) {
             this.roller_ani.setAnimation(0, RollerAni.ng_mipie, true);
         }
         else {
@@ -108,7 +108,7 @@ export class GameStage extends Component {
             .start();
 
         XUtils.ClearSpine(this.roller_ani);
-        if (BaseDataManager.getInstance().isBS() === true) {
+        if (DataManager.getInstance().isBS() === true) {
             this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
         }
         else {
@@ -118,25 +118,25 @@ export class GameStage extends Component {
 
     /**點擊幸運一擊 */
     private clickFeatureBuyBtn(): void {
-        BaseDataManager.getInstance().isMenuOn = true;
-        FeatureBuyPage.show.emit(BaseDataManager.getInstance().getCurFeatureBuyTotal());
+        DataManager.getInstance().isMenuOn = true;
+        FeatureBuyPage.show.emit(DataManager.getInstance().getCurFeatureBuyTotal());
     }
 
     /**網路準備完成 */
     private netReady(): void {
         //初始化盤面
-        let gameData = BaseDataManager.getInstance().getData<GameData>();
-        gameData.slotParser.setStripTable(BaseDataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
+        let gameData = DataManager.getInstance().getData<GameData>();
+        gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
         SlotMachine2.setup.emit(0, gameData.slotParser);
 
-        SettingsPage1.lessEnabled.emit(BaseDataManager.getInstance().bet.getLessEnabled());
-        BaseEvent.refreshCredit.emit(BaseDataManager.getInstance().playerCent);
+        SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
+        BaseEvent.refreshCredit.emit(DataManager.getInstance().playerCent);
         // BaseEvent.refreshBet.emit(this.TotalArray[this.TotalIndex]);
         BaseEvent.refreshWin.emit(0);
 
-        BaseEvent.buyFeatureEnabled.emit(BaseDataManager.getInstance().isFeatureBuyEnabled());
+        BaseEvent.buyFeatureEnabled.emit(DataManager.getInstance().isFeatureBuyEnabled());
 
-        if (BaseDataManager.getInstance().recoverData) {
+        if (DataManager.getInstance().recoverData) {
             // let recoverTask = new RecoverTask();
         }
 
@@ -148,17 +148,17 @@ export class GameStage extends Component {
 
     /**幫助開啟 */
     private HelpOpen() {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().auto.isAutoPlay() == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
-        BaseDataManager.getInstance().isMenuOn = true;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().auto.isAutoPlay() == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
+        DataManager.getInstance().isMenuOn = true;
         SettingsPage2.hide.emit();
         GameHelpWebView.show.emit();
     }
 
     /**幫助關閉 */
     private HelpClose() {
-        BaseDataManager.getInstance().isMenuOn = false;
+        DataManager.getInstance().isMenuOn = false;
         SettingsPage2.show.emit();
     }
 

@@ -2,7 +2,7 @@ import { _decorator, Label, sp } from 'cc';
 
 import { BaseSpinBtn } from '@base/components/settingsPage/BaseSpinBtn';
 import { BaseFont } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { AutoPlayMode, SpinButtonState } from '@base/script/types/BaseType';
 import { FontManager } from '@base/script/utils/FontManager';
 
@@ -85,13 +85,13 @@ export class BasicSpinBtn extends BaseSpinBtn {
                 this.spinAnmAuto.node.active = true;
                 this.spinAnmAuto.clearTracks();
                 this.spinAnmAuto.setToSetupPose();
-                if (BaseDataManager.getInstance().auto.mode == AutoPlayMode.always || BaseDataManager.getInstance().auto.mode == AutoPlayMode.tillBonus) {
+                if (DataManager.getInstance().auto.mode == AutoPlayMode.always || DataManager.getInstance().auto.mode == AutoPlayMode.tillBonus) {
                     this.spinAnmAuto.addAnimation(0, SpinAnimation.always, true);
                 }
-                else if (BaseDataManager.getInstance().auto.mode == AutoPlayMode.num) {
+                else if (DataManager.getInstance().auto.mode == AutoPlayMode.num) {
                     this.spinAnmAuto.addAnimation(0, SpinAnimation.auto, true);
 
-                    this.autoLabel.string = FontManager.getInstance().convertToAsciiString(BaseFont.number, BaseDataManager.getInstance().auto.num.toString());
+                    this.autoLabel.string = FontManager.getInstance().convertToAsciiString(BaseFont.number, DataManager.getInstance().auto.num.toString());
                     this.autoLabel.node.active = true;
                 }
                 this.spinAnm.node.active = false;

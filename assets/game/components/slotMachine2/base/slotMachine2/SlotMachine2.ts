@@ -1,6 +1,6 @@
 import { _decorator, Component, CCInteger, Node, Prefab, tween, Tween, RealCurve } from 'cc';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { XEvent1, XEvent2, XEvent3, XEvent4 } from '@base/script/utils/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
@@ -295,7 +295,7 @@ export class SlotMachine2 extends Component {
                 }
             }, this);
 
-            let speedConfig = this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()];
+            let speedConfig = this.config.speedConfigList[DataManager.getInstance().getTurboMode()];
 
             //依序啟動
             script.call(() => {
@@ -397,7 +397,7 @@ export class SlotMachine2 extends Component {
      * 停止
      */
     public realStop(rngList: number[], skipNumReel: number = -1): void {
-        let speedConfig = this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()];
+        let speedConfig = this.config.speedConfigList[DataManager.getInstance().getTurboMode()];
         this.parser.rngList = rngList.concat();
         let numReel: number = skipNumReel > 0 ? skipNumReel : this.spinList.length;
         let isMi: boolean = false;
@@ -478,7 +478,7 @@ export class SlotMachine2 extends Component {
         if (this.dropList.length <= 0) {
             throw new Error('未設置dropList!');
         }
-        let speedConfig = this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()];
+        let speedConfig = this.config.speedConfigList[DataManager.getInstance().getTurboMode()];
 
         Tween.stopAllByTarget(this.node);
         let script = tween(this.node);
@@ -519,7 +519,7 @@ export class SlotMachine2 extends Component {
             throw new Error('未設置fillList!');
         }
 
-        let speedConfig = this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()];
+        let speedConfig = this.config.speedConfigList[DataManager.getInstance().getTurboMode()];
         let miList = this.parser.getMiList2(fromMap);
         let realMiList = this.fillList.map((reel) => { return miList[reel.reelIndex] && reel.getNumEmpty() > 0;});
 
@@ -657,7 +657,7 @@ export class SlotMachine2 extends Component {
      * @param reelIndex 
      */
     private startMiAllAt(reelIndex: number): void {
-        if (this.config.speedConfigList[BaseDataManager.getInstance().getTurboMode()].miAllReel) {
+        if (this.config.speedConfigList[DataManager.getInstance().getTurboMode()].miAllReel) {
             this.dataList.map((reel, index) => { reel.setIsMi(true); });
         }
         else {

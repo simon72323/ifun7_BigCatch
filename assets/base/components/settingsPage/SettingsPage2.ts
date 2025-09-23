@@ -3,7 +3,7 @@ import { _decorator, Button, Sprite, SpriteFrame } from 'cc';
 import { BaseSettingsPage } from '@base/components/settingsPage/BaseSettingsPage';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { APIManager } from '@base/script/utils/APIManager';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
@@ -55,7 +55,7 @@ export class SettingsPage2 extends BaseSettingsPage {
             AudioManager.getInstance().play(AudioKey.BtnClick);
             SettingsPage2.clickHistory.emit();
         }, this);
-        this.node.getChildByPath('HistoryButton').active = BaseDataManager.getInstance().isDemoMode() === false;
+        this.node.getChildByPath('HistoryButton').active = DataManager.getInstance().isDemoMode() === false;
 
         this.node.getChildByPath('HelpButton').on(Button.EventType.CLICK, () => {
             AudioManager.getInstance().play(AudioKey.BtnClick);

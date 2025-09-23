@@ -4,13 +4,13 @@ import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
-import { AutoPlayMode, ModuleID, SpinButtonState } from '@base/script/types/BaseType';
+import { AutoPlayMode, ModuleID, SpinBtnState } from '@base/script/types/BaseType';
 import { PromoManager } from '@base/script/utils/PromoManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 
+import { DataManager } from '@common/script/data/DataManager';
 
 /**
  * 共用待機流程
@@ -35,15 +35,15 @@ export abstract class BaseIdleTask extends GameTask {
     }
 
     execute2(): void {
-        BaseDataManager.getInstance().curModuleID = ModuleID.BS;
+        DataManager.getInstance().curModuleID = ModuleID.BS;
 
-        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
 
-        SettingsPage1.setSpinState.emit(SpinButtonState.Idle);
+        SettingsPage1.setSpinState.emit(SpinBtnState.Idle);
 
         //表示轉動過程被修改, 待機時重新帶入
-        if (BaseDataManager.getInstance().getTurboMode() != BaseDataManager.getInstance().tempTurboMode) {
-            BaseDataManager.getInstance().setTurboMode(BaseDataManager.getInstance().tempTurboMode);
+        if (DataManager.getInstance().getTurboMode() != DataManager.getInstance().tempTurboMode) {
+            DataManager.getInstance().setTurboMode(DataManager.getInstance().tempTurboMode);
         }
 
         //免費轉
@@ -53,17 +53,17 @@ export abstract class BaseIdleTask extends GameTask {
         //有待通知訊系
         else if (PromoManager.getInstance().hasNotifyCampaign() === true) {
             //活動異動通知時取消自動轉
-            if (BaseDataManager.getInstance().auto.isAutoPlay() == true) {
-                BaseDataManager.getInstance().auto.stopAuto();
+            if (DataManager.getInstance().auto.isAutoPlay() == true) {
+                DataManager.getInstance().auto.stopAuto();
             }
 
             this.idleState();
         }
         //自動轉
-        else if (BaseDataManager.getInstance().auto.isAutoPlay() == true) {
-            if (BaseDataManager.getInstance().auto.mode == AutoPlayMode.num) {
-                BaseDataManager.getInstance().auto.num -= 1;
-                SettingsPage1.setSpinNum.emit(BaseDataManager.getInstance().auto.num);
+        else if (DataManager.getInstance().auto.isAutoPlay() == true) {
+            if (DataManager.getInstance().auto.mode == AutoPlayMode.num) {
+                DataManager.getInstance().auto.num -= 1;
+                SettingsPage1.setSpinNum.emit(DataManager.getInstance().auto.num);
             }
             this.onSpin(false);
         }
@@ -87,12 +87,12 @@ export abstract class BaseIdleTask extends GameTask {
 
         InfoBar.setEnabled.emit(true);
 
-        SettingsPage1.lessEnabled.emit(BaseDataManager.getInstance().bet.getLessEnabled());
-        SettingsPage1.plusEnabled.emit(BaseDataManager.getInstance().bet.getPlusEnabled());
+        SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
+        SettingsPage1.plusEnabled.emit(DataManager.getInstance().bet.getPlusEnabled());
         SettingsPage1.setEnabled.emit(true);
 
-        BaseEvent.refreshBet.emit(BaseDataManager.getInstance().bet.getCurTotal());
-        BaseEvent.buyFeatureVisible.emit(BaseDataManager.getInstance().isFeatureBuyEnabled());
+        BaseEvent.refreshBet.emit(DataManager.getInstance().bet.getCurTotal());
+        BaseEvent.buyFeatureVisible.emit(DataManager.getInstance().isFeatureBuyEnabled());
         BaseEvent.buyFeatureEnabled.emit(true);
 
         BaseEvent.clickSpin.on(() => {
@@ -101,7 +101,7 @@ export abstract class BaseIdleTask extends GameTask {
 
         //購買功能
         BaseEvent.buyFeature.on(() => {
-            BaseDataManager.getInstance().isMenuOn = false;
+            DataManager.getInstance().isMenuOn = false;
             this.onSpin(true);
         }, this);
 
@@ -119,8 +119,8 @@ export abstract class BaseIdleTask extends GameTask {
      */
     private onSpin(buyFs: boolean): void {
 
-        let curBet = buyFs ? BaseDataManager.getInstance().getCurFeatureBuyTotal() : BaseDataManager.getInstance().bet.getCurTotal();
-        BaseDataManager.getInstance().buyFs = buyFs;
+        let curBet = buyFs ? DataManager.getInstance().getCurFeatureBuyTotal() : DataManager.getInstance().bet.getCurTotal();
+        DataManager.getInstance().buyFs = buyFs;
 
         BaseEvent.refreshWin.emit(0);
 
@@ -128,15 +128,15 @@ export abstract class BaseIdleTask extends GameTask {
         if (PromoManager.getInstance().isFreeSpin() === true) {
 
             //觸發免費轉時取消自動轉
-            if (BaseDataManager.getInstance().auto.isAutoPlay() == true) {
-                BaseDataManager.getInstance().auto.stopAuto();
+            if (DataManager.getInstance().auto.isAutoPlay() == true) {
+                DataManager.getInstance().auto.stopAuto();
             }
 
             //Spin時就先扣除次數, 假設3次會顯示2、1、空
             PromoManager.getInstance().curCampaignRemainCount -= 1;
 
             SettingsPage1.setFreeSpinRemainCount.emit(PromoManager.getInstance().curCampaignRemainCount);
-            BaseEvent.refreshBet.emit(BaseDataManager.getInstance().bet.getCurTotal());
+            BaseEvent.refreshBet.emit(DataManager.getInstance().bet.getCurTotal());
             SettingsPage1.setFreeSpinVisible.emit(PromoManager.getInstance().curCampaignRemainCount > 0);
             if (PromoManager.getInstance().curCampaignRemainCount == 0) {
                 PromoManager.getInstance().waitingPayout = true;
@@ -144,20 +144,20 @@ export abstract class BaseIdleTask extends GameTask {
             this.sendSpin();
         }
         //下注不足
-        else if (curBet < BaseDataManager.getInstance().lawMinBet) {
-            let multi = BaseDataManager.getInstance().featureBuyMultipleList[0];
-            let featureBuyTotal = BaseDataManager.getInstance().bet.getRateAt(0) * BaseDataManager.getInstance().bet.getBetAt(0) * multi;
-            if (featureBuyTotal < BaseDataManager.getInstance().lawMinBet) {
-                featureBuyTotal = BaseDataManager.getInstance().lawMinBet;
+        else if (curBet < DataManager.getInstance().lawMinBet) {
+            let multi = DataManager.getInstance().featureBuyMultipleList[0];
+            let featureBuyTotal = DataManager.getInstance().bet.getRateAt(0) * DataManager.getInstance().bet.getBetAt(0) * multi;
+            if (featureBuyTotal < DataManager.getInstance().lawMinBet) {
+                featureBuyTotal = DataManager.getInstance().lawMinBet;
             }
-            BaseDataManager.getInstance().auto.stopAuto();
-            // Notice.showSpinMin.emit(featureBuyTotal, BaseDataManager.getInstance().lawMinBet);
+            DataManager.getInstance().auto.stopAuto();
+            // Notice.showSpinMin.emit(featureBuyTotal, DataManager.getInstance().lawMinBet);
             this.idleState();
         }
         // 餘額不足
-        else if (BaseDataManager.getInstance().playerCent < curBet) {
-            BaseEvent.refreshCredit.emit(BaseDataManager.getInstance().playerCent);
-            BaseDataManager.getInstance().auto.stopAuto();
+        else if (DataManager.getInstance().playerCent < curBet) {
+            BaseEvent.refreshCredit.emit(DataManager.getInstance().playerCent);
+            DataManager.getInstance().auto.stopAuto();
             Notice.showNoBalance.emit(false);
             this.idleState();
         }

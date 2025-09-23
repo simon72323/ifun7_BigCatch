@@ -1,10 +1,11 @@
 import { _decorator, Component, director, SpriteFrame } from 'cc';
 
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseLangBundleDir } from '@base/script/types/BaseType';
 import { logger } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass } = _decorator;
 
@@ -15,7 +16,7 @@ export class ActivateScene extends Component {
     private bundleComplete: boolean = false;
 
     onLoad() {
-        BaseDataManager.getInstance().init(window['gameConfig']);
+        DataManager.getInstance().init(window['gameConfig']);
     }
 
     async start() {
@@ -26,7 +27,7 @@ export class ActivateScene extends Component {
             this.checkComplete();
         }, 1);
 
-        const lang = BaseDataManager.getInstance().urlParam.lang;
+        const lang = DataManager.getInstance().urlParam.lang;
 
         const loadingLoader = new BundleLoader();
         //加載幣別符號

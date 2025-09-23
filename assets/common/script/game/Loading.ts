@@ -1,4 +1,4 @@
-import { _decorator, Component, director, Label, ProgressBar, ResolutionPolicy, sp, view } from 'cc';
+import { _decorator, Component, director, Label, Node, ProgressBar, ResolutionPolicy, sp, view } from 'cc';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { NetworkManager } from '@common/script/network/NetworkManager';
@@ -23,14 +23,15 @@ export class Loading extends Component {
     /** 載入Logo動態Spine */
     public logoSpine: sp.Skeleton = null;
 
+    private blackLayer: Node = null;
     // private loadingTime = 0;
 
     protected onLoad() {
         // E2ETest.E2EStartLoading();
 
         this.initUI();
-        this.getCurrencyJson();//獲取幣別資料
-        i18n.init(UrlParameters.lang);//初始化語言
+        // this.getCurrencyJson();//獲取幣別資料
+        // i18n.init(UrlParameters.lang);//初始化語言
 
         // GoogleAnalytics.instance.initialize();
     }
@@ -44,7 +45,9 @@ export class Loading extends Component {
         this.logoSpine = this.node.getChildByPath('Logo').getComponent(sp.Skeleton);
         this.logoSpine.addAnimation(0, 'in', false);
         this.logoSpine.addAnimation(0, 'loop', true);
+        this.blackLayer = this.node.getChildByName('Black');
     }
+
 
     /**
      * 開始載入

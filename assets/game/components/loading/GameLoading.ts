@@ -2,7 +2,7 @@ import { _decorator, AudioSource, Button, Node, Sprite } from 'cc';
 
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 
@@ -21,7 +21,7 @@ export class GameLoading extends BaseGameLoading {
         const button = this.btnStart.getComponent(Button);
 
         //加載多語系圖片
-        let dir: string = BaseDataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING;
+        let dir: string = DataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, dir, (langRes: any) => {
             loadingBg.getComponent(Sprite).spriteFrame = langRes['background_loading'];
             button.normalSprite = langRes['start_btn_N'];

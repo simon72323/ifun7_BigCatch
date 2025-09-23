@@ -1,7 +1,7 @@
 import { _decorator, Label, Sprite, SpriteFrame } from 'cc';
 
 import { BaseRngItem } from '@base/components/cheat/BaseRngItem';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { ModuleID } from '@base/script/types/BaseType';
 
 const { ccclass, property } = _decorator;
@@ -22,7 +22,7 @@ export class RngItem extends BaseRngItem {
 
     public setRng(moduleID: string, rng: number[]): void {
         this.node.getChildByPath('Layout-001/Label').getComponent(Label).string = `rng: ${rng}`;
-        let strips = BaseDataManager.getInstance().getStripTableByID(moduleID as ModuleID)._strips;
+        let strips = DataManager.getInstance().getStripTableByID(moduleID as ModuleID)._strips;
         for (let col: number = 0; col < 6; ++col) {
             for (let row: number = 0; row < 6; ++row) {
                 let idx = col * 6 + row;

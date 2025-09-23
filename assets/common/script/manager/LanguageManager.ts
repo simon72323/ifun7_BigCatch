@@ -23,7 +23,7 @@ import { _decorator, SpriteFrame, AudioClip, Component, Node, director, sp, Asse
 // import { LocalizedLabel } from '../../components/localized/LocalizedLabel';
 // import { LocalizedSpineSkeleton } from '../../components/localized/LocalizedSpineSkeleton';
 // import { LocalizedSprite } from '../../components/localized/LocalizedSprite';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 // import { Logger } from '@base/script/utils/Logger';
 // import { UrlHelper } from '@base/script/utils/UrlHelper';
 
@@ -122,7 +122,7 @@ export class LanguageManager extends Component {
     public async getLanguageData(key: string): Promise<any> {
         return new Promise(async resolve => {
             const bundle = await this.getBundle();
-            const lang = BaseDataManager.getInstance().urlParam.lang;
+            const lang = DataManager.getInstance().urlParam.lang;
             const langPath = `${lang}/${lang}`;
             const defaultPath = 'en/en';
             const languageData = bundle?.get(langPath, JsonAsset) || bundle?.get(defaultPath, JsonAsset);//語系.json
@@ -143,7 +143,7 @@ export class LanguageManager extends Component {
         return new Promise(async resolve => {
             const bundle = await this.getBundle();
             console.log('bundle', bundle);
-            const lang = BaseDataManager.getInstance().urlParam.lang;
+            const lang = DataManager.getInstance().urlParam.lang;
             const langPath = `${lang}/${folderPath}/spriteFrame`;
             const defaultPath = `eng/${folderPath}/spriteFrame`;
             const spriteFrame = bundle?.get(langPath, SpriteFrame) || bundle?.get(defaultPath, SpriteFrame);
@@ -163,7 +163,7 @@ export class LanguageManager extends Component {
     public async getAudioClip(folderPath: string): Promise<AudioClip> {
         return new Promise(async resolve => {
             const bundle = await this.getBundle();
-            const lang = BaseDataManager.getInstance().urlParam.lang;
+            const lang = DataManager.getInstance().urlParam.lang;
             const langPath = `${lang}/${folderPath}`;
             const defaultPath = `eng/${folderPath}`;
             const audioClip = bundle?.get(langPath, AudioClip) || bundle?.get(defaultPath, AudioClip);
@@ -183,7 +183,7 @@ export class LanguageManager extends Component {
     public async getSkeletonData(folderPath: string): Promise<sp.SkeletonData> {
         return new Promise(async resolve => {
             const bundle = await this.getBundle();
-            const lang = BaseDataManager.getInstance().urlParam.lang;
+            const lang = DataManager.getInstance().urlParam.lang;
             const langPath = `${lang}/${folderPath}`;
             const defaultPath = `eng/${folderPath}`;
             const skeletonData = bundle?.get(langPath, sp.SkeletonData) || bundle?.get(defaultPath, sp.SkeletonData);

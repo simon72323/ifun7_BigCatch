@@ -2,7 +2,7 @@ import { _decorator, Button, Component, Input, Node, sp, Sprite, SpriteFrame } f
 
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseAnimationName } from '@base/script/types/BaseType';
@@ -93,7 +93,7 @@ export class FeatureBuyBtn extends Component {
             XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.5);
         }, this);
 
-        let lang: string = BaseDataManager.getInstance().urlParam.lang;
+        let lang: string = DataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
             this.btnSpriteList = [langRes['btn_featurebuy_N'], langRes['btn_featurebuy_H']];
             this.sprite.spriteFrame = this.btnSpriteList[0];

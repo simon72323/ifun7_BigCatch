@@ -1,4 +1,5 @@
 import { game, ResolutionPolicy, view, Game } from 'cc';
+
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { OrientationtMode } from '@base/script/types/BaseType';
 
@@ -54,12 +55,12 @@ export class ScreenAdapter {
      */
     private static handleResize() {
         if (!game.canvas) return;
-        
+
         const rect = game.canvas.getBoundingClientRect();
         const aspectRatio = rect.width / rect.height;
-        
+
         // console.log('Canvas尺寸變化:', { width: rect.width, height: rect.height, aspectRatio });
-        
+
         // 判斷橫豎屏並設置對應分辨率
         if (aspectRatio > (720 / 1280)) {
             // 橫屏模式

@@ -1,7 +1,7 @@
 import { _decorator, Color, Component, sp } from 'cc';
 
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
@@ -24,7 +24,7 @@ export class SlowMotionUI extends Component {
 
     private curIdx: number = -1;
     onLoad() {
-        let len: number = BaseDataManager.getInstance().getData().REEL_COL;
+        let len: number = DataManager.getInstance().getData().REEL_COL;
         for (let i: number = 0; i < len; ++i) {
             let anm = this.node.getChildByName(`${i}`).getComponent(sp.Skeleton);
             this.miList.push(anm);

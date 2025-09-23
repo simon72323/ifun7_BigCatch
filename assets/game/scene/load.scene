@@ -92,8 +92,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 360,
-      "y": 640,
+      "x": 659.343544857768,
+      "y": 360,
       "z": 0
     },
     "_lrot": {
@@ -260,7 +260,7 @@
     "_priority": 10,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 640,
+    "_orthoHeight": 360,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -1794,8 +1794,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 720,
-      "height": 1280
+      "width": 1318.687089715536,
+      "height": 720
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

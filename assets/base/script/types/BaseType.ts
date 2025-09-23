@@ -23,11 +23,10 @@ export enum OrientationtMode {
 }
 
 /**SPIN模式 */
-export enum SpinMode {
-    Normal = 'Normal',
-    Super = 'Super',
-}
-
+// export enum SpinMode {
+//     Normal = 'Normal',
+//     Super = 'Super',
+// }
 
 /**場景類型 */
 export enum ModuleID {
@@ -39,10 +38,21 @@ export enum ModuleID {
     BFS = 'BFS',
 }
 
+/**遊戲狀態 */
+export enum GameState {
+    /**準備 */
+    Ready = 0,
+    /**轉動中 */
+    Running,
+    /**結算表演中 */
+    Result,
+    // BuyFree,
+}
+
 /**
- * Spin按鈕狀態
+ * SpinBtn狀態
  */
-export enum SpinButtonState {
+export enum SpinBtnState {
     Idle = 0,
     Loop,
     Win,
@@ -50,37 +60,37 @@ export enum SpinButtonState {
     Disabled
 }
 
-export enum playAction {
-    NormalNAutoNSpeed = 0,
-    NormalNAutoSpeed = 1,
-    NormalAutoNSpeed = 2,
-    NormalAutoSpeed = 3,
-    LuckyStrick100 = 4,
-    LuckyStrick80 = 5,
-    LuckyStrick60 = 6,
-}
+// export enum playAction {
+//     NormalNAutoNSpeed = 0,
+//     NormalNAutoSpeed = 1,
+//     NormalAutoNSpeed = 2,
+//     NormalAutoSpeed = 3,
+//     LuckyStrick100 = 4,
+//     LuckyStrick80 = 5,
+//     LuckyStrick60 = 6,
+// }
 
-export enum FeatureBuyType {
-    LuckyStrick100 = 0,
-    LuckyStrick80 = 1,
-    LuckyStrick60 = 2,
-}
+// export enum FeatureBuyType {
+//     LuckyStrick100 = 0,
+//     LuckyStrick80 = 1,
+//     LuckyStrick60 = 2,
+// }
 
-export enum ScrollEventType {
-    SCROLL_TO_TOP = 0,
-    SCROLL_TO_BOTTOM = 1,
-    SCROLL_TO_LEFT = 2,
-    SCROLL_TO_RIGHT = 3,
-    SCROLLING = 4,
-    BOUNCE_TOP = 5,
-    BOUNCE_BOTTOM = 6,
-    BOUNCE_LEFT = 7,
-    BOUNCE_RIGHT = 8,
-    SCROLL_ENDED = 9,
-    TOUCH_UP = 10,
-    AUTOSCROLL_ENDED_WITH_THRESHOLD = 11,
-    SCROLL_BEGAN = 12
-}
+// export enum ScrollEventType {
+//     SCROLL_TO_TOP = 0,
+//     SCROLL_TO_BOTTOM = 1,
+//     SCROLL_TO_LEFT = 2,
+//     SCROLL_TO_RIGHT = 3,
+//     SCROLLING = 4,
+//     BOUNCE_TOP = 5,
+//     BOUNCE_BOTTOM = 6,
+//     BOUNCE_LEFT = 7,
+//     BOUNCE_RIGHT = 8,
+//     SCROLL_ENDED = 9,
+//     TOUCH_UP = 10,
+//     AUTOSCROLL_ENDED_WITH_THRESHOLD = 11,
+//     SCROLL_BEGAN = 12
+// }
 
 /**
  * 輪帶資料結構

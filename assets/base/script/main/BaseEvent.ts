@@ -1,6 +1,6 @@
 import { KeyCode } from 'cc';
 
-import { ModuleID, OrientationtMode, SpinMode } from '@base/script/types/BaseType';
+import { ModuleID, OrientationtMode } from '@base/script/types/BaseType';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
 /**
@@ -10,9 +10,15 @@ export class BaseEvent {
 
     /**開啟'開始遊戲'按鈕 */
     public static showStartBtn: XEvent = new XEvent();
-
     /**切換直橫式 */
     public static changeOrientation: XEvent1<OrientationtMode> = new XEvent1();
+    /**點擊開始 */
+    public static clickStart: XEvent = new XEvent();
+    /**點擊停止Spin */
+    public static clickStop: XEvent = new XEvent();
+    /**重置Spin */
+    public static resetSpin: XEvent = new XEvent();
+
 
     /**初始化封包完成 */
     public static initMessageComplete: XEvent = new XEvent();
@@ -23,11 +29,10 @@ export class BaseEvent {
     /**讀取畫面關閉,開始遊戲 */
     public static startGame: XEvent = new XEvent();
 
-    /**點擊開始 */
-    public static clickStart: XEvent = new XEvent();
+
 
     /**點擊SPIN */
-    public static clickSpin: XEvent1<SpinMode> = new XEvent1();
+    public static clickSpin: XEvent1<boolean> = new XEvent1();
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();
     /**點擊自動轉 */

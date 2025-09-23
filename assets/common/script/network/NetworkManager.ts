@@ -1,10 +1,12 @@
 import { _decorator } from 'cc';
 
 import { DataManager } from '@common/script/data/DataManager';
+import { NetworkData } from '@common/script/data/NetWorkData';
+import { NetworkApi } from '@common/script/network/APIType';
 import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 import { HTTP_METHODS, HttpRequestUtils, IPayload } from '@common/script/network/HttpRequestUtils';
-import { NetworkApi } from '@common/script/network/NetworkApi';
 import { UrlParameters } from '@common/script/utils/UrlParameters';
+
 
 const { ccclass, property } = _decorator;
 
@@ -112,7 +114,7 @@ export class NetworkManager {
     public async getUserData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
         console.log('[NetworkManager] onGetUserDataReceived =>', response);
-        DataManager.getInstance().setUserData(response.data);
+        NetworkData.getInstance().setUserData(response.data);
     }
 
     /**
@@ -123,14 +125,14 @@ export class NetworkManager {
             game_id: UrlParameters.gameId
         });
         console.log('[NetworkManager] onGetGameDataReceived =>', response);
-        DataManager.getInstance().setGameData(response.data);
+        NetworkData.getInstance().setGameData(response.data);
     }
 
     /**
      * 發送spin請求
      * @param betData 轉輪資料
      */
-    public async spin(betData: any): Promise<void> {
+    public async sendSpin(betData: any): Promise<void> {
         const response = await this.sendRequest(NetworkApi.SPIN, betData);
         console.log('[NetworkManager] onSpinReceived =>', response);
         // slotData.getSpinData(response.data);

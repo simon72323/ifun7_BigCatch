@@ -4,10 +4,11 @@ import { Notice } from '@base/components/notice/Notice';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { WebViewEnum } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
 import { XEvent, XEvent2 } from '@base/script/utils/XEvent';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 enum Web2Game {
     /**取得活動相關數值 */
@@ -120,9 +121,9 @@ export class FreeSpinBonus extends Component {
         this.black.active = false;
         this.responsePayload(webViewData.messageId, {
             campaign_id: this.campaignID,
-            operator_id: BaseDataManager.getInstance().operatorID,
-            member_id: BaseDataManager.getInstance().memberID,
-            game_id: BaseDataManager.getInstance().gameID,
+            operator_id: DataManager.getInstance().operatorID,
+            member_id: DataManager.getInstance().memberID,
+            game_id: DataManager.getInstance().gameID,
             campaign_event_type: this.eventType != -1 ? this.eventType : null
         });
     }
@@ -146,9 +147,9 @@ export class FreeSpinBonus extends Component {
      */
     private onGetPromoInfoValue(webViewData): void {
         this.responsePayload(webViewData.messageId, {
-            operator_id: BaseDataManager.getInstance().operatorID,
-            member_id: BaseDataManager.getInstance().memberID,
-            game_id: BaseDataManager.getInstance().gameID
+            operator_id: DataManager.getInstance().operatorID,
+            member_id: DataManager.getInstance().memberID,
+            game_id: DataManager.getInstance().gameID
         });
     }
 
@@ -233,7 +234,7 @@ export class FreeSpinBonus extends Component {
      * 關閉
      */
     private onHide(): void {
-        BaseDataManager.getInstance().isMenuOn = false;
+        DataManager.getInstance().isMenuOn = false;
         this.node.active = false;
         this.webView.url = '';
     }

@@ -5,7 +5,7 @@ import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { WebViewEnum } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
 import { XEvent } from '@base/script/utils/XEvent';
@@ -38,7 +38,7 @@ export class GameHelpWebView extends Component {
         btn.on(Button.EventType.CLICK, () => {
 
             AudioManager.getInstance().play(AudioKey.BtnClick);
-            BaseDataManager.getInstance().isMenuOn = false;
+            DataManager.getInstance().isMenuOn = false;
             SettingsPage2.show.emit();
 
             this.node.active = false;
@@ -74,7 +74,7 @@ export class GameHelpWebView extends Component {
                 type: 'RESPONSE_DATA',
                 messageId: webviewData.messageId,
                 timestamp: new Date().getTime(),
-                payload: BaseDataManager.getInstance().getData().getGameHelpPayload()
+                payload: DataManager.getInstance().getData().getGameHelpPayload()
             };
 
             this.iframe.parentNode['style'].zIndex = WebViewEnum.GameHelp;

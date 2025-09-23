@@ -1,7 +1,7 @@
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { AutoPlayMode, ModuleID } from '@base/script/types/BaseType';
@@ -31,16 +31,16 @@ export class TransTask extends GameTask {
 
     execute(): void {
 
-        BaseDataManager.getInstance().curModuleID = BaseDataManager.getInstance().nextModuleID;
+        DataManager.getInstance().curModuleID = DataManager.getInstance().nextModuleID;
 
         //中免費轉停止
-        if (BaseDataManager.getInstance().auto.isAutoPlay() === true && BaseDataManager.getInstance().auto.mode === AutoPlayMode.tillBonus) {
-            BaseDataManager.getInstance().auto.stopAuto();
+        if (DataManager.getInstance().auto.isAutoPlay() === true && DataManager.getInstance().auto.mode === AutoPlayMode.tillBonus) {
+            DataManager.getInstance().auto.stopAuto();
         }
 
-        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
-        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWSCATTERWIN);
-        // BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRANSLATE);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWSCATTERWIN);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRANSLATE);
 
         //設定初始次數
         // FeatureGameUI.refreshRemainTimes.emit(this.times);
@@ -63,8 +63,8 @@ export class TransTask extends GameTask {
                 RevolverUI.reset.emit(ModuleID.BS, GameConst.multiplierList[0]);
 
                 //初始化盤面
-                let gameData = BaseDataManager.getInstance().getData<GameData>();
-                gameData.slotParser.setStripTable(BaseDataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
+                let gameData = DataManager.getInstance().getData<GameData>();
+                gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
                 SlotMachine2.setup.emit(0, gameData.slotParser);
                 FSRoleUI.idle.emit();
 

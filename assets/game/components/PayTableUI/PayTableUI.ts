@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, Label, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { Grid } from '@base/script/types/BaseType';
 import { XEvent5 } from '@base/script/utils/XEvent';
@@ -42,7 +42,7 @@ export class PayTableUI extends Component {
         PayTableUI.show.on(this.onShow, this);
         this.black.on(Button.EventType.CLICK, this.onHide, this);
 
-        let lang = BaseDataManager.getInstance().urlParam.lang;
+        let lang = DataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.paytable}`, (langRes: any) => {
             this.node.getChildByPath('PaySymbol/Scatter/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_2'];
             this.node.getChildByPath('PaySymbol/Scatter/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_2'];
@@ -97,7 +97,7 @@ export class PayTableUI extends Component {
             }
         }
 
-        BaseDataManager.getInstance().isPayTable = true;
+        DataManager.getInstance().isPayTable = true;
         this.node.active = true;
 
     }
@@ -107,7 +107,7 @@ export class PayTableUI extends Component {
      */
     private onHide(): void {
         this.node.active = false;
-        BaseDataManager.getInstance().isPayTable = false;
+        DataManager.getInstance().isPayTable = false;
     }
 }
 

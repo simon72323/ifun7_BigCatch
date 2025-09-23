@@ -10,10 +10,11 @@ import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { AutoPlayMode, ModuleID, SpinButtonState, TurboMode } from '@base/script/types/BaseType';
+import { AutoPlayMode, ModuleID, SpinBtnState, TurboMode } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 /**
  * 共用UI管理
@@ -77,7 +78,7 @@ export class UIManager {
         }, this);
         //下注面板關閉
         BetPage.onHide.on(() => {
-            BaseDataManager.getInstance().isMenuOn = false;
+            DataManager.getInstance().isMenuOn = false;
             InfoBar.moveToTop.emit();
         }, this);
 
@@ -88,7 +89,7 @@ export class UIManager {
         //其他 ======================================================
         //歷史紀錄提示
         GameHistory.onHide.on(() => {
-            BaseDataManager.getInstance().webViewVisible = false;
+            DataManager.getInstance().webViewVisible = false;
         }, this);
 
         //監聽點擊重新載入
@@ -111,11 +112,11 @@ export class UIManager {
      * @returns 
      */
     private onClickTurbo(): void {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isBS() === false) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isBS() === false) return;
 
         let newTurboMode;
-        switch (BaseDataManager.getInstance().tempTurboMode) {
+        switch (DataManager.getInstance().tempTurboMode) {
             case TurboMode.Normal:
                 newTurboMode = TurboMode.Speed;
                 break;
@@ -131,12 +132,12 @@ export class UIManager {
         Notice.showMode.emit(newTurboMode);
 
         //待機狀態才能直接修改, 否則先存等到待機帶入
-        if (BaseDataManager.getInstance().isIdle() === true) {
-            BaseDataManager.getInstance().setTurboMode(newTurboMode);
-            BaseDataManager.getInstance().tempTurboMode = newTurboMode;
+        if (DataManager.getInstance().isIdle() === true) {
+            DataManager.getInstance().setTurboMode(newTurboMode);
+            DataManager.getInstance().tempTurboMode = newTurboMode;
         }
         else {
-            BaseDataManager.getInstance().tempTurboMode = newTurboMode;
+            DataManager.getInstance().tempTurboMode = newTurboMode;
         }
     }
 
@@ -145,9 +146,9 @@ export class UIManager {
      * @returns 
      */
     private onClickLess(): void {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
-        BaseDataManager.getInstance().bet.less();
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
+        DataManager.getInstance().bet.less();
         this.refreshBet();
     }
 
@@ -156,9 +157,9 @@ export class UIManager {
      * @returns 
      */
     private onClickPlus(): void {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
-        BaseDataManager.getInstance().bet.plus();
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
+        DataManager.getInstance().bet.plus();
         this.refreshBet();
     }
 
@@ -169,14 +170,14 @@ export class UIManager {
      */
     private onClickSpin() {
         if (this.currentSettingPage == 1) return;
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
 
         //自動轉過程若點擊手動轉要停止自動
-        if (BaseDataManager.getInstance().auto.isAutoPlay() === true) {
-            BaseDataManager.getInstance().auto.stopAuto();
+        if (DataManager.getInstance().auto.isAutoPlay() === true) {
+            DataManager.getInstance().auto.stopAuto();
             return;
         }
-        if (BaseDataManager.getInstance().isIdle()) {
+        if (DataManager.getInstance().isIdle()) {
             AudioManager.getInstance().play(AudioKey.SpinClick);
             BaseEvent.clickSpin.emit(false);
         }
@@ -190,28 +191,28 @@ export class UIManager {
      * @returns 
      */
     private onClickAuto() {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
 
         //停止自動
-        if (BaseDataManager.getInstance().auto.isAutoPlay() == true) {
+        if (DataManager.getInstance().auto.isAutoPlay() == true) {
 
-            BaseDataManager.getInstance().auto.stopAuto();
+            DataManager.getInstance().auto.stopAuto();
         }
         //開啟自動面板
-        else if (BaseDataManager.getInstance().isIdle() &&
-            BaseDataManager.getInstance().auto.isAutoPlay() == false) {
+        else if (DataManager.getInstance().isIdle() &&
+            DataManager.getInstance().auto.isAutoPlay() == false) {
 
             //下注不足
-            if (BaseDataManager.getInstance().bet.getCurTotal() < BaseDataManager.getInstance().lawMinBet) {
-                let multi = BaseDataManager.getInstance().featureBuyMultipleList[0];
-                let featureBuyTotal = BaseDataManager.getInstance().bet.getRateAt(0) * BaseDataManager.getInstance().bet.getBetAt(0) * multi;
-                if (featureBuyTotal < BaseDataManager.getInstance().lawMinBet) {
-                    featureBuyTotal = BaseDataManager.getInstance().lawMinBet;
+            if (DataManager.getInstance().bet.getCurTotal() < DataManager.getInstance().lawMinBet) {
+                let multi = DataManager.getInstance().featureBuyMultipleList[0];
+                let featureBuyTotal = DataManager.getInstance().bet.getRateAt(0) * DataManager.getInstance().bet.getBetAt(0) * multi;
+                if (featureBuyTotal < DataManager.getInstance().lawMinBet) {
+                    featureBuyTotal = DataManager.getInstance().lawMinBet;
                 }
-                // Notice.showSpinMin.emit(featureBuyTotal, BaseDataManager.getInstance().lawMinBet);
+                // Notice.showSpinMin.emit(featureBuyTotal, DataManager.getInstance().lawMinBet);
             }
             else {
-                BaseDataManager.getInstance().isMenuOn = true;
+                DataManager.getInstance().isMenuOn = true;
                 AutoPage.open.emit();
                 InfoBar.moveToDown.emit();
                 SettingsPage1.showAutoPage.emit(true);
@@ -225,9 +226,9 @@ export class UIManager {
      * @returns 
      */
     private changeSettingPage(page: number) {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().auto.isAutoPlay() == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().auto.isAutoPlay() == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
         if (page === 0) {
             this.currentSettingPage = 0;
             SettingsPage1.fadeIn.emit();
@@ -247,11 +248,11 @@ export class UIManager {
      * @returns 
      */
     public goRecord() {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
-        if (BaseDataManager.getInstance().auto.isAutoPlay() == true) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
+        if (DataManager.getInstance().auto.isAutoPlay() == true) return;
         GameHistory.show.emit(APIManager.getInstance().getRecordUrl());
-        BaseDataManager.getInstance().webViewVisible = true;
+        DataManager.getInstance().webViewVisible = true;
     }
 
     /**
@@ -259,8 +260,8 @@ export class UIManager {
      * @returns 
      */
     public goHome() {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
         APIManager.getInstance().goHome();
 
         BackGame.show.emit();
@@ -271,7 +272,7 @@ export class UIManager {
      * @returns 
      */
     private onClickVoice() {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
         let newMute = !AudioManager.getInstance().getIsMute();
         AudioManager.getInstance().setMute(newMute);
         SettingsPage1.setMute.emit(newMute);
@@ -283,24 +284,24 @@ export class UIManager {
      * 自動轉介面關閉
      */
     private onAutoPageClosed() {
-        BaseDataManager.getInstance().isMenuOn = false;
+        DataManager.getInstance().isMenuOn = false;
         InfoBar.moveToTop.emit();
         SettingsPage1.showAutoPage.emit(false);
     }
 
     private ChooseAutoOption(value: number) {
         if (value == 1) {
-            BaseDataManager.getInstance().auto.mode = AutoPlayMode.always;
+            DataManager.getInstance().auto.mode = AutoPlayMode.always;
         }
         else if (value == 2) {
-            BaseDataManager.getInstance().auto.mode = AutoPlayMode.tillBonus;
+            DataManager.getInstance().auto.mode = AutoPlayMode.tillBonus;
         }
         else if (value > 3) {
-            BaseDataManager.getInstance().auto.mode = AutoPlayMode.num;
-            BaseDataManager.getInstance().auto.num = Number(value) - 1;
+            DataManager.getInstance().auto.mode = AutoPlayMode.num;
+            DataManager.getInstance().auto.num = Number(value) - 1;
         }
 
-        SettingsPage1.setSpinState.emit(SpinButtonState.Auto);
+        SettingsPage1.setSpinState.emit(SpinBtnState.Auto);
         BaseEvent.clickSpin.emit(false);
     }
 
@@ -311,8 +312,8 @@ export class UIManager {
      * @returns 
      */
     private onClickBet() {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
 
         if (this.currentSettingPage === 1) {
             this.currentSettingPage = 0;
@@ -327,9 +328,9 @@ export class UIManager {
     }
 
     private onClickWin() {
-        if (BaseDataManager.getInstance().isDemoMode() === true) return;
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (BaseDataManager.getInstance().isIdle() === false) return;
+        if (DataManager.getInstance().isDemoMode() === true) return;
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (DataManager.getInstance().isIdle() === false) return;
         this.goRecord();
     }
 
@@ -350,11 +351,11 @@ export class UIManager {
      * 刷新下注資訊
      */
     private refreshBet(): void {
-        BaseEvent.refreshBet.emit(BaseDataManager.getInstance().bet.getCurTotal());
-        BaseEvent.buyFeatureVisible.emit(BaseDataManager.getInstance().isFeatureBuyEnabled());
+        BaseEvent.refreshBet.emit(DataManager.getInstance().bet.getCurTotal());
+        BaseEvent.buyFeatureVisible.emit(DataManager.getInstance().isFeatureBuyEnabled());
 
-        SettingsPage1.lessEnabled.emit(BaseDataManager.getInstance().bet.getLessEnabled());
-        SettingsPage1.plusEnabled.emit(BaseDataManager.getInstance().bet.getPlusEnabled());
+        SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
+        SettingsPage1.plusEnabled.emit(DataManager.getInstance().bet.getPlusEnabled());
         SettingsPage1.setEnabled.emit(true);
     }
 }

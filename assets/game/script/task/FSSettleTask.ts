@@ -1,6 +1,6 @@
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { ModuleID } from '@base/script/types/BaseType';
@@ -25,11 +25,11 @@ export class FSSettleTask extends GameTask {
         FSRoleUI.final.emit(() => {
             AudioManager.getInstance().stop(AudioKey.FsMusic);
 
-            FSSettleUI.show.emit(this.win * BaseDataManager.getInstance().bet.getCurRate(),
+            FSSettleUI.show.emit(this.win * DataManager.getInstance().bet.getCurRate(),
                 //轉場全遮蔽
                 () => {
                     BaseEvent.changeScene.emit(ModuleID.BS);
-                    RevolverUI.reset.emit(BaseDataManager.getInstance().curModuleID, GameConst.multiplierList[0]);
+                    RevolverUI.reset.emit(DataManager.getInstance().curModuleID, GameConst.multiplierList[0]);
                 },
                 //演示完畢
                 () => {

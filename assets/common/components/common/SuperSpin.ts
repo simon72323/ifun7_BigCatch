@@ -1,6 +1,6 @@
 // import { _decorator, Component, Node } from 'cc';
 
-// import { BaseDataManager } from '@base/script/main/BaseDataManager';
+// import { DataManager } from '@common/script/data/DataManager';;
 // import { BaseEvent } from '@base/script/main/BaseEvent';
 
 // const { ccclass, property } = _decorator;
@@ -32,7 +32,7 @@
 //         this.superSpin.active = active;
 //         this.content.active = !active;
 //         this.preMessage.active = active;
-//         const isBS = BaseDataManager.getInstance().isBS();
+//         const isBS = DataManager.getInstance().isBS();
 //         this.BsBg.active = isBS;
 //         this.FsBg.active = !isBS;
 //         // const copy = instantiate(this.props['superSpin']['win'].node);

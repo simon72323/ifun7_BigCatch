@@ -3,12 +3,13 @@ import { _decorator, Animation, Button, Color, Component, Label, sp, Sprite, Spr
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst, BaseFont } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseAnimationName, BaseLangBundleDir, BigWinType } from '@base/script/types/BaseType';
 import { FontManager } from '@base/script/utils/FontManager';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 type BigWinConfig = {
     /**音效 */
@@ -163,7 +164,7 @@ export class BasicBigWin extends Component {
         this.slogan = this.node.getChildByPath('NullSpine/SloganSlot/Sprite').getComponent(Sprite);
         this.title = this.node.getChildByPath('NullSpine/TitleSlot/Sprite').getComponent(Sprite);
 
-        let lang: string = BaseDataManager.getInstance().urlParam.lang;
+        let lang: string = DataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${lang}/${BaseLangBundleDir.bigWin}`, (langRes: any) => {
 
             let idx = 1;
@@ -191,9 +192,9 @@ export class BasicBigWin extends Component {
         //設定終值
         this.data.currentRateValue = 0;
         this.data.endRateValue = 0;
-        this.data.finalRateValue = value * BaseDataManager.getInstance().bet.getCurRate();
+        this.data.finalRateValue = value * DataManager.getInstance().bet.getCurRate();
         this.data.currentType = BigWinType.big;
-        this.data.finalType = BaseDataManager.getInstance().getBigWinTypeByValue(value);
+        this.data.finalType = DataManager.getInstance().getBigWinTypeByValue(value);
 
         this.node.active = true;
         this.isPlaying = true;
@@ -219,24 +220,24 @@ export class BasicBigWin extends Component {
 
 
         //設定終點
-        let levelBeginValue = BaseDataManager.getInstance().getData().BIG_WIN_MULTIPLE[this.data.currentType] * BaseDataManager.getInstance().bet.getCurTotal();
+        let levelBeginValue = DataManager.getInstance().getData().BIG_WIN_MULTIPLE[this.data.currentType] * DataManager.getInstance().bet.getCurTotal();
         this.data.currentRateValue = this.data.currentType == BigWinType.big ? 0 : levelBeginValue;
         let endType = this.data.currentType + 1;
         let duration;
 
         //超過極限
-        if (endType > BaseDataManager.getInstance().getData().BIG_WIN_MULTIPLE.length - 1) {
+        if (endType > DataManager.getInstance().getData().BIG_WIN_MULTIPLE.length - 1) {
             this.data.endRateValue = this.data.finalRateValue;
             duration = BaseConst.BIG_WIN_LEVEL_TIME;
         }
         //最後等級,直接到終值,時間等比例換算
         else if (this.data.currentType == this.data.finalType) {
             this.data.endRateValue = this.data.finalRateValue;
-            let levelEndValue = BaseDataManager.getInstance().getData().BIG_WIN_MULTIPLE[endType] * BaseDataManager.getInstance().bet.getCurTotal();
+            let levelEndValue = DataManager.getInstance().getData().BIG_WIN_MULTIPLE[endType] * DataManager.getInstance().bet.getCurTotal();
             duration = BaseConst.BIG_WIN_LEVEL_TIME * (this.data.finalRateValue - this.data.currentRateValue) / (levelEndValue - this.data.currentRateValue);
         }
         else {
-            let levelEndValue = BaseDataManager.getInstance().getData().BIG_WIN_MULTIPLE[endType] * BaseDataManager.getInstance().bet.getCurTotal();
+            let levelEndValue = DataManager.getInstance().getData().BIG_WIN_MULTIPLE[endType] * DataManager.getInstance().bet.getCurTotal();
             this.data.endRateValue = levelEndValue;
             duration = BaseConst.BIG_WIN_LEVEL_TIME;
         }

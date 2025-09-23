@@ -1,7 +1,7 @@
 import { _decorator, Label, Node, sp } from 'cc';
 
 import { BaseSpinBtn } from '@base/components/settingsPage/BaseSpinBtn';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { AutoPlayMode, SpinButtonState } from '@base/script/types/BaseType';
 import { XUtils } from '@base/script/utils/XUtils';
 
@@ -86,13 +86,13 @@ export class SpinBtn extends BaseSpinBtn {
                 XUtils.ClearSpine(this.autoSpinAnm);
 
                 //無限轉
-                if (BaseDataManager.getInstance().auto.mode == AutoPlayMode.always || BaseDataManager.getInstance().auto.mode == AutoPlayMode.tillBonus) {
+                if (DataManager.getInstance().auto.mode == AutoPlayMode.always || DataManager.getInstance().auto.mode == AutoPlayMode.tillBonus) {
                     this.autoLabel.node.active = false;
                     this.autoSpinAnm.setAnimation(0, SpinAnimation.infinity, true);
                 }
                 //次數轉
-                else if (BaseDataManager.getInstance().auto.mode == AutoPlayMode.num) {
-                    this.autoLabel.string = BaseDataManager.getInstance().auto.num.toString();
+                else if (DataManager.getInstance().auto.mode == AutoPlayMode.num) {
+                    this.autoLabel.string = DataManager.getInstance().auto.num.toString();
                     this.autoLabel.node.active = true;
                     this.autoSpinAnm.setAnimation(0, SpinAnimation.game, true);
                 }

@@ -1,5 +1,5 @@
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { GameTask } from '@base/script/tasks/GameTask';
 
 import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
@@ -26,17 +26,17 @@ export class DropTask extends GameTask {
 
     execute(): void {
 
-        // BaseDataManager.getInstance().getData<GameData>().isLastPlane = this.isLastPlane;
+        // DataManager.getInstance().getData<GameData>().isLastPlane = this.isLastPlane;
 
         //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
         BSRoleUI.scatterWin.emit(this.isScatterWin);
 
         let fromAllToReel: SymbolData2[][] = [];
         let allToReel: SymbolData2[][] = [];
-        for (let col: number = 0; col < BaseDataManager.getInstance().getData().REEL_COL; col++) {
+        for (let col: number = 0; col < DataManager.getInstance().getData().REEL_COL; col++) {
             let toReel: SymbolData2[] = [];
             let fromReel: SymbolData2[] = [];
-            for (let row: number = 0; row < BaseDataManager.getInstance().getData().REEL_ROW; row++) {
+            for (let row: number = 0; row < DataManager.getInstance().getData().REEL_ROW; row++) {
                 let fromData = new SymbolData2();
                 fromData.symbolID = this.preSymbolPattern[col + 6 * row];
                 fromData.isBadge = false;

@@ -3,7 +3,7 @@ import { _decorator, Button, Component, Label, sp, Sprite, UIOpacity } from 'cc'
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseAnimationName } from '@base/script/types/BaseType';
@@ -57,7 +57,7 @@ export class FeatureBuyPage extends Component {
         FeatureBuyPage.show.on(this.show, this);
         FeatureBuyPage.hide.on(this.hide, this);
 
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${BaseDataManager.getInstance().urlParam.lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
+        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${DataManager.getInstance().urlParam.lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
 
             this.node.getChildByPath('buyfeature_box_ani/label_featurebuy').getComponent(Sprite).spriteFrame = langRes['label_featurebuy'];
             this.node.getChildByPath('buyfeature_box_ani/text_featurebuy').getComponent(Sprite).spriteFrame = langRes['text_featurebuy'];
@@ -135,7 +135,7 @@ export class FeatureBuyPage extends Component {
     private forceHide(): void {
         this.node.active = false;
         this.isHiding = false;
-        BaseDataManager.getInstance().isMenuOn = false;
+        DataManager.getInstance().isMenuOn = false;
     }
 
 

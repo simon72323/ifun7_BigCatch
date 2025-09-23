@@ -3,7 +3,7 @@ import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Sprite
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { XEvent, XEvent3 } from '@base/script/utils/XEvent';
@@ -109,7 +109,7 @@ export class FSSettleUI extends Component {
 
         }, this);
 
-        let lang: string = BaseDataManager.getInstance().urlParam.lang;
+        let lang: string = DataManager.getInstance().urlParam.lang;
         BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
             this.title_totalwin = langRes['title_totalwin'];
             this.title_fgend = langRes['title_fgend'];

@@ -1,4 +1,4 @@
-import { Animation, AnimationState, Button, Component, director, game, Node, Scheduler, sp, SpriteFrame, Vec3 } from 'cc';
+import { Animation, AnimationState, Button, Component, director, game, Node, Scheduler, sp, SpriteFrame, tween, UIOpacity, Vec3 } from 'cc';
 
 import { BaseConst } from '@base/script/constant/BaseConst';
 import { Grid, SpreadObject } from '@base/script/types/BaseType';
@@ -47,10 +47,74 @@ export class XUtils {
      * 添加手型懸停事件(滑鼠)
      * @param target 
      */
-    public static AddHandHoverEvent ( target: Node ) {
-        target.on( Node.EventType.MOUSE_ENTER, () => { game.canvas.style.cursor = 'pointer'; } );
-        target.on( Node.EventType.MOUSE_LEAVE, () => { game.canvas.style.cursor = 'default'; } );
+    public static AddHandHoverEvent(target: Node) {
+        target.on(Node.EventType.MOUSE_ENTER, () => { game.canvas.style.cursor = 'pointer'; });
+        target.on(Node.EventType.MOUSE_LEAVE, () => { game.canvas.style.cursor = 'default'; });
     }
+
+    /**
+     * 淡入
+     * @param node 
+     * @param time 
+     * @param callback 
+     */
+    public static fadeIn(node: Node, time: number, callback?: () => void) {
+        node.getComponent(UIOpacity).opacity = 0;
+        tween(node.getComponent(UIOpacity))
+            .to(time, { opacity: 255 })
+            .call(() => {
+                if (callback) callback();
+            })
+            .start();
+    }
+
+    /**
+     * 淡出
+     * @param node 
+     * @param time 
+     * @param callback 
+     */
+    public static fadeOut(node: Node, time: number, callback?: () => void) {
+        node.getComponent(UIOpacity).opacity = 255;
+        tween(node.getComponent(UIOpacity))
+            .to(time, { opacity: 0 })
+            .call(() => {
+                if (callback) callback();
+            })
+            .start();
+    }
+
+    // /**
+    //  * 縮放回歸
+    //  * @param node 節點
+    //  * @param time 時間
+    //  * @param scale 縮放
+    //  * @param callback 
+    //  */
+    // public static scaleIn(node: Node, time: number, scale: number, callback?: () => void) {
+    //     tween(node)
+    //         .to(time, { scale }, { easing: 'cubicIn' })
+    //         .call(() => {
+    //             if (callback) callback();
+    //         })
+    //         .start();
+    // }
+
+    // /**
+    //  * 縮放回歸
+    //  * @param node 節點
+    //  * @param time 時間
+    //  * @param scale 縮放
+    //  * @param callback 
+    //  */
+    // public static scaleOut(node: Node, time: number, scale: number, callback?: () => void) {
+    //     tween(node)
+    //         .to(time, { scale }, { easing: 'backOut' })
+    //         .call(() => {
+    //             if (callback) callback();
+    //         })
+    //         .start();
+    // }
 
     /**
      * 從陣列隨機取出一筆資料

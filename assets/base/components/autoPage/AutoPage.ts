@@ -4,11 +4,11 @@ import { AutoOption } from '@base/components/autoPage/AutoOption';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseLangBundleDir } from '@base/script/types/BaseType';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass } = _decorator;
 
@@ -37,7 +37,7 @@ export class AutoPage extends Component {
      * 
      */
     onLoad() {
-        BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${BaseDataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.ui3_0}`, (LngRes: any) => {
+        BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${DataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.ui3_0}`, (LngRes: any) => {
             this.container.getChildByPath('Title').getComponent(Sprite).spriteFrame = LngRes['auto_title'];
 
             let button;

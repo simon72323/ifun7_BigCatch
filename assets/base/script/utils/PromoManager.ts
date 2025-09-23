@@ -1,7 +1,8 @@
 import { FreeSpinBonus } from '@base/components/campaign/FreeSpinBonus';
 import { FreeSpinInfoBtn } from '@base/components/campaign/FreeSpinInfoBtn';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
+
+import { DataManager } from '@common/script/data/DataManager';
 // import { SocketManager } from '@base/script/socket/SocketManager';
 
 export enum CampaignStatusEnum {
@@ -76,12 +77,12 @@ export class PromoManager {
     public checkRedirect(): void {
         //非當前遊戲, 跳出提示訊息, 並重新導向遊戲
         let curCampaign = this.notifiable_campaign_list[0];
-        if (curCampaign && curCampaign.redirect_game_id && curCampaign.redirect_game_id !== BaseDataManager.getInstance().gameID) {
+        if (curCampaign && curCampaign.redirect_game_id && curCampaign.redirect_game_id !== DataManager.getInstance().gameID) {
             FreeSpinBonus.clickPlayNow.once(() => {
-                window.location.replace(window.location.href.replace(BaseDataManager.getInstance().gameID, curCampaign.redirect_game_id));
+                window.location.replace(window.location.href.replace(DataManager.getInstance().gameID, curCampaign.redirect_game_id));
             }, this);
             // FreeSpinBonus.clickClose
-            BaseDataManager.getInstance().isMenuOn = true;
+            DataManager.getInstance().isMenuOn = true;
             this.isWebViewOpen = true;
             FreeSpinBonus.showReminder.emit(curCampaign.campaign_id, -1);
         }
@@ -96,7 +97,7 @@ export class PromoManager {
             //顯示活動資訊按鈕
             FreeSpinInfoBtn.show.emit();
             FreeSpinInfoBtn.clickInfo.on(() => {
-                BaseDataManager.getInstance().isMenuOn = true;
+                DataManager.getInstance().isMenuOn = true;
                 this.isWebViewOpen = true;
                 FreeSpinBonus.showInfo.emit();
 
@@ -116,7 +117,7 @@ export class PromoManager {
     private reset(): void {
         this.curCampaignID = '';
         this.curCampaignRemainCount = 0;
-        BaseDataManager.getInstance().bet.setPromoRate(-1, -1);
+        DataManager.getInstance().bet.setPromoRate(-1, -1);
     }
 
     /**
@@ -131,7 +132,7 @@ export class PromoManager {
         //送出免費轉Spin
         this.curCampaignRemainCount = remain_count;
         this.curCampaignID = campaign_id;
-        BaseDataManager.getInstance().bet.setPromoRate(bet_rate, bet_level);
+        DataManager.getInstance().bet.setPromoRate(bet_rate, bet_level);
         //送出Spin
         BaseEvent.clickSpin.emit(false);
     }
@@ -158,7 +159,7 @@ export class PromoManager {
     //     else {
     //         this.notifiable_campaign_list.push({ campaign_id, event_type, redirect_game_id: '' });
 
-    //         if (BaseDataManager.getInstance().isIdle() === true) {
+    //         if (DataManager.getInstance().isIdle() === true) {
     //             this.checkReminder();
     //         }
     //     }
@@ -203,7 +204,7 @@ export class PromoManager {
 
         //有結算訊息優先顯示, 結束再檢查其他活動異動訊息
         if (this.curCampaignID != '') {
-            BaseDataManager.getInstance().isMenuOn = true;
+            DataManager.getInstance().isMenuOn = true;
             this.isWebViewOpen = true;
             FreeSpinBonus.showReminder.emit(this.curCampaignID, -1);
             this.reset();
@@ -218,7 +219,7 @@ export class PromoManager {
         if (this.hasNotifyCampaign() === true) {
             let curCampaign = this.notifiable_campaign_list[0];
             this.notifiable_campaign_list.length = 0;//顯示第一則, 其他清空
-            BaseDataManager.getInstance().isMenuOn = true;
+            DataManager.getInstance().isMenuOn = true;
             this.isWebViewOpen = true;
             FreeSpinBonus.showReminder.emit(curCampaign.campaign_id, curCampaign.event_type);
             //開啟reminder後, 只有可能'關閉'或'開始Spin'
@@ -246,7 +247,7 @@ export class PromoManager {
         FreeSpinBonus.clickPlayNow.off(this);
         FreeSpinBonus.clickClose.off(this);
 
-        BaseDataManager.getInstance().isMenuOn = false;
+        DataManager.getInstance().isMenuOn = false;
         this.isWebViewOpen = false;
         FreeSpinBonus.hide.emit();
     }

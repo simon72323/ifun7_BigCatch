@@ -1,5 +1,5 @@
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { XUtils } from '@base/script/utils/XUtils';
@@ -62,7 +62,7 @@ export class ExplodeTask extends GameTask {
             RevolverUI.setMultiplier.emit(this.newMultiplier);
             UIBlack.fadeOut.emit(BlackKey.UIBlack);
 
-            if (BaseDataManager.getInstance().isBS() === true) {
+            if (DataManager.getInstance().isBS() === true) {
                 BSRoleUI.begin.emit(this.newMultiplier);
             }
             else {
@@ -84,7 +84,7 @@ export class ExplodeTask extends GameTask {
                 }
             }, 0.2, this);
 
-        }, BaseDataManager.getInstance().getData<GameData>().getTurboSetting().explodeTime, this);
+        }, DataManager.getInstance().getData<GameData>().getTurboSetting().explodeTime, this);
 
         // //1.2秒後演示乘倍
         // XUtils.scheduleOnce(() => {
@@ -102,12 +102,12 @@ export class ExplodeTask extends GameTask {
 
     private onMultiplierComplete(delay: number): void {
 
-        let rateSumWin = this.sumWin * BaseDataManager.getInstance().bet.getCurRate();
+        let rateSumWin = this.sumWin * DataManager.getInstance().bet.getCurRate();
         BaseEvent.refreshWin.emit(rateSumWin);
         BaseEvent.refreshCredit.emit(this.playerCent);
 
         if (this.hitMultiplier > 1) {
-            let rateMultiplierWin = this.win * BaseDataManager.getInstance().bet.getCurRate();
+            let rateMultiplierWin = this.win * DataManager.getInstance().bet.getCurRate();
             BannerUI.showWin.emit(rateMultiplierWin, this.hitMultiplier);
         }
 

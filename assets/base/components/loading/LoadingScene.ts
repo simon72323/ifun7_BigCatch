@@ -3,7 +3,7 @@ import { _decorator, Component, director, EventKeyboard, game, input, Input, ins
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
 import { Notice } from '@base/components/notice/Notice';
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseLang, BaseLangBundleDir, OrientationtMode } from '@base/script/types/BaseType';
@@ -11,7 +11,10 @@ import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 import { logger } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
+
 
 const { ccclass, property } = _decorator;
 @ccclass('LoadingScene')
@@ -72,7 +75,7 @@ export class LoadingScene extends Component {
         // }
 
         //在一開始就帶入(用localhost判斷是否要用api)
-        BaseDataManager.getInstance().init(window['gameConfig']);
+        DataManager.getInstance().init(window['gameConfig']);
 
         //將此節點加入常駐節點
         director.addPersistRootNode(this.node);
@@ -110,7 +113,7 @@ export class LoadingScene extends Component {
         // BaseEvent.hideLoading.on(() => {
         //     this.isInitMessageComplete = true;
         //     //如果是狀態回復要強制關閉loading, 直接設定對應flag
-        //     this.tryHideLoading(BaseDataManager.getInstance().recoverData !== null);
+        //     this.tryHideLoading(DataManager.getInstance().recoverData !== null);
         // }, this);
 
         //監聽遊戲資源讀取完成通知
@@ -143,7 +146,7 @@ export class LoadingScene extends Component {
 
         logger('[LoadingScene] bundle 讀取完成!');
 
-        BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${BaseDataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.loading}`, (langRes: any) => {
+        BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${DataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.loading}`, (langRes: any) => {
             let bannerIdx = Math.floor(Math.random() * 5);
             this.node.getChildByPath('Loader/StartBefore/Banner').getComponent(Sprite).spriteFrame = langRes[`loading_banner_0${bannerIdx}`];
 
@@ -154,15 +157,15 @@ export class LoadingScene extends Component {
 
         //await等待資源讀取完成再跑後續流程 ==================================================
         const baseLoadingLoader = new BundleLoader();
-        baseLoadingLoader.add(BaseConst.BUNDLE_BASE_CURRENCY, `${BaseDataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.loading}`, SpriteFrame);
+        baseLoadingLoader.add(BaseConst.BUNDLE_BASE_CURRENCY, `${DataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.loading}`, SpriteFrame);
         await baseLoadingLoader.load(true);
 
         const gameLoadingLoader = new BundleLoader();
-        gameLoadingLoader.add(BaseConst.BUNDLE_LANGUAGE, BaseDataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING, SpriteFrame);
+        gameLoadingLoader.add(BaseConst.BUNDLE_LANGUAGE, DataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING, SpriteFrame);
         await gameLoadingLoader.load(true);
 
         //不走API版本
-        if (BaseDataManager.getInstance().useAPI === false) {
+        if (DataManager.getInstance().useAPI === false) {
             this.loadGame();
             return;
         }
@@ -222,7 +225,7 @@ export class LoadingScene extends Component {
         this.node.getChildByPath('Loader/AdBg/TxtBg').active = !useLogo;
         this.node.getChildByPath('Loader/AdBg/LogoBg').active = useLogo;
 
-        let lang = BaseDataManager.getInstance().urlParam.lang;
+        let lang = DataManager.getInstance().urlParam.lang;
         this.node.getChildByPath('Loader/AdBg/LogoBg/Bg').active = lang !== BaseLang.tch;
         this.node.getChildByPath('Loader/AdBg/LogoBg/BgTw').active = lang === BaseLang.tch;
 
@@ -231,8 +234,8 @@ export class LoadingScene extends Component {
         this.node.getChildByPath('GameHistory/S5GLoading/LogoLoading').active = useLogo;
 
         //是否DEMO
-        this.demoLabel.node.active = BaseDataManager.getInstance().isDemoMode();
-        this.demoLabel.string = BaseDataManager.getInstance().getLangSetting().demoStr;
+        this.demoLabel.node.active = DataManager.getInstance().isDemoMode();
+        // this.demoLabel.string = DataManager.getInstance().getLangSetting().demoStr;
         this.schedule(this.updateFakeLoad);
 
         this.loadGameScene();

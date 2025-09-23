@@ -1,4 +1,4 @@
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';
 
 export class APIManager {
     private static instance: APIManager;
@@ -161,7 +161,7 @@ export class APIManager {
         //線上
         if (this.psAPI) {
             //新架構
-            if (BaseDataManager.getInstance().urlParam.isNewGameServer) {
+            if (DataManager.getInstance().urlParam.isNewGameServer) {
                 url = this.psAPI.hostInfo.history_url;
                 url = (!url || url == '') ? `${this.psAPI.origin}/GameHelp/GameInfo/` : url;
                 url += `?lang=${this.psAPI.hostInfo.lang}`;
@@ -169,7 +169,7 @@ export class APIManager {
             }
             //舊架構
             else {
-                let code = BaseDataManager.getInstance().urlParam.langCode;
+                let code = DataManager.getInstance().urlParam.langCode;
                 code = code == 'po-BR' ? 'pt-BR' : code;
                 url = `${this.psAPI.origin}/gamehistory/GameHelp/GameInfo?lang=${code}&game_id=${this.psAPI.hostInfo.game_id}`;
             }
@@ -178,7 +178,7 @@ export class APIManager {
         else {
             url += 'https://platform-dev.5gg.win/#/game_info';
             url += '?lang=sch';
-            url += `&game_id=${BaseDataManager.getInstance().gameID}`;
+            url += `&game_id=${DataManager.getInstance().gameID}`;
         }
         return url;
     }

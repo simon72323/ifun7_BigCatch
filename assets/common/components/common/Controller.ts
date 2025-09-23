@@ -1,10 +1,10 @@
-import { _decorator, Animation, Button, Component, EventKeyboard, KeyCode, Node, screen, tween, UITransform, Vec3 } from 'cc';
+import { _decorator, Animation, Button, Component, EventKeyboard, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { AudioMode, SpinMode, TurboMode } from '@base/script/types/BaseType';
-import { addBtnClickEvent } from '@base/script/utils/XUtils';
+import { AudioMode, GameState, TurboMode } from '@base/script/types/BaseType';
+import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
 
+import { DataManager } from '@common/script/data/DataManager';
 import { AudioManager } from '@common/script/manager/AudioManager';
 
 const { ccclass, property } = _decorator;
@@ -14,8 +14,8 @@ export class Controller extends Component {
     @property({ type: Node, tooltip: 'bet資訊' })
     private betInfo: Node = null;
 
-    @property({ type: Node, tooltip: 'SPIN按鈕' })
-    private spinBtn: Node = null;
+    @property({ type: Node, tooltip: 'SPIN節點' })
+    private spinNode: Node = null;
 
     @property({ type: Node, tooltip: '重複下注按鈕' })
     private repeatAutoBtn: Node = null;
@@ -47,6 +47,12 @@ export class Controller extends Component {
     @property({ type: Node, tooltip: '返回按鈕' })
     private backBtn: Node = null;
 
+    @property({ type: Node, tooltip: '增加下注按鈕' })
+    private addBetBtn: Node = null;
+
+    @property({ type: Node, tooltip: '減少下注按鈕' })
+    private minusBetBtn: Node = null;
+
     private superSpin: Node = null;//超級SPIN節點
     private content: Node = null;//超級SPIN內容
     private preMessage: Node = null;//超級SPIN預先訊息
@@ -62,10 +68,29 @@ export class Controller extends Component {
     private audioMode: number = AudioMode.AudioOn;//音效模式
     // private turboMode: TurboMode = TurboMode.Normal;//加速模式
 
+    private spinBtn: Node = null;//Spin主要按鈕
+    private stopSpinBtn: Node = null;//Spin停止按鈕
+    private freeSpin: Node = null;//Spin免費節點
+    private stopAutoSpinBtn: Node = null;//自動停止按鈕
+
+    private balanceValue: Label = null;//剩餘額度
+    private totalWinValue: Label = null;//總贏得
+    private totalBetValue: Label = null;//總下注
+
+
     /**
      * 初始化
      */
     onLoad() {
+        this.setNode();
+        this.setupBtnEvent();
+        this.setEventListen();
+    }
+
+    /**
+     * 設定節點
+     */
+    private setNode() {
         this.superSpin = this.node.getChildByName('SuperSpin');
         this.content = this.superSpin.getChildByName('Content');
         this.preMessage = this.superSpin.getChildByName('PreMessage');
@@ -75,7 +100,15 @@ export class Controller extends Component {
         this.porControllerBtns = this.node.getChildByPath('Por_ControllerBtns');
         this.porOptionMenuBtns = this.node.getChildByPath('Por_OptionMenuBtns');
         this.landOptionMenuBtns = this.node.getChildByPath('Land_OptionMenuBtns');
-        this.setupBtnEvent();
+
+        this.balanceValue = this.betInfo.getChildByPath('Balance/Value').getComponent(Label);
+        this.totalWinValue = this.betInfo.getChildByPath('TotalWin/Value').getComponent(Label);
+        this.totalBetValue = this.betInfo.getChildByPath('TotalBet/Value').getComponent(Label);
+
+        this.spinBtn = this.spinNode.getChildByName('SpinBtn');
+        this.stopSpinBtn = this.spinNode.getChildByName('StopSpinBtn');
+        this.freeSpin = this.spinNode.getChildByName('FreeSpin');
+        this.stopAutoSpinBtn = this.spinNode.getChildByName('StopAutoSpinBtn');
     }
 
     /**
@@ -84,6 +117,7 @@ export class Controller extends Component {
     private setupBtnEvent() {
         const scriptName = 'ControllerUI';
         addBtnClickEvent(this.spinBtn, scriptName, this.spinBtn.getComponent(Button), this.onSpin);
+        addBtnClickEvent(this.stopSpinBtn, scriptName, this.stopSpinBtn.getComponent(Button), this.onStopSpin);
         addBtnClickEvent(this.repeatAutoBtn, scriptName, this.repeatAutoBtn.getComponent(Button), this.onRepeatAuto);
         addBtnClickEvent(this.autoBtn, scriptName, this.autoBtn.getComponent(Button), this.onAuto);
         addBtnClickEvent(this.turboBtn, scriptName, this.turboBtn.getComponent(Button), this.onTurbo);
@@ -95,6 +129,16 @@ export class Controller extends Component {
         addBtnClickEvent(this.informationBtn, scriptName, this.informationBtn.getComponent(Button), this.onInformation);
 
         addBtnClickEvent(this.backBtn, scriptName, this.backBtn.getComponent(Button), this.onOption);
+        addBtnClickEvent(this.stopAutoSpinBtn, scriptName, this.stopAutoSpinBtn.getComponent(Button), this.onStopAutoSpin);
+        addBtnClickEvent(this.addBetBtn, scriptName, this.addBetBtn.getComponent(Button), this.onAddBet);
+        addBtnClickEvent(this.minusBetBtn, scriptName, this.minusBetBtn.getComponent(Button), this.onMinusBet);
+    }
+
+    /**
+     * 設定事件監聽
+     */
+    private setEventListen() {
+        BaseEvent.resetSpin.on(this.onResetSpin, this);
     }
 
     /**
@@ -139,14 +183,31 @@ export class Controller extends Component {
     // }
 
     /**
-     * 顯示/關閉超級 SPIN 模式
-     * @param active {boolean} 顯示/關閉
+     * 啟用/禁用控制器按鈕
+     * @param enabled {boolean} 啟用/禁用
      */
-    private onSuperSpinMode(active: boolean) {
-        this.superSpin.active = active;
-        this.content.active = !active;
-        this.preMessage.active = active;
-        const isBS = BaseDataManager.getInstance().isBS();
+    private setControlBtnInteractable(enabled: boolean) {
+        this.spinBtn.getComponent(Button).interactable = enabled;
+        this.repeatAutoBtn.getComponent(Button).interactable = enabled;
+        this.autoBtn.getComponent(Button).interactable = enabled;
+        this.turboBtn.getComponent(Button).interactable = enabled;
+        this.optionBtn.getComponent(Button).interactable = enabled;
+
+        this.addBetBtn.getComponent(Button).interactable = enabled;
+        this.minusBetBtn.getComponent(Button).interactable = enabled;
+        // this.screenBtn.getComponent(Button).interactable = bool;
+        // this.audioBtn.getComponent(Button).interactable = bool;
+    }
+
+    /**
+     * 顯示/關閉超級 SPIN 模式
+     * @param show {boolean} 顯示/關閉
+     */
+    private showSuperSpin(show: boolean) {
+        this.superSpin.active = show;
+        this.content.active = !show;
+        this.preMessage.active = show;
+        const isBS = DataManager.getInstance().isBS();
         this.BsBg.active = isBS;
         this.FsBg.active = !isBS;
         // const copy = instantiate(this.props['superSpin']['win'].node);
@@ -168,16 +229,76 @@ export class Controller extends Component {
      * 執行Spin
      */
     private onSpin() {
-        if (!BaseDataManager.getInstance().isBS()) return;
-        const spinImage = this.spinBtn.getChildByName('Image');
-        tween(spinImage).to(0.1, { scale: new Vec3(0.6, 0.6, 1) }).to(0.15, { scale: Vec3.ONE }, { easing: 'backOut' }).start();
+        if (!DataManager.getInstance().isBS()) return;
+        this.setControlBtnInteractable(false);//禁用控制器按鈕
+        this.spinDownAnim();
 
-        if (this.superSpin.active) {
-            BaseEvent.clickSpin.emit(SpinMode.Super);
-            this.showSuperSpinContent();
-        } else {
-            BaseEvent.clickSpin.emit(SpinMode.Normal);
+        //切換Spin按鈕狀態為Loop
+        // DataManager.getInstance().curSpinBtnState = SpinBtnState.Loop;
+
+        //要等待server回傳下注正確後才能執行後續操作
+
+        DataManager.getInstance().curGameState = GameState.Running;
+
+        const isSuperMode = DataManager.getInstance().isSuperMode;
+        if (isSuperMode) this.showSuperSpinContent();
+        BaseEvent.clickSpin.emit(isSuperMode);
+    }
+
+    /**
+     * 執行SpinDown動畫
+     */
+    private spinDownAnim() {
+        const animation = this.spinBtn.getComponent(Animation);
+        animation.once(Animation.EventType.FINISHED, () => {
+            this.spinBtn.active = false;
+            this.stopSpinBtn.getComponent(UIOpacity).opacity = 255;
+            this.stopSpinBtn.active = true;
+            this.stopSpinBtn.getComponent(Animation).play('stopSpinBtnShow');
+        });
+        animation.play('spinBtnDown');
+    }
+
+    private onResetSpin() {
+        const animation = this.stopSpinBtn.getComponent(Animation);
+        animation.once(Animation.EventType.FINISHED, () => {
+            this.stopSpinBtn.active = false;
+            this.spinBtn.active = true;
+            this.spinBtn.getComponent(Animation).play('spinBtnShow');
+            this.setControlBtnInteractable(true);//啟用控制器按鈕
+        });
+        animation.play('stopSpinBtnDown');
+    }
+
+    /**
+     * 停止spin
+     */
+    private onStopSpin() {
+        // this.stopSpinBtn.getComponent(Button).interactable = false;//禁用停止按鈕
+
+        //要判斷是否轉動中，觸發立即停止
+        if (DataManager.getInstance().curGameState === GameState.Running) {
+            BaseEvent.clickStop.emit();
         }
+    }
+
+    /**
+     * 停止自動Spin
+     */
+    private onStopAutoSpin() {
+        this.stopAutoSpinBtn.active = false;
+        // this.freeSpin.active = false;
+        // this.spinBtn.active = true;
+    }
+
+
+
+    private onAddBet() {
+        // DataManager.getInstance().addBet();
+    }
+
+    private onMinusBet() {
+        // DataManager.getInstance().minusBet();
     }
 
     /**
@@ -199,9 +320,9 @@ export class Controller extends Component {
      * 切換加速模式
      */
     private onTurbo() {
-        let turboMode = BaseDataManager.getInstance().curTurboMode;
+        let turboMode = DataManager.getInstance().curTurboMode;
         turboMode = (turboMode + 1) % 4;
-        BaseDataManager.getInstance().curTurboMode = turboMode;
+        DataManager.getInstance().curTurboMode = turboMode;
         const normalNode = this.turboBtn.getChildByName('Normal');
         const speedNode = this.turboBtn.getChildByName('Speed');
         const turboNode = this.turboBtn.getChildByName('Turbo');
@@ -214,25 +335,25 @@ export class Controller extends Component {
         superNode.active = false;
 
         //判斷超級SPIN開關
-        this.onSuperSpinMode(turboMode === TurboMode.Super);
+        this.showSuperSpin(turboMode === TurboMode.Super);
 
         // 根據當前狀態顯示對應圖示
         switch (turboMode) {
             case TurboMode.Normal:
                 normalNode.active = true;
-                BaseDataManager.getInstance().setTurboMode(TurboMode.Normal);
+                DataManager.getInstance().setTurboMode(TurboMode.Normal);
                 break;
             case TurboMode.Speed:
                 speedNode.active = true;
-                BaseDataManager.getInstance().setTurboMode(TurboMode.Speed);
+                DataManager.getInstance().setTurboMode(TurboMode.Speed);
                 break;
             case TurboMode.Turbo:
                 turboNode.active = true;
-                BaseDataManager.getInstance().setTurboMode(TurboMode.Turbo);
+                DataManager.getInstance().setTurboMode(TurboMode.Turbo);
                 break;
             case TurboMode.Super:
                 superNode.active = true;
-                BaseDataManager.getInstance().setTurboMode(TurboMode.Super);
+                DataManager.getInstance().setTurboMode(TurboMode.Super);
                 break;
         }
     }
@@ -306,7 +427,7 @@ export class Controller extends Component {
      * 開啟下注紀錄
      */
     private onRecord() {
-        const betrecordurl = BaseDataManager.getInstance().getFullBetrecordurl();
+        const betrecordurl = DataManager.getInstance().getFullBetrecordurl();
         window.open(betrecordurl, '_blank');
     }
 

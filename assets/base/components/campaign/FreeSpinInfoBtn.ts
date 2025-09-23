@@ -1,9 +1,10 @@
 import { _decorator, Button, Component } from 'cc';
 
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { ModuleID } from '@base/script/types/BaseType';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass } = _decorator;
 
@@ -24,7 +25,7 @@ export class FreeSpinInfoBtn extends Component {
 
         FreeSpinInfoBtn.show.on(() => {
             this.isShow = true;
-            this.node.active = this.isShow && BaseDataManager.getInstance().isBS();
+            this.node.active = this.isShow && DataManager.getInstance().isBS();
         }, this);
         FreeSpinInfoBtn.hide.on(() => {
             this.isShow = false;
@@ -42,7 +43,7 @@ export class FreeSpinInfoBtn extends Component {
 
         //FS內不顯示活動按鈕
         BaseEvent.changeScene.on((_moduleID: ModuleID) => {
-            this.node.active = this.isShow && BaseDataManager.getInstance().isBS();
+            this.node.active = this.isShow && DataManager.getInstance().isBS();
         }, this);
 
         this.node.active = false;

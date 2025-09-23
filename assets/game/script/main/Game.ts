@@ -4,7 +4,7 @@
 // import { AudioKey } from '@base/script/audio/AudioKey';
 // import { AudioManager } from '@base/script/audio/AudioManager';
 // import { BaseConst } from '@base/script/constant/BaseConst';
-// import { BaseDataManager } from '@base/script/main/BaseDataManager';
+// import { DataManager } from '@common/script/data/DataManager';;
 // import { BaseEvent } from '@base/script/main/BaseEvent';
 // import { GameMain } from '@base/script/main/GameMain';
 // import { CheatCodeData, ModuleID } from '@base/script/types/BaseType';
@@ -34,14 +34,14 @@
 //     protected initializeGame() {
 
 //         //配置遊戲資料
-//         BaseDataManager.getInstance().setData(new GameData());
+//         DataManager.getInstance().setData(new GameData());
 
 //         //封包處理
 //         MessageHandler.getInstance().initialize();
 
 //         //註冊語系資源(註冊完畢後GameMain會呼叫startLoadLanguage)
 //         {
-//             let lang: string = BaseDataManager.getInstance().urlParam.lang;
+//             let lang: string = DataManager.getInstance().urlParam.lang;
 //             this.loadLanguage(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.banner}`, SpriteFrame);
 //             this.loadLanguage(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.featureBuy}`, SpriteFrame);
 //             this.loadLanguage(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, SpriteFrame);
@@ -234,7 +234,7 @@
 //         CheatUI.registerButton.emit('槍客', 'RNG', title, () => {
 //             let data = new CheatCodeData();
 //             data.rngList = [rng];
-//             BaseDataManager.getInstance().cheatCodeData = data;
+//             DataManager.getInstance().cheatCodeData = data;
 //             CheatUI.hide.emit();
 //         });
 //     }

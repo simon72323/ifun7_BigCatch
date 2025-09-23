@@ -5,7 +5,7 @@ import { BaseSettingsPage } from '@base/components/settingsPage/BaseSettingsPage
 import { BaseSpinBtn } from '@base/components/settingsPage/BaseSpinBtn';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { SpinButtonState, TurboMode } from '@base/script/types/BaseType';
 import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
@@ -182,7 +182,7 @@ export class SettingsPage1 extends BaseSettingsPage {
                 this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).addAnimation(1, 'begin', false);
             }
             else {
-                if (BaseDataManager.getInstance().auto.isAutoPlay() == false) {
+                if (DataManager.getInstance().auto.isAutoPlay() == false) {
                     this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).clearTracks();
                     this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).setToSetupPose();
                     this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).addAnimation(0, 'normal', true);
@@ -196,10 +196,10 @@ export class SettingsPage1 extends BaseSettingsPage {
             this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).addAnimation(1, 'end', false);
 
             this.spinBtn.stopAuto();
-            if (BaseDataManager.getInstance().isIdle() === false) {
+            if (DataManager.getInstance().isIdle() === false) {
                 this.AutoBtn.getComponent(Button).interactable = false;
                 this.scheduleOnce(() => {
-                    if (BaseDataManager.getInstance().isIdle() === false) {
+                    if (DataManager.getInstance().isIdle() === false) {
                         this.AutoBtn.getChildByName('AutoDis').getComponent(Sprite).color = new Color(255, 255, 255, 255);
                         this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).color = new Color(255, 255, 255, 0);
                     }
@@ -284,7 +284,7 @@ export class SettingsPage1 extends BaseSettingsPage {
         }, this);
         SettingsPage1.setFreeSpinVisible.on((visible) => {
             this.isFreeSpin = visible;
-            freeSpinNode.active = this.isFreeSpin && BaseDataManager.getInstance().isBS();
+            freeSpinNode.active = this.isFreeSpin && DataManager.getInstance().isBS();
         }, this);
         this.node.active = true;
     }
@@ -295,8 +295,8 @@ export class SettingsPage1 extends BaseSettingsPage {
      * @returns 
      */
     private onTouchAuto(event) {
-        if (BaseDataManager.getInstance().isMenuOn == true) return;
-        if (event.type == 'touch-start' && BaseDataManager.getInstance().auto.isAutoPlay() == false) {
+        if (DataManager.getInstance().isMenuOn == true) return;
+        if (event.type == 'touch-start' && DataManager.getInstance().auto.isAutoPlay() == false) {
             this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).clearTracks();
             this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).setToSetupPose();
             this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).addAnimation(0, 'hit', true);
@@ -306,7 +306,7 @@ export class SettingsPage1 extends BaseSettingsPage {
             SettingsPage1.clickAuto.emit();
         }
         else if (event.type == 'touch-cancel') {
-            if (BaseDataManager.getInstance().auto.isAutoPlay() == false) {
+            if (DataManager.getInstance().auto.isAutoPlay() == false) {
                 this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).clearTracks();
                 this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).setToSetupPose();
                 this.AutoBtn.getChildByName('AutoAnm').getComponent(sp.Skeleton).addAnimation(0, 'normal', true);
@@ -345,7 +345,7 @@ export class SettingsPage1 extends BaseSettingsPage {
         const isEnabled = enabled && this.isFreeSpin === false;
 
         //非自動轉才能禁用
-        let autoEnabled: boolean = isEnabled || BaseDataManager.getInstance().auto.isAutoPlay();
+        let autoEnabled: boolean = isEnabled || DataManager.getInstance().auto.isAutoPlay();
         let invisibleColor = new Color(255, 255, 255, 0);
         this.AutoBtn.getComponent(Button).interactable = autoEnabled;
         this.AutoBtn.getChildByName('AutoDis').getComponent(Sprite).color = autoEnabled ? invisibleColor : Color.WHITE;

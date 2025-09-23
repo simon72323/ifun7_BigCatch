@@ -1,11 +1,12 @@
 import { _decorator, Animation, Button, Component, Label, Node, Sprite } from 'cc';
 
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseAnimationName, BaseLangBundleDir, TurboMode } from '@base/script/types/BaseType';
 import { XEvent, XEvent1, XEvent2 } from '@base/script/utils/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
+
+import { DataManager } from '@common/script/data/DataManager';
 
 const { ccclass } = _decorator;
 
@@ -84,20 +85,20 @@ export class Notice extends Component {
         this.node.getChildByPath('InfoBg/check').on(Button.EventType.CLICK, () => {
             this.node.getChildByPath('BlackBg').active = false;
             this.node.getChildByPath('InfoBg').active = false;
-            Notice.clickError.emit();
+            // Notice.clickError.emit();
         }, this);
 
         //下注不足提示
         this.node.getChildByPath('BetBlock/Back').on(Button.EventType.CLICK, () => {
             this.node.getChildByPath('BetBlock').active = false;
         }, this);
-        Notice.showSpinMin.on((v1: number, v2: number) => {
-            this.node.getChildByPath('BlackBg').active = false;
-            this.node.getChildByPath('InfoBg').active = false;
-            this.node.getChildByPath('InfoNoBalance').active = false;
-            this.node.getChildByPath('BetBlock').active = true;
-            this.node.getChildByPath('BetBlock/Label').getComponent(Label).string = this.spinMinText.replace('#1', XUtils.NumberToCentString(v1)).replace('#2', XUtils.NumberToCentString(v2));
-        }, this);
+        // Notice.showSpinMin.on((v1: number, v2: number) => {
+        //     this.node.getChildByPath('BlackBg').active = false;
+        //     this.node.getChildByPath('InfoBg').active = false;
+        //     this.node.getChildByPath('InfoNoBalance').active = false;
+        //     this.node.getChildByPath('BetBlock').active = true;
+        //     this.node.getChildByPath('BetBlock/Label').getComponent(Label).string = this.spinMinText.replace('#1', XUtils.NumberToCentString(v1)).replace('#2', XUtils.NumberToCentString(v2));
+        // }, this);
 
         //切換模式
         // Notice.showMode.on((mode: TurboMode) => {
@@ -136,7 +137,7 @@ export class Notice extends Component {
         //     }
         // }, this);
 
-        // BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${BaseDataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.ui3_0}`, (langRes: any) => {
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${DataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.ui3_0}`, (langRes: any) => {
         //     //多語系資源讀取完成後, 就不再使用系統字
         //     this.label.node.active = false;
 

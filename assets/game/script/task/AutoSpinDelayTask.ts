@@ -1,4 +1,4 @@
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { GameTask } from '@base/script/tasks/GameTask';
 import { XUtils } from '@base/script/utils/XUtils';
 
@@ -12,10 +12,10 @@ export class AutoSpinDelayTask extends GameTask {
     execute(): void {
 
         //自動轉 & 沒有skip 才延遲0.3秒
-        if (BaseDataManager.getInstance().auto.isAutoPlay() == true &&
-            BaseDataManager.getInstance().getData<GameData>().hasSkip === false) {
+        if (DataManager.getInstance().auto.isAutoPlay() == true &&
+            DataManager.getInstance().getData<GameData>().hasSkip === false) {
             //延遲時間依照速度模式
-            let delay = BaseDataManager.getInstance().getData<GameData>().getTurboSetting().autoSpinRoundDelay;
+            let delay = DataManager.getInstance().getData<GameData>().getTurboSetting().autoSpinRoundDelay;
             XUtils.scheduleOnce(() => {
                 this.finish();
             }, delay, this);

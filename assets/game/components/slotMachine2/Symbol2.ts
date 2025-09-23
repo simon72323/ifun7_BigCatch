@@ -1,7 +1,7 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame, Button, randomRangeInt, UITransform } from 'cc';
 
 import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseDataManager } from '@base/script/main/BaseDataManager';
+import { DataManager } from '@common/script/data/DataManager';;
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { PayTableUI } from '@game/components/PayTableUI/PayTableUI';
@@ -99,7 +99,7 @@ export class Symbol2 extends BaseSymbol2 {
         // this.spine.node.active = false;
 
         this.node.getChildByName('Sens').on(Button.EventType.CLICK, () => {
-            if (BaseDataManager.getInstance().isIdle() === false || BaseDataManager.getInstance().isMenuOn == true || BaseDataManager.getInstance().auto.isAutoPlay() == true) {
+            if (DataManager.getInstance().isIdle() === false || DataManager.getInstance().isMenuOn == true || DataManager.getInstance().auto.isAutoPlay() == true) {
                 return;
             }
 
@@ -108,7 +108,7 @@ export class Symbol2 extends BaseSymbol2 {
             }
 
             let worldPos = this.node.parent.getComponent(UITransform).convertToWorldSpaceAR(this.node.getPosition());
-            let payData = BaseDataManager.getInstance().getData<GameData>().getPayBySymbolID(this.symbolID);
+            let payData = DataManager.getInstance().getData<GameData>().getPayBySymbolID(this.symbolID);
             PayTableUI.show.emit(this.grid, this.symbolID, this.normal.spriteFrame, worldPos, payData);
         }, this);
 
@@ -169,7 +169,7 @@ export class Symbol2 extends BaseSymbol2 {
 
             //查輪帶資料表
             if (stripIdx !== -1) {
-                this.isBadge = !!BaseDataManager.getInstance().getData<GameData>().stripBadgeDataList[this.grid.col][stripIdx];
+                this.isBadge = !!DataManager.getInstance().getData<GameData>().stripBadgeDataList[this.grid.col][stripIdx];
             }
             this.spine.skeletonData = this.spineDataList[newSymbolID];
             this.normal.spriteFrame = this.isBadge ? this.normalBadgeImageList[newSymbolID] : this.normalImageList[newSymbolID];
@@ -305,7 +305,7 @@ export class Symbol2 extends BaseSymbol2 {
      * 爆炸演示
      */
     public explode() {
-        this.spine.timeScale = BaseDataManager.getInstance().getData<GameData>().getTurboSetting().explodeTimeScale;
+        this.spine.timeScale = DataManager.getInstance().getData<GameData>().getTurboSetting().explodeTimeScale;
         this.playSymbolAni(SymbolAni.explo, false);
         this.symbolID = -1;
 
