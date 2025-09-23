@@ -1,10 +1,9 @@
 import { _decorator } from 'cc';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { NetworkData } from '@common/script/data/NetWorkData';
-import { NetworkApi } from '@common/script/network/APIType';
+import { NetworkData } from '@common/script/data/NetworkData';
 import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 import { HTTP_METHODS, HttpRequestUtils, IPayload } from '@common/script/network/HttpRequestUtils';
+import { IGameData, IGameMenu, ISpinData, IUserData, NetworkApi } from '@common/script/network/NetworkApi';
 import { UrlParameters } from '@common/script/utils/UrlParameters';
 
 
@@ -26,7 +25,6 @@ export class NetworkManager {
     constructor() {
         this.httpRequest = new HttpRequestUtils();
         this.httpRequest.onErrorDelegate.add(this.onHttpError.bind(this));
-
         this.errorCodeConfig = new ErrorCodeConfig();
     }
 
@@ -36,6 +34,7 @@ export class NetworkManager {
      */
     protected onHttpError(errorCode: number): void {
         if (errorCode === -1) {
+            console.error(`網路錯誤: ${errorCode}`);
             // TODO: 處理網路錯誤
         }
     }
@@ -44,16 +43,26 @@ export class NetworkManager {
      * 檢查錯誤代碼
      * @param response 回應資料
      */
-    protected checkErrorCode(response: IResponseData): void {
+    protected checkErrorCode(response: any): boolean {
         if (response.error_code !== 0) {
-            if (this.errorCodeConfig.retryErrorCodes.includes(response.error_code)) {
-                // TODO: 重試邏輯
-            } else if (this.errorCodeConfig.closeAndContinueCodes.includes(response.error_code)) {
-                // TODO: 顯示關閉按鈕錯誤對話框
+            // 獲取錯誤描述
+            const errorMessage = this.errorCodeConfig.errorCodes.get(response.error_code) || 'Unknown Error';
+            const fullErrorMessage = `${response.error_code} - ${errorMessage}`;
+
+            // if (this.errorCodeConfig.retryErrorCodes.includes(response.error_code)) {
+            //     // TODO: 重試邏輯(有重新連線按鈕)
+            //     console.warn(`需要重試的錯誤: ${fullErrorMessage}`);
+            // } else 
+            if (this.errorCodeConfig.closeAndContinueCodes.includes(response.error_code)) {
+                // TODO: 顯示關閉按鈕錯誤對話框(有OK按鈕，會關閉視窗並繼續)
+                console.error(`需要關閉並繼續的錯誤: ${fullErrorMessage}`);
             } else {
-                // TODO: 顯示一般錯誤對話框
+                // TODO: 顯示一般錯誤對話框(有重新連線按鈕)
+                console.error(`一般錯誤: ${fullErrorMessage}`);
             }
+            return false; // 有錯誤
         }
+        return true; // 沒有錯誤
     }
 
     /**
@@ -78,8 +87,9 @@ export class NetworkManager {
 
         return new Promise((resolve, reject) => {
             this.httpRequest.sendRequest(payload, (response: IResponseData) => {
-                this.checkErrorCode(response);
-                resolve(response);
+                if (this.checkErrorCode(response)) {
+                    resolve(response);  // 沒有錯誤，成功
+                }
             }).catch((error) => {
                 reject(error);
             });
@@ -111,37 +121,77 @@ export class NetworkManager {
     /**
      * 獲取用戶資料UserData
      */
-    public async getUserData(): Promise<void> {
+    public async sendUserData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
-        console.log('[NetworkManager] onGetUserDataReceived =>', response);
-        NetworkData.getInstance().setUserData(response.data);
+        console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
+        // return response.data as IUserData;
+        NetworkData.getInstance().userData = response.data;
     }
 
     /**
      * 獲取遊戲資料GameData
      */
-    public async getGameData(): Promise<void> {
+    public async sendGameData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_GAME_DATA, {
             game_id: UrlParameters.gameId
         });
-        console.log('[NetworkManager] onGetGameDataReceived =>', response);
-        NetworkData.getInstance().setGameData(response.data);
+        console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
+        // return response.data as IGameData;
+        NetworkData.getInstance().gameData = response.data;
     }
 
     /**
      * 發送spin請求
-     * @param betData 轉輪資料
      */
-    public async sendSpin(betData: any): Promise<void> {
-        const response = await this.sendRequest(NetworkApi.SPIN, betData);
-        console.log('[NetworkManager] onSpinReceived =>', response);
+    public async sendSpin(): Promise<void> {
+        const gameData = NetworkData.getInstance().gameData;
+        const coinValue = gameData.coin_value[gameData.coin_value_default_index];
+        const lineBet = gameData.line_bet[gameData.line_bet_default_index];
+        const lineTotal = gameData.line_total;
+        const betCredit = coinValue * 1000 * lineBet * lineTotal / 1000;
+
+        const response = await this.sendRequest(NetworkApi.SPIN, {
+            game_id: UrlParameters.gameId,
+            coin_value: coinValue,
+            line_bet: lineBet,
+            line_num: lineTotal,
+            bet_creait: betCredit,
+            buy_spin: 0
+        });
+        console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
+        // return response.data as ISpinData;
+        NetworkData.getInstance().spinData = response.data;
+        // slotData.getSpinData(response.data);
+    }
+
+    /**
+     * 發送購買免費遊戲spin請求
+     */
+    public async sendBuyFreeSpin(buyFreeBet: number): Promise<ISpinData> {
+        const gameData = NetworkData.getInstance().gameData;
+        // const coinValue = gameData.coin_value[gameData.coin_value_default_index];
+        const lineBet = gameData.line_bet[gameData.line_bet_default_index];
+        const lineTotal = gameData.line_total;
+        const betCredit = buyFreeBet * 1000 * lineBet * lineTotal / 1000;
+
+        const response = await this.sendRequest(NetworkApi.SPIN, {
+            game_id: UrlParameters.gameId,
+            coin_value: buyFreeBet,
+            line_bet: lineBet,
+            line_num: lineTotal,
+            bet_creait: betCredit,
+            buy_spin: 0
+        });
+        console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
+        return response.data as ISpinData;
+        // NetworkData.getInstance().spinData = response.data;
         // slotData.getSpinData(response.data);
     }
 
     /**
      * 獲取累積獎金資料
      */
-    public async getJackpot(): Promise<void> {
+    public async sendJackpot(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_JACKPOT);
         console.log('[NetworkManager] onGetJackpotReceived =>', response);
         // TODO: 處理累積獎金資料
@@ -150,7 +200,7 @@ export class NetworkManager {
     /**
      * 獲取現金掉落資料
      */
-    public async getCashDrop(): Promise<void> {
+    public async sendCashDrop(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_CASH_DROP);
         console.log('[NetworkManager] onGetCashDropReceived =>', response);
         // TODO: 處理現金掉落資料
@@ -159,7 +209,7 @@ export class NetworkManager {
     /**
      * 獲取錦標賽資料
      */
-    public async getTournament(): Promise<void> {
+    public async sendTournament(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_TOURNAMENT);
         console.log('[NetworkManager] onGetTournamentReceived =>', response);
         // TODO: 處理錦標賽資料
@@ -168,7 +218,7 @@ export class NetworkManager {
     /**
      * 獲取促銷簡介資料
      */
-    public async getPromotionBrief(): Promise<void> {
+    public async sendPromotionBrief(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_PROMOTION_BRIEF);
         console.log('[NetworkManager] onGetPromotionBriefReceived =>', response);
         // TODO: 處理促銷簡介資料
@@ -177,26 +227,26 @@ export class NetworkManager {
     /**
      * 獲取遊戲內選單狀態
      */
-    public async getInGameMenuStatus(): Promise<void> {
-        const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU_STATUS);
-        console.log('[NetworkManager] onGetInGameMenuStatusReceived =>', response);
-        // TODO: 處理遊戲內選單狀態
-    }
+    // public async sendInGameMenuStatus(): Promise<IGameMenu> {
+    //     const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU_STATUS);
+    //     console.log('[NetworkManager] onGetInGameMenuStatusReceived =>', response);
+    //     return response.data as IGameMenu;
+    // }
 
     /**
      * 獲取遊戲內選單資料
      */
-    public async getInGameMenu(): Promise<void> {
+    public async sendInGameMenu(): Promise<IGameMenu> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU);
         console.log('[NetworkManager] onGetInGameMenuReceived =>', response);
-        // TODO: 處理遊戲內選單資料
+        return response.data as IGameMenu;
     }
 
     /**
      * 更新遊戲內選單最愛遊戲
      * @param favoriteList 最愛遊戲列表
      */
-    public async updateInGameMenuFavoriteGame(favoriteList: any[]): Promise<void> {
+    public async sendUpdateInGameMenuFavoriteGame(favoriteList: any[]): Promise<void> {
         const response = await this.sendRequest(NetworkApi.UPDATE_IN_GAME_MENU_FAVORITE_GAME, {
             favorite: favoriteList
         });
@@ -209,7 +259,7 @@ export class NetworkManager {
      * @param gameId 遊戲 ID
      * @param lang 語言
      */
-    public async getInGameMenuGameUrl(gameId: number, lang: string): Promise<void> {
+    public async sendInGameMenuGameUrl(gameId: number, lang: string): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU_GAME_URL, {
             game_id: gameId,
             lang

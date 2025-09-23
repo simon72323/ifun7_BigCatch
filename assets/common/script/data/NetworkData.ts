@@ -1,5 +1,4 @@
-
-import { IBetData, IGameData, IUserData } from '@common/script/network/APIType';
+import { ISpinData, IGameData, IUserData } from '@common/script/network/NetworkApi';
 
 /**
  * 遊戲資料控制器
@@ -14,46 +13,42 @@ export class NetworkData {
     }
 
     /** 用戶資料 */
-    private userData: IUserData;
+    public userData: IUserData;
     /** 遊戲資料 */
-    private gameData: IGameData;
+    public gameData: IGameData;
     /** 下注資料 */
-    private betData: IBetData;
-
-    //==========================獲取資料==========================
-    /** 獲取用戶資料 */
-    public getUserData(): IUserData {
-        return this.userData;
-    }
-
-    /** 獲取遊戲資料 */
-    public getGameData(): IGameData {
-        return this.gameData;
-    }
-
-    /** 獲取下注資料 */
-    public getBetData(): IBetData {
-        return this.betData;
-    }
-
-    //==========================獲取資料==========================
-
-
-    //==========================設置資料==========================
-    /** 設定遊戲資料 */
-    public setGameData(data: IGameData): void {
-        this.gameData = data;
-    }
-
-    /** 設定用戶資料 */
-    public setUserData(data: IUserData): void {
-        this.userData = data;
-    }
-
-    /** 設定下注資料 */
-    public setBetData(data: IBetData): void {
-        this.betData = data;
-    }
-
-    //==========================設置資料==========================
+    public spinData: ISpinData;
 }
+
+//==========================獲取資料==========================
+/** 獲取用戶資料 */
+// export function getUserData() {
+//     return NetworkData.getInstance().userData as IUserDataResponse;
+// }
+// /** 獲取遊戲資料 */
+// export function getGameData() {
+//     return NetworkData.getInstance().gameData as IGameDataResponse;
+// }
+// /** 獲取下注資料 */
+// export function getBetData() {
+//     return NetworkData.getInstance().betData as IBetDataResponse;
+// }
+// //==========================獲取資料==========================
+
+
+// //==========================設置資料==========================
+// /** 設定用戶資料 */
+// export function setUserData(data: IUserDataResponse) {
+//     NetworkData.getInstance().userData = data;
+// }
+// /** 設定遊戲資料 */
+// export function setGameData(data: IGameDataResponse) {
+//     NetworkData.getInstance().gameData = data;
+// }
+
+// /** 設定下注資料 */
+// export function setBetData(data: IBetDataResponse) {
+//     NetworkData.getInstance().betData = data;
+// }
+//==========================設置資料==========================
+

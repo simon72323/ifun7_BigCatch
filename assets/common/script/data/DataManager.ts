@@ -25,21 +25,18 @@ export class DataManager {
 
     /**是否為超級模式 */
     public isSuperMode: boolean = false;
-
+    /**是否購買免費遊戲 */
+    // public isBuyFreeGame: boolean = false;
     /**當前方向模式 */
-    // public curOrientationMode: OrientationtMode = OrientationtMode.Portrait;
-
+    // public orientationMode: OrientationtMode = OrientationtMode.Portrait;
     /**當前模式 */
-    public curModuleID: ModuleID = ModuleID.BS;
-
+    public moduleID: ModuleID = ModuleID.BS;
     /**下一模式 */
     public nextModuleID: ModuleID = ModuleID.BS;
-
-    public curTurboMode: TurboMode = TurboMode.Speed;
-
+    /**當前加速模式 */
+    public turboMode: TurboMode = TurboMode.Speed;
     /**當前遊戲狀態 */
-    public curGameState: GameState = GameState.Ready;
-
+    public gameState: GameState = GameState.Ready;
     /**大贏跑分倍率 */
     public bigWinMultiple: number[] = [10, 20, 50];
 
@@ -59,7 +56,7 @@ export class DataManager {
     public bet: BetData = new BetData();
 
     /**加速模式(幸運一擊會強制設為Normal) */
-    private turboMode: TurboMode = TurboMode.Normal;
+    // private turboMode: TurboMode = TurboMode.Normal;
 
     /**轉動過程設定的新模式,待機時帶入 */
     public tempTurboMode: TurboMode = TurboMode.Normal;
@@ -90,9 +87,6 @@ export class DataManager {
 
     /**是否已呼叫過init */
     private initialize: boolean = false;
-
-    /**是否購買FS */
-    public buyFs: boolean = false;
 
     /**幸運一擊購買類型(一般狀況為0) */
     public featureBuyType = 0;
@@ -275,7 +269,7 @@ export class DataManager {
      */
     public getStripTable() {
         for (let i = 0; i < this.stripTables.length; i++) {
-            if (this.stripTables[i]._id == this.curModuleID) {
+            if (this.stripTables[i]._id == this.moduleID) {
                 return this.stripTables[i];
             }
         }
@@ -424,7 +418,7 @@ export class DataManager {
      * @returns 
      */
     public isBS(): boolean {
-        return this.curModuleID === ModuleID.BS;
+        return this.moduleID === ModuleID.BS;
     }
 
     /**
@@ -440,7 +434,7 @@ export class DataManager {
      * @returns 
      */
     public getTurboMode(): TurboMode {
-        if (this.curModuleID != ModuleID.BS) {
+        if (this.moduleID != ModuleID.BS) {
             return TurboMode.Normal;
         }
         else {

@@ -1,11 +1,14 @@
 import { _decorator, Animation, Button, Component, EventKeyboard, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { AudioMode, GameState, TurboMode } from '@base/script/types/BaseType';
+import { AudioMode, GameState, ModuleID, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
 
 import { DataManager } from '@common/script/data/DataManager';
+import { NetworkData } from '@common/script/data/NetworkData';
 import { AudioManager } from '@common/script/manager/AudioManager';
+import { ISpinData } from '@common/script/network/NetworkApi';
+import { NetworkManager } from '@common/script/network/NetworkManager';
 
 const { ccclass, property } = _decorator;
 
@@ -227,8 +230,9 @@ export class Controller extends Component {
 
     /**
      * 執行Spin
+     * @param buyFreeBet 購買免費遊戲下注
      */
-    private onSpin() {
+    private async onSpin(buyFreeBet: number = 0) {
         if (!DataManager.getInstance().isBS()) return;
         this.setControlBtnInteractable(false);//禁用控制器按鈕
         this.spinDownAnim();
@@ -236,9 +240,14 @@ export class Controller extends Component {
         //切換Spin按鈕狀態為Loop
         // DataManager.getInstance().curSpinBtnState = SpinBtnState.Loop;
 
+        //判斷此次spin是否為購買免費遊戲
+        if (buyFreeBet > 0) {
+            await NetworkManager.getInstance().sendBuyFreeSpin(buyFreeBet);
+        } else {
+            await NetworkManager.getInstance().sendSpin();
+        }
         //要等待server回傳下注正確後才能執行後續操作
-
-        DataManager.getInstance().curGameState = GameState.Running;
+        DataManager.getInstance().gameState = GameState.Running;
 
         const isSuperMode = DataManager.getInstance().isSuperMode;
         if (isSuperMode) this.showSuperSpinContent();
@@ -277,7 +286,7 @@ export class Controller extends Component {
         // this.stopSpinBtn.getComponent(Button).interactable = false;//禁用停止按鈕
 
         //要判斷是否轉動中，觸發立即停止
-        if (DataManager.getInstance().curGameState === GameState.Running) {
+        if (DataManager.getInstance().gameState === GameState.Running) {
             BaseEvent.clickStop.emit();
         }
     }
@@ -320,9 +329,9 @@ export class Controller extends Component {
      * 切換加速模式
      */
     private onTurbo() {
-        let turboMode = DataManager.getInstance().curTurboMode;
-        turboMode = (turboMode + 1) % 4;
-        DataManager.getInstance().curTurboMode = turboMode;
+        let tempTurboMode = DataManager.getInstance().turboMode;
+        tempTurboMode = (tempTurboMode + 1) % 4;
+        DataManager.getInstance().turboMode = tempTurboMode;
         const normalNode = this.turboBtn.getChildByName('Normal');
         const speedNode = this.turboBtn.getChildByName('Speed');
         const turboNode = this.turboBtn.getChildByName('Turbo');
@@ -335,10 +344,10 @@ export class Controller extends Component {
         superNode.active = false;
 
         //判斷超級SPIN開關
-        this.showSuperSpin(turboMode === TurboMode.Super);
+        this.showSuperSpin(tempTurboMode === TurboMode.Super);
 
         // 根據當前狀態顯示對應圖示
-        switch (turboMode) {
+        switch (tempTurboMode) {
             case TurboMode.Normal:
                 normalNode.active = true;
                 DataManager.getInstance().setTurboMode(TurboMode.Normal);

@@ -33,9 +33,9 @@ export enum ModuleID {
     /**一般遊戲 */
     BS = 'BS',
     /**免費遊戲 */
-    FS = 'FS',
+    FG = 'FG',
     /**購買免費遊戲 */
-    BFS = 'BFS',
+    // BFG = 'BFG',
 }
 
 /**遊戲狀態 */
