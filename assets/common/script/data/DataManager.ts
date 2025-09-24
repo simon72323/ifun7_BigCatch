@@ -5,6 +5,8 @@ import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { XUtils } from '@base/script/utils/XUtils';
 
+import { NetworkData } from '@common/script/data/NetworkData';
+
 
 /**
  * 遊戲資料控制器
@@ -39,6 +41,10 @@ export class DataManager {
     public gameState: GameState = GameState.Ready;
     /**大贏跑分倍率 */
     public bigWinMultiple: number[] = [10, 20, 50];
+    /**當前下注索引 */
+    public betIdx: number = 1;
+    /**當前下注值 */
+    public betValue: number = 0;
 
 
 
@@ -387,6 +393,32 @@ export class DataManager {
      */
     public getFeatureBuyMultipleByType(type: number): number {
         return this.featureBuyMultipleList[type] / this.bet.getLineAt(0);
+    }
+
+    /**
+     * 改變下注並回傳下注值
+     * @param changeValue 改變值（正數為增加，負數為減少）
+     */
+    public getChangeBetValue(changeValue: number): number {
+        this.betIdx += changeValue;
+        const length = NetworkData.getInstance().gameData.coin_value.length;
+        const betIdxMin = NetworkData.getInstance().gameData.bet_available_idx;
+
+        if (changeValue > 0) {
+            // 增加下注
+            if (this.betIdx >= length) {
+                this.betIdx = betIdxMin;
+            }
+        } else {
+            // 減少下注
+            if (this.betIdx < betIdxMin) {
+                this.betIdx = length - 1;
+            }
+        }
+
+        // 更新下注值
+        this.betValue = NetworkData.getInstance().gameData.coin_value[this.betIdx];
+        return this.betValue;
     }
 
     /**

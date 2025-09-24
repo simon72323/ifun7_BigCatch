@@ -1,14 +1,16 @@
-import { _decorator, Animation, Button, Component, EventKeyboard, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
+import { _decorator, Animation, Button, Component, EventKeyboard, EventTouch, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { AudioMode, GameState, ModuleID, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
 
+import { GameConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
 import { NetworkData } from '@common/script/data/NetworkData';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { ISpinData } from '@common/script/network/NetworkApi';
 import { NetworkManager } from '@common/script/network/NetworkManager';
+import { Utils } from '@common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
 
@@ -133,8 +135,8 @@ export class Controller extends Component {
 
         addBtnClickEvent(this.backBtn, scriptName, this.backBtn.getComponent(Button), this.onOption);
         addBtnClickEvent(this.stopAutoSpinBtn, scriptName, this.stopAutoSpinBtn.getComponent(Button), this.onStopAutoSpin);
-        addBtnClickEvent(this.addBetBtn, scriptName, this.addBetBtn.getComponent(Button), this.onAddBet);
-        addBtnClickEvent(this.minusBetBtn, scriptName, this.minusBetBtn.getComponent(Button), this.onMinusBet);
+        addBtnClickEvent(this.addBetBtn, scriptName, this.addBetBtn.getComponent(Button), this.changeBet, '1');
+        addBtnClickEvent(this.minusBetBtn, scriptName, this.minusBetBtn.getComponent(Button), this.changeBet, '-1');
     }
 
     /**
@@ -268,6 +270,9 @@ export class Controller extends Component {
         animation.play('spinBtnDown');
     }
 
+    /**
+     * 執行ResetSpin動畫
+     */
     private onResetSpin() {
         const animation = this.stopSpinBtn.getComponent(Animation);
         animation.once(Animation.EventType.FINISHED, () => {
@@ -302,13 +307,22 @@ export class Controller extends Component {
 
 
 
-    private onAddBet() {
-        // DataManager.getInstance().addBet();
+    /**
+     * 改變下注
+     * @param event 事件
+     * @param eventData 事件數據
+     */
+    private changeBet(event: EventTouch, eventData: string) {
+        const changeValue = parseInt(eventData);
+        //改變下注
+        const betValue = DataManager.getInstance().getChangeBetValue(changeValue);
+        // 添加币别符号并格式化数字
+        this.totalBetValue.string = GameConfig.CurrencySymbol + Utils.numberFormat(betValue);
     }
 
-    private onMinusBet() {
-        // DataManager.getInstance().minusBet();
-    }
+    // private onMinusBet() {
+    //     // DataManager.getInstance().minusBet();
+    // }
 
     /**
      * 執行重複下注

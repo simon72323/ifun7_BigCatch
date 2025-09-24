@@ -1,7 +1,7 @@
 import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3 } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
-import { BaseConfig } from '@common/script/data/BaseConfig';
+import { GameConfig } from '@common/script/data/BaseConfig';
 
 
 // declare const gtag: (command: string, event: string, data?: any) => void;
@@ -36,6 +36,100 @@ const { ccclass, property } = _decorator;
 // }
 
 export class Utils {
+    //================= 用到的 Utils =================
+    /**
+     * 數字格式化，添加千分位逗號
+     * @param value 要格式化的數字
+     * @returns 格式化後的字符串
+     */
+    public static numberFormat(value: number): string {
+        let decimalPoint = GameConfig.DecimalPlaces;
+        const preciseValue = Utils.accMul(value, 1);
+        return Number(preciseValue.toFixed(decimalPoint)).toLocaleString('en', {
+            minimumFractionDigits: decimalPoint
+        });
+    }
+
+    /**
+     * 精確乘法
+     * @param arg1 第一個數
+     * @param arg2 第二個數
+     * @returns 精確的乘積
+     */
+    public static accMul(arg1: number, arg2: number): number {
+        const arg1Str = `${arg1}`;
+        const arg2Str = `${arg2}`;
+        let pow = 0;
+
+        const arg1Decimal = arg1Str.split('.')[1];
+        const arg2Decimal = arg2Str.split('.')[1];
+
+        pow += arg1Decimal ? arg1Decimal.length : 0;
+        pow += arg2Decimal ? arg2Decimal.length : 0;
+
+        const r1 = +arg1Str.replace('.', '');
+        const r2 = +arg2Str.replace('.', '');
+
+        return r1 * r2 / Math.pow(10, pow);
+    }
+
+    /**
+     * 精確除法
+     * @param arg1 被除數
+     * @param arg2 除數
+     * @returns 精確的商
+     */
+    public static accDiv(arg1: number, arg2: number): number {
+        const arg1Str = `${arg1}`;
+        const arg2Str = `${arg2}`;
+
+        const t1 = arg1Str.split('.')[1]?.length || 0;
+        const t2 = arg2Str.split('.')[1]?.length || 0;
+
+        const r1 = +arg1Str.replace('.', '');
+        const r2 = +arg2Str.replace('.', '');
+
+        return Utils.accMul(r1 / r2, +`1e${t2 - t1}`);
+    }
+
+    /**
+     * 精確加法
+     * @param arg1 第一個數
+     * @param arg2 第二個數
+     * @returns 精確的和
+     */
+    public static accAdd(arg1: number, arg2: number): number {
+        let r1 = 0;
+        let r2 = 0;
+        let m: number;
+
+        try {
+            r1 = arg1.toString().split('.')[1].length;
+        } catch {
+            // 忽略錯誤
+        }
+
+        try {
+            r2 = arg2.toString().split('.')[1].length;
+        } catch {
+            // 忽略錯誤
+        }
+
+        m = Math.pow(10, Math.max(r1, r2));
+        return (Utils.accMul(arg1, m) + Utils.accMul(arg2, m)) / m;
+    }
+
+    /**
+     * 精確減法
+     * @param arg1 被減數
+     * @param arg2 減數
+     * @returns 精確的差
+     */
+    public static accSub(arg1: number, arg2: number): number {
+        return Utils.accAdd(arg1, -arg2);
+    }
+
+    //================= 用到的 Utils =================
 
     /**
      * 貝茲曲線動畫
@@ -323,16 +417,6 @@ export class Utils {
      * @param value 要格式化的數字
      * @returns 格式化後的字符串
      */
-    public static numberFormat(value: number) {
-        let decimalPoint = BaseConfig.DecimalPlaces;
-        return Number(value.toFixed(decimalPoint)).toLocaleString('en', { minimumFractionDigits: decimalPoint });
-    }
-
-    /**
-     * 數字格式化，添加千分位逗號
-     * @param value 要格式化的數字
-     * @returns 格式化後的字符串
-     */
     public static numberFormatM(value: number) {
         if (value < 1000000) return Utils.numberFormat(value);
         return Utils.toFixedNoRound(value / 1000000, 3) + 'M';
@@ -403,12 +487,12 @@ export class Utils {
         if (EDITOR === true) return 'Develop';
         let domain = window.location.hostname;
 
-        if (BaseConfig.Sites == null) return null;
+        if (GameConfig.Sites == null) return null;
 
-        let keys = Object.keys(BaseConfig.Sites);
+        let keys = Object.keys(GameConfig.Sites);
         for (let i in keys) {
             let key = keys[i];
-            let sites: string[] = BaseConfig.Sites[key];
+            let sites: string[] = GameConfig.Sites[key];
 
             if (sites == null) continue;
             if (sites.length === 0) continue;
