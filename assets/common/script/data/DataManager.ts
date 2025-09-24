@@ -1,11 +1,12 @@
 import { BaseConst } from '@base/script/constant/BaseConst';
-import { BetData } from '@base/script/main/BetData';
+// import { BetData } from '@base/script/main/BetData';
 import { Auto, BigWinType, CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { NetworkData } from '@common/script/data/NetworkData';
+import { Utils } from '@common/script/utils/Utils';
 
 
 /**
@@ -25,8 +26,12 @@ export class DataManager {
     /**當前SPIN模式 */
     // public curSpinMode: SpinMode = SpinMode.Normal;
 
-    /**是否為超級模式 */
-    public isSuperMode: boolean = false;
+    /**超級模式 */
+    public superMode: boolean = false;
+    /**自動模式 */
+    public autoMode: boolean = false;
+    /**剩餘自動轉次數 */
+    public autoSpinCount: number = 0;
     /**是否購買免費遊戲 */
     // public isBuyFreeGame: boolean = false;
     /**當前方向模式 */
@@ -45,6 +50,9 @@ export class DataManager {
     public betIdx: number = 1;
     /**當前下注值 */
     public betValue: number = 0;
+    /**玩家餘額 */
+    public userCredit: number = 0;
+
 
 
 
@@ -59,7 +67,7 @@ export class DataManager {
     public urlParam: UrlParam = new UrlParam();
 
     /**下注相關資料 */
-    public bet: BetData = new BetData();
+    // public bet: BetData = new BetData();
 
     /**加速模式(幸運一擊會強制設為Normal) */
     // private turboMode: TurboMode = TurboMode.Normal;
@@ -69,9 +77,6 @@ export class DataManager {
 
     /**目前狀態 */
     // public curState: s5g.game.proto.ESTATEID;
-
-    /**玩家金額(真實數字要再除100) */
-    public playerCent: number = 0;
 
     /**剩餘額度顯示模式 */
     public creditMode: CreditMode = CreditMode.Cent;
@@ -147,27 +152,6 @@ export class DataManager {
     /**Token */
     public token: string;
 
-    /**各語系設定檔 */
-    // public allLangSettings: Map<string, BaseLangSetting> = new Map([
-    //     [BaseLang.bd, { demoStr: 'DEMO' }],
-    //     [BaseLang.sch, { demoStr: '试玩' }],
-    //     [BaseLang.tai, { demoStr: 'สาธิต' }],
-    //     [BaseLang.ind, { demoStr: 'DEMO' }],
-    //     [BaseLang.por, { demoStr: 'DEMO' }],
-    //     [BaseLang.vie, { demoStr: '試玩' }],
-    //     [BaseLang.in, { demoStr: 'DEMO' }],
-    //     [BaseLang.esp, { demoStr: 'DEMO' }],
-    //     [BaseLang.jp, { demoStr: 'DEMO' }],
-    //     [BaseLang.kor, { demoStr: 'DEMO' }],
-    //     [BaseLang.tur, { demoStr: 'DEMO' }],
-    //     [BaseLang.eng, { demoStr: 'DEMO' }],
-    //     [BaseLang.tch, { demoStr: 'DEMO' }]
-    // ]);
-
-    // public getLangSetting(): BaseLangSetting {
-    //     return this.allLangSettings.get(this.urlParam.lang);
-    // }
-
 
     /**
      * 初始化
@@ -187,6 +171,29 @@ export class DataManager {
         // 初始化數字格式
         XUtils.initFormat(currency, locale);
     }
+
+    /**
+     * 檢查餘額是否足夠
+     * @returns 
+     */
+    public checkCredit(): boolean {
+        return this.userCredit >= this.getBetCredit();
+    }
+
+    /**
+     * 取得總下注金額
+     * @param idx 
+     * @returns 
+     */
+    public getBetCredit() {
+        const gameData = NetworkData.getInstance().gameData;
+        const coinValue = gameData.coin_value[gameData.coin_value_default_index];
+        const lineBet = gameData.line_bet[gameData.line_bet_default_index];
+        const lineTotal = gameData.line_total;
+        return Utils.accNumber(coinValue * lineBet * lineTotal);//處理浮點數問題
+    }
+
+
 
     /**
      * 取得完整下注紀錄網址
@@ -222,24 +229,24 @@ export class DataManager {
      * @param value 
      * @returns 
      */
-    public getWinMultipleByValue(value: number): number {
-        return value / this.bet.getCurBetXCurLine();
-    }
+    // public getWinMultipleByValue(value: number): number {
+    //     return value / this.bet.getCurBetXCurLine();
+    // }
 
     /**
      * 取得value對應BigWin類型
      * @param value 
      */
-    public getBigWinTypeByValue(value: number): BigWinType {
-        let bigWinLevel: BigWinType = BigWinType.non;
-        let multiple: number = this.getWinMultipleByValue(value);
-        for (let i = 0; i < this.bigWinMultiple.length; i++) {
-            if (multiple >= this.bigWinMultiple[i]) {
-                bigWinLevel = i;
-            }
-        }
-        return bigWinLevel;
-    }
+    // public getBigWinTypeByValue(value: number): BigWinType {
+    //     let bigWinLevel: BigWinType = BigWinType.non;
+    //     let multiple: number = this.getWinMultipleByValue(value);
+    //     for (let i = 0; i < this.bigWinMultiple.length; i++) {
+    //         if (multiple >= this.bigWinMultiple[i]) {
+    //             bigWinLevel = i;
+    //         }
+    //     }
+    //     return bigWinLevel;
+    // }
 
     public isIdle(): boolean {
         return false;
@@ -329,21 +336,21 @@ export class DataManager {
      * 幸運一擊是否可用
      * @returns 幸運一擊購買金額 <= 幸運一擊限制購買金額(最大投注 x 幸運一擊限制倍率)
      */
-    public isFeatureBuyEnabled(): boolean {
-        return this.getCurFeatureBuyTotal() <= this.bet.getMaxTotal() * this.luckyStrikeBlockRate;
-    }
+    // public isFeatureBuyEnabled(): boolean {
+    //     return this.getCurFeatureBuyTotal() <= this.bet.getMaxTotal() * this.luckyStrikeBlockRate;
+    // }
 
-    /**
-     * 幸運一擊購買金額
-     * @returns 幸運一擊購買金額 = 幸運一擊購買倍率 x 總下注
-     */
-    public getCurFeatureBuyTotal(): number {
-        return this.getCurFeatureBuyMultiple() * this.bet.getCurRateXCurBet();
-    }
+    // /**
+    //  * 幸運一擊購買金額
+    //  * @returns 幸運一擊購買金額 = 幸運一擊購買倍率 x 總下注
+    //  */
+    // public getCurFeatureBuyTotal(): number {
+    //     return this.getCurFeatureBuyMultiple() * this.bet.getCurRateXCurBet();
+    // }
 
-    public getFeatureBuyCostAt(type: number): number {
-        return this.featureBuyMultipleList[type] * this.bet.getCurRateXCurBet();
-    }
+    // public getFeatureBuyCostAt(type: number): number {
+    //     return this.featureBuyMultipleList[type] * this.bet.getCurRateXCurBet();
+    // }
 
     /**
      * 取得目前幸運一擊購買倍率(幸運一擊允許N個Bet)
@@ -357,43 +364,43 @@ export class DataManager {
      * 幸運一擊金額為N個Bet
      * @returns 
      */
-    public getFeatureBuyNumOfCost(): number {
-        return this.getCurFeatureBuyMultiple() / this.bet.getLineAt(0);
-    }
+    // public getFeatureBuyNumOfCost(): number {
+    //     return this.getCurFeatureBuyMultiple() / this.bet.getLineAt(0);
+    // }
 
     /**
      * 取得幸運一擊最大購買金額
      */
-    public getFeatureBuyMaxBet(): number {
-        let lk = this.luckyStrikeBlockRate;
-        let max = this.bet.getMaxTotal();
-        let numCost = this.getFeatureBuyNumOfCost();
-        let len = this.bet.getTotalLength();
-        let featureBuyLimit = (lk * max) / numCost;
-        let totalIdx: number = -1;
-        for (let i = 0; i < len; i++) {
-            if (this.bet.getTotalAt(i) <= featureBuyLimit) {
-                totalIdx = i;
-            }
-        }
+    // public getFeatureBuyMaxBet(): number {
+    //     let lk = this.luckyStrikeBlockRate;
+    //     let max = this.bet.getMaxTotal();
+    //     let numCost = this.getFeatureBuyNumOfCost();
+    //     let len = this.bet.getTotalLength();
+    //     let featureBuyLimit = (lk * max) / numCost;
+    //     let totalIdx: number = -1;
+    //     for (let i = 0; i < len; i++) {
+    //         if (this.bet.getTotalAt(i) <= featureBuyLimit) {
+    //             totalIdx = i;
+    //         }
+    //     }
 
-        //設為0時, 回傳購買金額0
-        if (totalIdx === -1) {
-            return 0;
-        }
-        else {
-            return XUtils.numberToFloor(this.bet.getTotalAt(totalIdx));
-        }
-    }
+    //     //設為0時, 回傳購買金額0
+    //     if (totalIdx === -1) {
+    //         return 0;
+    //     }
+    //     else {
+    //         return XUtils.numberToFloor(this.bet.getTotalAt(totalIdx));
+    //     }
+    // }
 
     /**
      * 取得幸運一擊購買倍率
-     * @param type 
-     * @returns 
-     */
-    public getFeatureBuyMultipleByType(type: number): number {
-        return this.featureBuyMultipleList[type] / this.bet.getLineAt(0);
-    }
+    //  * @param type 
+    //  * @returns 
+    //  */
+    // public getFeatureBuyMultipleByType(type: number): number {
+    //     return this.featureBuyMultipleList[type] / this.bet.getLineAt(0);
+    // }
 
     /**
      * 改變下注並回傳下注值

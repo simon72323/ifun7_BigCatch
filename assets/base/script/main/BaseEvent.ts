@@ -32,11 +32,11 @@ export class BaseEvent {
 
 
     /**點擊SPIN */
-    public static clickSpin: XEvent1<boolean> = new XEvent1();
+    public static clickSpin: XEvent = new XEvent();
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();
-    /**點擊自動轉 */
-    public static clickAutoSpin: XEvent1<boolean> = new XEvent1();
+    /**點擊自動 */
+    // public static clickAuto: XEvent1<boolean> = new XEvent1();
     /**點擊SKIP */
     public static clickSkip: XEvent = new XEvent();
 

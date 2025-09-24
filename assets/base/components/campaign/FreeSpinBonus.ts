@@ -1,6 +1,7 @@
 import { _decorator, Button, Component, Node, UITransform, WebView } from 'cc';
 
-import { Notice } from '@base/components/notice/Notice';
+
+
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { WebViewEnum } from '@base/script/constant/BaseConst';
@@ -8,6 +9,7 @@ import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
 import { XEvent, XEvent2 } from '@base/script/utils/XEvent';
 
+import { Notice } from '@common/components/notice/Notice';
 import { DataManager } from '@common/script/data/DataManager';
 
 enum Web2Game {

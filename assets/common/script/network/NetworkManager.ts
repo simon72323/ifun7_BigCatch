@@ -5,6 +5,7 @@ import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 import { HTTP_METHODS, HttpRequestUtils, IPayload } from '@common/script/network/HttpRequestUtils';
 import { IGameData, IGameMenu, ISpinData, IUserData, NetworkApi } from '@common/script/network/NetworkApi';
 import { UrlParameters } from '@common/script/utils/UrlParameters';
+import { Utils } from '@common/script/utils/Utils';
 
 
 const { ccclass, property } = _decorator;
@@ -148,7 +149,7 @@ export class NetworkManager {
         const coinValue = gameData.coin_value[gameData.coin_value_default_index];
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
         const lineTotal = gameData.line_total;
-        const betCredit = coinValue * 1000 * lineBet * lineTotal / 1000;
+        const betCredit = Utils.accNumber(coinValue * lineBet * lineTotal);//處理浮點數問題
 
         const response = await this.sendRequest(NetworkApi.SPIN, {
             game_id: UrlParameters.gameId,
@@ -172,7 +173,7 @@ export class NetworkManager {
         // const coinValue = gameData.coin_value[gameData.coin_value_default_index];
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
         const lineTotal = gameData.line_total;
-        const betCredit = buyFreeBet * 1000 * lineBet * lineTotal / 1000;
+        const betCredit = Utils.accNumber(buyFreeBet * lineBet * lineTotal);//處理浮點數問題
 
         const response = await this.sendRequest(NetworkApi.SPIN, {
             game_id: UrlParameters.gameId,

@@ -1,4 +1,4 @@
-import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3 } from 'cc';
+import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
 import { GameConfig } from '@common/script/data/BaseConfig';
@@ -48,6 +48,15 @@ export class Utils {
         return Number(preciseValue.toFixed(decimalPoint)).toLocaleString('en', {
             minimumFractionDigits: decimalPoint
         });
+    }
+
+    /**
+     * 精確數字
+     * @param value 要精確的數字
+     * @returns 精確的數字
+     */
+    public static accNumber(value: number): number {
+        return Utils.accMul(value, 1);
     }
 
     /**
@@ -128,6 +137,42 @@ export class Utils {
     public static accSub(arg1: number, arg2: number): number {
         return Utils.accAdd(arg1, -arg2);
     }
+
+    //================= 動畫相關 =================
+    /**
+     * 淡入
+     * @param node 
+     * @param time 
+     * @param callback 
+     */
+    public static fadeIn(node: Node, time: number, callback?: () => void) {
+        node.getComponent(UIOpacity).opacity = 0;
+        tween(node.getComponent(UIOpacity))
+            .to(time, { opacity: 255 })
+            .call(() => {
+                if (callback) callback();
+            })
+            .start();
+    }
+
+    /**
+     * 淡出
+     * @param node 
+     * @param time 
+     * @param callback 
+     */
+    public static fadeOut(node: Node, time: number, callback?: () => void) {
+        node.getComponent(UIOpacity).opacity = 255;
+        tween(node.getComponent(UIOpacity))
+            .to(time, { opacity: 0 })
+            .call(() => {
+                if (callback) callback();
+            })
+            .start();
+    }
+
+    //================= 動畫相關 =================
+
 
     //================= 用到的 Utils =================
 

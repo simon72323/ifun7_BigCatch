@@ -1,14 +1,21 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
+import { XEvent } from '@base/script/utils/XEvent';
 import { addBtnClickEvent } from '@base/script/utils/XUtils';
 
 import { DataManager } from '@common/script/data/DataManager';
+
 
 const { ccclass, property } = _decorator;
 
 @ccclass('AutoSpin')
 export class AutoSpin extends Component {
+    public static open: XEvent = new XEvent();
+    public static close: XEvent = new XEvent();
+    // public static setup: XEvent1<number[]> = new XEvent1();
+    // public static choose: XEvent1<number> = new XEvent1();
+
     private autoSpin: Node = null;//自動轉節點
     private content: Node = null;//內容
 
@@ -23,7 +30,8 @@ export class AutoSpin extends Component {
     // private dropDownLabel: Label= null;//下拉文字
 
     onLoad() {
-        BaseEvent.clickAutoSpin.on(this.onAutoSpinMode, this);
+        AutoSpin.open.on(() => this.autoSpin.active = true, this);
+        AutoSpin.close.on(() => this.autoSpin.active = false, this);
 
         this.autoSpin = this.node.getChildByName('AutoSpin');
 
@@ -60,9 +68,9 @@ export class AutoSpin extends Component {
      * 啟用/禁用自動轉模式
      * @param active {boolean} 啟用/禁用
      */
-    private onAutoSpinMode(active: boolean) {
-        this.autoSpin.active = active;
-    }
+    // private onAutoSpinMode(active: boolean) {
+    //     this.autoSpin.active = active;
+    // }
 
     private onStart() {
         console.log('onStart');

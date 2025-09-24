@@ -1,8 +1,12 @@
 import { _decorator, Animation, Button, Component, EventKeyboard, EventTouch, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
 
+
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { AudioMode, GameState, ModuleID, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
+
+import { AutoSpin } from '@common/components/common/AutoSpin';
+import { Notice } from '@common/components/notice/Notice';
 
 import { GameConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
@@ -11,6 +15,8 @@ import { AudioManager } from '@common/script/manager/AudioManager';
 import { ISpinData } from '@common/script/network/NetworkApi';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { Utils } from '@common/script/utils/Utils';
+
+
 
 const { ccclass, property } = _decorator;
 
@@ -84,12 +90,12 @@ export class Controller extends Component {
 
 
     /**
-     * 初始化
+     * 遊戲初始化設定
      */
     onLoad() {
-        this.setNode();
-        this.setupBtnEvent();
-        this.setEventListen();
+        this.setNode();//設定節點
+        this.setupBtnEvent();//設定按鈕Click事件
+        this.setEventListen();//設定事件監聽
     }
 
     /**
@@ -153,6 +159,7 @@ export class Controller extends Component {
     protected onKeySpaceDown(event: EventKeyboard) {
         switch (event.keyCode) {
             case KeyCode.SPACE:
+                this.onStopAutoSpin();
                 // AutoSpin.StopAutoSpin();
                 this.onSpin();
                 return;
@@ -188,7 +195,7 @@ export class Controller extends Component {
     // }
 
     /**
-     * 啟用/禁用控制器按鈕
+     * 啟用/禁用所有控制類按鈕
      * @param enabled {boolean} 啟用/禁用
      */
     private setControlBtnInteractable(enabled: boolean) {
@@ -235,39 +242,56 @@ export class Controller extends Component {
      * @param buyFreeBet 購買免費遊戲下注
      */
     private async onSpin(buyFreeBet: number = 0) {
+        this.clickAnim(this.spinBtn);
+        this.rotateAnim(this.spinBtn);
+        //如果不在BS模式下，則不執行Spin功能
         if (!DataManager.getInstance().isBS()) return;
+        // if (DataManager.getInstance().superMode) return;
+        if (DataManager.getInstance().gameState !== GameState.Ready) return;
+        //TODO:關閉遊戲符號資訊
+        //TODO:關閉自動SPIN功能
+
+        //TODO:判斷餘額是否足夠，不足要顯示錯誤訊息
+        if (!DataManager.getInstance().checkCredit()) {
+            Notice.showNoBalance.emit(false);//顯示餘額不足提示
+            return;
+        }
+
         this.setControlBtnInteractable(false);//禁用控制器按鈕
-        this.spinDownAnim();
-
-        //切換Spin按鈕狀態為Loop
-        // DataManager.getInstance().curSpinBtnState = SpinBtnState.Loop;
-
-        //判斷此次spin是否為購買免費遊戲
+        //判斷是否執行顯示超級模式畫面
+        if (!DataManager.getInstance().superMode && DataManager.getInstance().turboMode === TurboMode.Super) {
+            this.showSuperSpinContent();
+            DataManager.getInstance().superMode = true;
+        }
+        //判斷此次spin是否為購買免費遊戲(等待server回傳)
         if (buyFreeBet > 0) {
             await NetworkManager.getInstance().sendBuyFreeSpin(buyFreeBet);
         } else {
             await NetworkManager.getInstance().sendSpin();
         }
-        //要等待server回傳下注正確後才能執行後續操作
-        DataManager.getInstance().gameState = GameState.Running;
 
-        const isSuperMode = DataManager.getInstance().isSuperMode;
-        if (isSuperMode) this.showSuperSpinContent();
-        BaseEvent.clickSpin.emit(isSuperMode);
+        //設定遊戲狀態為Running
+        DataManager.getInstance().gameState = GameState.Running;
+        this.spinBtn.active = false;//隱藏Spin按鈕
+        this.stopSpinBtn.active = true;//顯示StopSpin按鈕
+
+        //發送點擊spin事件(確認執行)
+        BaseEvent.clickSpin.emit();
     }
 
     /**
-     * 執行SpinDown動畫
+     * click按鈕動畫
      */
-    private spinDownAnim() {
-        const animation = this.spinBtn.getComponent(Animation);
-        animation.once(Animation.EventType.FINISHED, () => {
-            this.spinBtn.active = false;
-            this.stopSpinBtn.getComponent(UIOpacity).opacity = 255;
-            this.stopSpinBtn.active = true;
-            this.stopSpinBtn.getComponent(Animation).play('stopSpinBtnShow');
-        });
-        animation.play('spinBtnDown');
+    private clickAnim(node: Node) {
+        tween(node).to(0.1, { scale: 0.7 }).to(0.15, { scale: 1 }, { easing: 'backOut' }).start();
+    }
+
+    /**
+     * 旋轉按鈕動畫
+     * @param node 節點
+     */
+    private rotateAnim(node: Node) {
+        tween(node).by(1, { angle: 360 }, { easing: 'linear' }).start();
     }
 
     /**
@@ -301,11 +325,13 @@ export class Controller extends Component {
      */
     private onStopAutoSpin() {
         this.stopAutoSpinBtn.active = false;
+        DataManager.getInstance().autoMode = false;
+        DataManager.getInstance().autoSpinCount = 0;
+        AutoSpin.close.emit();
+        // AutoSpin.StopAutoSpin();
         // this.freeSpin.active = false;
         // this.spinBtn.active = true;
     }
-
-
 
     /**
      * 改變下注
@@ -314,15 +340,11 @@ export class Controller extends Component {
      */
     private changeBet(event: EventTouch, eventData: string) {
         const changeValue = parseInt(eventData);
-        //改變下注
+
+        //下注數值更新(添加幣別符號與格式化)
         const betValue = DataManager.getInstance().getChangeBetValue(changeValue);
-        // 添加币别符号并格式化数字
         this.totalBetValue.string = GameConfig.CurrencySymbol + Utils.numberFormat(betValue);
     }
-
-    // private onMinusBet() {
-    //     // DataManager.getInstance().minusBet();
-    // }
 
     /**
      * 執行重複下注
@@ -332,11 +354,10 @@ export class Controller extends Component {
     }
 
     /**
-     * 執行自動下注
+     * 點擊自動下注按鈕
      */
     private onAuto() {
-        //出現AutoSpinUI，使用xevent
-        // BaseEvent.clickAuto.emit(true);
+        AutoSpin.open.emit();
     }
 
     /**
@@ -357,7 +378,7 @@ export class Controller extends Component {
         turboNode.active = false;
         superNode.active = false;
 
-        //判斷超級SPIN開關
+        //判斷超級SPIN資訊顯示/隱藏
         this.showSuperSpin(tempTurboMode === TurboMode.Super);
 
         // 根據當前狀態顯示對應圖示

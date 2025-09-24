@@ -1,12 +1,6 @@
-import { _decorator, Animation, Button, Component, Label, Node, Sprite } from 'cc';
+import { _decorator, Button, Component, Node } from 'cc';
 
-import { BaseConst } from '@base/script/constant/BaseConst';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseAnimationName, BaseLangBundleDir, TurboMode } from '@base/script/types/BaseType';
-import { XEvent, XEvent1, XEvent2 } from '@base/script/utils/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
-
-import { DataManager } from '@common/script/data/DataManager';
+import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
 
 const { ccclass } = _decorator;
 
@@ -18,14 +12,15 @@ export class Notice extends Component {
 
     /**顯示餘額不足提示(reload:boolean) */
     public static showNoBalance: XEvent1<boolean> = new XEvent1();
-
     /**顯示錯誤提示 */
     public static showError: XEvent1<string> = new XEvent1();
 
     /**點擊錯誤提示OK */
     public static clickReload: XEvent = new XEvent();
+    /**點擊錯誤提示OK */
+    public static clickError: XEvent = new XEvent();
 
-    public static showMode: XEvent1<TurboMode> = new XEvent1();
+    // public static showMode: XEvent1<TurboMode> = new XEvent1();
 
     // /**下注不足提示 */
     // private spinMinText: string = 'ANDA BISA BELI SPIN GRATIS MULAI DARI RP #1 DAN LEBIH ATAU NAIKKAN TARUHAN ANDA KE RP #2 UNTUK SPIN';
@@ -34,71 +29,30 @@ export class Notice extends Component {
     /**錯誤提示系統字(多語系資源讀取完成前使用) */
     // private label: Label;
 
+    /**錯誤提示 */
+    private infoError: Node;
     /**餘額不足提示 */
-    private noBalanceSR: Node;
+    private infoNoBalance: Node;
 
-    /**
-     * 顯示餘額不足提示 
-     * @param reload {boolean} 是否重新載入
-     */
-    private onShowNoBalance() {
-        this.noBalanceSR.active = true;
-        this.noBalanceSR.getChildByName('check').on(Button.EventType.CLICK, () => {
-            Notice.clickReload.emit();
-        }, this);
-    }
 
     onLoad() {
-        // this.label = this.node.getChildByPath('InfoBg/Label').getComponent(Label);
-        // /**錯誤提示系統字 */
-        // this.label.string = 'PLEASE RECONNECT OR\nTRY AGAIN LATER.';
+        this.infoError = this.node.getChildByName('InfoError');
+        this.infoNoBalance = this.node.getChildByName('InfoNoBalance');
 
-        //SR回傳餘額不足, 點擊OK後重刷
-        this.noBalanceSR = this.node.getChildByName('InfoNoBalanceSR');
-
-
+        //監聽
         Notice.showNoBalance.on(this.onShowNoBalance, this);
-        // Notice.showNoBalance.on((reload: boolean) => {
-        //     //顯示餘額不足提示
-        //     // this.node.getChildByPath('BlackBg').active = true;
-        //     if (reload) {
-        //         this.noBalanceSR.active = true;
-        //     }
-        //     // else {
-        //     //     this.node.getChildByPath('InfoNoBalance').active = true;
-        //     // }
-        // }, this);
+        Notice.showError.on(this.onShowError, this);
 
-        Notice.showError.on((str: string) => {
-            this.node.getChildByPath('BlackBg').active = true;
-            this.node.getChildByPath('InfoBg').active = true;
-            this.node.getChildByPath('InfoBg/state').getComponent(Label).string = str;
+        this.infoError.getChildByName('Click').on(Button.EventType.CLICK, () => {
+            Notice.clickError.emit();//點擊OK後關閉提示
+            this.onCloseNotice();
         }, this);
 
-        //餘額不足提示
-        this.node.getChildByPath('InfoNoBalance/check').on(Button.EventType.CLICK, () => {
-            this.node.getChildByPath('InfoNoBalance').active = false;
-            this.node.getChildByPath('BlackBg').active = false;
+        this.infoNoBalance.getChildByName('Click').on(Button.EventType.CLICK, () => {
+            Notice.clickReload.emit();//點擊OK後重刷
+            this.onCloseNotice();
         }, this);
 
-        //錯誤提示
-        this.node.getChildByPath('InfoBg/check').on(Button.EventType.CLICK, () => {
-            this.node.getChildByPath('BlackBg').active = false;
-            this.node.getChildByPath('InfoBg').active = false;
-            // Notice.clickError.emit();
-        }, this);
-
-        //下注不足提示
-        this.node.getChildByPath('BetBlock/Back').on(Button.EventType.CLICK, () => {
-            this.node.getChildByPath('BetBlock').active = false;
-        }, this);
-        // Notice.showSpinMin.on((v1: number, v2: number) => {
-        //     this.node.getChildByPath('BlackBg').active = false;
-        //     this.node.getChildByPath('InfoBg').active = false;
-        //     this.node.getChildByPath('InfoNoBalance').active = false;
-        //     this.node.getChildByPath('BetBlock').active = true;
-        //     this.node.getChildByPath('BetBlock/Label').getComponent(Label).string = this.spinMinText.replace('#1', XUtils.NumberToCentString(v1)).replace('#2', XUtils.NumberToCentString(v2));
-        // }, this);
 
         //切換模式
         // Notice.showMode.on((mode: TurboMode) => {
@@ -149,6 +103,33 @@ export class Notice extends Component {
         //     this.node.getChildByPath('turboOn').getComponent(Sprite).spriteFrame = langRes['hint_turbo_on'];
         //     this.node.getChildByPath('turboOff').getComponent(Sprite).spriteFrame = langRes['hint_turbo_off'];
         // });
+    }
+
+    /**
+     * 顯示錯誤提示
+     * @param str {string} 錯誤提示
+     */
+    private onShowError(str: string) {
+        this.node.getChildByPath('BlackMask').active = true;
+        this.infoError.active = true;
+    }
+
+    /**
+     * 顯示餘額不足提示 
+     * @param reload {boolean} 是否重新載入
+     */
+    private onShowNoBalance() {
+        this.node.getChildByPath('BlackMask').active = true;
+        this.infoNoBalance.active = true;
+    }
+
+    /**
+     * 關閉提示
+     */
+    private onCloseNotice() {
+        this.node.getChildByPath('BlackMask').active = false;
+        this.infoError.active = false;
+        this.infoNoBalance.active = false;
     }
 }
 
