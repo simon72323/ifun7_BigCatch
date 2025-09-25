@@ -1,10 +1,13 @@
-import { _decorator, Button, Component, Label, Node } from 'cc';
+import { _decorator, Animation, Button, Component, Label, Node } from 'cc';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
+import { TurboMode } from '@base/script/types/BaseType';
 import { XEvent } from '@base/script/utils/XEvent';
 import { addBtnClickEvent } from '@base/script/utils/XUtils';
 
 import { DataManager } from '@common/script/data/DataManager';
+
+
 
 
 const { ccclass, property } = _decorator;
@@ -30,8 +33,8 @@ export class AutoSpin extends Component {
     // private dropDownLabel: Label= null;//下拉文字
 
     onLoad() {
-        AutoSpin.open.on(() => this.autoSpin.active = true, this);
-        AutoSpin.close.on(() => this.autoSpin.active = false, this);
+        AutoSpin.open.on(this.onOpen, this);
+        AutoSpin.close.on(this.onClose, this);
 
         this.autoSpin = this.node.getChildByName('AutoSpin');
 
@@ -72,13 +75,40 @@ export class AutoSpin extends Component {
     //     this.autoSpin.active = active;
     // }
 
+    private onOpen() {
+        this.autoSpin.active = true;
+        this.updateSpeedSwitch();
+    }
+
+    private onClose() {
+        this.autoSpin.active = false;
+    }
+
     private onStart() {
         console.log('onStart');
     }
 
-    private onClose() {
-        console.log('onClose');
+    /**
+     * 更新速度開關
+     */
+    private updateSpeedSwitch() {
+        const turboMode = DataManager.getInstance().turboMode;
+        switch (turboMode) {
+            case TurboMode.Normal:
+                this.quickSpinBtn.getComponent(Animation).play('switchButtonOff');
+                this.turboSpinBtn.getComponent(Animation).play('switchButtonOff');
+                break;
+            case TurboMode.Quick:
+                this.quickSpinBtn.getComponent(Animation).play('switchButtonOn');
+                this.turboSpinBtn.getComponent(Animation).play('switchButtonOff');
+                break;
+            case TurboMode.Turbo:
+                this.turboSpinBtn.getComponent(Animation).play('switchButtonOn');
+                this.quickSpinBtn.getComponent(Animation).play('switchButtonOff');
+                break;
+        }
     }
+
 
     private onStopUntilFeature() {
         console.log('onStopUntilFeature');

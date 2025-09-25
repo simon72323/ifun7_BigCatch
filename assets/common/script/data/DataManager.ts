@@ -1,6 +1,6 @@
 import { BaseConst } from '@base/script/constant/BaseConst';
 // import { BetData } from '@base/script/main/BetData';
-import { Auto, BigWinType, CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
+import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { XUtils } from '@base/script/utils/XUtils';
@@ -41,7 +41,7 @@ export class DataManager {
     /**下一模式 */
     public nextModuleID: ModuleID = ModuleID.BS;
     /**當前加速模式 */
-    public turboMode: TurboMode = TurboMode.Speed;
+    public turboMode: TurboMode = TurboMode.Quick;
     /**當前遊戲狀態 */
     public gameState: GameState = GameState.Ready;
     /**大贏跑分倍率 */
@@ -121,7 +121,7 @@ export class DataManager {
     public lawMinBet: number = 0;
 
     /**自動轉資料 */
-    public auto: Auto = new Auto();
+    // public auto: Auto = new Auto();
 
     //TODO:不明
     public isMenuOn = false;

@@ -22,11 +22,17 @@ export enum OrientationtMode {
     Landscape = 'Landscape',
 }
 
-/**SPIN模式 */
-// export enum SpinMode {
-//     Normal = 'Normal',
-//     Super = 'Super',
-// }
+/**Auto模式 */
+export enum AudoMode {
+    /**禁用 */
+    Off = 0,
+    /**無限轉 */
+    Infinite = 1,
+    /**直到免費轉 */
+    UntilBonus = 2,
+    /**轉N次 */
+    Limited = 3,
+}
 
 /**場景類型 */
 export enum ModuleID {
@@ -47,6 +53,16 @@ export enum GameState {
     /**結算表演中 */
     Result,
     // BuyFree,
+}
+
+/**
+ * 快速模式
+ */
+export enum TurboMode {
+    Normal = 0,
+    Quick,
+    Turbo,
+    Super
 }
 
 /**
@@ -189,26 +205,18 @@ export enum EVENTTYPE {
 /**
  * 自動轉狀態
  */
-export enum AutoPlayMode {
-    /**禁用 */
-    disable = 0,
-    /**連續轉 */
-    always = 1,
-    /**直到免費轉 */
-    tillBonus = 2,
-    /**轉N次 */
-    num = 3,
-}
+// export enum AutoPlayMode {
+//     /**禁用 */
+//     disable = 0,
+//     /**連續轉 */
+//     always = 1,
+//     /**直到免費轉 */
+//     tillBonus = 2,
+//     /**轉N次 */
+//     num = 3,
+// }
 
-/**
- * 快速模式
- */
-export enum TurboMode {
-    Normal = 0,
-    Speed,
-    Turbo,
-    Super
-}
+
 
 /**
  * 音效模式
@@ -277,27 +285,27 @@ export class UrlParam {
 /**
  * 自動轉資料
  */
-export class Auto {
-    /**自動轉模式 */
-    public mode: AutoPlayMode = AutoPlayMode.disable;
-    /**自動轉次數 */
-    public num: number = -1;
+// export class Auto {
+//     /**自動轉模式 */
+//     public mode: AutoPlayMode = AutoPlayMode.disable;
+//     /**自動轉次數 */
+//     public num: number = -1;
 
-    /**是否正在自動轉 */
-    public isAutoPlay(): boolean {
-        return this.mode != AutoPlayMode.disable;
-    }
+//     /**是否正在自動轉 */
+//     public isAutoPlay(): boolean {
+//         return this.mode != AutoPlayMode.disable;
+//     }
 
-    /**
-     * 停止自動轉並廣播
-     */
-    public stopAuto(): void {
-        if (this.isAutoPlay()) {
-            this.mode = AutoPlayMode.disable;
-            BaseEvent.onStopAuto.emit();
-        }
-    }
-}
+//     /**
+//      * 停止自動轉並廣播
+//      */
+//     public stopAuto(): void {
+//         if (this.isAutoPlay()) {
+//             this.mode = AutoPlayMode.disable;
+//             BaseEvent.onStopAuto.emit();
+//         }
+//     }
+// }
 
 /**
  * 逾時定義

@@ -1,6 +1,5 @@
 import { _decorator, Animation, Button, Component, EventKeyboard, EventTouch, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
 
-
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { AudioMode, GameState, ModuleID, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
@@ -15,7 +14,6 @@ import { AudioManager } from '@common/script/manager/AudioManager';
 import { ISpinData } from '@common/script/network/NetworkApi';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { Utils } from '@common/script/utils/Utils';
-
 
 
 const { ccclass, property } = _decorator;
@@ -387,9 +385,9 @@ export class Controller extends Component {
                 normalNode.active = true;
                 DataManager.getInstance().setTurboMode(TurboMode.Normal);
                 break;
-            case TurboMode.Speed:
+            case TurboMode.Quick:
                 speedNode.active = true;
-                DataManager.getInstance().setTurboMode(TurboMode.Speed);
+                DataManager.getInstance().setTurboMode(TurboMode.Quick);
                 break;
             case TurboMode.Turbo:
                 turboNode.active = true;
