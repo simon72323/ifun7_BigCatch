@@ -24,9 +24,14 @@ export class TaskManager {
     private curTask: GameTask;
 
     public constructor() {
+        /**接收任務完成事件 */
         this.finishEvent.on(this.onFinishTask, this);
     }
 
+    /**
+     * 添加任務
+     * @param task 任務
+     */
     public addTask(task: GameTask) {
         this.tasks.push(task);
         if (!this.curTask) {
@@ -35,6 +40,10 @@ export class TaskManager {
         }
     }
 
+    /**
+     * 更新任務
+     * @param deltaTime 增量時間
+     */
     public update(deltaTime: number): void {
         if (this.curTask) {
             //第一次進入該任務才執行baseExecute
@@ -49,7 +58,7 @@ export class TaskManager {
     }
 
     /**
-     * 
+     * 完成任務
      * @param task 
      */
     private onFinishTask(task: GameTask) {
@@ -73,5 +82,4 @@ export class TaskManager {
         logger('TaskManager 执行任務 ' + this.curTask.getName());
         this.curTask.baseExecute();
     }
-
 }

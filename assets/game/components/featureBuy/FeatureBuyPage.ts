@@ -24,7 +24,7 @@ const { ccclass } = _decorator;
 @ccclass('FeatureBuyPage')
 export class FeatureBuyPage extends Component {
 
-    /**顯示(幸運一擊花費) */
+    /**顯示(免費遊戲花費) */
     public static show: XEvent1<number> = new XEvent1();
 
     /**隱藏 */

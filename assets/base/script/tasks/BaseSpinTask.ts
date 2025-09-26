@@ -7,7 +7,7 @@ import { BaseConst } from '@base/script/constant/BaseConst';
 import { BaseEvent } from '@base/script/main/BaseEvent';
 // import { SocketManager } from '@base/script/socket/SocketManager';
 import { GameTask } from '@base/script/tasks/GameTask';
-import { AutoPlayMode, SpinBtnState, TurboMode } from '@base/script/types/BaseType';
+import { SpinBtnState, TurboMode } from '@base/script/types/BaseType';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 import { logger } from '@base/script/utils/XUtils';
 
@@ -23,7 +23,8 @@ export abstract class BaseSpinTask extends GameTask {
         logger('==========================================新局開始==========================================');
 
         TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_IDLE_MUTE.key);
-        if (DataManager.getInstance().isBS() == true) {
+        const dataManager = DataManager.getInstance();
+        if (dataManager.isBS() == true) {
             //沒在播放的話才從頭淡入
             if (AudioManager.getInstance().isPlaying(AudioKey.BsMusic) === false) {
                 //一秒淡入BS背景音樂
@@ -34,40 +35,35 @@ export abstract class BaseSpinTask extends GameTask {
                 AudioManager.getInstance().edit(AudioKey.BsMusic, 1);
             }
         }
-
-        InfoBar.setEnabled.emit(false);
-
-        BaseEvent.buyFeatureEnabled.emit(false);
-
-        SettingsPage1.setSpinState.emit(SpinBtnState.Loop);
         AudioManager.getInstance().play(AudioKey.SpinLoop);
 
-
+        InfoBar.setEnabled.emit(false);
+        BaseEvent.buyFeatureEnabled.emit(false);
+        SettingsPage1.setSpinState.emit(SpinBtnState.Loop);
         SettingsPage1.setEnabled.emit(false);
         SettingsPage1.lessEnabled.emit(false);
         SettingsPage1.plusEnabled.emit(false);
 
 
-        //購買幸運一擊強制取消Turbo, 但不跳通知
-        if (DataManager.getInstance().buyFs == true && DataManager.getInstance().isTurboOn() == true) {
-            DataManager.getInstance().setTurboMode(TurboMode.Normal);
-            DataManager.getInstance().tempTurboMode = TurboMode.Normal;
+        //購買免費遊戲強制取消Turbo, 但不跳通知
+        if (dataManager.buyFs == true && dataManager.isTurboOn() == true) {
+            dataManager.setTurboMode(TurboMode.Normal);
+            dataManager.tempTurboMode = TurboMode.Normal;
             SettingsPage1.setTurbo.emit(TurboMode.Normal);
 
-            //購買幸運一擊強制取消Turbo, 但不跳通知
+            //購買免費遊戲強制取消Turbo, 但不跳通知
             // Notice.showMode.emit(DataManager.getInstance().TurboMode);
         }
 
-        if (DataManager.getInstance().auto.isAutoPlay() == true &&
-            DataManager.getInstance().auto.mode == AutoPlayMode.num &&
-            DataManager.getInstance().auto.num <= 0) {
-            DataManager.getInstance().auto.stopAuto();
+        //取消自動轉
+        if (dataManager.isAutoMode && dataManager.autoSpinCount <= 0) {
+            dataManager.isAutoMode = false;
         }
 
         //監聽spin是否成功,
         BaseEvent.spinResult.once((success) => {
 
-            //還原幸運一擊
+            //還原免費遊戲
             DataManager.getInstance().buyFs = false;
             DataManager.getInstance().featureBuyType = 0;
 
@@ -95,15 +91,16 @@ export abstract class BaseSpinTask extends GameTask {
 
     }
 
+    /**持續更新 */
     update(_deltaTime: number): void {
         // throw new Error('Method not implemented.');
     }
 
+    /**子類別實現執行 */
     protected childExecute(): void {
         //由子類別覆寫, 處理閒置狀態額外需要的動作
     }
 
     /**子類別實現Spin失敗 */
     abstract childSpinFailed(): void;
-
 }

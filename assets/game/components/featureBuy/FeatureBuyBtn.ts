@@ -14,12 +14,12 @@ import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
 const { ccclass } = _decorator;
 
 /**
- * 幸運一擊按鈕
+ * 免費遊戲按鈕
  */
 @ccclass('FeatureBuyBtn')
 export class FeatureBuyBtn extends Component {
 
-    /**點擊幸運一擊 */
+    /**點擊免費遊戲 */
     public static click: XEvent = new XEvent();
 
     /**購買功能按鈕 */
@@ -33,7 +33,7 @@ export class FeatureBuyBtn extends Component {
     private sprite: Sprite;
 
     onLoad() {
-        //點擊幸運一擊
+        //點擊免費遊戲
         this.FeatureBuyButton = this.node.getChildByName('btn');
         this.FeatureBuyButton.on(Button.EventType.CLICK, () => {
             AudioManager.getInstance().play(GameAudioKey.FeatureBuy);

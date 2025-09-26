@@ -5,14 +5,18 @@ import { TaskManager } from '@base/script/tasks/TaskManager';
  */
 export abstract class GameTask {
 
+    /**任務名稱 */
     protected name: string;
 
+    /**是否已執行 */
     public executed: boolean = false;
 
+    /**取得任務名稱 */
     public getName(): string {
         return this.name;
     }
 
+    /**基礎執行 */
     public baseExecute(): void {
         this.executed = true;
         this.execute();
@@ -24,6 +28,7 @@ export abstract class GameTask {
     /**持續更新 */
     abstract update(deltaTime: number): void;
 
+    /**完成 */
     protected finish(): void {
         TaskManager.getInstance().finishEvent.emit(this);
     }

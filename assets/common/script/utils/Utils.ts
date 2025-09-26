@@ -1,7 +1,7 @@
-import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity } from 'cc';
+import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
-import { GameConfig } from '@common/script/data/BaseConfig';
+import { BaseConfig } from '@common/script/data/BaseConfig';
 
 
 // declare const gtag: (command: string, event: string, data?: any) => void;
@@ -43,7 +43,7 @@ export class Utils {
      * @returns 格式化後的字符串
      */
     public static numberFormat(value: number): string {
-        let decimalPoint = GameConfig.DecimalPlaces;
+        let decimalPoint = BaseConfig.DecimalPlaces;
         const preciseValue = Utils.accMul(value, 1);
         return Number(preciseValue.toFixed(decimalPoint)).toLocaleString('en', {
             minimumFractionDigits: decimalPoint
@@ -126,6 +126,38 @@ export class Utils {
 
         m = Math.pow(10, Math.max(r1, r2));
         return (Utils.accMul(arg1, m) + Utils.accMul(arg2, m)) / m;
+    }
+
+    /**
+     * 延遲執行
+     * @param callback 要執行的回調函數
+     * @param delay 延遲秒數
+     * @param scope 作用域（this 指向）
+     */
+    public static scheduleOnce(callback: (dt?: number) => void, delay: number, scope: any) {
+        Utils.schedule(callback, scope, 0, 0, delay);
+    }
+
+    /**
+     * 延遲執行
+     * @param callback 要執行的回調函數
+     * @param scope 作用域（this 指向）
+     * @param interval 間隔秒數
+     * @param repeat 重複次數
+     * @param delay 延遲秒數
+     */
+    public static schedule(callback: (dt?: number) => void, scope: any, interval: number, repeat?: number, delay?: number) {
+        Scheduler.enableForTarget(scope);
+        director.getScheduler().schedule(callback, scope, interval, repeat, delay, false);
+    }
+
+    /**
+     * 取消延遲執行
+     * @param callback 要執行的回調函數
+     * @param scope 作用域（this 指向）
+     */
+    public static unschedule(callback: (dt?: number) => void, scope: any) {
+        director.getScheduler().unschedule(callback, scope);
     }
 
     /**
@@ -532,12 +564,12 @@ export class Utils {
         if (EDITOR === true) return 'Develop';
         let domain = window.location.hostname;
 
-        if (GameConfig.Sites == null) return null;
+        if (BaseConfig.Sites == null) return null;
 
-        let keys = Object.keys(GameConfig.Sites);
+        let keys = Object.keys(BaseConfig.Sites);
         for (let i in keys) {
             let key = keys[i];
-            let sites: string[] = GameConfig.Sites[key];
+            let sites: string[] = BaseConfig.Sites[key];
 
             if (sites == null) continue;
             if (sites.length === 0) continue;
@@ -693,5 +725,26 @@ export class CurveRangeProperty {
             return value;
         };
     }
+}
+
+/**
+ * 延遲
+ * @param ms 
+ * @returns 
+ */
+export async function delay(ms: number): Promise<void> {
+    return new Promise<void>(resolve => {
+        Utils.scheduleOnce(() => resolve(), ms, null);
+    });
+}
+
+/**
+ * 等待下一幀
+ * @returns 
+ */
+export async function waitNextFrame(): Promise<void> {
+    return new Promise<void>(resolve => {
+        Utils.scheduleOnce(() => resolve(), 0, null);
+    });
 }
 

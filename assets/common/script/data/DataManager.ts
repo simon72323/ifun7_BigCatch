@@ -5,7 +5,10 @@ import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { XUtils } from '@base/script/utils/XUtils';
 
+import { SlotData } from '@game/script/data/SlotData';
+
 import { NetworkData } from '@common/script/data/NetworkData';
+import { IGameData } from '@common/script/network/NetworkApi';
 import { Utils } from '@common/script/utils/Utils';
 
 
@@ -21,38 +24,42 @@ export class DataManager {
         return DataManager.instance;
     }
 
-    /**當前SPIN模式 */
+    /** 當前SPIN模式 */
     // public curSpinMode: SpinMode = SpinMode.Normal;
 
-    /**超級模式 */
-    public superMode: boolean = false;
-    /**自動模式 */
-    public autoMode: boolean = false;
-    /**剩餘自動轉次數 */
+    /** 超級模式 */
+    public isSuperMode: boolean = false;
+    /** 自動模式 */
+    public isAutoMode: boolean = false;
+    /** 剩餘自動轉次數 */
     public autoSpinCount: number = 0;
-    /**停止直到免費轉 */
-    public stopUntilFeature: boolean = false;
+    /** 停止直到免費轉 */
+    public isStopUntilFeature: boolean = false;
 
-    /**是否購買免費遊戲 */
+    /** 是否購買免費遊戲 */
     // public isBuyFreeGame: boolean = false;
-    /**當前方向模式 */
+    /** 當前方向模式 */
     // public orientationMode: OrientationtMode = OrientationtMode.Portrait;
-    /**當前模式 */
+    /** 當前模式 */
     public moduleID: ModuleID = ModuleID.BS;
-    /**下一模式 */
+    /** 下一模式 */
     public nextModuleID: ModuleID = ModuleID.BS;
-    /**當前加速模式 */
+    /** 當前加速模式(免費遊戲會強制設為Normal) */
     public turboMode: TurboMode = TurboMode.Quick;
-    /**當前遊戲狀態 */
+    /** 當前遊戲狀態 */
     public gameState: GameState = GameState.Ready;
-    /**大贏跑分倍率 */
+    /** 大贏跑分倍率 */
     public bigWinMultiple: number[] = [10, 20, 50];
-    /**當前下注索引 */
+    /** 當前下注索引 */
     public betIdx: number = 1;
-    /**當前下注值 */
+    /** 當前下注值 */
     public betValue: number = 0;
-    /**玩家餘額 */
+    /** 玩家餘額 */
     public userCredit: number = 0;
+
+
+    /** 獲取slot資料 */
+    public slotData: SlotData = new SlotData();
 
 
 
@@ -69,9 +76,6 @@ export class DataManager {
 
     /**下注相關資料 */
     // public bet: BetData = new BetData();
-
-    /**加速模式(幸運一擊會強制設為Normal) */
-    // private turboMode: TurboMode = TurboMode.Normal;
 
     /**轉動過程設定的新模式,待機時帶入 */
     public tempTurboMode: TurboMode = TurboMode.Normal;
@@ -100,14 +104,11 @@ export class DataManager {
     /**是否已呼叫過init */
     private initialize: boolean = false;
 
-    /**幸運一擊購買類型(一般狀況為0) */
+    /**免費遊戲購買類型(一般狀況為0) */
     public featureBuyType = 0;
 
     /**遊戲總贏分(BS表示一轉總得分, FS表示N轉總得分) */
     public winTotal: number = 0;
-
-    //遊戲資料 (如果沒有呼叫setData就用預設)
-    // private data: BaseData = new BaseData();
 
     /**輪帶資料 */
     public stripTables: StripTable[] = [];
@@ -115,7 +116,7 @@ export class DataManager {
     /**盤面圖示賠率 */
     public payOfPos = [];
 
-    /**幸運一擊購買倍率清單(幸運一擊允許N個Bet) */
+    /**免費遊戲購買倍率清單(免費遊戲允許N個Bet) */
     public featureBuyMultipleList: number[] = [];
 
     /**最低下注額(目前僅用於印尼版) */
@@ -174,6 +175,14 @@ export class DataManager {
     }
 
     /**
+     * 取得遊戲資料
+     * @returns 遊戲資料
+     */
+    public getGameData(): IGameData {
+        return NetworkData.getInstance().gameData;
+    }
+
+    /**
      * 檢查餘額是否足夠
      * @returns 
      */
@@ -187,7 +196,7 @@ export class DataManager {
      * @returns 
      */
     public getBetCredit() {
-        const gameData = NetworkData.getInstance().gameData;
+        const gameData = this.getGameData();
         const coinValue = gameData.coin_value[gameData.coin_value_default_index];
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
         const lineTotal = gameData.line_total;
@@ -319,7 +328,7 @@ export class DataManager {
     }
 
     /**
-     * 設定幸運一擊購買倍率清單
+     * 設定免費遊戲購買倍率清單
      * @param data 
      */
     public setFeatureBuyMultipleList(data: number[] | number): void {
@@ -334,16 +343,16 @@ export class DataManager {
     }
 
     /**
-     * 幸運一擊是否可用
-     * @returns 幸運一擊購買金額 <= 幸運一擊限制購買金額(最大投注 x 幸運一擊限制倍率)
+     * 免費遊戲是否可用
+     * @returns 免費遊戲購買金額 <= 免費遊戲限制購買金額(最大投注 x 免費遊戲限制倍率)
      */
     // public isFeatureBuyEnabled(): boolean {
     //     return this.getCurFeatureBuyTotal() <= this.bet.getMaxTotal() * this.luckyStrikeBlockRate;
     // }
 
     // /**
-    //  * 幸運一擊購買金額
-    //  * @returns 幸運一擊購買金額 = 幸運一擊購買倍率 x 總下注
+    //  * 免費遊戲購買金額
+    //  * @returns 免費遊戲購買金額 = 免費遊戲購買倍率 x 總下注
     //  */
     // public getCurFeatureBuyTotal(): number {
     //     return this.getCurFeatureBuyMultiple() * this.bet.getCurRateXCurBet();
@@ -354,7 +363,7 @@ export class DataManager {
     // }
 
     /**
-     * 取得目前幸運一擊購買倍率(幸運一擊允許N個Bet)
+     * 取得目前免費遊戲購買倍率(免費遊戲允許N個Bet)
      * @returns 
      */
     public getCurFeatureBuyMultiple(): number {
@@ -362,7 +371,7 @@ export class DataManager {
     }
 
     /**
-     * 幸運一擊金額為N個Bet
+     * 免費遊戲金額為N個Bet
      * @returns 
      */
     // public getFeatureBuyNumOfCost(): number {
@@ -370,7 +379,7 @@ export class DataManager {
     // }
 
     /**
-     * 取得幸運一擊最大購買金額
+     * 取得免費遊戲最大購買金額
      */
     // public getFeatureBuyMaxBet(): number {
     //     let lk = this.luckyStrikeBlockRate;
@@ -395,7 +404,7 @@ export class DataManager {
     // }
 
     /**
-     * 取得幸運一擊購買倍率
+     * 取得免費遊戲購買倍率
     //  * @param type 
     //  * @returns 
     //  */
@@ -409,8 +418,9 @@ export class DataManager {
      */
     public getChangeBetValue(changeValue: number): number {
         this.betIdx += changeValue;
-        const length = NetworkData.getInstance().gameData.coin_value.length;
-        const betIdxMin = NetworkData.getInstance().gameData.bet_available_idx;
+        const gameData = this.getGameData();
+        const length = gameData.coin_value.length;
+        const betIdxMin = gameData.bet_available_idx;
 
         if (changeValue > 0) {
             // 增加下注
@@ -425,7 +435,7 @@ export class DataManager {
         }
 
         // 更新下注值
-        this.betValue = NetworkData.getInstance().gameData.coin_value[this.betIdx];
+        this.betValue = gameData.coin_value[this.betIdx];
         return this.betValue;
     }
 

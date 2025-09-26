@@ -1,4 +1,4 @@
-import { ISpinData, IGameData, IUserData } from '@common/script/network/NetworkApi';
+import { IGameData, ISpinData, IUserData } from '@common/script/network/NetworkApi';
 
 /**
  * 遊戲資料控制器

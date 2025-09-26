@@ -187,18 +187,6 @@ export class XUtils {
         return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
 
-    public static scheduleOnce(callback: (dt?: number) => void, delay: number, scope: any) {
-        XUtils.schedule(callback, scope, 0, 0, delay);
-    }
-
-    public static schedule(callback: (dt?: number) => void, scope: any, interval: number, repeat?: number, delay?: number) {
-        Scheduler.enableForTarget(scope);
-        director.getScheduler().schedule(callback, scope, interval, repeat, delay, false);
-    }
-
-    public static unschedule(callback: (dt?: number) => void, scope: any) {
-        director.getScheduler().unschedule(callback, scope);
-    }
 
     /**
      * 將N筆WinLine轉換為Spread2維陣列動作清單
@@ -627,27 +615,6 @@ export class XUtils {
         return result;
     }
 
-}
-
-/**
- * 延遲
- * @param ms 
- * @returns 
- */
-export async function delay(ms: number): Promise<void> {
-    return new Promise<void>(resolve => {
-        XUtils.scheduleOnce(() => resolve(), ms, null);
-    });
-}
-
-/**
- * 等待下一幀
- * @returns 
- */
-export async function waitNextFrame(): Promise<void> {
-    return new Promise<void>(resolve => {
-        XUtils.scheduleOnce(() => resolve(), 0, null);
-    });
 }
 
 export function logger(str: string) {

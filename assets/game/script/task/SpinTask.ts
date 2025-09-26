@@ -34,7 +34,7 @@ export class SpinTask extends BaseSpinTask {
         }, this);
 
         if (DataManager.getInstance().isBS() === true) {
-            //先轉型(幸運一擊直接給結果不轉動)
+            //先轉型(免費遊戲直接給結果不轉動)
             if (DataManager.getInstance().buyFs === false && APIManager.getInstance().getSpinLate() === false) {
                 SlotMachine2.spin.emit(SlotMachineID.BS);
             }

@@ -1,10 +1,10 @@
-import { _decorator, Component, director, Label, Node, ProgressBar, ResolutionPolicy, sp, view } from 'cc';
+import { _decorator, Component, director, Label, Node, ProgressBar, sp } from 'cc';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
-import { NetworkManager } from '@common/script/network/NetworkManager';
 import { i18n } from '@common/script/utils/i18n';
 import { UrlParameters } from '@common/script/utils/UrlParameters';
 import { Utils } from '@common/script/utils/Utils';
+
 
 const { ccclass, property, disallowMultiple } = _decorator;
 
@@ -30,8 +30,8 @@ export class Loading extends Component {
         // E2ETest.E2EStartLoading();
 
         this.initUI();
-        // this.getCurrencyJson();//獲取幣別資料
-        // i18n.init(UrlParameters.lang);//初始化語言
+        this.getCurrencyJson();//獲取幣別資料
+        i18n.init(UrlParameters.lang);//初始化語言
 
         // GoogleAnalytics.instance.initialize();
     }

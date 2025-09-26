@@ -54,14 +54,14 @@ export abstract class BaseIdleTask extends GameTask {
         //有待通知訊系
         else if (PromoManager.getInstance().hasNotifyCampaign() === true) {
             //活動異動通知時取消自動轉
-            if (DataManager.getInstance().autoMode == true) {
-                DataManager.getInstance().autoMode = false;
+            if (DataManager.getInstance().isAutoMode) {
+                DataManager.getInstance().isAutoMode = false;
             }
 
             this.idleState();
         }
         //自動轉
-        else if (DataManager.getInstance().autoMode == true) {
+        else if (DataManager.getInstance().isAutoMode) {
             // if (DataManager.getInstance().auto.mode == AutoPlayMode.num) {
             //     DataManager.getInstance().auto.num -= 1;
             //     SettingsPage1.setSpinNum.emit(DataManager.getInstance().auto.num);

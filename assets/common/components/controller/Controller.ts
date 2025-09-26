@@ -1,4 +1,4 @@
-import { _decorator, Animation, Button, Component, EventKeyboard, EventTouch, KeyCode, Label, Node, screen, tween, UIOpacity } from 'cc';
+import { _decorator, Animation, Button, Component, EventKeyboard, EventTouch, KeyCode, Label, Node, screen, tween, UIOpacity, Vec3 } from 'cc';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
 import { AudioMode, GameState, ModuleID, TurboMode } from '@base/script/types/BaseType';
@@ -7,7 +7,7 @@ import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
 import { AutoSpin } from '@common/components/autoSpin/AutoSpin';
 import { Notice } from '@common/components/notice/Notice';
 
-import { GameConfig } from '@common/script/data/BaseConfig';
+import { BaseConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
 import { NetworkData } from '@common/script/data/NetworkData';
 import { AudioManager } from '@common/script/manager/AudioManager';
@@ -257,9 +257,9 @@ export class Controller extends Component {
 
         this.setControlBtnInteractable(false);//禁用控制器按鈕
         //判斷是否執行顯示超級模式畫面
-        if (!DataManager.getInstance().superMode && DataManager.getInstance().turboMode === TurboMode.Super) {
+        if (!DataManager.getInstance().isSuperMode && DataManager.getInstance().turboMode === TurboMode.Super) {
             this.showSuperSpinContent();
-            DataManager.getInstance().superMode = true;
+            DataManager.getInstance().isSuperMode = true;
         }
         //判斷此次spin是否為購買免費遊戲(等待server回傳)
         if (buyFreeBet > 0) {
@@ -281,7 +281,7 @@ export class Controller extends Component {
      * click按鈕動畫
      */
     private clickAnim(node: Node) {
-        tween(node).to(0.1, { scale: 0.7 }).to(0.15, { scale: 1 }, { easing: 'backOut' }).start();
+        tween(node).to(0.1, { scale: new Vec3(0.7, 0.7, 0.7) }).to(0.15, { scale: new Vec3(1, 1, 1) }, { easing: 'backOut' }).start();
     }
 
     /**
@@ -323,7 +323,7 @@ export class Controller extends Component {
      */
     private onStopAutoSpin() {
         this.stopAutoSpinBtn.active = false;
-        DataManager.getInstance().autoMode = false;
+        DataManager.getInstance().isAutoMode = false;
         DataManager.getInstance().autoSpinCount = 0;
         AutoSpin.close.emit();
         // AutoSpin.StopAutoSpin();
@@ -341,7 +341,7 @@ export class Controller extends Component {
 
         //下注數值更新(添加幣別符號與格式化)
         const betValue = DataManager.getInstance().getChangeBetValue(changeValue);
-        this.totalBetValue.string = GameConfig.CurrencySymbol + Utils.numberFormat(betValue);
+        this.totalBetValue.string = BaseConfig.CurrencySymbol + Utils.numberFormat(betValue);
     }
 
     /**

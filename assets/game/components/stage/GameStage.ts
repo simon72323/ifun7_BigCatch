@@ -51,7 +51,7 @@ export class GameStage extends Component {
         GameStage.shake.on(this.shake, this);//監聽震動事件
         GameStage.fsOpening.on(this.fsOpening, this);//監聽FS開場事件
 
-        FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊幸運一擊事件
+        FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
         SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
 
         SlotMachine2.startMi.on(this.startMi, this);//監聽開始咪牌事件
@@ -116,7 +116,7 @@ export class GameStage extends Component {
         }
     }
 
-    /**點擊幸運一擊 */
+    /**點擊免費遊戲 */
     private clickFeatureBuyBtn(): void {
         DataManager.getInstance().isMenuOn = true;
         FeatureBuyPage.show.emit(DataManager.getInstance().getCurFeatureBuyTotal());

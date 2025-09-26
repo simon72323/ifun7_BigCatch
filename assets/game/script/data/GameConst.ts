@@ -10,20 +10,69 @@ export class GameConst {
     public static symbolWeight: number[] = [0, 99, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     /**倍數清單 */
     public static multiplierList: number[] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
-    /**FS初始倍數 */
-    public static FS_INIT_MULTIPLIER: number = 8;
-    public static FS_INIT_MULTIPLIER_INDEX: number = GameConst.multiplierList.indexOf(GameConst.FS_INIT_MULTIPLIER);
-
     /**FS獲得次數累加毫秒 */
     public static BONUS_TIME_ADD_INTERVAL = 0.2;
-
     /**BigWin End 播放完畢後等待時間 */
     public static BIG_WIN_END_DELAY: number = 1;
-
     /**金框隨機值 */
     public static RANDOM_GOLDEN: number = 0.2;
+    /**橫軸列數 */
+    public static REEL_COL: number = 5;
+    /**縱軸列數 */
+    public static REEL_ROW: number = 3;
+    /**自訂BigWin倍數 */
+    public static BIG_WIN_MULTIPLE: number[] = [10, 20, 40, 80, 120];
+
+    /**遊戲表演時間 */
+    public static SLOT_TIME = {
+        // 正常模式
+        normal: {
+            showWinDuration: 1,      // 中獎演示時間
+            explodeTime: 1,          // 消去動畫時間
+            autoSpinTime: 0.5,        // 自動轉停止後，等待一段時間再開始下一輪
+            reelStopTime: 0.1,        // 每個轉軸停止間隔時間
+            reelMiTime: 1,          // 每個轉軸瞇牌時間
+            symbolFallTime: 0.5,      // 符號掉落速度倍率
+            bigWinEndDelay: 0.5,       // BigWin結束延遲
+            bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
+        },
+        // 快速模式
+        quick: {
+            showWinDuration: 0.6,      // 中獎演示時間
+            explodeTime: 0.6,          // 消去動畫時間
+            autoSpinTime: 0.3,        // 自動轉停止後，等待一段時間再開始下一輪
+            reelStopTime: 0.05,        // 每個轉軸停止間隔時間
+            reelMiTime: 0.6,          // 每個轉軸瞇牌時間
+            symbolFallTime: 0.3,      // 符號掉落速度倍率
+            bigWinEndDelay: 0.3,       // BigWin結束延遲
+            bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
+        },
+        // 極速模式
+        turbo: {
+            showWinDuration: 0.4,      // 中獎演示時間
+            explodeTime: 0.4,          // 消去動畫時間
+            autoSpinTime: 0.2,        // 自動轉停止後，等待一段時間再開始下一輪
+            reelStopTime: 0,        // 每個轉軸停止間隔時間
+            reelMiTime: 0.4,          // 每個轉軸瞇牌時間
+            symbolFallTime: 0.2,      // 符號掉落速度倍率
+            bigWinEndDelay: 0.2,       // BigWin結束延遲
+            bonusTimeAddInterval: 0.1  // 獎勵時間累加間隔
+        },
+        // 超速模式
+        ultra: {
+            showWinDuration: 0.1,      // 中獎演示時間
+            explodeTime: 0.1,          // 消去動畫時間
+            autoSpinTime: 0.1,        // 自動轉停止後，等待一段時間再開始下一輪
+            reelStopTime: 0,        // 每個轉軸停止間隔時間
+            reelMiTime: 0,          // 每個轉軸瞇牌時間
+            symbolFallTime: 0,      // 符號掉落速度倍率
+            bigWinEndDelay: 0,       // BigWin結束延遲
+            bonusTimeAddInterval: 0  // 獎勵時間累加間隔
+        }
+    };
 }
 
+/**符號ID */
 export enum SymbolID {
     Wild = 0,
     Scatter,
@@ -118,10 +167,10 @@ export enum GameAudioKey {
     /**壞人死 */
     die = 'die',
 
-    //幸運一擊----------------------------
-    /**幸運一擊按鈕 */
+    //免費遊戲----------------------------
+    /**免費遊戲按鈕 */
     FeatureBuy = 'FeatureBuy',
-    /**幸運一擊購買按鈕 */
+    /**免費遊戲購買按鈕 */
     buy = 'buy',
 
     //其他----------------------------
@@ -145,18 +194,21 @@ export enum GameAudioKey {
     in = 'in',
 }
 
+/**壓黑Key */
 export enum BlackKey {
     DiceBlack = 'DiceBlack',
     UIBlack = 'UIBlack',
 
 }
 
+/**遊戲Layer */
 export enum GameLayer {
     Reel = 0,
     Reel2 = 1,
     Scatter = 2
 }
 
+/**老虎機ID */
 export enum SlotMachineID {
     BS = 0,
     FS = 1

@@ -1,8 +1,12 @@
-import { DataManager } from '@common/script/data/DataManager';;
-import { GameTask } from '@base/script/tasks/GameTask';
-import { XUtils } from '@base/script/utils/XUtils';
 
-import { GameData } from '@game/script/main/GameData';
+
+import { GameTask } from '@base/script/tasks/GameTask';
+
+import { GameConst } from '@game/script/data/GameConst';
+
+import { DataManager } from '@common/script/data/DataManager';
+import { Utils } from '@common/script/utils/Utils';
+
 
 /**
  * 自動轉等待時間
@@ -12,11 +16,11 @@ export class AutoSpinDelayTask extends GameTask {
     execute(): void {
 
         //自動轉 & 沒有skip 才延遲0.3秒
-        if (DataManager.getInstance().auto.isAutoPlay() == true &&
-            DataManager.getInstance().getData<GameData>().hasSkip === false) {
+        if (DataManager.getInstance().isAutoMode == true &&
+            DataManager.getInstance().slotData.hasSkip === false) {
             //延遲時間依照速度模式
-            let delay = DataManager.getInstance().getData<GameData>().getTurboSetting().autoSpinRoundDelay;
-            XUtils.scheduleOnce(() => {
+            let delay = GameConst.SLOT_TIME[DataManager.getInstance().turboMode].autoSpinTime;
+            Utils.scheduleOnce(() => {
                 this.finish();
             }, delay, this);
         }

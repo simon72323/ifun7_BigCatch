@@ -1,4 +1,4 @@
-export const GameConfig = {
+export const BaseConfig = {
     /** 網站 */
     Sites: {
         /** 開發網站 */
@@ -13,7 +13,7 @@ export const GameConfig = {
     },
 
     /** 版本 */
-    Version: '4800.010',
+    Version: '5800.010',
 
     /** 貨幣符號 */
     CurrencySymbol: 'A$',
