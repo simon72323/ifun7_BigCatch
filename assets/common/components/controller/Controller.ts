@@ -4,7 +4,7 @@ import { BaseEvent } from '@base/script/main/BaseEvent';
 import { AudioMode, GameState, ModuleID, TurboMode } from '@base/script/types/BaseType';
 import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
 
-import { AutoSpin } from '@common/components/common/AutoSpin';
+import { AutoSpin } from '@common/components/autoSpin/AutoSpin';
 import { Notice } from '@common/components/notice/Notice';
 
 import { GameConfig } from '@common/script/data/BaseConfig';

@@ -1,14 +1,17 @@
 import { _decorator, Button, Component, Label, Node, sys, WebView } from 'cc';
 
-import { Notice } from '@base/components/notice/Notice';
+
 import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { WebViewEnum } from '@base/script/constant/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
 import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
 import { XEvent } from '@base/script/utils/XEvent';
+
+import { Notice } from '@common/components/notice/Notice';
+import { DataManager } from '@common/script/data/DataManager';
+
 
 const { ccclass } = _decorator;
 
@@ -73,8 +76,8 @@ export class GameHelpWebView extends Component {
             let response = {
                 type: 'RESPONSE_DATA',
                 messageId: webviewData.messageId,
-                timestamp: new Date().getTime(),
-                payload: DataManager.getInstance().getData().getGameHelpPayload()
+                timestamp: new Date().getTime()
+                // payload: DataManager.getInstance().getData().getGameHelpPayload()
             };
 
             this.iframe.parentNode['style'].zIndex = WebViewEnum.GameHelp;

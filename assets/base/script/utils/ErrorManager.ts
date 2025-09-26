@@ -1,5 +1,7 @@
-import { Notice } from '@base/components/notice/Notice';
+
 import { AudioManager } from '@base/script/audio/AudioManager';
+
+import { Notice } from '@common/components/notice/Notice';
 // import { SocketManager } from '@base/script/socket/SocketManager';
 
 /**

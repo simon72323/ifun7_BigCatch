@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "d690e0c0-381e-4468-b621-fc965cac2e6e",
+  "uuid": "4320ffc1-1b0b-4691-8fae-ff2b385b1d4f",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "DropDown"
+    "syncNodeName": "AutoSpin"
   }
 }

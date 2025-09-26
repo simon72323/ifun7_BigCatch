@@ -1,7 +1,6 @@
 import { _decorator, Component, director, EventKeyboard, game, input, Input, instantiate, KeyCode, Label, Mask, Node, Prefab, ResolutionPolicy, screen, Sprite, SpriteFrame, sys, UITransform, view, View } from 'cc';
 
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
-import { Notice } from '@base/components/notice/Notice';
 import { BaseConst } from '@base/script/constant/BaseConst';
 
 import { BaseEvent } from '@base/script/main/BaseEvent';
@@ -12,6 +11,7 @@ import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';
 import { logger } from '@base/script/utils/XUtils';
 
+import { Notice } from '@common/components/notice/Notice';
 import { DataManager } from '@common/script/data/DataManager';
 import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 

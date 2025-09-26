@@ -656,7 +656,7 @@ export function logger(str: string) {
 
 /**
  * 添加button Click事件監聽器
- * @param target 目標節點
+ * @param target 目標(掛腳本的節點)
  * @param component 組件名稱
  * @param button 按鈕
  * @param handler 處理器

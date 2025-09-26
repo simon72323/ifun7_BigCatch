@@ -21,7 +21,7 @@
             "_value": false
           },
           "animation": {
-            "_value": false
+            "_value": true
           },
           "skeletal-animation": {
             "_value": false
@@ -198,6 +198,7 @@
           "2d",
           "3d",
           "affine-transform",
+          "animation",
           "audio",
           "base",
           "custom-pipeline",

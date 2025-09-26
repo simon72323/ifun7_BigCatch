@@ -5,15 +5,16 @@ import { BackGame } from '@base/components/backGame/BackGame';
 import { BetPage } from '@base/components/betPage/BetPage';
 import { GameHistory } from '@base/components/gameHistory/GameHistory';
 import { InfoBar } from '@base/components/infoBar/InfoBar';
-import { Notice } from '@base/components/notice/Notice';
+
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { AudioKey } from '@base/script/audio/AudioKey';
 import { AudioManager } from '@base/script/audio/AudioManager';
 import { BaseEvent } from '@base/script/main/BaseEvent';
-import { AutoPlayMode, ModuleID, SpinBtnState, TurboMode } from '@base/script/types/BaseType';
+import { ModuleID, SpinBtnState, TurboMode } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 
+import { Notice } from '@common/components/notice/Notice';
 import { DataManager } from '@common/script/data/DataManager';
 
 /**
@@ -118,9 +119,9 @@ export class UIManager {
         let newTurboMode;
         switch (DataManager.getInstance().tempTurboMode) {
             case TurboMode.Normal:
-                newTurboMode = TurboMode.Speed;
+                newTurboMode = TurboMode.Quick;
                 break;
-            case TurboMode.Speed:
+            case TurboMode.Quick:
                 newTurboMode = TurboMode.Turbo;
                 break;
             case TurboMode.Turbo:
@@ -129,7 +130,7 @@ export class UIManager {
         }
 
         SettingsPage1.setTurbo.emit(newTurboMode);
-        Notice.showMode.emit(newTurboMode);
+        // Notice.showMode.emit(newTurboMode);
 
         //待機狀態才能直接修改, 否則先存等到待機帶入
         if (DataManager.getInstance().isIdle() === true) {
@@ -148,7 +149,7 @@ export class UIManager {
     private onClickLess(): void {
         if (DataManager.getInstance().isMenuOn == true) return;
         if (DataManager.getInstance().isIdle() === false) return;
-        DataManager.getInstance().bet.less();
+        // DataManager.getInstance().bet.less();
         this.refreshBet();
     }
 
@@ -159,7 +160,7 @@ export class UIManager {
     private onClickPlus(): void {
         if (DataManager.getInstance().isMenuOn == true) return;
         if (DataManager.getInstance().isIdle() === false) return;
-        DataManager.getInstance().bet.plus();
+        // DataManager.getInstance().bet.plus();
         this.refreshBet();
     }
 
@@ -169,21 +170,21 @@ export class UIManager {
      * @returns 
      */
     private onClickSpin() {
-        if (this.currentSettingPage == 1) return;
-        if (DataManager.getInstance().isMenuOn == true) return;
+        // if (this.currentSettingPage == 1) return;
+        // if (DataManager.getInstance().isMenuOn == true) return;
 
-        //自動轉過程若點擊手動轉要停止自動
-        if (DataManager.getInstance().auto.isAutoPlay() === true) {
-            DataManager.getInstance().auto.stopAuto();
-            return;
-        }
-        if (DataManager.getInstance().isIdle()) {
-            AudioManager.getInstance().play(AudioKey.SpinClick);
-            BaseEvent.clickSpin.emit(false);
-        }
-        else {
-            BaseEvent.clickSkip.emit();
-        }
+        // //自動轉過程若點擊手動轉要停止自動
+        // if (DataManager.getInstance().auto.isAutoPlay() === true) {
+        //     DataManager.getInstance().auto.stopAuto();
+        //     return;
+        // }
+        // if (DataManager.getInstance().isIdle()) {
+        //     AudioManager.getInstance().play(AudioKey.SpinClick);
+        //     BaseEvent.clickSpin.emit(false);
+        // }
+        // else {
+        //     BaseEvent.clickSkip.emit();
+        // }
     }
 
     /**
@@ -191,33 +192,33 @@ export class UIManager {
      * @returns 
      */
     private onClickAuto() {
-        if (DataManager.getInstance().isMenuOn == true) return;
+        // if (DataManager.getInstance().isMenuOn == true) return;
 
-        //停止自動
-        if (DataManager.getInstance().auto.isAutoPlay() == true) {
+        // //停止自動
+        // if (DataManager.getInstance().auto.isAutoPlay() == true) {
 
-            DataManager.getInstance().auto.stopAuto();
-        }
-        //開啟自動面板
-        else if (DataManager.getInstance().isIdle() &&
-            DataManager.getInstance().auto.isAutoPlay() == false) {
+        //     DataManager.getInstance().auto.stopAuto();
+        // }
+        // //開啟自動面板
+        // else if (DataManager.getInstance().isIdle() &&
+        //     DataManager.getInstance().auto.isAutoPlay() == false) {
 
-            //下注不足
-            if (DataManager.getInstance().bet.getCurTotal() < DataManager.getInstance().lawMinBet) {
-                let multi = DataManager.getInstance().featureBuyMultipleList[0];
-                let featureBuyTotal = DataManager.getInstance().bet.getRateAt(0) * DataManager.getInstance().bet.getBetAt(0) * multi;
-                if (featureBuyTotal < DataManager.getInstance().lawMinBet) {
-                    featureBuyTotal = DataManager.getInstance().lawMinBet;
-                }
-                // Notice.showSpinMin.emit(featureBuyTotal, DataManager.getInstance().lawMinBet);
-            }
-            else {
-                DataManager.getInstance().isMenuOn = true;
-                AutoPage.open.emit();
-                InfoBar.moveToDown.emit();
-                SettingsPage1.showAutoPage.emit(true);
-            }
-        }
+        //     //下注不足
+        //     if (DataManager.getInstance().bet.getCurTotal() < DataManager.getInstance().lawMinBet) {
+        //         let multi = DataManager.getInstance().featureBuyMultipleList[0];
+        //         let featureBuyTotal = DataManager.getInstance().bet.getRateAt(0) * DataManager.getInstance().bet.getBetAt(0) * multi;
+        //         if (featureBuyTotal < DataManager.getInstance().lawMinBet) {
+        //             featureBuyTotal = DataManager.getInstance().lawMinBet;
+        //         }
+        //         // Notice.showSpinMin.emit(featureBuyTotal, DataManager.getInstance().lawMinBet);
+        //     }
+        //     else {
+        //         DataManager.getInstance().isMenuOn = true;
+        //         AutoPage.open.emit();
+        //         InfoBar.moveToDown.emit();
+        //         SettingsPage1.showAutoPage.emit(true);
+        //     }
+        // }
     }
 
     /**
@@ -227,7 +228,7 @@ export class UIManager {
      */
     private changeSettingPage(page: number) {
         if (DataManager.getInstance().isMenuOn == true) return;
-        if (DataManager.getInstance().auto.isAutoPlay() == true) return;
+        if (DataManager.getInstance().autoMode == true) return;
         if (DataManager.getInstance().isIdle() === false) return;
         if (page === 0) {
             this.currentSettingPage = 0;
@@ -250,7 +251,7 @@ export class UIManager {
     public goRecord() {
         if (DataManager.getInstance().isMenuOn == true) return;
         if (DataManager.getInstance().isIdle() === false) return;
-        if (DataManager.getInstance().auto.isAutoPlay() == true) return;
+        if (DataManager.getInstance().autoMode == true) return;
         GameHistory.show.emit(APIManager.getInstance().getRecordUrl());
         DataManager.getInstance().webViewVisible = true;
     }
@@ -290,19 +291,19 @@ export class UIManager {
     }
 
     private ChooseAutoOption(value: number) {
-        if (value == 1) {
-            DataManager.getInstance().auto.mode = AutoPlayMode.always;
-        }
-        else if (value == 2) {
-            DataManager.getInstance().auto.mode = AutoPlayMode.tillBonus;
-        }
-        else if (value > 3) {
-            DataManager.getInstance().auto.mode = AutoPlayMode.num;
-            DataManager.getInstance().auto.num = Number(value) - 1;
-        }
+        // if (value == 1) {
+        //     DataManager.getInstance().auto.mode = AutoPlayMode.always;
+        // }
+        // else if (value == 2) {
+        //     DataManager.getInstance().auto.mode = AutoPlayMode.tillBonus;
+        // }
+        // else if (value > 3) {
+        //     DataManager.getInstance().auto.mode = AutoPlayMode.num;
+        //     DataManager.getInstance().auto.num = Number(value) - 1;
+        // }
 
-        SettingsPage1.setSpinState.emit(SpinBtnState.Auto);
-        BaseEvent.clickSpin.emit(false);
+        // SettingsPage1.setSpinState.emit(SpinBtnState.Auto);
+        // BaseEvent.clickSpin.emit(false);
     }
 
     //額度介面 =====================================================
@@ -351,11 +352,11 @@ export class UIManager {
      * 刷新下注資訊
      */
     private refreshBet(): void {
-        BaseEvent.refreshBet.emit(DataManager.getInstance().bet.getCurTotal());
-        BaseEvent.buyFeatureVisible.emit(DataManager.getInstance().isFeatureBuyEnabled());
+        // BaseEvent.refreshBet.emit(DataManager.getInstance().bet.getCurTotal());
+        // BaseEvent.buyFeatureVisible.emit(DataManager.getInstance().isFeatureBuyEnabled());
 
-        SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
-        SettingsPage1.plusEnabled.emit(DataManager.getInstance().bet.getPlusEnabled());
-        SettingsPage1.setEnabled.emit(true);
+        // SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
+        // SettingsPage1.plusEnabled.emit(DataManager.getInstance().bet.getPlusEnabled());
+        // SettingsPage1.setEnabled.emit(true);
     }
 }

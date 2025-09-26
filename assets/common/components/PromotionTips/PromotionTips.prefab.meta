@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "3e033621-7a34-46dc-a811-01130b7fc86c",
+  "uuid": "e5c27e64-3064-47a0-ae26-fbe3b55584e5",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Common"
+    "syncNodeName": "PromotionTips"
   }
 }

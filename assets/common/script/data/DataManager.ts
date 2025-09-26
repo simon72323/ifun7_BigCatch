@@ -13,9 +13,7 @@ import { Utils } from '@common/script/utils/Utils';
  * 遊戲資料控制器
  */
 export class DataManager {
-
     private static instance: DataManager = null;
-
     public static getInstance(): DataManager {
         if (!DataManager.instance) {
             DataManager.instance = new DataManager();
@@ -32,6 +30,9 @@ export class DataManager {
     public autoMode: boolean = false;
     /**剩餘自動轉次數 */
     public autoSpinCount: number = 0;
+    /**停止直到免費轉 */
+    public stopUntilFeature: boolean = false;
+
     /**是否購買免費遊戲 */
     // public isBuyFreeGame: boolean = false;
     /**當前方向模式 */
