@@ -1,10 +1,10 @@
 import { _decorator, Button, Component, Label, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { Grid } from '@base/script/types/BaseType';
-import { XEvent5 } from '@base/script/utils/XEvent';
+import { XEvent5 } from '@common/script/event/XEvent';
 
 import { LangBundleDir, SymbolID } from '@game/script/constant/GameConst';
 

@@ -1,7 +1,7 @@
 import { _decorator, Component, sp } from 'cc';
 
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { XEvent2 } from '@base/script/utils/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { XEvent2 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { GameAudioKey } from '@game/script/constant/GameConst';

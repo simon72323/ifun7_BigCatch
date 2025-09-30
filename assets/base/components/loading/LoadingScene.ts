@@ -1,19 +1,19 @@
 import { _decorator, Component, director, EventKeyboard, game, input, Input, instantiate, KeyCode, Label, Mask, Node, Prefab, ResolutionPolicy, screen, Sprite, SpriteFrame, sys, UITransform, view, View } from 'cc';
 
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
-import { BaseConst } from '@base/script/constant/BaseConst';
 
-import { BaseEvent } from '@base/script/main/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseLang, BaseLangBundleDir, OrientationtMode } from '@base/script/types/BaseType';
 import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
-import { TimeoutManager } from '@base/script/utils/TimeoutManager';
-import { logger } from '@base/script/utils/XUtils';
+
 
 import { Notice } from '@common/components/notice/Notice';
+
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
-import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { BundleLoader } from '@common/script/loading/BundleLoader';
+import { TimeoutManager } from '@common/script/manager/TimeoutManager';
+import { BaseLang, BaseLangBundleDir, OrientationtMode } from '@common/script/types/BaseType';
 
 
 const { ccclass, property } = _decorator;
@@ -74,8 +74,8 @@ export class LoadingScene extends Component {
         //     screen.autoFullScreen(null, null);
         // }
 
-        //在一開始就帶入(用localhost判斷是否要用api)
-        DataManager.getInstance().init(window['gameConfig']);
+        //在一開始就要初始化語系貨幣數字
+        // DataManager.getInstance().init(window['gameConfig']);
 
         //將此節點加入常駐節點
         director.addPersistRootNode(this.node);
@@ -144,7 +144,7 @@ export class LoadingScene extends Component {
             ErrorManager.getInstance().showError(ErrorCode.Timeout);
         });
 
-        logger('[LoadingScene] bundle 讀取完成!');
+        console.log('[LoadingScene] bundle 讀取完成!');
 
         BundleLoader.onLoaded(BaseConst.BUNDLE_BASE_CURRENCY, `${DataManager.getInstance().urlParam.lang}/${BaseLangBundleDir.loading}`, (langRes: any) => {
             let bannerIdx = Math.floor(Math.random() * 5);
@@ -247,12 +247,12 @@ export class LoadingScene extends Component {
     private loadGameScene(): void {
         //預載scene資源
         director.preloadScene('main', this.onPreloadProgress.bind(this), () => {
-            logger('[LoadingScene] preloadScene 完成!');
+            console.log('[LoadingScene] preloadScene 完成!');
         });
 
         //轉換scene
         director.loadScene('main', () => {
-            logger('[LoadingScene] loadScene 完成!');
+            console.log('[LoadingScene] loadScene 完成!');
         });
     }
 

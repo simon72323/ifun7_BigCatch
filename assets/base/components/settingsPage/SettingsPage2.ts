@@ -2,10 +2,10 @@ import { _decorator, Button, Sprite, SpriteFrame } from 'cc';
 
 import { BaseSettingsPage } from '@base/components/settingsPage/BaseSettingsPage';
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
 import { APIManager } from '@base/script/utils/APIManager';
-import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 
 const { ccclass, property } = _decorator;
 

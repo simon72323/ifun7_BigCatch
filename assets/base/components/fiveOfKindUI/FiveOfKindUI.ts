@@ -1,9 +1,9 @@
 import { _decorator, Component, sp, tween, Tween, UIOpacity } from 'cc';
 
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { BaseAnimationName } from '@base/script/types/BaseType';
-import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 const { ccclass } = _decorator;

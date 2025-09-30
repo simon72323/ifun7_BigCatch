@@ -4,12 +4,12 @@ import { AutoPage } from '@base/components/autoPage/AutoPage';
 import { GameHelpWebView } from '@base/components/gameHelp/GameHelpWebView';
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { TaskManager } from '@base/script/tasks/TaskManager';
 import { ModuleID } from '@base/script/types/BaseType';
-import { XEvent } from '@base/script/utils/XEvent';
+import { XEvent } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';

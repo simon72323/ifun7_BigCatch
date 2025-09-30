@@ -1,6 +1,6 @@
 import { _decorator, Button, Color, Component, Input, Label, Sprite, SpriteFrame } from 'cc';
 
-import { XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent1 } from '@common/script/event/XEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('AutoOption')

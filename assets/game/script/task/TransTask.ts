@@ -1,8 +1,8 @@
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { AutoPlayMode, ModuleID } from '@base/script/types/BaseType';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';

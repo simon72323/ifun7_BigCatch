@@ -4,13 +4,13 @@ import { _decorator, Button, Color, Component, EventTouch, Label, Node, Rect, Sp
 
 import { TextAdjust } from '@base/components/TextAdjust';
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseConst } from '@common/script/data/BaseConst';
 
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 
-import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { DataManager } from '@common/script/data/DataManager';

@@ -5,7 +5,7 @@ import { BaseDropSymbol } from '@base/components/dropSlotMachine/BaseDropSymbol'
 import { BaseDropSymbolData } from '@base/components/dropSlotMachine/BaseDropSymbolData';
 import { DataManager } from '@common/script/data/DataManager';;
 import { TurboMode } from '@base/script/types/BaseType';
-import { XEvent, XEvent1, XEvent2 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 

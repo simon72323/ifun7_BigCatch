@@ -1,6 +1,6 @@
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { BigWinType, ModuleID, SpinButtonState } from '@base/script/types/BaseType';
 import { XUtils } from '@base/script/utils/XUtils';

@@ -1,6 +1,6 @@
 import { Animation, AnimationState, Button, Component, director, game, Node, Scheduler, sp, SpriteFrame, tween, UIOpacity, Vec3 } from 'cc';
 
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { Grid, SpreadObject } from '@base/script/types/BaseType';
 
 /**
@@ -621,19 +621,3 @@ export function logger(str: string) {
     console.warn(`logger:${str}`);
 }
 
-/**
- * 添加button Click事件監聽器
- * @param target 目標(掛腳本的節點)
- * @param component 組件名稱
- * @param button 按鈕
- * @param handler 處理器
- * @param eventData 事件數據(可選)
- */
-export function addBtnClickEvent(target: Node, component: string, button: Button, handler: Function, eventData?: string) {
-    const eventHandler = new Component.EventHandler();
-    eventHandler.target = target;
-    eventHandler.component = component;
-    eventHandler.handler = handler.name;
-    if (eventData) eventHandler.customEventData = eventData;
-    button.clickEvents.push(eventHandler);
-}

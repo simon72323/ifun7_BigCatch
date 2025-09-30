@@ -3,11 +3,11 @@ import { _decorator, Button, Component, Node, UITransform, WebView } from 'cc';
 
 
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { WebViewEnum } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { WebViewEnum } from '@common/script/data/BaseConst';
 import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
-import { XEvent, XEvent2 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent2 } from '@common/script/event/XEvent';
 
 import { Notice } from '@common/components/notice/Notice';
 import { DataManager } from '@common/script/data/DataManager';

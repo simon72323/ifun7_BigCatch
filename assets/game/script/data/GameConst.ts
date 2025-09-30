@@ -9,7 +9,14 @@ export class GameConst {
     /**圖示權重(越大越上層) */
     public static symbolWeight: number[] = [0, 99, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     /**倍數清單 */
-    public static multiplierList: number[] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
+    // public static multiplierList: number[] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
+
+    /** 中獎線路配置 (3x5盤面) */
+    public static payLineData: number[][] = [
+        [1, 1, 1, 1, 1], [0, 0, 0, 0, 0], [2, 2, 2, 2, 2], [1, 0, 0, 0, 1], [1, 2, 2, 2, 1],
+        [2, 1, 0, 1, 2], [0, 1, 2, 1, 0], [2, 2, 1, 0, 0], [0, 0, 1, 2, 2], [2, 1, 1, 1, 0]
+    ];
+
     /**FS獲得次數累加毫秒 */
     public static BONUS_TIME_ADD_INTERVAL = 0.2;
     /**BigWin End 播放完畢後等待時間 */
@@ -75,15 +82,22 @@ export class GameConst {
 /**符號ID */
 export enum SymbolID {
     Wild = 0,
-    Scatter,
-    H1,
+    H1 = 1,
     H2,
     H3,
     H4,
-    L1,
-    L2,
-    L3,
-    L4,
+    F1 = 5,
+    F2,
+    F3,
+    F4,
+    F5,
+    F6,
+    LA = 11,
+    LK,
+    LQ,
+    LJ,
+    LT,
+    Scatter = 16,
 }
 
 /**語系資源目錄 */

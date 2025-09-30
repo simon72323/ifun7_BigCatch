@@ -1,8 +1,8 @@
 import { _decorator, Component, sp } from 'cc';
 
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { ModuleID } from '@base/script/types/BaseType';
-import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';

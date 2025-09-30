@@ -1,4 +1,4 @@
-import { BaseFont } from '@base/script/constant/BaseConst';
+import { BaseFont } from '@common/script/data/BaseConst';
 
 /**
  * LabelAtlas字型管理

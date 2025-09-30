@@ -1,9 +1,9 @@
 import { _decorator, Component, Label, Node, Sprite } from 'cc';
 
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
 import { BundleLoader } from '@base/script/main/BundleLoader';
-import { XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent1 } from '@common/script/event/XEvent';
 
 import { LangBundleDir } from '@game/script/constant/GameConst';
 

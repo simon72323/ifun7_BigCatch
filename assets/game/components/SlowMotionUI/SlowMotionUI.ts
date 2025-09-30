@@ -1,6 +1,6 @@
 import { _decorator, Color, Component, sp } from 'cc';
 
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
 import { XUtils } from '@base/script/utils/XUtils';
 

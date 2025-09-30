@@ -1,4 +1,4 @@
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
 import { GameTask } from '@base/script/tasks/GameTask';
 

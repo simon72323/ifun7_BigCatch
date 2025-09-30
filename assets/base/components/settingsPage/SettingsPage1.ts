@@ -4,11 +4,11 @@ import { FreeSpinInfoBtn } from '@base/components/campaign/FreeSpinInfoBtn';
 import { BaseSettingsPage } from '@base/components/settingsPage/BaseSettingsPage';
 import { BaseSpinBtn } from '@base/components/settingsPage/BaseSpinBtn';
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { SpinButtonState, TurboMode } from '@base/script/types/BaseType';
-import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 
 const { ccclass, property } = _decorator;
 

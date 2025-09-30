@@ -1,6 +1,6 @@
 import { _decorator, Button, Component } from 'cc';
 
-import { XEvent } from '@base/script/utils/XEvent';
+import { XEvent } from '@common/script/event/XEvent';
 
 const { ccclass } = _decorator;
 /**

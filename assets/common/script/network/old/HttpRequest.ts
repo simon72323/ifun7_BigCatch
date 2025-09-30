@@ -193,70 +193,70 @@
 //         }
 //     }
 
-//     static getPromotionBrief ( response: any ): any {
-//         let promotionBriefResponse = response.data;
-//         promotionBriefResponse.sort( function ( a, b ) {
-//             const timeZoneNow = new Date( new Date().toLocaleString( 'sv-SE', { timeZone: a.time_zone } ).replace( /-/g, '/' ) );
-//             const TIME_A = new Date( a.end_date.replace( /-/g, '/' ) ).getTime() - timeZoneNow.getTime();
-//             const TIME_B = new Date( b.end_date.replace( /-/g, '/' ) ).getTime() - timeZoneNow.getTime();
-//             return TIME_B > TIME_A ? 1 : -1;
-//         } );
-//         // 把錦標賽拿到後面放
-//         let pushType = 1;
-//         let temp = promotionBriefResponse.filter( value => value.promotion_type === pushType );
-//         for ( let i = promotionBriefResponse.length - 1; i >= 0; i-- ) {
-//             if ( promotionBriefResponse[ i ].promotion_type === pushType ) {
-//                 promotionBriefResponse.splice( i, 1 );
-//             }
-//         }
-//         promotionBriefResponse = promotionBriefResponse.concat( temp );
-//         for ( let i = 0; i < promotionBriefResponse.length; i++ ) {
-//             // * `promotion_type === 2` means jackpot
-//             if ( promotionBriefResponse[ i ].promotion_type === 2 ) {
-//                 gameInformation.promotion.jackpotInformation.push( {
-//                     promotion_id: promotionBriefResponse[ i ].promotion_id,
-//                     end_date: promotionBriefResponse[ i ].end_date,
-//                     promotion_name: promotionBriefResponse[ i ].promotion_name,
-//                     time_zone: promotionBriefResponse[ i ].time_zone,
-//                     min_bet: promotionBriefResponse[ i ].min_bet,
-//                     currency: promotionBriefResponse[ i ].currency,
-//                     promotion_type: promotionBriefResponse[ i ].promotion_type,
-//                     promotion_content: '',
-//                     mode: 0,
-//                     mode_rule: [],
-//                     bonus_setting: {
-//                         bonus: 0,
-//                         start_rank: 0,
-//                         end_rank: 0
-//                     },
-//                     payout_status: 0,
-//                     user: [],
-//                     winner: []
-//                 } );
-//             } else {
-//                 gameInformation.promotion.information.push( {
-//                     promotion_id: promotionBriefResponse[ i ].promotion_id,
-//                     end_date: promotionBriefResponse[ i ].end_date,
-//                     promotion_name: promotionBriefResponse[ i ].promotion_name,
-//                     time_zone: promotionBriefResponse[ i ].time_zone,
-//                     min_bet: promotionBriefResponse[ i ].min_bet,
-//                     currency: promotionBriefResponse[ i ].currency,
-//                     promotion_type: promotionBriefResponse[ i ].promotion_type,
-//                     promotion_content: '',
-//                     mode: 0,
-//                     mode_rule: [],
-//                     bonus_setting: {
-//                         bonus: 0,
-//                         start_rank: 0,
-//                         end_rank: 0
-//                     },
-//                     payout_status: 0,
-//                     user: [],
-//                     winner: []
-//                 } );
-//             }
-//         }
-//     }
+    static getPromotionBrief ( response: any ): any {
+        let promotionBriefResponse = response.data;
+        promotionBriefResponse.sort( function ( a, b ) {
+            const timeZoneNow = new Date( new Date().toLocaleString( 'sv-SE', { timeZone: a.time_zone } ).replace( /-/g, '/' ) );
+            const TIME_A = new Date( a.end_date.replace( /-/g, '/' ) ).getTime() - timeZoneNow.getTime();
+            const TIME_B = new Date( b.end_date.replace( /-/g, '/' ) ).getTime() - timeZoneNow.getTime();
+            return TIME_B > TIME_A ? 1 : -1;
+        } );
+        // 把錦標賽拿到後面放
+        let pushType = 1;
+        let temp = promotionBriefResponse.filter( value => value.promotion_type === pushType );
+        for ( let i = promotionBriefResponse.length - 1; i >= 0; i-- ) {
+            if ( promotionBriefResponse[ i ].promotion_type === pushType ) {
+                promotionBriefResponse.splice( i, 1 );
+            }
+        }
+        promotionBriefResponse = promotionBriefResponse.concat( temp );
+        for ( let i = 0; i < promotionBriefResponse.length; i++ ) {
+            // * `promotion_type === 2` means jackpot
+            if ( promotionBriefResponse[ i ].promotion_type === 2 ) {
+                gameInformation.promotion.jackpotInformation.push( {
+                    promotion_id: promotionBriefResponse[ i ].promotion_id,
+                    end_date: promotionBriefResponse[ i ].end_date,
+                    promotion_name: promotionBriefResponse[ i ].promotion_name,
+                    time_zone: promotionBriefResponse[ i ].time_zone,
+                    min_bet: promotionBriefResponse[ i ].min_bet,
+                    currency: promotionBriefResponse[ i ].currency,
+                    promotion_type: promotionBriefResponse[ i ].promotion_type,
+                    promotion_content: '',
+                    mode: 0,
+                    mode_rule: [],
+                    bonus_setting: {
+                        bonus: 0,
+                        start_rank: 0,
+                        end_rank: 0
+                    },
+                    payout_status: 0,
+                    user: [],
+                    winner: []
+                } );
+            } else {
+                gameInformation.promotion.information.push( {
+                    promotion_id: promotionBriefResponse[ i ].promotion_id,
+                    end_date: promotionBriefResponse[ i ].end_date,
+                    promotion_name: promotionBriefResponse[ i ].promotion_name,
+                    time_zone: promotionBriefResponse[ i ].time_zone,
+                    min_bet: promotionBriefResponse[ i ].min_bet,
+                    currency: promotionBriefResponse[ i ].currency,
+                    promotion_type: promotionBriefResponse[ i ].promotion_type,
+                    promotion_content: '',
+                    mode: 0,
+                    mode_rule: [],
+                    bonus_setting: {
+                        bonus: 0,
+                        start_rank: 0,
+                        end_rank: 0
+                    },
+                    payout_status: 0,
+                    user: [],
+                    winner: []
+                } );
+            }
+        }
+    }
 
 //     static getCashDropPrizeRecord ( response: any ): any {
 //         let cashDropPrizeRecordResponse = response.data;
@@ -338,35 +338,35 @@
 //         slotData.getSpinData( response.data );
 //     }
 
-//     static getInGameMenu ( response: any ): any {
-//         if ( response.game && response.game.length > 0 ) {
-//             // * Process Hot, New and All game list
-//             let menuGames = response.game;
-//             for ( let i = 0; i < menuGames.length; i++ ) {
-//                 if ( menuGames[ i ][ 1 ] == 1 ) {
-//                     gameInformation.inGameMenuStore.new.push( menuGames[ i ][ 0 ] );
-//                 } else if ( menuGames[ i ][ 1 ] == 2 ) {
-//                     gameInformation.inGameMenuStore.hot.push( menuGames[ i ][ 0 ] );
-//                 }
-//                 gameInformation.inGameMenuStore.gameList.push( menuGames[ i ][ 0 ] );
-//             }
+    static getInGameMenu ( response: any ): any {
+        if ( response.game && response.game.length > 0 ) {
+            // * Process Hot, New and All game list
+            let menuGames = response.game;
+            for ( let i = 0; i < menuGames.length; i++ ) {
+                if ( menuGames[ i ][ 1 ] == 1 ) {
+                    gameInformation.inGameMenuStore.new.push( menuGames[ i ][ 0 ] );
+                } else if ( menuGames[ i ][ 1 ] == 2 ) {
+                    gameInformation.inGameMenuStore.hot.push( menuGames[ i ][ 0 ] );
+                }
+                gameInformation.inGameMenuStore.gameList.push( menuGames[ i ][ 0 ] );
+            }
 
-//             // * Process favorite game list
-//             let favGames = response.favorite;
-//             for ( let i = 0; i < favGames.length; i++ ) {
-//                 gameInformation.inGameMenuStore.favList.push( favGames[ i ] );
-//             }
+            // * Process favorite game list
+            let favGames = response.favorite;
+            for ( let i = 0; i < favGames.length; i++ ) {
+                gameInformation.inGameMenuStore.favList.push( favGames[ i ] );
+            }
 
-//             // * Keeps imageURL
-//             gameInformation.inGameMenuStore.imageURL = response.image;
+            // * Keeps imageURL
+            gameInformation.inGameMenuStore.imageURL = response.image;
 
-//             // * Create game data
-//             let allGamesData = response.game_name;
-//             for ( let i = 0; i < allGamesData.length; i++ ) {
-//                 gameInformation.gameListStore[ allGamesData[ i ].game_id ] = allGamesData[ i ].language;
-//             }
-//         }
-//     }
+            // * Create game data
+            let allGamesData = response.game_name;
+            for ( let i = 0; i < allGamesData.length; i++ ) {
+                gameInformation.gameListStore[ allGamesData[ i ].game_id ] = allGamesData[ i ].language;
+            }
+        }
+    }
 
 //     static updateInGameMenuFavoriteGame ( response: any ): any {
 //     }

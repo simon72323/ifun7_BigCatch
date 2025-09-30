@@ -1,9 +1,9 @@
 import { _decorator, AudioSource, Button, Node, Sprite } from 'cc';
 
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 
 const { ccclass } = _decorator;

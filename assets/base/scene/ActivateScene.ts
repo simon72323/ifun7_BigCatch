@@ -1,6 +1,6 @@
 import { _decorator, Component, director, SpriteFrame } from 'cc';
 
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseLangBundleDir } from '@base/script/types/BaseType';
 import { logger } from '@base/script/utils/XUtils';

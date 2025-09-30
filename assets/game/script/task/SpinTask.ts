@@ -1,4 +1,4 @@
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
 import { BaseSpinTask } from '@base/script/tasks/BaseSpinTask';
 import { TaskManager } from '@base/script/tasks/TaskManager';

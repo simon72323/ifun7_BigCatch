@@ -3,11 +3,11 @@ import { _decorator, Button, Component, Label, Node, sys, WebView } from 'cc';
 
 import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { WebViewEnum } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { WebViewEnum } from '@common/script/data/BaseConst';
 import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
-import { XEvent } from '@base/script/utils/XEvent';
+import { XEvent } from '@common/script/event/XEvent';
 
 import { Notice } from '@common/components/notice/Notice';
 import { DataManager } from '@common/script/data/DataManager';

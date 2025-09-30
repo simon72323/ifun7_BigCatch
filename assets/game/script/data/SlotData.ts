@@ -126,21 +126,21 @@ export class SlotData {
     /**
      * 重置累積資料
      */
-    public resetFS(): void {
-        this.fsRemainTimes = -1;
-        this.fsWin = 0;
-        this.fsInitialize = false;
-    }
+    // public resetFS(): void {
+    //     this.fsRemainTimes = -1;
+    //     this.fsWin = 0;
+    //     this.fsInitialize = false;
+    // }
 
-    /**
-     * 取得下一個倍數
-     * @param multiplier 當前倍數
-     * @returns 下一個倍數
-     */
-    public getNextMultiplier(multiplier: number): number {
-        let preIdx = GameConst.multiplierList.indexOf(multiplier);
-        return GameConst.multiplierList[preIdx + 1];
-    }
+    // /**
+    //  * 取得下一個倍數
+    //  * @param multiplier 當前倍數
+    //  * @returns 下一個倍數
+    //  */
+    // public getNextMultiplier(multiplier: number): number {
+    //     let preIdx = GameConst.multiplierList.indexOf(multiplier);
+    //     return GameConst.multiplierList[preIdx + 1];
+    // }
 }
 
 /**

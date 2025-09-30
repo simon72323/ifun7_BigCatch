@@ -1,5 +1,5 @@
 
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 
 import { Notice } from '@common/components/notice/Notice';
 // import { SocketManager } from '@base/script/socket/SocketManager';

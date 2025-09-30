@@ -1,0 +1,69 @@
+import { Timeout } from '@common/script/types/BaseType';
+
+// export enum BaseFont {
+//     /**一般數字 ['0123456789|2', '.,|1'] */
+//     number = 'number',
+// }
+
+// export enum OperatorName {
+//     BP = 'bp',
+// }
+
+// /**
+//  * 網頁視窗列舉
+//  */
+// export enum WebViewEnum {
+//     GameHistory = 0,
+//     GameHelp,
+//     Promo
+// }
+
+/**
+ * 公版全域常數(絕對不會改的資料放這, 若放BaseDataManager容易出現循環引用問題)
+ */
+export class BaseConst {
+    /**自動轉次數選項 */
+    public static AUTO_OPTIONS: number[] = [10, 20, 30, 50, 100, 150, 200, -1];
+    /**BIGWIN表演時間 */
+    public static BIG_WIN_LEVEL_TIME: number = 5;
+    /**TOTALWIN表演時間 */
+    public static TOTAL_WIN_SCROLL_TIME: number = 1;
+    /**BigWin/totalWin播放完畢後等待時間 */
+    public static WIN_END_DELAY: number = 2;
+
+    /**讀取畫面逾時設定(2分鐘) */
+    public static TIMEOUT_LOADING: Timeout = { key: 'Loading', seconds: 120 };
+    /**待機5秒後靜音 */
+    public static TIMEOUT_IDLE_MUTE: Timeout = { key: 'IdleMute', seconds: 5 };
+    /**FreeGame 倒數10秒後自動進入 */
+    public static TIMEOUT_FEATURE_WAIT_START: Timeout = { key: 'FeatureWaitStart', seconds: 10 };
+    /**spin30秒內需回應 */
+    public static TIMEOUT_RESULT_RECALL: Timeout = { key: 'ResultRecall', seconds: 30 };
+
+    //============================= bundle資料夾名稱 =============================
+    /**bundle公版語系資料夾名稱 */
+    public static BUNDLE_BASE_LANGUAGE: string = 'baseLanguage';
+    /**bundle公版幣別資料夾名稱 */
+    public static BUNDLE_BASE_CURRENCY: string = 'currency';
+    /**bundle遊戲語系資料夾名稱 */
+    public static BUNDLE_LANGUAGE: string = 'language';
+    /**bundle遊戲載入頁資料夾名稱 */
+    public static DIR_LOADING: string = 'loading';
+    //============================= bundle資料夾名稱 =============================
+
+    /**
+     * 跑分隨機值
+     * @param t 
+     * @returns 
+     */
+    // public static noisyEasing(t: number): number {
+    //     // 加一點正向亂數，但不能超過1，也不能比t小
+    //     const noise = Math.random() * 0.01; // 隨機減少最多 0.1
+    //     if (t < 0.9) {
+    //         return t - t * noise;
+    //     }
+    //     else {
+    //         return t;
+    //     }
+    // }
+}

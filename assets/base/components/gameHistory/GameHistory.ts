@@ -1,9 +1,9 @@
 import { _decorator, Button, Component, Node, WebView } from 'cc';
 
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { WebViewEnum } from '@base/script/constant/BaseConst';
-import { XEvent, XEvent1 } from '@base/script/utils/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { WebViewEnum } from '@common/script/data/BaseConst';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 
 const { ccclass } = _decorator;
 

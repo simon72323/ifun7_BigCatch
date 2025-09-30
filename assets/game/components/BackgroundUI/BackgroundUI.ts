@@ -1,6 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { ModuleID } from '@base/script/types/BaseType';
 const { ccclass } = _decorator;
 

@@ -61,8 +61,9 @@ export class AudioManager extends Component {
     private soundMap: Map<string, AudioInfo> = new Map();//紀錄音效
     private musicMap: Map<string, AudioInfo> = new Map();//紀錄音樂
     private isAudioContextRunning: boolean = false;//等待AudioContext啟動
-    private isMuted: boolean = false;//音效設置
-    private isMusicMuted: boolean = false;//音樂設置
+    // private isMuted: boolean = false;//所有音效設置
+    private isSoundMuted: boolean = false;//音效靜音設置
+    private isMusicMuted: boolean = false;//音樂靜音設置
     private isInBackground: boolean = false;//是否處於背景
     private isLowerMusic: boolean = false;//是否降低背景音樂
 
@@ -256,7 +257,7 @@ export class AudioManager extends Component {
         audioInfo.startTime = Date.now(); // 更新開始時間(背景運行時也要記錄)
         audioInfo.audioSource.loop = loop;
         audioInfo.audioSource.currentTime = 0;
-        if (!(await this.onUserInteraction()) || this.isMuted || this.isInBackground) return;
+        if (!(await this.onUserInteraction()) || this.isSoundMuted || this.isInBackground) return;
         audioInfo.audioSource.volume = 1;
         audioInfo.audioSource.play();
     }
@@ -270,7 +271,7 @@ export class AudioManager extends Component {
         if (!audioInfo) return;
         const audioClip = audioInfo.audioClip;
         audioInfo.audioSource.currentTime = 0;
-        if (!(await this.onUserInteraction()) || this.isMuted || this.isInBackground) return; // 檢查音效開關和後台狀態
+        if (!(await this.onUserInteraction()) || this.isSoundMuted || this.isInBackground) return; // 檢查音效開關和後台狀態
         audioInfo.audioSource.volume = 1;
         audioInfo.audioSource.playOneShot(audioClip);
     }
@@ -286,6 +287,15 @@ export class AudioManager extends Component {
         tween(audioInfo.audioSource).to(0.3, { volume: 0 }).call(() => {
             audioInfo.audioSource.stop();
         }).start();
+    }
+
+    /**
+     * 設定音效靜音
+     * @param mute 是否靜音
+     */
+    public setSoundMute(mute: boolean) {
+        this.isSoundMuted = mute;
+        this.isSoundMuted ? this.offSound() : this.onSound();
     }
     //=================================== Sound控制 ===================================
 
@@ -315,7 +325,7 @@ export class AudioManager extends Component {
         audioInfo.audioSource.loop = true;//循環播放
         audioInfo.musicPlaying = true;//設置為正在播放
         audioInfo.audioSource.play();//重頭播放(背景運行時也要啟用播放)
-        if (!(await this.onUserInteraction()) || this.isMuted || this.isMusicMuted || this.isInBackground) return;
+        if (!(await this.onUserInteraction()) || this.isMusicMuted || this.isInBackground) return;
         this.audioTween(audioInfo.audioSource).to(0.3, { volume: 1 }).start();
     }
 
@@ -324,7 +334,7 @@ export class AudioManager extends Component {
      */
     public async lowerMusic() {
         this.isLowerMusic = true;//觸發降低背景音
-        if (!(await this.onUserInteraction()) || this.isMuted || this.isMusicMuted || this.isInBackground) return;
+        if (!(await this.onUserInteraction()) || this.isMusicMuted || this.isInBackground) return;
         for (const audioInfo of this.musicMap.values()) {
             if (!audioInfo) continue;
             this.audioTween(audioInfo.audioSource).to(0.3, { volume: 0.2 }).start();
@@ -336,7 +346,7 @@ export class AudioManager extends Component {
      */
     public async restoreMusic() {
         this.isLowerMusic = false;//觸發恢復背景音
-        if (!(await this.onUserInteraction()) || this.isMuted || this.isMusicMuted || this.isInBackground) return;
+        if (!(await this.onUserInteraction()) || this.isMusicMuted || this.isInBackground) return;
         for (const audioInfo of this.musicMap.values()) {
             if (!audioInfo) continue;
             this.audioTween(audioInfo.audioSource).to(0.3, { volume: 1 }).start();
@@ -355,15 +365,12 @@ export class AudioManager extends Component {
     }
 
     /**
-     * 靜音音樂
+     * 設定音樂靜音
+     * @param mute 是否靜音
      */
-    public setMusictMute() {
-        this.isMusicMuted = true;
-        for (const audioInfo of this.musicMap.values()) {
-            if (audioInfo && audioInfo.musicPlaying) {
-                audioInfo.audioSource.volume = 0;//立即靜音
-            }
-        }
+    public setMusicMute(mute: boolean) {
+        this.isMusicMuted = mute;
+        this.isMusicMuted ? this.offMusic() : this.onMusic();
     }
     //=================================== Music控制 ===================================
 
@@ -375,7 +382,8 @@ export class AudioManager extends Component {
     private onGameHide() {
         this.isInBackground = true;
         Tween.stopAllByTag('audio' as any);//停止所有聲音類的Tween
-        this.offAudio();
+        this.offSound();
+        this.offMusic();
     }
 
     /**
@@ -383,32 +391,25 @@ export class AudioManager extends Component {
      */
     private onGameShow() {
         this.isInBackground = false;
-        this.isMuted ? this.offAudio() : this.onAudio();
+        this.isMusicMuted ? this.offMusic() : this.onMusic();
+        this.isSoundMuted ? this.offSound() : this.onSound();
     }
 
     /**
      * 設定音效狀態
      */
-    public setMute(mute: boolean) {
-        this.isMuted = mute;
-        this.isMusicMuted = mute;
-        mute ? this.offAudio() : this.onAudio();
-    }
+    // public setMute(mute: boolean) {
+    //     this.isMuted = mute;
+    //     this.isMusicMuted = mute;
+    //     mute ? this.offAudio() : this.onAudio();
+    // }
 
-    // 關閉音效(靜音)
-    private offAudio() {
-        //音效暫停
-        for (const audioInfo of this.soundMap.values()) {
-            audioInfo.audioSource.volume = 0;
-        }
-        //音樂統一靜音
-        for (const audioInfo of this.musicMap.values()) {
-            audioInfo.audioSource.volume = 0;
-        }
-    }
 
-    // 恢復音效(恢復靜音)
-    private onAudio() {
+    /**
+     * 恢復音效(恢復靜音)
+     */
+    private onSound() {
+        // this.isSoundMuted = false;
         const currentTime = Date.now();
         //音效接續播放
         for (const audioInfo of this.soundMap.values()) {
@@ -423,6 +424,24 @@ export class AudioManager extends Component {
                 this.audioTween(audioInfo.audioSource).to(0.2, { volume: 1 }).start();//聲音淡入
             }
         }
+
+    }
+
+    /**
+     * 關閉音效(靜音)
+     */
+    private offSound() {
+        for (const audioInfo of this.soundMap.values()) {
+            audioInfo.audioSource.volume = 0;
+        }
+    }
+
+    /**
+     * 恢復音樂(恢復靜音)
+     */
+    private onMusic() {
+        // this.isMusicMuted = false;
+        // const currentTime = Date.now();
         //音樂聲音恢復
         const musicVolume = this.isLowerMusic ? 0.2 : 1;
         for (const audioInfo of this.musicMap.values()) {
@@ -430,6 +449,20 @@ export class AudioManager extends Component {
                 this.audioTween(audioInfo.audioSource).to(0.2, { volume: musicVolume }).start();//聲音淡入
             }
         }
+    }
+
+    /**
+     * 關閉音樂(靜音)
+     */
+    private offMusic() {
+        for (const audioInfo of this.musicMap.values()) {
+            if (audioInfo && audioInfo.musicPlaying) {
+                audioInfo.audioSource.volume = 0;//立即靜音
+            }
+        }
+        // for (const audioInfo of this.musicMap.values()) {
+        //     audioInfo.audioSource.volume = 0;
+        // }
     }
     //=================================== Audio整體控制 ===================================
 

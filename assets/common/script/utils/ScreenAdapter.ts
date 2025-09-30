@@ -1,7 +1,7 @@
 import { game, ResolutionPolicy, view, Game } from 'cc';
 
-import { BaseEvent } from '@base/script/main/BaseEvent';
-import { OrientationtMode } from '@base/script/types/BaseType';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { OrientationtMode } from '@common/script/types/BaseType';
 
 /**
  * 屏幕適配管理器 - 靜態類
@@ -64,11 +64,11 @@ export class ScreenAdapter {
         // 判斷橫豎屏並設置對應分辨率
         if (aspectRatio > (720 / 1280)) {
             // 橫屏模式
-            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
+            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.SHOW_ALL);
             BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
             // 豎屏模式
-            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
+            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
             BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
     }

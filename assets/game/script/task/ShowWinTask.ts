@@ -1,7 +1,7 @@
 import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { SpinButtonState } from '@base/script/types/BaseType';
 import { XUtils } from '@base/script/utils/XUtils';

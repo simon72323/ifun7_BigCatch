@@ -1,4 +1,4 @@
-import { _decorator, Component, JsonAsset, Enum } from 'cc';
+import { _decorator, Component, JsonAsset, Enum, director } from 'cc';
 import { EDITOR, PREVIEW } from 'cc/env';
 
 import { LanguageLabel } from '@common/components/localized/LanguageLabel';
@@ -71,7 +71,12 @@ export class i18n extends Component {
     // }
 
     public onLoad() {
+        if (i18n.instance && i18n.instance !== this) {
+            this.node.destroy();
+            return;
+        }
         i18n.instance = this;
+        director.addPersistRootNode(this.node);
         this.loadLanguage();
     }
 

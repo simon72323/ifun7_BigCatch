@@ -308,7 +308,7 @@
         "__id__": 39
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 45
@@ -510,7 +510,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Content",
+    "_name": "Label",
     "_objFlags": 512,
     "__editorExtras__": {},
     "_parent": {
@@ -1302,7 +1302,7 @@
         "__id__": 77
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 83

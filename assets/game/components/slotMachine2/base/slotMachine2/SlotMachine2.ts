@@ -1,7 +1,7 @@
 import { _decorator, Component, CCInteger, Node, Prefab, tween, Tween, RealCurve } from 'cc';
 
 import { DataManager } from '@common/script/data/DataManager';;
-import { XEvent1, XEvent2, XEvent3, XEvent4 } from '@base/script/utils/XEvent';
+import { XEvent1, XEvent2, XEvent3, XEvent4 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { BaseSlotParser2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSlotData2';

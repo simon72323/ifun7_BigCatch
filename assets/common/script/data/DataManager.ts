@@ -1,14 +1,14 @@
-import { BaseConst } from '@base/script/constant/BaseConst';
-// import { BetData } from '@base/script/main/BetData';
-import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@base/script/types/BaseType';
-import { APIManager } from '@base/script/utils/APIManager';
-import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
+
+// import { APIManager } from '@base/script/utils/APIManager';
+// import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 import { XUtils } from '@base/script/utils/XUtils';
 
-import { SlotData } from '@game/script/data/SlotData';
+// import { SlotData } from '@game/script/data/SlotData';
 
+import { BaseConst } from '@common/script/data/BaseConst';
 import { NetworkData } from '@common/script/data/NetworkData';
 import { IGameData } from '@common/script/network/NetworkApi';
+import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
 
@@ -28,13 +28,22 @@ export class DataManager {
     // public curSpinMode: SpinMode = SpinMode.Normal;
 
     /** 超級模式 */
-    public isSuperMode: boolean = false;
-    /** 自動模式 */
+    // public isSuperMode: boolean = false;
+
+    /** 音效狀態 */
+    public isSoundEnabled: boolean = true;
+    /** 音樂狀態 */
+    public isMusicEnabled: boolean = true;
+    /** 自動旋轉模式 */
     public isAutoMode: boolean = false;
-    /** 剩餘自動轉次數 */
+    /** 自動旋轉次數索引 */
+    public autoIndex: number = 0;
+    /** 剩餘自動旋轉次數 */
     public autoSpinCount: number = 0;
     /** 停止直到免費轉 */
     public isStopUntilFeature: boolean = false;
+
+
 
     /** 是否購買免費遊戲 */
     // public isBuyFreeGame: boolean = false;
@@ -45,7 +54,7 @@ export class DataManager {
     /** 下一模式 */
     public nextModuleID: ModuleID = ModuleID.BS;
     /** 當前加速模式(免費遊戲會強制設為Normal) */
-    public turboMode: TurboMode = TurboMode.Quick;
+    public turboMode: TurboMode = TurboMode.Normal;
     /** 當前遊戲狀態 */
     public gameState: GameState = GameState.Ready;
     /** 大贏跑分倍率 */
@@ -59,7 +68,7 @@ export class DataManager {
 
 
     /** 獲取slot資料 */
-    public slotData: SlotData = new SlotData();
+    // public slotData: SlotData = new SlotData();
 
 
 
@@ -156,22 +165,22 @@ export class DataManager {
 
 
     /**
-     * 初始化
+     * 初始化資料
      * @param config 
      */
     public init(config: any): void {
 
-        if (this.initialize) {
-            return;//已經初始化過
-        }
-        this.initialize = true;
+        // if (this.initialize) {
+        //     return;//已經初始化過
+        // }
+        // this.initialize = true;
 
         // 根據信用模式設定貨幣單位
-        let currency = this.creditMode == CreditMode.Dollar ? 'USD' : 'EUR';
+        // let currency = this.creditMode == CreditMode.Dollar ? 'USD' : 'EUR';
         // 根據數字模式設定地區格式
-        let locale = this.digitMode == DigitMode.COMMA ? 'vi-VN' : 'en-US';
+        // let locale = this.digitMode == DigitMode.COMMA ? 'vi-VN' : 'en-US';
         // 初始化數字格式
-        XUtils.initFormat(currency, locale);
+        // XUtils.initFormat(currency, locale);
     }
 
     /**
@@ -318,9 +327,9 @@ export class DataManager {
         return this.webViewVisible || this.isPayTable;
     }
 
-    public getSocketUrl(): string {
-        return APIManager.getInstance().getSocketUrl() || this.defaultSocketUrl;
-    }
+    // public getSocketUrl(): string {
+    //     return APIManager.getInstance().getSocketUrl() || this.defaultSocketUrl;
+    // }
 
     public getMapIndex(idx: number): number {
         // return XUtils.getMapIndex(idx, this.getData().REEL_ROW);
@@ -453,15 +462,15 @@ export class DataManager {
      * @param value 
      * @returns 
      */
-    public TestOverFlow(value: number): boolean {
-        if (value < 1000000000000) {
-            return true;
-        }
-        else {
-            ErrorManager.getInstance().showError(ErrorCode.Overflow);
-            return false;
-        }
-    }
+    // public TestOverFlow(value: number): boolean {
+    //     if (value < 1000000000000) {
+    //         return true;
+    //     }
+    //     else {
+    //         ErrorManager.getInstance().showError(ErrorCode.Overflow);
+    //         return false;
+    //     }
+    // }
 
     /**
      * 是否為BS模式
@@ -475,30 +484,30 @@ export class DataManager {
      * 設定加速模式
      * @param mode 
      */
-    public setTurboMode(mode: TurboMode) {
-        this.turboMode = mode;
-    }
+    // public setTurboMode(mode: TurboMode) {
+    //     this.turboMode = mode;
+    // }
 
     /**
      * 取得加速模式
      * @returns 
      */
-    public getTurboMode(): TurboMode {
-        if (this.moduleID != ModuleID.BS) {
-            return TurboMode.Normal;
-        }
-        else {
-            return this.turboMode;
-        }
-    }
+    // public getTurboMode(): TurboMode {
+    //     if (this.moduleID != ModuleID.BS) {
+    //         return TurboMode.Normal;
+    //     }
+    //     else {
+    //         return this.turboMode;
+    //     }
+    // }
 
     /**
      * 非Normal都是加速
      * @returns 
      */
-    public isTurboOn(): boolean {
-        return this.getTurboMode() !== TurboMode.Normal;
-    }
+    // public isTurboOn(): boolean {
+    //     return this.getTurboMode() !== TurboMode.Normal;
+    // }
 
 
     /**

@@ -1,10 +1,10 @@
 import { _decorator } from 'cc';
 
-import { NetworkData } from '@common/script/data/NetworkData';
+import { gameInformation } from '@common/script/data/GameInformation';
 import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 import { HTTP_METHODS, HttpRequestUtils, IPayload } from '@common/script/network/HttpRequestUtils';
-import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IGameMenu, IInGameMenuGameUrlResponse, IInGameMenuStatus, IPromotionBrief, IRenewTokenResponse, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
-import { UrlParameters } from '@common/script/utils/UrlParameters';
+import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IGameMenu, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
+
 import { Utils } from '@common/script/utils/Utils';
 
 
@@ -75,13 +75,13 @@ export class NetworkManager {
     private async sendRequest(command: string, data: any = {}): Promise<IResponseData> {
         const content: IRequestData = {
             command,
-            token: UrlParameters.token,
+            token: gameInformation.token,
             data
         };
 
         // 設置請求資料
         const payload: IPayload = {
-            url: UrlParameters.serverUrl,
+            url: gameInformation.serverUrl,
             method: HTTP_METHODS.POST,
             content: JSON.stringify(content)
         };
@@ -100,10 +100,10 @@ export class NetworkManager {
     /**
      * 更新 token
      */
-    public async sendRenewToken(): Promise<IRenewTokenResponse> {
+    public async sendRenewToken(): Promise<string> {
         const response = await this.sendRequest(NetworkApi.RENEW_TOKEN);
         console.log('[NetworkManager] onRenewTokenReceived =>', response);
-        return response.data[0] as IRenewTokenResponse;
+        return response.data[0].token as string;
     }
 
     /**
@@ -111,14 +111,14 @@ export class NetworkManager {
      * @param freeSpinId 免費旋轉 ID，如果為空則為一般投注
      */
     public async sendSpin(freeSpinId: string = ''): Promise<void> {
-        const gameData = NetworkData.getInstance().gameData;
+        const gameData = gameInformation.gameData;
         const coinValue = gameData.coin_value[gameData.coin_value_default_index];
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
         const lineTotal = gameData.line_total;
         const betCredit = Utils.accNumber(coinValue * lineBet * lineTotal); // 處理浮點數問題
 
         const response = await this.sendRequest(NetworkApi.SPIN, {
-            game_id: UrlParameters.gameId,
+            game_id: gameInformation.gameId,
             coin_value: coinValue,
             line_bet: lineBet,
             line_num: lineTotal,
@@ -126,20 +126,20 @@ export class NetworkManager {
             free_spin_id: freeSpinId
         });
         console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
-        NetworkData.getInstance().spinData = response.data;
+        gameInformation.spinData = response.data;
     }
 
     /**
      * 發送購買免費遊戲spin請求
      */
     public async sendBuyFreeSpin(buyFreeBet: number): Promise<ISpinData> {
-        const gameData = NetworkData.getInstance().gameData;
+        const gameData = gameInformation.gameData;
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
         const lineTotal = gameData.line_total;
         const betCredit = Utils.accNumber(buyFreeBet * lineBet * lineTotal); // 處理浮點數問題
 
         const response = await this.sendRequest(NetworkApi.SPIN, {
-            game_id: UrlParameters.gameId,
+            game_id: gameInformation.gameId,
             coin_value: buyFreeBet,
             line_bet: lineBet,
             line_num: lineTotal,
@@ -174,12 +174,39 @@ export class NetworkManager {
     /**
      * 獲取促銷簡介資料
      */
-    public async sendPromotionBrief(): Promise<IPromotionBrief[]> {
+    public async sendPromotionBrief(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_PROMOTION_BRIEF, {
             promotion_id: '-1'
         });
         console.log('[NetworkManager] onGetPromotionBriefReceived =>', response);
-        return response.data as IPromotionBrief[];
+        this.processPromotionBrief(response);
+    }
+
+    /**
+     * 處理促銷簡介資料
+     * @param response 原始促銷資料
+     */
+    private processPromotionBrief(response: any): void {
+        let promotionBriefResponse = response.data;
+        // 按結束時間排序
+        promotionBriefResponse.sort((a: IPromotionBrief, b: IPromotionBrief) => {
+            const timeZoneNow = new Date(new Date().toLocaleString('sv-SE', { timeZone: a.time_zone }).replace(/-/g, '/'));
+            const TIME_A = new Date(a.end_date.replace(/-/g, '/')).getTime() - timeZoneNow.getTime();
+            const TIME_B = new Date(b.end_date.replace(/-/g, '/')).getTime() - timeZoneNow.getTime();
+            return TIME_B > TIME_A ? 1 : -1;
+        });
+
+        // 把錦標賽拿到後面放
+        const pushType = 1;
+        const temp = promotionBriefResponse.filter(value => value.promotion_type === pushType);
+        for (let i = promotionBriefResponse.length - 1; i >= 0; i--) {
+            if (promotionBriefResponse[i].promotion_type === pushType) {
+                promotionBriefResponse.splice(i, 1);
+            }
+        }
+        promotionBriefResponse = promotionBriefResponse.concat(temp);
+        //更新資料
+        gameInformation.promotionData = promotionBriefResponse;
     }
 
     /**
@@ -238,12 +265,12 @@ export class NetworkManager {
     }
 
     /**
-     * 獲取遊戲內選單狀態
+     * 獲取遊戲內選單狀態開關 0=off，1=on
      */
-    public async sendInGameMenuStatus(): Promise<IInGameMenuStatus> {
+    public async sendInGameMenuStatus(): Promise<boolean> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU_STATUS);
         console.log('[NetworkManager] onGetInGameMenuStatusReceived =>', response);
-        return response.data[0] as IInGameMenuStatus;
+        return response.data[0].status as boolean;
     }
 
     /**
@@ -252,14 +279,14 @@ export class NetworkManager {
      * @param lang 語言
      * @param b loading 頁面底圖
      */
-    public async sendInGameMenuGameUrl(gameId: number, lang: string, b: string): Promise<IInGameMenuGameUrlResponse> {
+    public async sendInGameMenuGameUrl(gameId: number, lang: string, b: string): Promise<string> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU_GAME_URL, {
             game_id: gameId,
             lang,
             b
         });
         console.log('[NetworkManager] onGetInGameMenuGameUrlReceived =>', response);
-        return response.data[0] as IInGameMenuGameUrlResponse;
+        return response.data[0].url as string;
     }
 
     /**
@@ -269,7 +296,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
         console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
         // return response.data as IUserData;
-        NetworkData.getInstance().userData = response.data;
+        gameInformation.userData = response.data;
     }
 
     /**
@@ -277,11 +304,11 @@ export class NetworkManager {
      */
     public async sendGameData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_GAME_DATA, {
-            game_id: UrlParameters.gameId
+            game_id: gameInformation.gameId
         });
         console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
         // return response.data as IGameData;
-        NetworkData.getInstance().gameData = response.data;
+        gameInformation.gameData = response.data;
     }
 
     /**
@@ -296,10 +323,44 @@ export class NetworkManager {
     /**
      * 獲取遊戲內選單資料
      */
-    public async sendInGameMenu(): Promise<IGameMenu> {
+    public async sendInGameMenu(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU);
         console.log('[NetworkManager] onGetInGameMenuReceived =>', response);
-        return response.data as IGameMenu;
+        this.getInGameMenu(response);
+    }
+
+    /**
+     * 處理遊戲內選單資料
+     * @param response 原始遊戲內選單資料
+     */
+    private getInGameMenu(response: any): any {
+        if (response.game && response.game.length > 0) {
+            // * Process Hot, New and All game list
+            let menuGames = response.game;
+            for (let i = 0; i < menuGames.length; i++) {
+                if (menuGames[i][1] == 1) {
+                    gameInformation.inGameMenuStore.new.push(menuGames[i][0]);
+                } else if (menuGames[i][1] == 2) {
+                    gameInformation.inGameMenuStore.hot.push(menuGames[i][0]);
+                }
+                gameInformation.inGameMenuStore.gameList.push(menuGames[i][0]);
+            }
+
+            // * Process favorite game list
+            let favGames = response.favorite;
+            for (let i = 0; i < favGames.length; i++) {
+                gameInformation.inGameMenuStore.favList.push(favGames[i]);
+            }
+
+            // * Keeps imageURL
+            gameInformation.inGameMenuStore.imageURL = response.image;
+
+            // * Create game data
+            let allGamesData = response.game_name;
+            for (let i = 0; i < allGamesData.length; i++) {
+                gameInformation.gameNameList[allGamesData[i].game_id] = allGamesData[i].language;
+            }
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 import { _decorator, Label, sp } from 'cc';
 
 import { BaseSpinBtn } from '@base/components/settingsPage/BaseSpinBtn';
-import { BaseFont } from '@base/script/constant/BaseConst';
+import { BaseFont } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
 import { AutoPlayMode, SpinButtonState } from '@base/script/types/BaseType';
 import { FontManager } from '@base/script/utils/FontManager';

@@ -1,12 +1,12 @@
 import { _decorator, Button, Component, Input, Node, sp, Sprite, SpriteFrame } from 'cc';
 
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseAnimationName } from '@base/script/types/BaseType';
-import { XEvent } from '@base/script/utils/XEvent';
+import { XEvent } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';

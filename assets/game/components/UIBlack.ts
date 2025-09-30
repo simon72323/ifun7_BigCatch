@@ -1,7 +1,7 @@
 import { _decorator, Animation, Component, UIOpacity } from 'cc';
 
 import { BaseAnimationName } from '@base/script/types/BaseType';
-import { XEvent1 } from '@base/script/utils/XEvent';
+import { XEvent1 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 const { ccclass, property } = _decorator;

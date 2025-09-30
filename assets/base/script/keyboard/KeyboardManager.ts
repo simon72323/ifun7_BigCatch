@@ -1,6 +1,6 @@
 import { EventKeyboard, input, Input } from 'cc';
 
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 
 import { DataManager } from '@common/script/data/DataManager';
 

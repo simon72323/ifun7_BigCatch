@@ -1,6 +1,6 @@
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { BaseIdleTask } from '@base/script/tasks/BaseIdleTask';
 import { TaskManager } from '@base/script/tasks/TaskManager';
 import { TimeoutManager } from '@base/script/utils/TimeoutManager';

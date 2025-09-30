@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, EditBox, EventTouch, instantiate, Label, Node, Prefab, Slider } from 'cc';
 
 import { CheatPageRng } from '@base/components/cheat/CheatPageRng';
-import { XEvent, XEvent4, XEvent5 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent4, XEvent5 } from '@common/script/event/XEvent';
 
 const { ccclass, property } = _decorator;
 

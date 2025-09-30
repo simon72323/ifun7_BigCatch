@@ -1,4 +1,4 @@
-import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler } from 'cc';
+import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
@@ -170,6 +170,43 @@ export class Utils {
         return Utils.accAdd(arg1, -arg2);
     }
 
+    /**
+     * 根據中獎線ID獲取路徑位置
+     * @param payLineId 中獎線ID (從1開始)
+     * @param amount 需要的位置数量
+     * @param payLineData 中獎線路徑配置
+     * @returns 路徑位置數組
+     */
+    public static getLinePathPosition(payLineId: number, amount: number, gameResult: number[], payLineData: number[][]): { winPos: number[], symbolIDs: number[] } {
+        const linePath = payLineData[payLineId - 1]; // payLineId從1開始
+        let winPos: number[] = [];
+        let symbolIDs: number[] = [];
+
+        // 從payLineData推導出行數 (假設所有路徑都有相同的行數)
+        const rowCount = Math.max(...payLineData.flat()) + 1; // 最大行號 + 1
+
+        // 根據amount限制返回的位置數量
+        for (let col = 0; col < linePath.length && col < amount; col++) {
+            const row = linePath[col];
+            const pos = col * rowCount + row;
+            winPos.push(pos);
+            symbolIDs.push(gameResult[pos]);
+        }
+
+        return { winPos, symbolIDs };
+    }
+
+    /**
+     * 排除陣列重複資料
+     * @param list 
+     * @returns 
+     */
+    public static uniq(list: any[]) {
+        return Array.from(new Set(list));
+    }
+    //================= 用到的 Utils =================
+
+
     //================= 動畫相關 =================
     /**
      * 淡入
@@ -202,12 +239,9 @@ export class Utils {
             })
             .start();
     }
-
     //================= 動畫相關 =================
 
-
-    //================= 用到的 Utils =================
-
+    //================= 以下待確認 =================
     /**
      * 貝茲曲線動畫
      * @param t 時間
@@ -748,3 +782,51 @@ export async function waitNextFrame(): Promise<void> {
     });
 }
 
+/**
+* 添加button Click事件監聽器
+* @param target 目標(掛腳本的節點)
+* @param component 組件名稱
+* @param button 按鈕
+* @param handler 處理器
+* @param eventData 事件數據(可選)
+*/
+export function addBtnClickEvent(target: Node, component: string, button: Button, handler: Function, eventData?: string) {
+    const eventHandler = new Component.EventHandler();
+    eventHandler.target = target;
+    eventHandler.component = component;
+    eventHandler.handler = handler.name;
+    if (eventData) eventHandler.customEventData = eventData;
+    button.clickEvents.push(eventHandler);
+}
+
+// /**
+// * 添加toggle check事件監聽器
+// * @param target 目標(掛腳本的節點)
+// * @param component 組件名稱
+// * @param toggle 切換按鈕
+// * @param handler 處理器
+// */
+// export function addToggleCheckEvent(target: Node, component: string, toggle: Toggle, handler: Function) {
+//     const eventHandler = new Component.EventHandler();
+//     eventHandler.target = target;
+//     eventHandler.component = component;
+//     eventHandler.handler = handler.name;
+//     toggle.checkEvents.push(eventHandler);
+// }
+
+/**
+* 添加toggle事件監聽器（包含check和uncheck）
+* @param target 目標(掛腳本的節點)
+* @param component 組件名稱
+* @param toggle 切換按鈕
+* @param handler 處理器
+* @param eventData 事件數據(可選)
+*/
+export function addToggleClickEvent(target: Node, component: string, toggle: Toggle, handler: Function, eventData?: string) {
+    const eventHandler = new Component.EventHandler();
+    eventHandler.target = target;
+    eventHandler.component = component;
+    eventHandler.handler = handler.name;
+    if (eventData) eventHandler.customEventData = eventData;
+    toggle.checkEvents.push(eventHandler);
+}

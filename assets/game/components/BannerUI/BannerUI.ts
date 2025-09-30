@@ -1,13 +1,13 @@
 import { _decorator, Animation, Component, Label, Node, sp, Sprite, SpriteFrame, Tween, Vec3 } from 'cc';
 
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
-import { BaseConst } from '@base/script/constant/BaseConst';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { BundleLoader } from '@base/script/main/BundleLoader';
 import { BaseLang, ModuleID } from '@base/script/types/BaseType';
-import { XEvent, XEvent1, XEvent2 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { BannerAD } from '@game/components/BannerUI/BannerAD';

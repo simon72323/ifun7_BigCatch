@@ -1,6 +1,6 @@
 import { FreeSpinBonus } from '@base/components/campaign/FreeSpinBonus';
 import { FreeSpinInfoBtn } from '@base/components/campaign/FreeSpinInfoBtn';
-import { BaseEvent } from '@base/script/main/BaseEvent';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 
 import { DataManager } from '@common/script/data/DataManager';
 // import { SocketManager } from '@base/script/socket/SocketManager';

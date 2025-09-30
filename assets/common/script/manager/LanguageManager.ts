@@ -23,7 +23,7 @@ import { _decorator, SpriteFrame, AudioClip, Component, Node, director, sp, Asse
 // import { LocalizedLabel } from '../../components/localized/LocalizedLabel';
 // import { LocalizedSpineSkeleton } from '../../components/localized/LocalizedSpineSkeleton';
 // import { LocalizedSprite } from '../../components/localized/LocalizedSprite';
-import { DataManager } from '@common/script/data/DataManager';;
+import { DataManager } from '@common/script/data/DataManager';
 // import { Logger } from '@base/script/utils/Logger';
 // import { UrlHelper } from '@base/script/utils/UrlHelper';
 

@@ -1,4 +1,4 @@
-import { XEvent, XEvent1, XEvent2, XEvent3, XEvent4, XEvent5 } from '@base/script/utils/XEvent';
+import { XEvent, XEvent1, XEvent2, XEvent3, XEvent4, XEvent5 } from '@common/script/event/XEvent';
 
 /**
  * 事件管理工具類

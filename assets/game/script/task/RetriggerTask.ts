@@ -1,5 +1,5 @@
 import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@base/script/audio/AudioManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@base/script/tasks/GameTask';
 import { XUtils } from '@base/script/utils/XUtils';
 

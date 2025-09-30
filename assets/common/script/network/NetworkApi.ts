@@ -114,40 +114,40 @@ export interface ISpinData {
     game_id: number; // 遊戲 ID
     main_game: IGameResult; // 主遊戲結果
     get_sub_game: boolean; // 是否中 sub game
-    sub_game: ISubGameResult | null; // 子遊戲結果
-    get_jackpot: boolean; // 是否中 jackpot
-    jackpot: IJackpotResult; // jackpot 結果
-    get_jackpot_increment: boolean; // 是否獲取 jackpot 增量
-    jackpot_increment: IJackpotIncrement; // jackpot 增量
-    grand: number; // 水池
-    major: number; // 水池
-    minor: number; // 水池
-    mini: number; // 水池
+    sub_game: {
+        game_result: IGameResult[]; // 子遊戲結果
+        pay_credit_total: number; // 總金額
+        over_win?: boolean; // 贏倍超出最大值
+    };
+
     user_credit: number; // 用戶目前金額
     bet_credit: number; // 總投注金額
     payout_credit: number; // 總派彩金額
     change_credit: number; // 改變金額，如果沒中獎，是負的
     effect_credit: number; // 有效投注，就是總投注額
+
     buy_spin: number; // 0=normal, 1=buy
     buy_spin_multiplier: number; // 購買花費（bet 的幾倍）
     extra: IExtraData | null; // 額外資料
+
+    get_jackpot?: boolean; // 是否中 jackpot
+    jackpot?: IJackpotResult; // jackpot 結果
+    get_jackpot_increment?: boolean; // 是否獲取 jackpot 增量
+    jackpot_increment?: IJackpotIncrement; // jackpot 增量
+    grand?: number; // 水池
+    major?: number; // 水池
+    minor?: number; // 水池
+    mini?: number; // 水池
 }
 
 export interface IGameResult {
     pay_credit_total: number; // 該盤面金額
     game_result: number[][]; // 盤面 3X5 symbolID
     pay_line: IPayLine[]; // 中獎線
-    scatter_info: ISymbolInfo | null; // scatter 資訊
-    wild_info: ISymbolInfo | null; // wild 資訊
-    scatter_extra: any[] | null; // scatter 額外資訊
-    extra: IExtraInfo | null; // 額外資訊
-}
-
-export interface ISubGameResult {
-    pay_credit_total: number; // free game 總金額
-    spin_times: number; // 旋轉次數
-    result: IGameResult[] | null; // 遊戲結果陣列
-    over_win: boolean; // 贏倍超出最大值
+    scatter_info?: ISymbolInfo; // scatter 資訊
+    wild_info?: ISymbolInfo; // wild 資訊
+    scatter_extra?: any[]; // scatter 額外資訊
+    extra?: IExtraInfo; // 額外資訊
 }
 
 export interface IJackpotResult {
@@ -169,16 +169,16 @@ export interface IPayLine {
     symbol_id: number; // 這條線的 symbol id
     amount: number; // 中幾個 symbol
     pay_credit: number; // 本條線金額
-    multiplier: number; // 倍數
+    multiplier?: number; // 倍數
 }
 
 export interface ISymbolInfo {
     id: number[]; // symbol ID 陣列
     position: number[][]; // 盤面位置
-    amount: number; // 數量
-    multiplier: number; // 倍數
-    pay_credit: number; // 派彩金額
-    pay_rate: number; // 派彩率
+    amount?: number; // 數量
+    multiplier?: number; // 倍數
+    pay_credit?: number; // 派彩金額
+    pay_rate?: number; // 派彩率
 }
 
 export interface IExtraInfo {
@@ -190,8 +190,8 @@ export interface IExtraInfo {
 
 export interface IFreeSpinInfo {
     times: number; // 次數
-    init_result: number[][] | null; // 初始結果
-    scatter_info: ISymbolInfo | null; // scatter 資訊
+    init_result?: number[][]; // 初始結果
+    scatter_info?: ISymbolInfo; // scatter 資訊
 }
 
 export interface IExtraData {
@@ -348,12 +348,6 @@ export interface IJackpotPrize {
 
 
 //========================= 遊戲內選單相關 =========================
-/**
- * 遊戲內選單狀態相關
- */
-export interface IInGameMenuStatus {
-    status: number; // 開關狀態 0=off，1=on
-}
 
 /**
  * 遊戲內選單遊戲 URL 相關
@@ -364,24 +358,11 @@ export interface IInGameMenuGameUrlRequest {
     b: string; // loading 頁面底圖
 }
 
-/**
- * 遊戲內選單遊戲 URL 相關
- */
-export interface IInGameMenuGameUrlResponse {
-    url: string; // 新的遊戲啟動 url
-}
 
 /**
  * 更新收藏遊戲相關
  */
-export interface IUpdateFavoriteGameRequest {
-    favorite: number[]; // 收藏遊戲列表
-}
+// export interface IUpdateFavoriteGameRequest {
+//     favorite: number[]; // 收藏遊戲列表
+// }
 //========================= 遊戲內選單相關 =========================
-
-
-//========================= Token 相關 =========================
-export interface IRenewTokenResponse {
-    token: string; // 新 token
-}
-//========================= Token 相關 =========================
