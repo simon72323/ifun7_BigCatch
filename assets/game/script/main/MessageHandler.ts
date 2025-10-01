@@ -33,6 +33,7 @@ import { IGameResult, ISpinData } from '@common/script/network/NetworkApi';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
+import { IWinLineData, IWinScatterData } from '../data/GameType';
 
 
 /**
@@ -71,11 +72,11 @@ export class MessageHandler {
             DataManager.getInstance().winTotal = 0;
         }
 
-        let allWinPos: number[];//此盤面全部中獎位置
-        let planeWin: number;//此盤面中獎金額總和
-        let winLineList: { symbolIDs: number[], payCredit: number }[] = [];//此盤面細部中獎資料
-        let scatterWinData: { winPos: number[], count: number, payCredit: number } = { winPos: [], count: 0, payCredit: 0 };//scatter中獎資料
-        let preSymbolPattern: number[];//上一盤面符號
+        // let allWinPos: number[];//此盤面全部中獎位置
+        // let planeWin: number;//此盤面中獎金額總和
+        let winLineData: IWinLineData[] = [];//此盤面細部中獎資料
+        let winScatterData: IWinScatterData = { symbolID: 0, winPos: [], payCredit: 0, amount: 0 };//scatter中獎資料
+        // let preSymbolPattern: number[];//上一盤面符號
         let newSymbolPattern: number[];//新盤面符號
 
         //把第一盤和N盤結果合併, 取用資料時再決定轉型成SlotResult或SubResult
@@ -87,45 +88,38 @@ export class MessageHandler {
 
         allResult.forEach((data, resultIndex) => {
             let subIdx = resultIndex - 1;//第幾個subResult(allResult[0]是SlotResult)
-            preSymbolPattern = newSymbolPattern || [];
+            // preSymbolPattern = newSymbolPattern || [];
             newSymbolPattern = data.game_result[subIdx].flat();//新盤面符號(二維陣列改一維陣列)
+
+            //轉換中獎線資料
+            data.pay_line.forEach((payLine) => {
+                const data = Utils.getLinePathPosition(payLine.pay_line, payLine.amount, newSymbolPattern, GameConst.payLineData);
+                winLineData.push({ lineID: payLine.pay_line, winPos: data.winPos, symbolIDs: data.symbolIDs, payCredit: payLine.pay_credit });
+            });
+
+            //轉換scatter資料
             if (data.scatter_info) {
-                let scatterPos = data.scatter_info.position.flat();//二維陣列改一維陣列
-                scatterPos.forEach((pos, index) => {
-                    pos === 1 && scatterWinData.count++;
-                    pos === 1 && scatterWinData.winPos.push(index);
+                // let scatterPos = data.scatter_info.position.flat();//二維陣列改一維陣列
+                let scatterPos = data.scatter_info.position;
+                scatterPos.forEach((pos, i) => {
+                    winScatterData.winPos.push(pos[0] * GameConst.REEL_ROW + pos[1]);
                 });
-                scatterWinData.payCredit = data.scatter_info.pay_credit;
+                winScatterData.symbolID = data.scatter_info.id[0];
+                winScatterData.amount = data.scatter_info.amount;
+                winScatterData.payCredit = data.scatter_info.pay_credit;
             }
 
-            //為了乘倍,移到這提早運算
-            allWinPos = [];
-            let payLineList = data.pay_line || [];
-            let normalPayLineList = payLineList.filter((payLine) => payLine.symbol_id !== SymbolID.Scatter);
-            if (normalPayLineList && normalPayLineList.length > 0) {
-                planeWin = 0;
-                normalPayLineList.forEach((payLine) => {
-                    const winLineData = Utils.getLinePathPosition(payLine.pay_line, payLine.amount, newSymbolPattern, GameConst.payLineData);
-                    winLineList.push({ symbolIDs: winLineData.symbolIDs, payCredit: payLine.pay_credit });
-                    allWinPos = allWinPos.concat(winLineData.winPos);
-                    planeWin += payLine.pay_credit;
-                });
-            }
-            allWinPos = Utils.uniq(allWinPos);//去重複值
 
-            // let scatterPayLineList = payLineList.filter((payLine) => payLine.symbol_id === SymbolID.Scatter);
-            // let errorWinPos = allWinPos.filter((pos, idx, arr) => pos % 10 >= 6);//只取前六個位置
-            // if (errorWinPos.length > 0) {
-            //     throw new Error('winPos異常!!');
-            // }
+            // allWinPos = Utils.uniq(allWinPos);//去重複值
+
 
             //首次停輪
             if (resultIndex === 0) {
                 //如果是免費遊戲
                 if (DataManager.getInstance().moduleID === ModuleID.FG) {
-                    let fsTask = new FSUpdateRemainTimesTask();
-                    fsTask.fsRemainTimes = --gameData.fsRemainTimes;
-                    TaskManager.getInstance().addTask(fsTask);
+                    // let fsTask = new FSUpdateRemainTimesTask();
+                    // fsTask.fsRemainTimes = --gameData.fsRemainTimes;
+                    // TaskManager.getInstance().addTask(fsTask);
                 }
 
                 //因為要處理輪帶金框, 只有第一轉設定, 否則slotParser內的資料會被子盤面覆蓋
@@ -134,7 +128,7 @@ export class MessageHandler {
                 // SlotMachine2.changeStrip.emit(SlotMachineID.BS, gameData.slotParser);
 
                 let stop = new StopTask();
-                stop.rngList = slotResult.rng;
+                // stop.rngList = slotResult.rng;
                 //第一盤就中FS, 如果還有得分的話要在掉落後的盤面處理
                 stop.isScatterWin = numScatterInPattern >= GameConst.BONUS_WIN_COUNT && msgResultIndex == allResult.length - 1;
                 stop.isLastPlane = msgResultIndex == allResult.length - 1;

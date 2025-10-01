@@ -177,12 +177,6 @@ export class XUtils {
             obj.setSkin(skin);
     }
 
-    public static ClearSpine(obj: sp.Skeleton) {
-        obj.clearTracks();
-        obj.setToSetupPose();
-        obj.setCompleteListener(null);
-    }
-
     public static isEqual(obj1, obj2) {
         return JSON.stringify(obj1) === JSON.stringify(obj2);
     }

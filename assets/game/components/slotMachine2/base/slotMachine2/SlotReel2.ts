@@ -5,6 +5,7 @@ import { XUtils } from '@base/script/utils/XUtils';
 import { BaseSymbol2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbol2';
 import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
 import { ReelState2, SlotReelConfig2, SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
+import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
 const { ccclass, property } = _decorator;
 
@@ -69,9 +70,9 @@ export class SlotReel2 extends Component {
     private forceResult: number[] = [];
 
     /**圖示顯示時透明度 */
-    private static VISIBLE_OPACITY = 255;
+    // private static VISIBLE_OPACITY = 255;
     /**圖示隱藏時透明度 */
-    private static HIDE_OPACITY = 0;
+    // private static HIDE_OPACITY = 0;
 
     private isMi: boolean = false;
 
@@ -84,9 +85,9 @@ export class SlotReel2 extends Component {
      * 設置輪帶
      * @param strip 
      */
-    public setStrip(strip: number[]): void {
-        this.strip = strip;
-    }
+    // public setStrip(strip: number[]): void {
+    //     this.strip = strip;
+    // }
 
     /**
      * 初始化
@@ -102,29 +103,13 @@ export class SlotReel2 extends Component {
         let idx: number = 0;
         let posNode = this.node.getChildByName(`NodePos${idx}`);
         while (posNode != null) {
-            posNode.removeAllChildren();
-            //轉換成ReelLayer坐標系
-            let worldPos = this.node.getComponent(UITransform).convertToWorldSpaceAR(posNode.getPosition());
-            //沒有設定layer就不調整層級
-            let targetLayerList = config.layerList.length > 0 ? config.layerList : config.reelLayerList;
-            if (config.layerList.length > 0) {
-                let layerPos = config.layerList[0].getComponent(UITransform).convertToNodeSpaceAR(worldPos);
-                posNode.setPosition(layerPos);
-            }
-            else if (config.reelLayerList.length > 0) {
-                let layerPos = config.reelLayerList[reelIndex].getComponent(UITransform).convertToNodeSpaceAR(worldPos);
-                posNode.setPosition(layerPos);
-            }
-
             this.posList.push(posNode);
             let symbol = instantiate(config.symbolPrefab).getComponent(BaseSymbol2);
-            symbol.setLayerList(targetLayerList);
-            targetLayerList[0].addChild(symbol.node);
+            symbol.setLayerList(config.layerList);
+            config.layerList[0][reelIndex].addChild(symbol.node);
             symbol.setPosIndex(idx);
-            symbol.setGrid({ col: reelIndex, row: idx });
             this.symbolList.push(symbol);
             symbol.node.setPosition(posNode.getPosition());
-            symbol.node.setScale(posNode.getScale(symbol.node.scale));
             idx++;
             posNode = this.node.getChildByName(`NodePos${idx}`);
         }
@@ -135,19 +120,20 @@ export class SlotReel2 extends Component {
      * @param strip 輪帶資料
      * @param rng 輪帶索引
      */
-    public setupStripAndRng(strip: number[], rng: number): void {
-
-        this.setStrip(strip);
-
-        this.currentRng = this.getRng(rng - 1);
-        this.symbolList.forEach((symbol, _idx) => {
-            let stripIdx = this.getRng(this.currentRng - this.keepRow + symbol.getPosIndex());
-            symbol.isInView = this.isInView(symbol.getPosIndex());
-            symbol.setSymbolID(this.strip[stripIdx], stripIdx);
+    public setupSymbolIDs(symbolIDs: number[]): void {
+        const posLength = Math.floor(this.posList.length / 3);
+        // this.currentRng = this.getRng(rng - 1);
+        this.symbolList.forEach((symbol, idx) => {
+            if (idx >= posLength && idx < posLength * 2) {
+                symbol.symbolID = symbolIDs[idx - posLength];
+                symbol.isInView = true;
+            } else {
+                //上下隨機symbol圖
+                symbol.symbolID = Math.floor(Math.random() * GameConst.symbolIDCount);
+            }
+            symbol.setState(SymbolState2.Normal);
         });
-        this.setSymbolState(SymbolState2.Normal);
     }
-
 
     private getPosIdx(idx: number): number {
         return (idx + this.posList.length) % this.posList.length;
@@ -158,20 +144,21 @@ export class SlotReel2 extends Component {
      * @returns 
      */
     public spin(): void {
-        if (this.reelState !== ReelState2.IDLE) {
-            return;
-        }
+        if (this.reelState !== ReelState2.IDLE) return;
         if (this.reelIndex === 0) {
-            SlotReel2.firstReelCount = 0;
+            SlotReel2.firstReelCount = 0;//第一軸走完時重置
         }
 
         this.randomSeed = Math.random();
-        this.requestStop = false;
+        this.requestStop = false;//要求停止
         this.reelState = ReelState2.BEGIN;
+        //隱藏軸最後一個symbol
+        let hidePos: number = this.config.direction > 0 ? this.posList.length - 1 : 0;
         this.symbolList.forEach((symbol, idx) => {
             this.debug(`${this.reelIndex}, symbol ${idx} posIndex ${symbol.symbolID}`);
+            //隱藏軸最後一個symbol
             let hidePos: number = this.config.direction > 0 ? this.posList.length - 1 : 0;
-            symbol.getComponent(UIOpacity).opacity = (symbol.getPosIndex() === hidePos) ? SlotReel2.HIDE_OPACITY : SlotReel2.VISIBLE_OPACITY;
+            symbol.getComponent(UIOpacity).opacity = (symbol.getPosIndex() === hidePos) ? 0 : 255;
             if (symbol.symbolID == -1) {
                 symbol.randomSymbol();
             }
@@ -468,7 +455,7 @@ export class SlotReel2 extends Component {
             //這次update要走的步數刷新posIndex
             symbol.setPosIndex(this.getPosIdx(symbol.getPosIndex() + this.config.direction * step));
             // symbol.node.setSiblingIndex(symbol.getPosIndex());//由上至下,深度排序, 改由Symbol自定義
-            symbol.getComponent(UIOpacity).opacity = (symbol.getPosIndex() === this.symbolList.length - 1) ? SlotReel2.HIDE_OPACITY : SlotReel2.VISIBLE_OPACITY;
+            symbol.getComponent(UIOpacity).opacity = (symbol.getPosIndex() === this.symbolList.length - 1) ? 0 : 255;
 
             let curNode = this.posList[this.getPosIdx(symbol.getPosIndex())];
             let nextNode = this.posList[this.getPosIdx(symbol.getPosIndex() + this.config.direction)];

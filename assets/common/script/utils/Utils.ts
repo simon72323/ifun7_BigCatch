@@ -1,4 +1,4 @@
-import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle } from 'cc';
+import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle, sp } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
@@ -203,6 +203,16 @@ export class Utils {
      */
     public static uniq(list: any[]) {
         return Array.from(new Set(list));
+    }
+
+    /**
+     * 清除Spine
+     * @param obj 
+     */
+    public static ClearSpine(obj: sp.Skeleton) {
+        obj.clearTracks();
+        obj.setToSetupPose();
+        obj.setCompleteListener(null);
     }
     //================= 用到的 Utils =================
 

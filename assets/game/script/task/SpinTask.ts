@@ -33,10 +33,10 @@ export class SpinTask extends BaseSpinTask {
             AudioManager.getInstance().play(GameAudioKey.in);
         }, this);
 
-        if (DataManager.getInstance().isBS() === true) {
+        if (DataManager.getInstance().isBS()) {
             //先轉型(免費遊戲直接給結果不轉動)
             if (DataManager.getInstance().buyFs === false && APIManager.getInstance().getSpinLate() === false) {
-                SlotMachine2.spin.emit(SlotMachineID.BS);
+                SlotMachine2.spin.emit();
             }
         }
         else {
@@ -45,7 +45,7 @@ export class SpinTask extends BaseSpinTask {
     }
 
     public childSpinFailed(): void {
-        if (DataManager.getInstance().isBS() === true) {
+        if (DataManager.getInstance().isBS()) {
             TaskManager.getInstance().addTask(new IdleTask());
         }
     }

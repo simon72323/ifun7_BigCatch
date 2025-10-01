@@ -1,16 +1,14 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame, Button, randomRangeInt, UITransform } from 'cc';
 
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { DataManager } from '@common/script/data/DataManager';;
-import { XUtils } from '@base/script/utils/XUtils';
-
 import { PayTableUI } from '@game/components/PayTableUI/PayTableUI';
 import { BaseSymbol2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbol2';
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
 import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
-import { GameAudioKey, GameConst, SymbolID } from '@game/script/constant/GameConst';
-import { GameData } from '@game/script/main/GameData';
+import { GameConst, SymbolID } from '@game/script/data/GameConst';
+
+import { DataManager } from '@common/script/data/DataManager';
+import { Utils } from '@common/script/utils/Utils';
 
 enum SymbolLayer {
     Reel = 0,
@@ -130,7 +128,7 @@ export class Symbol2 extends BaseSymbol2 {
             }
         }, this);
 
-        SlotMachine2.stopMi.on((id) => {
+        SlotMachine2.stopMi.on(() => {
             this.isMi = false;
             if (this.isScatter() === true) {
                 this.setState(this.state);
@@ -141,8 +139,8 @@ export class Symbol2 extends BaseSymbol2 {
     /**
      * 開始spin時空的圖示要隨機給symbolID
      */
-    public randomSymbol(): void {
-        this.symbolID = randomRangeInt(0, GameConst.symbolWeight.length);
+    public setRandomSymbol(): void {
+        this.symbolID = Math.floor(Math.random() * GameConst.symbolCount);
     }
 
     /**
@@ -216,7 +214,7 @@ export class Symbol2 extends BaseSymbol2 {
             //只有WILD會進來
             if (data.symbolID === SymbolID.Wild) {
                 this.wild.node.active = true;
-                XUtils.ClearSpine(this.wild);
+                Utils.ClearSpine(this.wild);
                 this.wild.setCompleteListener(() => {
                     this.setSymbolID(data.symbolID, -1);
                 });
@@ -292,24 +290,26 @@ export class Symbol2 extends BaseSymbol2 {
         this.reset();
     }
 
+    /**
+     * 回歸原始狀態
+     */
     private reset(): void {
         this.normal.node.active = true;
         this.spine.node.active = false;
-        XUtils.ClearSpine(this.spine);
+        Utils.ClearSpine(this.spine);
         this.wild.node.active = false;
-        XUtils.ClearSpine(this.wild);
-        this.addChildToLayer(SymbolLayer.Reel);
+        Utils.ClearSpine(this.wild);
+        this.addChildToLayer(SymbolLayer.Reel);//移至轉動層
     }
 
     /**
      * 爆炸演示
      */
-    public explode() {
-        this.spine.timeScale = DataManager.getInstance().getData<GameData>().getTurboSetting().explodeTimeScale;
-        this.playSymbolAni(SymbolAni.explo, false);
-        this.symbolID = -1;
-
-    }
+    // public explode() {
+    //     this.spine.timeScale = DataManager.getInstance().getData<GameData>().getTurboSetting().explodeTimeScale;
+    //     this.playSymbolAni(SymbolAni.explo, false);
+    //     this.symbolID = -1;
+    // }
 
     /**
      * 圖示落地
@@ -318,7 +318,7 @@ export class Symbol2 extends BaseSymbol2 {
     public hit(isInView: boolean): void {
         if (isInView) {
             if (this.isScatter() === true) {
-                AudioManager.getInstance().playOneShot(GameAudioKey.scatter);
+                // AudioManager.getInstance().playOneShot(GameAudioKey.scatter);
 
                 //畫面內的scatter只播一次hit
                 if (this.isInView === false) {
@@ -341,7 +341,7 @@ export class Symbol2 extends BaseSymbol2 {
         this.spine.node.active = true;
         this.normal.node.active = false;
         this.addChildToLayer(SymbolLayer.Win);
-        XUtils.ClearSpine(this.spine);
+        Utils.ClearSpine(this.spine);
 
         //非loop動畫會監聽完成並回復normal
         if (!loop) {

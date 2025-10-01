@@ -54,12 +54,12 @@ export class SlotReelConfig2 {
     /**層級 */
     public layerList: Node[] = [];
     /**層級 */
-    public reelLayerList: Node[] = [];
+    // public reelLayerList: Node[] = [];
     /**最大列數 */
     public maxRow: number = 0;
 
     public getSpeedConfig(): SpeedConfig2 {
-        let turboMode = DataManager.getInstance().getTurboMode();
+        let turboMode = DataManager.getInstance().turboMode;
         return this.speedConfigList[turboMode];
     }
 }

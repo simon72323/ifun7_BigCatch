@@ -1,6 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 
-import { Grid } from '@base/script/types/BaseType';
+// import { Grid } from '@base/script/types/BaseType';
 
 import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
 import { SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
@@ -79,17 +79,9 @@ export class BaseSymbol2 extends Component {
         //override
     }
 
-    public setGrid(grid: Grid): void {
-        this.grid = grid;
-        this.node.name = `symbol_${grid.col}_${grid.row}`;
-    }
-
-    public getGrid(): Grid {
-        return this.grid;
-    }
-
     public setPosIndex(index: number): void {
         this.posIndex = index;
+        this.node.name = `symbol_${index}`;
     }
 
     public copyPositionAndScaleFrom(node: Node): void {
@@ -113,7 +105,7 @@ export class BaseSymbol2 extends Component {
         //override
     }
 
-    public randomSymbol(): void {
+    public setRandomSymbol(): void {
         //override
     }
 

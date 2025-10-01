@@ -8,6 +8,8 @@ export class GameConst {
     public static EXPLODE_TIME: number = 1;
     /**圖示權重(越大越上層) */
     public static symbolWeight: number[] = [0, 99, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    /**圖示ID數量 */
+    public static symbolCount: number = 16;
     /**倍數清單 */
     // public static multiplierList: number[] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
 

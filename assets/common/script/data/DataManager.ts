@@ -1,15 +1,16 @@
 
 // import { APIManager } from '@base/script/utils/APIManager';
 // import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
-import { XUtils } from '@base/script/utils/XUtils';
+// import { XUtils } from '@base/script/utils/XUtils';
 
 // import { SlotData } from '@game/script/data/SlotData';
 
-import { BaseConst } from '@common/script/data/BaseConst';
-import { NetworkData } from '@common/script/data/NetworkData';
-import { IGameData } from '@common/script/network/NetworkApi';
+// import { BaseConst } from '@common/script/data/BaseConst';
+import { gameInformation } from '@common/script/data/GameInformation';
+// import { IGameData } from '@common/script/network/NetworkApi';
 import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
+
 
 
 /**
@@ -65,6 +66,8 @@ export class DataManager {
     public betValue: number = 0;
     /** 玩家餘額 */
     public userCredit: number = 0;
+    /** 是否跳過 */
+    public hasSkip: boolean = false;
 
 
     /** 獲取slot資料 */
@@ -187,9 +190,9 @@ export class DataManager {
      * 取得遊戲資料
      * @returns 遊戲資料
      */
-    public getGameData(): IGameData {
-        return NetworkData.getInstance().gameData;
-    }
+    // public getGameData(): IGameData {
+    //     return gameInformation.gameData;
+    // }
 
     /**
      * 檢查餘額是否足夠
@@ -205,7 +208,7 @@ export class DataManager {
      * @returns 
      */
     public getBetCredit() {
-        const gameData = this.getGameData();
+        const gameData = gameInformation.gameData;
         const coinValue = gameData.coin_value[gameData.coin_value_default_index];
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
         const lineTotal = gameData.line_total;
@@ -427,7 +430,7 @@ export class DataManager {
      */
     public getChangeBetValue(changeValue: number): number {
         this.betIdx += changeValue;
-        const gameData = this.getGameData();
+        const gameData = gameInformation.gameData;
         const length = gameData.coin_value.length;
         const betIdxMin = gameData.bet_available_idx;
 

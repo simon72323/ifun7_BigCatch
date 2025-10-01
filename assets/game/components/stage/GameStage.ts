@@ -1,23 +1,27 @@
 import { _decorator, Animation, Component, easing, Node, sp, tween, Tween, Vec3 } from 'cc';
 
-import { AutoPage } from '@base/components/autoPage/AutoPage';
-import { GameHelpWebView } from '@base/components/gameHelp/GameHelpWebView';
-import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { TaskManager } from '@base/script/tasks/TaskManager';
-import { ModuleID } from '@base/script/types/BaseType';
-import { XEvent } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+// import { AutoPage } from '@base/components/autoPage/AutoPage';
+// import { GameHelpWebView } from '@base/components/gameHelp/GameHelpWebView';
+// import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+// import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
+// import { AudioManager } from '@common/script/manager/AudioManager';
+
+// import { XUtils } from '@base/script/utils/XUtils';
 
 import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { GameAnimationName, GameAudioKey } from '@game/script/constant/GameConst';
-import { GameData } from '@game/script/main/GameData';
+import { GameAnimationName, GameAudioKey } from '@game/script/data/GameConst';
 import { IdleTask } from '@game/script/task/IdleTask';
+
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent } from '@common/script/event/XEvent';
+import { TaskManager } from '@common/script/tasks/TaskManager';
+import { ModuleID } from '@common/script/types/BaseType';
+import { Utils } from '@common/script/utils/Utils';
+import { gameInformation } from '@common/script/data/GameInformation';
+
 
 enum RollerAni {
     fg_mipie = 'fg_mipie',
@@ -37,12 +41,12 @@ export class GameStage extends Component {
 
     public static fsOpening: XEvent = new XEvent();
 
-    private roller_ani: sp.Skeleton;
+    // private roller_ani: sp.Skeleton;
 
     private isMi: boolean = false;
     private scaleNode: Node;
     onLoad() {
-        this.roller_ani = this.node.getChildByPath('ScaleNode/roller_ani').getComponent(sp.Skeleton);
+        // this.roller_ani = this.node.getChildByPath('ScaleNode/roller_ani').getComponent(sp.Skeleton);
         this.scaleNode = this.node.getChildByName('ScaleNode');
 
         BaseEvent.initMessageComplete.once(this.netReady, this);//監聽網路準備完成事件(一次)
@@ -52,7 +56,7 @@ export class GameStage extends Component {
         GameStage.fsOpening.on(this.fsOpening, this);//監聽FS開場事件
 
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
-        SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
+        // SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
 
         SlotMachine2.startMi.on(this.startMi, this);//監聽開始咪牌事件
         SlotMachine2.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
@@ -61,7 +65,7 @@ export class GameStage extends Component {
     /**開始 */
     start() {
         this.onChangeScene(ModuleID.BS);
-        AutoPage.setup.emit([10, 50, 100, 250, 1000]);
+        // AutoPage.setup.emit([10, 50, 100, 250, 1000]);
     }
 
     /**震動 */
@@ -71,49 +75,26 @@ export class GameStage extends Component {
 
     /**FS開場 */
     private fsOpening(): void {
-        XUtils.ClearSpine(this.roller_ani);
-        this.roller_ani.addAnimation(0, RollerAni.intofg_roller, false);
-        this.roller_ani.addAnimation(0, RollerAni.fg_roller, true);
-        AudioManager.getInstance().play(GameAudioKey.scExpand);
+        // AudioManager.getInstance().play(GameAudioKey.scExpand);
     }
 
     /**開始咪牌 */
     private startMi(): void {
-        if (this.isMi) {
-            return;
-        }
+        if (this.isMi) return;
         this.isMi = true;
         tween(this.scaleNode)
             .to(3, { scale: new Vec3(0.95, 0.95, 1) }, { easing: easing.circOut })
             .start();
-
-        XUtils.ClearSpine(this.roller_ani);
-        if (DataManager.getInstance().isBS() === true) {
-            this.roller_ani.setAnimation(0, RollerAni.ng_mipie, true);
-        }
-        else {
-            this.roller_ani.setAnimation(0, RollerAni.fg_mipie, true);
-        }
     }
 
     /**停止咪牌 */
     private stopMi(): void {
-        if (!this.isMi) {
-            return;
-        }
+        if (!this.isMi)  return;
         this.isMi = false;
         Tween.stopAllByTarget(this.scaleNode);
         tween(this.scaleNode)
             .to(1.5, { scale: new Vec3(1, 1, 1) })
             .start();
-
-        XUtils.ClearSpine(this.roller_ani);
-        if (DataManager.getInstance().isBS() === true) {
-            this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
-        }
-        else {
-            this.roller_ani.setAnimation(0, RollerAni.fg_roller, true);
-        }
     }
 
     /**點擊免費遊戲 */
@@ -125,9 +106,9 @@ export class GameStage extends Component {
     /**網路準備完成 */
     private netReady(): void {
         //初始化盤面
-        let gameData = DataManager.getInstance().getData<GameData>();
-        gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
-        SlotMachine2.setup.emit(0, gameData.slotParser);
+        let gameData = gameInformation.gameData;
+        // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
+        SlotMachine2.setup.emit(gameData.slotParser);
 
         SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
         BaseEvent.refreshCredit.emit(DataManager.getInstance().playerCent);
