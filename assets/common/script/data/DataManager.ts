@@ -129,7 +129,7 @@ export class DataManager {
     public payOfPos = [];
 
     /**免費遊戲購買倍率清單(免費遊戲允許N個Bet) */
-    public featureBuyMultipleList: number[] = [];
+    // public featureBuyMultipleList: number[] = [];
 
     /**最低下注額(目前僅用於印尼版) */
     public lawMinBet: number = 0;
@@ -187,14 +187,6 @@ export class DataManager {
     }
 
     /**
-     * 取得遊戲資料
-     * @returns 遊戲資料
-     */
-    // public getGameData(): IGameData {
-    //     return gameInformation.gameData;
-    // }
-
-    /**
      * 檢查餘額是否足夠
      * @returns 
      */
@@ -203,8 +195,15 @@ export class DataManager {
     }
 
     /**
+     * 檢查是否夠買免費遊戲(玩家餘額 >= 免費遊戲總購買金額)
+     * @returns 
+     */
+    public checkBuyFeature(): boolean {
+        return this.userCredit >= this.getBuyFeatureTotal();
+    }
+
+    /**
      * 取得總下注金額
-     * @param idx 
      * @returns 
      */
     public getBetCredit() {
@@ -215,7 +214,40 @@ export class DataManager {
         return Utils.accNumber(coinValue * lineBet * lineTotal);//處理浮點數問題
     }
 
+    /**
+     * 取得免費遊戲總購買金額(免費遊戲購買倍率 x 總下注)
+     * @returns 
+     */
+    public getBuyFeatureTotal(): number {
+        return gameInformation.gameData.buy_spin.multiplier * this.getBetCredit();
+    }
 
+    /**
+     * 改變下注並回傳下注值
+     * @param changeValue 改變值（正數為增加，負數為減少）
+     */
+    public getChangeBetValue(changeValue: number): number {
+        this.betIdx += changeValue;
+        const gameData = gameInformation.gameData;
+        const length = gameData.coin_value.length;
+        const betIdxMin = gameData.bet_available_idx;
+
+        if (changeValue > 0) {
+            // 增加下注
+            if (this.betIdx >= length) {
+                this.betIdx = betIdxMin;
+            }
+        } else {
+            // 減少下注
+            if (this.betIdx < betIdxMin) {
+                this.betIdx = length - 1;
+            }
+        }
+
+        // 更新下注值
+        this.betValue = gameData.coin_value[this.betIdx];
+        return this.betValue;
+    }
 
     /**
      * 取得完整下注紀錄網址
@@ -225,6 +257,16 @@ export class DataManager {
         const { betrecordurl, token, serverurl, lang } = this.urlParam;
         return `${betrecordurl}?token=${token}&lang=${lang}&serverurl=${serverurl}`;
     }
+
+    /**
+     * 是否為BS模式(一般遊戲)
+     * @returns 
+     */
+    public isBS(): boolean {
+        return this.moduleID === ModuleID.BS;
+    }
+
+    //=============================以上確定使用======================================
 
     /**
      * 金額模式
@@ -270,10 +312,10 @@ export class DataManager {
     //     return bigWinLevel;
     // }
 
-    public isIdle(): boolean {
-        return false;
-        // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
-    }
+    // public isIdle(): boolean {
+    //     return false;
+    //     // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
+    // }
 
     // public setState(state: s5g.game.proto.ESTATEID): void {
     //     this.curState = state;
@@ -281,49 +323,51 @@ export class DataManager {
     // }
 
     /**
-     * 
+     * 解析數字模式
+     * @param param 
+     * @returns 
      */
-    private parseDigitMode(param: string): DigitMode {
-        let mode: DigitMode;
-        if (param.length == 0) {
-            mode = DigitMode.DOT;
-        }
-        else if (param.substr(1, 1) == '1') {
-            mode = DigitMode.COMMA;
-        }
-        else {
-            mode = DigitMode.DOT;
-        }
-        return mode;
-    }
+    // private parseDigitMode(param: string): DigitMode {
+    //     let mode: DigitMode;
+    //     if (param.length == 0) {
+    //         mode = DigitMode.DOT;
+    //     }
+    //     else if (param.substr(1, 1) == '1') {
+    //         mode = DigitMode.COMMA;
+    //     }
+    //     else {
+    //         mode = DigitMode.DOT;
+    //     }
+    //     return mode;
+    // }
 
     /**
      * 取得輪帶
      * @param id 
      * @returns 
      */
-    public getStripTable() {
-        for (let i = 0; i < this.stripTables.length; i++) {
-            if (this.stripTables[i]._id == this.moduleID) {
-                return this.stripTables[i];
-            }
-        }
-        return null;
-    }
+    // public getStripTable() {
+    //     for (let i = 0; i < this.stripTables.length; i++) {
+    //         if (this.stripTables[i]._id == this.moduleID) {
+    //             return this.stripTables[i];
+    //         }
+    //     }
+    //     return null;
+    // }
 
     /**
      * 取得ID對應輪帶表
      * @param id 
      * @returns 
      */
-    public getStripTableByID(id: ModuleID) {
-        for (let i = 0; i < this.stripTables.length; i++) {
-            if (this.stripTables[i]._id == id) {
-                return this.stripTables[i];
-            }
-        }
-        return null;
-    }
+    // public getStripTableByID(id: ModuleID) {
+    //     for (let i = 0; i < this.stripTables.length; i++) {
+    //         if (this.stripTables[i]._id == id) {
+    //             return this.stripTables[i];
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
     public isBlockKeyboard(): boolean {
@@ -334,53 +378,20 @@ export class DataManager {
     //     return APIManager.getInstance().getSocketUrl() || this.defaultSocketUrl;
     // }
 
-    public getMapIndex(idx: number): number {
-        // return XUtils.getMapIndex(idx, this.getData().REEL_ROW);
-        return 0;
-    }
-
-    /**
-     * 設定免費遊戲購買倍率清單
-     * @param data 
-     */
-    public setFeatureBuyMultipleList(data: number[] | number): void {
-        //一律存為陣列
-        if (Array.isArray(data)) {
-            this.featureBuyMultipleList = data.concat();
-        }
-        else {
-            this.featureBuyMultipleList = [data];
-        }
-
-    }
-
-    /**
-     * 免費遊戲是否可用
-     * @returns 免費遊戲購買金額 <= 免費遊戲限制購買金額(最大投注 x 免費遊戲限制倍率)
-     */
-    // public isFeatureBuyEnabled(): boolean {
-    //     return this.getCurFeatureBuyTotal() <= this.bet.getMaxTotal() * this.luckyStrikeBlockRate;
+    // public getMapIndex(idx: number): number {
+    //     // return XUtils.getMapIndex(idx, this.getData().REEL_ROW);
+    //     return 0;
     // }
 
     // /**
-    //  * 免費遊戲購買金額
-    //  * @returns 免費遊戲購買金額 = 免費遊戲購買倍率 x 總下注
+    //  * 取得免費遊戲購買成本(多種免費遊戲選項)
+    //  * @param type 免費遊戲選項id
+    //  * @returns 
     //  */
-    // public getCurFeatureBuyTotal(): number {
-    //     return this.getCurFeatureBuyMultiple() * this.bet.getCurRateXCurBet();
-    // }
-
     // public getFeatureBuyCostAt(type: number): number {
     //     return this.featureBuyMultipleList[type] * this.bet.getCurRateXCurBet();
     // }
 
-    /**
-     * 取得目前免費遊戲購買倍率(免費遊戲允許N個Bet)
-     * @returns 
-     */
-    public getCurFeatureBuyMultiple(): number {
-        return this.featureBuyMultipleList[this.featureBuyType];
-    }
 
     /**
      * 免費遊戲金額為N個Bet
@@ -425,39 +436,12 @@ export class DataManager {
     // }
 
     /**
-     * 改變下注並回傳下注值
-     * @param changeValue 改變值（正數為增加，負數為減少）
-     */
-    public getChangeBetValue(changeValue: number): number {
-        this.betIdx += changeValue;
-        const gameData = gameInformation.gameData;
-        const length = gameData.coin_value.length;
-        const betIdxMin = gameData.bet_available_idx;
-
-        if (changeValue > 0) {
-            // 增加下注
-            if (this.betIdx >= length) {
-                this.betIdx = betIdxMin;
-            }
-        } else {
-            // 減少下注
-            if (this.betIdx < betIdxMin) {
-                this.betIdx = length - 1;
-            }
-        }
-
-        // 更新下注值
-        this.betValue = gameData.coin_value[this.betIdx];
-        return this.betValue;
-    }
-
-    /**
      * 是否為Demo模式
      * @returns 
      */
-    public isDemoMode(): boolean {
-        return this.urlParam.playMode == '1';
-    }
+    // public isDemoMode(): boolean {
+    //     return this.urlParam.playMode == '1';
+    // }
 
     //TODO:太多地方用, 還不確定明確用途, 暫時保留
     /**
@@ -474,14 +458,6 @@ export class DataManager {
     //         return false;
     //     }
     // }
-
-    /**
-     * 是否為BS模式
-     * @returns 
-     */
-    public isBS(): boolean {
-        return this.moduleID === ModuleID.BS;
-    }
 
     /**
      * 設定加速模式

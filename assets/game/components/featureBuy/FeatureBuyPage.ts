@@ -1,16 +1,22 @@
 import { _decorator, Button, Component, Label, sp, Sprite, UIOpacity } from 'cc';
 
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseAnimationName } from '@base/script/types/BaseType';
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+// import { AudioKey } from '@base/script/audio/AudioKey';
+// import { AudioManager } from '@common/script/manager/AudioManager';
 
-import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+
+import { GameAudioKey, LangBundleDir } from '@game/script/data/GameConst';
+
+import { BaseConst } from '@common/script/data/BaseConst';
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
+import { BundleLoader } from '@common/script/loading/BundleLoader';
+import { Utils } from '@common/script/utils/Utils';
+
+// import { BaseAnimationName } from '@base/script/types/BaseType';
+// import { XUtils } from '@base/script/utils/XUtils';
+// import { BundleLoader } from '@base/script/main/BundleLoader';
+
 
 enum BoxAni {
     start = 'start'
@@ -42,12 +48,12 @@ export class FeatureBuyPage extends Component {
         this.spine = this.node.getChildByPath('buyfeature_box_ani').getComponent(sp.Skeleton);
         this.costLabel = this.node.getChildByPath('buyfeature_box_ani/num_totalwin').getComponent(Label);
 
-        let buyBtn = this.node.getChildByPath('buyfeature_box_ani/btn_buy/btn').getComponent(Button);
+        const buyBtn = this.node.getChildByPath('buyfeature_box_ani/btn_buy/btn').getComponent(Button);
         buyBtn.node.on(Button.EventType.CLICK, this.onClickBuy, this);
 
-        let cancelBtn = this.node.getChildByPath('buyfeature_box_ani/btn_cancel/btn').getComponent(Button);
+        const cancelBtn = this.node.getChildByPath('buyfeature_box_ani/btn_cancel/btn').getComponent(Button);
         cancelBtn.node.on(Button.EventType.CLICK, () => {
-            AudioManager.getInstance().play(AudioKey.BetClick);
+            // AudioManager.getInstance().play(AudioKey.BetClick);
             this.onClickCancel();
         }, this);
 
@@ -64,8 +70,10 @@ export class FeatureBuyPage extends Component {
             this.node.getChildByPath('buyfeature_box_ani/title_featurebuy').getComponent(Sprite).spriteFrame = langRes['title_featurebuy'];
             this.node.getChildByPath('buyfeature_box_ani/title_featurebuy_cost').getComponent(Sprite).spriteFrame = langRes['title_featurebuy_cost'];
 
-            XUtils.setButtonSprite(buyBtn, langRes['btn_buy_N'], langRes['btn_buy_H']);
-            XUtils.setButtonSprite(cancelBtn, langRes['btn_cancel_N'], langRes['btn_cancel_H']);
+            buyBtn.normalSprite = buyBtn.hoverSprite = langRes['btn_buy_N'];
+            buyBtn.pressedSprite = buyBtn.disabledSprite = langRes['btn_buy_H'];
+            cancelBtn.normalSprite = cancelBtn.hoverSprite = langRes['btn_cancel_N'];
+            cancelBtn.pressedSprite = cancelBtn.disabledSprite = langRes['btn_cancel_H'];
         });
 
         this.node.active = false;
@@ -80,14 +88,14 @@ export class FeatureBuyPage extends Component {
      */
     private show(value: number): void {
 
-        this.costLabel.string = XUtils.NumberToCentString(value);
+        this.costLabel.string = Utils.numberFormat(value);
 
-        AudioManager.getInstance().play(AudioKey.Open, 0.6);
+        // AudioManager.getInstance().play(AudioKey.Open, 0.6);
 
 
 
         this.node.active = true;
-        XUtils.ClearSpine(this.spine);
+        // XUtils.ClearSpine(this.spine);
         this.spine.setAnimation(0, BoxAni.start, false);
 
         //延遲一幀避免動畫閃爍, 先最大又突然縮小再放大
@@ -107,12 +115,12 @@ export class FeatureBuyPage extends Component {
         }
         this.isHiding = true;
 
-        XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.3, () => {
-            this.forceHide();
-        });
+        // XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.3, () => {
+        this.forceHide();
+        // });
 
-        AudioManager.getInstance().play(AudioKey.Close);
-        AudioManager.getInstance().play(AudioKey.Trans);
+        // AudioManager.getInstance().play(AudioKey.Close);
+        // AudioManager.getInstance().play(AudioKey.Trans);
 
     }
 
@@ -124,7 +132,7 @@ export class FeatureBuyPage extends Component {
             return;
         }
 
-        AudioManager.getInstance().play(GameAudioKey.buy);
+        // AudioManager.getInstance().play(GameAudioKey.buy);
         this.forceHide();
         BaseEvent.buyFeature.emit();
     }

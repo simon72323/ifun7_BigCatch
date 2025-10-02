@@ -14,6 +14,7 @@ import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { XUtils } from '@base/script/utils/XUtils';
 
 import { DataManager } from '@common/script/data/DataManager';
+import { Utils } from '@common/script/utils/Utils';
 
 const { ccclass } = _decorator;
 
@@ -86,7 +87,7 @@ export class InfoBar extends Component {
 
     /**刷新餘額 */
     private refreshCredit(value: number): void {
-        this.Credit.getComponent(Label).string = XUtils.NumberToCentString(value);
+        this.Credit.getComponent(Label).string = Utils.numberFormat(value);
     }
 
     /**刷新下注 */

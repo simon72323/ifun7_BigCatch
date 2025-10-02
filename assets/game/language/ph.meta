@@ -1,0 +1,13 @@
+{
+  "ver": "1.2.0",
+  "importer": "directory",
+  "imported": true,
+  "uuid": "46ad6f10-4939-4207-ad5b-bbcf3bb534cc",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "isBundle": true,
+    "bundleName": "language5800-ph",
+    "priority": 8
+  }
+}

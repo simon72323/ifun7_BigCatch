@@ -220,11 +220,11 @@ export enum EVENTTYPE {
 /**
  * 音效模式
  */
-// export enum AudioMode {
-//     AudioOn = 0,
-//     MusicOff,
-//     AudioOff
-// }
+export enum AudioMode {
+    AudioOn = 0,
+    MusicOff,
+    AudioOff
+}
 
 /**
  * 擴散動畫物件

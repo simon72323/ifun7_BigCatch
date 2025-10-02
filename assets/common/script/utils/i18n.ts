@@ -150,7 +150,7 @@ export class i18n extends Component {
     public static getContent(key: string, id: number, label: any = null): string {
         if (!key || key.length == 0) return null;
 
-        if (i18n.instance.isLoadDone !== true) {
+        if (i18n.instance?.isLoadDone !== true) {
             if (label == null) return null;
             i18n.labelContents.push(label);
             return null;

@@ -1,17 +1,21 @@
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseSpinTask } from '@base/script/tasks/BaseSpinTask';
-import { TaskManager } from '@base/script/tasks/TaskManager';
-import { APIManager } from '@base/script/utils/APIManager';
-import { XUtils } from '@base/script/utils/XUtils';
+// import { AudioManager } from '@common/script/manager/AudioManager';
+
+// import { XUtils } from '@base/script/utils/XUtils';
 
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
 import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { GameAudioKey, GameConst, SlotMachineID } from '@game/script/constant/GameConst';
-import { GameData } from '@game/script/main/GameData';
+import { GameAudioKey, GameConst, SlotMachineID } from '@game/script/data/GameConst';
+// import { GameData } from '@game/script/data/GameData';
 import { IdleTask } from '@game/script/task/IdleTask';
+
+import { DataManager } from '@common/script/data/DataManager';
+// import { APIManager } from '@base/script/utils/APIManager';
+// import { BaseSpinTask } from '@common/script/tasks/BaseSpinTask';
+import { TaskManager } from '@common/script/tasks/TaskManager';
+
+// import { XUtils } from '@common/script/utils/XUtils';
 
 /**
  * 開始轉動

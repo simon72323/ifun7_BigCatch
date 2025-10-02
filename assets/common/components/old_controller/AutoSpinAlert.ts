@@ -1,10 +1,11 @@
 import { _decorator, Button, Component, EventTouch, Label, Node, Toggle } from 'cc';
 
-import { Controller } from '@common/components/controller/Controller';
+import { OldController } from '@common/components/old_controller/OldController';
 import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { XEvent } from '@common/script/event/XEvent';
 import { addBtnClickEvent, addToggleClickEvent, Utils } from '@common/script/utils/Utils';
+
 
 const { ccclass, property } = _decorator;
 
@@ -64,7 +65,7 @@ export class AutoSpinAlert extends Component {
      */
     private changeBetClick(event: EventTouch, eventData: string) {
         const changeValue = parseInt(eventData);
-        Controller.changeBet.emit(changeValue);
+        OldController.changeBet.emit(changeValue);
     }
 
     protected onEnable() {

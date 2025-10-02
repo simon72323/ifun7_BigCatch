@@ -15,21 +15,20 @@ import { GameAnimationName, GameAudioKey } from '@game/script/data/GameConst';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { DataManager } from '@common/script/data/DataManager';
+import { gameInformation } from '@common/script/data/GameInformation';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent } from '@common/script/event/XEvent';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
-import { gameInformation } from '@common/script/data/GameInformation';
 
-
-enum RollerAni {
-    fg_mipie = 'fg_mipie',
-    fg_roller = 'fg_roller',
-    intofg_roller = 'intofg_roller',
-    ng_mipie = 'ng_mipie',
-    ng_roller = 'ng_roller',
-}
+// enum RollerAni {
+//     fg_mipie = 'fg_mipie',
+//     fg_roller = 'fg_roller',
+//     intofg_roller = 'intofg_roller',
+//     ng_mipie = 'ng_mipie',
+//     ng_roller = 'ng_roller',
+// }
 
 const { ccclass, property } = _decorator;
 
@@ -100,26 +99,26 @@ export class GameStage extends Component {
     /**點擊免費遊戲 */
     private clickFeatureBuyBtn(): void {
         DataManager.getInstance().isMenuOn = true;
-        FeatureBuyPage.show.emit(DataManager.getInstance().getCurFeatureBuyTotal());
+        FeatureBuyPage.show.emit(DataManager.getInstance().getBuyFeatureTotal());
     }
 
     /**網路準備完成 */
     private netReady(): void {
         //初始化盤面
-        let gameData = gameInformation.gameData;
+        // let gameData = gameInformation.gameData;
         // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
-        SlotMachine2.setup.emit(gameData.slotParser);
+        // SlotMachine2.setup.emit(gameData.slotParser);
 
-        SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
-        BaseEvent.refreshCredit.emit(DataManager.getInstance().playerCent);
+        // SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
+        BaseEvent.refreshCredit.emit(DataManager.getInstance().userCredit);
         // BaseEvent.refreshBet.emit(this.TotalArray[this.TotalIndex]);
         BaseEvent.refreshWin.emit(0);
 
-        BaseEvent.buyFeatureEnabled.emit(DataManager.getInstance().isFeatureBuyEnabled());
+        BaseEvent.buyFeatureEnabled.emit(DataManager.getInstance().checkBuyFeature());
 
-        if (DataManager.getInstance().recoverData) {
-            // let recoverTask = new RecoverTask();
-        }
+        // if (DataManager.getInstance().recoverData) {
+        // let recoverTask = new RecoverTask();
+        // }
 
         //監聽開始遊戲事件 --------------------------------------------------------
         BaseEvent.startGame.once(() => {

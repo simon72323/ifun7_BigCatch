@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "5f4843a6-4134-4a3c-b89d-765f5c8458fc",
+  "uuid": "4320ffc1-1b0b-4691-8fae-ff2b385b1d4f",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Controller"
+    "syncNodeName": "AutoSpin"
   }
 }

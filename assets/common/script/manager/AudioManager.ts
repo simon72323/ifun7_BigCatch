@@ -396,14 +396,14 @@ export class AudioManager extends Component {
     }
 
     /**
-     * 設定音效狀態
+     * 設定所有聲音狀態
      */
-    // public setMute(mute: boolean) {
-    //     this.isMuted = mute;
+    // public setAudioMute(mute: boolean) {
+    //     this.isSoundMuted = mute;
     //     this.isMusicMuted = mute;
-    //     mute ? this.offAudio() : this.onAudio();
+    //     mute ? this.offSound() : this.onSound();
+    //     mute ? this.offMusic() : this.onMusic();
     // }
-
 
     /**
      * 恢復音效(恢復靜音)

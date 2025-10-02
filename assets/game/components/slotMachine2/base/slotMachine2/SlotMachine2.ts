@@ -206,8 +206,8 @@ export class SlotMachine2 extends Component {
             reel.init(idx, config);
         }, this);
 
-        SlotMachine2.setup.on(this.setupStripTableAndRng, this);
-        SlotMachine2.changeStrip.on(this.changeStripTable, this);
+        // SlotMachine2.setup.on(this.setupStripTableAndRng, this);
+        // SlotMachine2.changeStrip.on(this.changeStripTable, this);
         SlotMachine2.spin.on(this.onSpin, this);
         SlotMachine2.setForceResult.on(this.onForceResult, this);
         SlotMachine2.stop.on(this.onStop, this);
@@ -231,23 +231,23 @@ export class SlotMachine2 extends Component {
      * @param stripTable 
      * @param rngList 
      */
-    private setupStripTableAndRng(parser: BaseSlotParser2): void {
-        this.parser = parser;
-        for (let i = 0; i < this.dataList.length; i++) {
-            this.dataList[i].setupStripAndRng(parser.stripTable[i], parser.rngList[i]);
-        }
-    }
+    // private setupStripTableAndRng(parser: BaseSlotParser2): void {
+    //     this.parser = parser;
+    //     for (let i = 0; i < this.dataList.length; i++) {
+    //         this.dataList[i].setupStripAndRng(parser.stripTable[i], parser.rngList[i]);
+    //     }
+    // }
 
     /**
      * 變盤
      * @param parser 
      */
-    private changeStripTable(parser: BaseSlotParser2): void {
-        this.parser = parser;
-        for (let i = 0; i < this.dataList.length; i++) {
-            this.dataList[i].setStrip(parser.stripTable[i]);
-        }
-    }
+    // private changeStripTable(parser: BaseSlotParser2): void {
+    //     this.parser = parser;
+    //     for (let i = 0; i < this.dataList.length; i++) {
+    //         this.dataList[i].setStrip(parser.stripTable[i]);
+    //     }
+    // }
 
     /**
      * 開始轉動

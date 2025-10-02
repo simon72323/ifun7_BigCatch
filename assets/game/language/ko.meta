@@ -5,5 +5,9 @@
   "uuid": "9e6ad34f-89cf-49f1-9902-3a3c71057a70",
   "files": [],
   "subMetas": {},
-  "userData": {}
+  "userData": {
+    "isBundle": true,
+    "bundleName": "language5800-ko",
+    "priority": 8
+  }
 }

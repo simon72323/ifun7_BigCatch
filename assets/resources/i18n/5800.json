@@ -1,6 +1,6 @@
 {
     "en": {
-        "1000": "Big Bass Bonanza",
+        "1000": "Big Catch",
         "1010": "Win up to 2100x total bet in huge prizes!",
         "1011": "3 or more SCATTER symbols award 10 or more free spins.",
         "1012": "One more SCATTER to go!",
@@ -22,7 +22,7 @@
         "2032": "BONUS GAME",
         "2100": "BUY BONUS",
         "2200": "",
-        "3000": "Big Bass Bonanza",
+        "3000": "Big Catch",
         "3010": "ABOUT GAME",
         "3011": "",
         "3020": "GAME RULES",
@@ -40,7 +40,7 @@
         "3110": "COLLECT MONEY SYMBOLS",
         "3111": "During the FREE SPINS feature each WILD symbol also collects all the values from MONEY symbols on the screen.\nAll the WILD symbols that hit during the feature are collected until the end of the round.",
         "3130": "RETRIGGER",
-        "3131": "Every 4th WILD symbol collected, retriggers the bonus game, awards 10 more free spins and the multiplier for MONEY symbol collection increases to 2x for the first retrigger, 3x for the second retrigger and 10x for the third retrigger.\nThe retriggered spins are played after the previous batch of free spins ends.\nThe multiplier applies to the retriggered spins.\nAfter the third retrigger, the feature cannot be retriggered anymore.",
+        "3131": "Every 4th WILD symbol collected, retriggers the bonus game, awards 10 more free spins and the multiplier for MONEY symbol collection increases to 2x for the first retrigger, 4x for the second retrigger.\nThe retriggered spins are played after the previous batch of free spins ends.\nThe multiplier applies to the retriggered spins.\nAfter the second retrigger, the feature cannot be retriggered anymore.",
         "3120": "BOOTS GRANT EXTRA FREE SPIN",
         "3121": "Randomly, when there is only 1 WILD symbol without any fish MONEY Symbol on the screen, at the end of that free spin, a boot will be fish and 1 more free spin will be add to that batch.\nMax 3 more free spins may be added during that round.",
         "3200": "BUY BONUS GAME",
@@ -66,7 +66,7 @@
         "4043": "AUTO PLAY AFTER 10 SECONDS"
     },
     "zh-cn": {
-        "1000": "疯狂大鲈鱼",
+        "1000": "大丰收",
         "1010": "最高可赢取总投注额2100倍的巨额奖金！",
         "1011": "出现3个或以上SCATTER可获得10次或以上免费旋转！",
         "1012": "还差1个SCATTER即可获得奖励！",
@@ -88,7 +88,7 @@
         "2032": "奖励游戏",
         "2100": "购买奖励游戏",
         "2200": "",
-        "3000": "疯狂大鲈鱼",
+        "3000": "大丰收",
         "3010": "游戏规则",
         "3011": "",
         "3020": "游戏规则",
@@ -106,7 +106,7 @@
         "3110": "收集金钱符号",
         "3111": "在免费游戏期间，每个百搭符号都会收集屏幕上所有金钱符号的金额。\n累计收集的百搭符号数量将记录至免费游戏回合结束。",
         "3130": "再次触发",
-        "3131": "每收集4个百搭符号，即可再次触发免费游戏，额外获得10次免费旋转，并提升金钱符号收集的倍率。\n第一次再次触发：2倍倍率\n第二次再次触发：3倍倍率\n第三次再次触发：10倍倍率\n\n额外获得的免费旋转将在当前批次的免费旋转结束后进行。\n第三次再次触发后，将无法再触发更多免费旋转。",
+        "3131": "每收集4个百搭符号，即可再次触发免费游戏，额外获得10次免费旋转，并提升金钱符号收集的倍率。\n第一次再次触发：2倍倍率\n第二次再次触发：4倍倍率\n\n额外获得的免费旋转将在当前批次的免费旋转结束后进行。\n再次触发后，将无法再触发更多免费旋转。",
         "3120": "钓到靴子额外获得免费旋转",
         "3121": "若在免费旋转结束时，屏幕上仅有1个百搭符号且无任何鱼图案金钱符号，有机会钓到一只靴子并在当前批次中额外增加1次免费旋转。\n整个免费游戏阶段最多可额外获得3次免费旋转。",
         "3200": "购买奖励游戏",
@@ -132,7 +132,7 @@
         "4043": "10秒后自动继续"
     },
     "id": {
-        "1000": "Big Bass Bonanza",
+        "1000": "Tangkapan Besar",
         "1010": "Menangkan hingga 2100x total taruhan dalam hadiah besar!",
         "1011": "3 atau lebih simbol SCATTER memberikan 10 atau lebih FREE SPINS.",
         "1012": "Tinggal satu SCATTER lagi!",
@@ -154,7 +154,7 @@
         "2032": "PERMAINAN BONUS",
         "2100": "Beli permainan bonus",
         "2200": "",
-        "3000": "Big Bass Bonanza",
+        "3000": "Tangkapan Besar",
         "3010": "PERATURAN PERMAINAN",
         "3011": "",
         "3020": "PERATURAN PERMAINAN",
@@ -198,7 +198,7 @@
         "4043": "PUTAR OTOMATIS DALAM 10 DETIK"
     },
     "ko": {
-        "1000": "Big Bass Bonanza",
+        "1000": "큰 수확 / 대어",
         "1010": "총 베팅 금액의 최대 2100배 대박을 노려보세요!",
         "1011": "SCATTER 심볼 3개 이상으로 10회 이상의 FREE SPINS를 획득하세요!",
         "1012": "SCATTER 하나만 더 나오면 됩니다!",
@@ -219,7 +219,7 @@
         "2031": "구매",
         "2032": "보너스 게임",
         "2100": "보너스 구매",
-        "3000": "Big Bass Bonanza",
+        "3000": "큰 수확 / 대어",
         "3010": "게임 규칙",
         "3020": "게임 규칙",
         "3021": "모든 심볼은 가장 왼쪽 릴부터 활성 페이라인에 연속으로 정렬될 때 지급됩니다.\n모든 당첨금은 실제 코인으로 표시됩니다.\n각 페이라인마다 가장 높은 당첨만 지급됩니다.\n여러 페이라인에서 당첨 시 모든 당첨금이 합산됩니다.",
@@ -262,7 +262,7 @@
         "4043": "10초 후 자동 진행"
     },
     "vi": {
-        "1000": "Big Bass Bonanza",
+        "1000": "Mẻ Cá Lớn",
         "1010": "Giành giải thưởng khổng lồ lên tới 2100 lần tổng cược!",
         "1011": "3 biểu tượng SCATTER trở lên sẽ nhận được 10 lượt FREE SPINS trở lên!",
         "1012": "Chỉ cần thêm một SCATTER nữa thôi!",
@@ -284,7 +284,7 @@
         "2032": "TRÒ CHƠI BONUS",
         "2100": "MUA BONUS",
         "2200": "",
-        "3000": "Big Bass Bonanza",
+        "3000": "Mẻ Cá Lớn",
         "3010": "QUY TẮC TRÒ CHƠI",
         "3011": "",
         "3020": "QUY TẮC TRÒ CHƠI",
@@ -330,7 +330,7 @@
         "4043": "TỰ ĐỘNG CHƠI SAU 10 GIÂY"
     },
     "th": {
-        "1000": "Big Bass Bonanza",
+        "1000": "จับใหญ่",
         "1010": "ชนะรางวัลใหญ่ได้สูงสุดถึง 2100 เท่าของเงินเดิมพันทั้งหมด!",
         "1011": "สัญลักษณ์ SCATTER 3 ตัวขึ้นไปจะมอบ FREE SPINS 10 ครั้งขึ้นไป!",
         "1012": "เหลือ SCATTER อีกแค่ตัวเดียว!",
@@ -352,7 +352,7 @@
         "2032": "เกม BONUS",
         "2100": "ซื้อ BONUS",
         "2200": "",
-        "3000": "Big Bass Bonanza",
+        "3000": "จับใหญ่",
         "3010": "กฎของเกม",
         "3011": "",
         "3020": "กฎของเกม",
@@ -398,7 +398,7 @@
         "4043": "เล่นอัตโนมัติหลังจาก 10 วินาที"
     },
     "ms": {
-        "1000": "Big Bass Bonanza",
+        "1000": "Tangkapan Besar",
         "1010": "Menangi sehingga 2100x jumlah pertaruhan dalam hadiah besar!",
         "1011": "3 atau lebih simbol SCATTER memberikan 10 atau lebih FREE SPINS!",
         "1012": "Satu lagi SCATTER untuk menang!",
@@ -420,7 +420,7 @@
         "2032": "PERMAINAN BONUS",
         "2100": "BELI BONUS",
         "2200": "",
-        "3000": "Big Bass Bonanza",
+        "3000": "Tangkapan Besar",
         "3010": "PERATURAN PERMAINAN",
         "3011": "",
         "3020": "PERATURAN PERMAINAN",
@@ -466,7 +466,7 @@
         "4043": "MAIN AUTOMATIK DALAM 10 SAAT"
     },
     "ph": {
-        "1000": "Big Bass Bonanza",
+        "1000": "Big Catch",
         "1010": "Manalo ng hanggang 2100x ng kabuuang taya sa mga malalaking premyo!",
         "1011": "Makakuha ng 10 o higit pang FREE SPINS sa 3 o higit pang SCATTER na simbolo!",
         "1012": "Isa pang SCATTER na lang!",
@@ -488,7 +488,7 @@
         "2032": "LARO NG BONUS",
         "2100": "Bumili ng mga laro ng bonus",
         "2200": "",
-        "3000": "Big Bass Bonanza",
+        "3000": "Big Catch",
         "3010": "MGA PANUNTUNAN SA LARO",
         "3011": "",
         "3020": "MGA PANUNTUNAN NG LARO",
@@ -534,7 +534,7 @@
         "4043": "AABANTE SA 10 SEGUNDO"
     },
     "ja": {
-        "1000": "ビッグバスボナンザ",
+        "1000": "たいりょう",
         "1010": "最大ベット額の2,100倍のビッグ賞金を獲得！",
         "1011": "SCATTERシンボル3個以上で10回以上のフリースピンを獲得！",
         "1012": "あと1個のSCATTERでチャンス！",
@@ -556,7 +556,7 @@
         "2032": "ボーナスゲーム",
         "2100": "ボーナス購入",
         "2200": "",
-        "3000": "ビッグバスボナンザ",
+        "3000": "たいりょう",
         "3010": "ゲームルール",
         "3011": "",
         "3020": "ゲームルール",

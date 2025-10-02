@@ -1,5 +1,6 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 
 const { ccclass } = _decorator;
@@ -9,10 +10,12 @@ const { ccclass } = _decorator;
  */
 @ccclass('Notice')
 export class Notice extends Component {
-    private static instance: Notice;
-    public static getInstance(): Notice {
-        return Notice.instance;
-    }
+    // private static instance: Notice;
+    // public static getInstance(): Notice {
+    //     return Notice.instance;
+    // }
+    public static showError: XEvent1<number> = new XEvent1();
+    public static showNoBalance: XEvent = new XEvent();
 
     /**錯誤提示 */
     private infoError: Node;
@@ -23,7 +26,9 @@ export class Notice extends Component {
     private errorCodeConfig: ErrorCodeConfig;
 
     onLoad() {
-        Notice.instance = this;
+        Notice.showError.on(this.showError, this);
+        Notice.showNoBalance.on(this.showNoBalance, this);
+        // Notice.instance = this;
         this.errorCodeConfig = new ErrorCodeConfig();
         this.infoError = this.node.getChildByName('InfoError');
         this.infoNoBalance = this.node.getChildByName('InfoNoBalance');
@@ -53,7 +58,7 @@ export class Notice extends Component {
      * 顯示餘額不足提示 
      * @param errorCode {number} 錯誤代碼
      */
-    public showNoBalance(errorCode: number) {
+    public showNoBalance() {
         this.node.getChildByPath('BlackMask').active = true;
         this.infoNoBalance.active = true;
     }
