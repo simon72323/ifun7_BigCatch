@@ -128,8 +128,7 @@ export class SlotReel2 extends Component {
                 symbol.symbolID = symbolIDs[idx - posLength];
                 symbol.isInView = true;
             } else {
-                //上下隨機symbol圖
-                symbol.symbolID = Math.floor(Math.random() * GameConst.symbolIDCount);
+                symbol.setRandomSymbol();//上下隨機symbol圖
             }
             symbol.setState(SymbolState2.Normal);
         });
@@ -160,7 +159,7 @@ export class SlotReel2 extends Component {
             let hidePos: number = this.config.direction > 0 ? this.posList.length - 1 : 0;
             symbol.getComponent(UIOpacity).opacity = (symbol.getPosIndex() === hidePos) ? 0 : 255;
             if (symbol.symbolID == -1) {
-                symbol.randomSymbol();
+                symbol.setRandomSymbol();
             }
             symbol.onSpin();
             symbol.setIsEmpty(false);

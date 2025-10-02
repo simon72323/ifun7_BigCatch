@@ -3,7 +3,7 @@ import { EDITOR, PREVIEW } from 'cc/env';
 
 import { LanguageLabel } from '@common/components/localized/LanguageLabel';
 
-enum PREVIEW_LANGUAGE {
+enum Language {
     en = 'en',
     zh_cn = 'zh-cn',
     id = 'id',
@@ -12,6 +12,7 @@ enum PREVIEW_LANGUAGE {
     th = 'th',
     ms = 'ms',
     ph = 'ph',
+    jp = 'jp',
 }
 
 const { ccclass, property, disallowMultiple, executeInEditMode } = _decorator;
@@ -52,8 +53,8 @@ export class i18n extends Component {
     // @property({ displayName: '下載Json API網址', group: { name: 'develop', id: '1' } })
     // public editDownloadJsonURL = 'https://www.google.com/url?q=https://script.google.com/a/macros/ideatek.tech/s/AKfycbwHQEm5vUzr4ByllvzTKwpJlNQ9Ju_fwQRLyLgbvmGk43qyLF92MI5oim2hbJbH8O68NQ/exec';
 
-    @property({ type: Enum(PREVIEW_LANGUAGE), displayName: '預覽語言', group: { name: 'develop', id: '1' } })
-    public previewLanguage: PREVIEW_LANGUAGE = PREVIEW_LANGUAGE.en;
+    @property({ type: Enum(Language), displayName: '預覽語言', group: { name: 'develop', id: '1' } })
+    public previewLanguage: Language = Language.en;
 
     public isLoadDone = false;
     // public fontSizeGroupData: { [key: string]: { 'labels': LanguageLabel[], 'size': number } } = {};
@@ -160,7 +161,7 @@ export class i18n extends Component {
         if (i18n.language[key] == null) return null;
 
         let type = (EDITOR) ? i18n.instance.previewLanguage : i18n.languageType;
-        if (i18n.language[key][type] == null) type = 'en';
+        if (i18n.language[key][type] == null) type = Language.en;
 
         if (i18n.language[key][type][id] == null) {
             console.warn(`i18n Can not find language --> key : ${key} , id : ${id} , lang : ${type}`);
