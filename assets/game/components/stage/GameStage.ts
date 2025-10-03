@@ -129,8 +129,8 @@ export class GameStage extends Component {
     /**幫助開啟 */
     private HelpOpen() {
         if (DataManager.getInstance().isMenuOn == true) return;
-        if (DataManager.getInstance().auto.isAutoPlay() == true) return;
-        if (DataManager.getInstance().isIdle() === false) return;
+        if (DataManager.getInstance().isAutoMode == true) return;
+        // if (DataManager.getInstance().isIdle() === false) return;
         DataManager.getInstance().isMenuOn = true;
         SettingsPage2.hide.emit();
         GameHelpWebView.show.emit();
