@@ -39,7 +39,7 @@ export class BaseEvent {
     public static startGame: XEvent = new XEvent();
 
     /**點擊SPIN */
-    public static clickSpin: XEvent = new XEvent();
+    public static clickSpin: XEvent1<boolean> = new XEvent1();
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();
     /**點擊自動 */
@@ -48,22 +48,22 @@ export class BaseEvent {
     public static clickSkip: XEvent = new XEvent();
 
     /**SPIN結果是否成功(失敗回idle) */
-    // public static spinResult: XEvent1<boolean> = new XEvent1();
+    public static spinResult: XEvent1<boolean> = new XEvent1();
 
     /**購買功能 */
     public static buyFeature: XEvent = new XEvent();
     /**廣播是否可看見購買功能 */
-    public static buyFeatureVisible: XEvent1<boolean> = new XEvent1();
+    // public static buyFeatureVisible: XEvent1<boolean> = new XEvent1();
     /**廣播是否可點擊購買功能 */
     public static buyFeatureEnabled: XEvent1<boolean> = new XEvent1();
 
 
     /**刷新獲得 */
-    public static refreshWin: XEvent1<number> = new XEvent1<number>();
-    /**刷新額度 */
-    public static refreshCredit: XEvent1<number> = new XEvent1<number>();
-    /**刷新額度 */
-    public static refreshBet: XEvent1<number> = new XEvent1<number>();
+    // public static refreshWin: XEvent1<number> = new XEvent1<number>();
+    // /**刷新額度 */
+    // public static refreshCredit: XEvent1<number> = new XEvent1<number>();
+    // /**刷新額度 */
+    // public static refreshBet: XEvent1<number> = new XEvent1<number>();
 
     /**切換場景(BS/FS) */
     public static changeScene: XEvent1<ModuleID> = new XEvent1();

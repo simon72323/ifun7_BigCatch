@@ -1,5 +1,5 @@
 
-import { _decorator, CCBoolean, Component, Layout, Node, Sprite, SpriteFrame, Vec2, Vec3, Vec4 } from 'cc';
+import { _decorator, CCBoolean, Component, Layout, Node, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec3, Vec4 } from 'cc';
 import { EDITOR } from 'cc/env';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -65,6 +65,21 @@ class OrientationPosition {
 
     @property({ type: Vec3, tooltip: '橫式位置' })
     public landscapePosition: Vec3 = new Vec3(0, 0, 0);
+}
+
+/**
+ * 直橫式節點位置
+ */
+@ccclass('OrientationSize')
+class OrientationSize {
+    @property({ type: Node, tooltip: '目標節點' })
+    public target: Node = null!;
+
+    @property({ type: Size, tooltip: '直式尺寸' })
+    public portraitSize: Size = new Size(0, 0);
+
+    @property({ type: Size, tooltip: '橫式尺寸' })
+    public landscapeSize: Size = new Size(0, 0);
 }
 
 /**
@@ -140,6 +155,9 @@ export class OrientationManager extends Component {
     @property({ type: [OrientationPosition], tooltip: '直橫式位置控制' })
     private orientationPosition: OrientationPosition[] = [];
 
+    @property({ type: [OrientationSize], tooltip: '直橫式尺寸控制' })
+    private orientationSize: OrientationSize[] = [];
+
     @property({ type: [OrientationSpriteFrame], tooltip: '直橫式貼圖控制' })
     private orientationSpriteFrame: OrientationSpriteFrame[] = [];
 
@@ -190,6 +208,15 @@ export class OrientationManager extends Component {
             if (target) {
                 const positionValue = isLandscape ? position.landscapePosition : position.portraitPosition;
                 target.setPosition(positionValue);
+            }
+        });
+
+        //節點尺寸
+        this.orientationSize.forEach((size, index) => {
+            const target = size.target;
+            if (target) {
+                const sizeValue = isLandscape ? size.landscapeSize : size.portraitSize;
+                target.getComponent(UITransform)?.setContentSize(sizeValue);
             }
         });
 

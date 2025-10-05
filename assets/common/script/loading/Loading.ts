@@ -65,7 +65,7 @@ export class Loading extends Component {
             })
             .catch(function (e) {
                 //要出現405錯誤
-                Notice.getInstance().showError(405);
+                Notice.showError.emit(405);
                 console.error(e);
                 console.error('fail to load data from server');
             });

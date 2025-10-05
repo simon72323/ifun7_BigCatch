@@ -108,47 +108,28 @@ export class NetworkManager {
 
     /**
      * 發送spin請求（支援免費旋轉）
-     * @param freeSpinId 免費旋轉 ID，如果為空則為一般投注
+     * @param betCredit 下注金額
+     * @param SpinID 0=一般投注，1=免費投注
+     * @param callback spinResult=回傳spin結果（失敗回傳null）
      */
-    public async sendSpin(freeSpinId: string = ''): Promise<void> {
-        const gameData = gameInformation.gameData;
-        const coinValue = gameData.coin_value[gameData.coin_value_default_index];
-        const lineBet = gameData.line_bet[gameData.line_bet_default_index];
-        const lineTotal = gameData.line_total;
-        const betCredit = Utils.accNumber(coinValue * lineBet * lineTotal); // 處理浮點數問題
-
-        const response = await this.sendRequest(NetworkApi.SPIN, {
-            game_id: gameInformation.gameId,
-            coin_value: coinValue,
-            line_bet: lineBet,
-            line_num: lineTotal,
-            bet_credit: betCredit,
-            free_spin_id: freeSpinId
-        });
-        console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
-        gameInformation.spinData = response.data;
-    }
-
-    /**
-     * 發送購買免費遊戲spin請求
-     */
-    public async sendBuyFreeSpin(buyFreeBet: number): Promise<ISpinData> {
-        const gameData = gameInformation.gameData;
-        const lineBet = gameData.line_bet[gameData.line_bet_default_index];
-        const lineTotal = gameData.line_total;
-        const betCredit = Utils.accNumber(buyFreeBet * lineBet * lineTotal); // 處理浮點數問題
-
-        const response = await this.sendRequest(NetworkApi.SPIN, {
-            game_id: gameInformation.gameId,
-            coin_value: buyFreeBet,
-            line_bet: lineBet,
-            line_num: lineTotal,
-            bet_credit: betCredit,
-            free_spin_id: '',
-            buy_spin: 1
-        });
-        console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
-        return response.data as ISpinData;
+    public async sendSpin(betCredit: number, SpinID: number, callback: (spinResult: ISpinData) => void): Promise<void> {
+        try {
+            const gameData = gameInformation.gameData;
+            const response = await this.sendRequest(NetworkApi.SPIN, {
+                game_id: gameInformation.gameId,
+                coin_value: gameData.coin_value[gameData.coin_value_default_index],
+                line_bet: gameData.line_bet[gameData.line_bet_default_index],
+                line_num: gameData.line_total,
+                bet_credit: betCredit,
+                buy_spin: SpinID
+            });
+            // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
+            gameInformation.spinResult = response.data;
+            callback(response.data);// 成功回調
+        } catch (error) {
+            // console.error('[NetworkManager] sendSpin error =>', error);
+            callback(null);// 失敗回調
+        }
     }
 
     /**

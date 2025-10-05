@@ -24,14 +24,14 @@ export class GameInformation {
         this._gameData = gameData;
     }
 
-    /** 下注資料 */
-    private _spinData: ISpinData;
-    public get spinData(): ISpinData {
-        return this._spinData;
+    /** 下注回傳資料 */
+    private _spinResult: ISpinData;
+    public get spinResult(): ISpinData {
+        return this._spinResult;
     }
 
-    public set spinData(spinData: ISpinData) {
-        this._spinData = spinData;
+    public set spinResult(spinResult: ISpinData) {
+        this._spinResult = spinResult;
     }
 
     /** 用戶token */

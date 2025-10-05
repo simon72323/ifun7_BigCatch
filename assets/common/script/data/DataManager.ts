@@ -8,7 +8,7 @@
 // import { BaseConst } from '@common/script/data/BaseConst';
 import { gameInformation } from '@common/script/data/GameInformation';
 // import { IGameData } from '@common/script/network/NetworkApi';
-import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
+import { AutoMode, CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
 
@@ -36,18 +36,18 @@ export class DataManager {
     /** 音樂狀態 */
     public isMusicEnabled: boolean = true;
     /** 自動旋轉模式 */
-    public isAutoMode: boolean = false;
+    public curAutoMode: AutoMode = AutoMode.Off;
     /** 自動旋轉次數索引 */
-    public autoIndex: number = 0;
+    // public autoIndex: number = 0;
     /** 剩餘自動旋轉次數 */
     public autoSpinCount: number = 0;
     /** 停止直到免費轉 */
-    public isStopUntilFeature: boolean = false;
+    // public isStopUntilFeature: boolean = false;
 
 
 
     /** 是否購買免費遊戲 */
-    // public isBuyFreeGame: boolean = false;
+    public isBuyFs: boolean = false;
     /** 當前方向模式 */
     // public orientationMode: OrientationtMode = OrientationtMode.Portrait;
     /** 當前模式 */
@@ -55,15 +55,15 @@ export class DataManager {
     /** 下一模式 */
     public nextModuleID: ModuleID = ModuleID.BS;
     /** 當前加速模式(免費遊戲會強制設為Normal) */
-    public turboMode: TurboMode = TurboMode.Normal;
+    public curTurboMode: TurboMode = TurboMode.Normal;
     /** 當前遊戲狀態 */
-    public gameState: GameState = GameState.Ready;
+    public curGameState: GameState = GameState.Ready;
     /** 大贏跑分倍率 */
     public bigWinMultiple: number[] = [10, 20, 50];
     /** 當前下注索引 */
     public betIdx: number = 1;
     /** 當前下注值 */
-    public betValue: number = 0;
+    private betValue: number = 0;
     /** 玩家餘額 */
     public userCredit: number = 0;
     /** 是否跳過 */
@@ -90,7 +90,7 @@ export class DataManager {
     // public bet: BetData = new BetData();
 
     /**轉動過程設定的新模式,待機時帶入 */
-    public tempTurboMode: TurboMode = TurboMode.Normal;
+    // public tempTurboMode: TurboMode = TurboMode.Normal;
 
     /**目前狀態 */
     // public curState: s5g.game.proto.ESTATEID;
@@ -117,7 +117,7 @@ export class DataManager {
     private initialize: boolean = false;
 
     /**免費遊戲購買類型(一般狀況為0) */
-    public featureBuyType = 0;
+    // public featureBuyType = 0;
 
     /**遊戲總贏分(BS表示一轉總得分, FS表示N轉總得分) */
     public winTotal: number = 0;
@@ -166,6 +166,8 @@ export class DataManager {
     /**Token */
     public token: string;
 
+    /** 當前下注索引 */
+    // private betIndex: number = 0;
 
     /**
      * 初始化資料
@@ -187,26 +189,10 @@ export class DataManager {
     }
 
     /**
-     * 檢查餘額是否足夠
-     * @returns 
-     */
-    public checkCredit(): boolean {
-        return this.userCredit >= this.getBetCredit();
-    }
-
-    /**
-     * 檢查是否夠買免費遊戲(玩家餘額 >= 免費遊戲總購買金額)
-     * @returns 
-     */
-    public checkBuyFeature(): boolean {
-        return this.userCredit >= this.getBuyFeatureTotal();
-    }
-
-    /**
      * 取得總下注金額
      * @returns 
      */
-    public getBetCredit() {
+    public getBetTotal() {
         const gameData = gameInformation.gameData;
         const coinValue = gameData.coin_value[gameData.coin_value_default_index];
         const lineBet = gameData.line_bet[gameData.line_bet_default_index];
@@ -219,7 +205,7 @@ export class DataManager {
      * @returns 
      */
     public getBuyFeatureTotal(): number {
-        return gameInformation.gameData.buy_spin.multiplier * this.getBetCredit();
+        return gameInformation.gameData.buy_spin.multiplier * this.getBetTotal();
     }
 
     /**
@@ -264,6 +250,27 @@ export class DataManager {
      */
     public isBS(): boolean {
         return this.moduleID === ModuleID.BS;
+    }
+
+    public plus(): void {
+        this.betIdx = Math.min(this.betIdx + 1, gameInformation.gameData.coin_value.length - 1);
+        // this.betIdx = gameInformation.gameData.coin_value[this.totalIndex];
+        // this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
+    }
+
+    public less(): void {
+        this.betIdx = Math.max(this.betIdx - 1, 0);
+        // this.betIdx = this.TotalArrayX[this.TotalIndex][0];
+        // this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
+    }
+
+    public getPlusEnabled(): boolean {
+        // this.betIndex = Math.min(this.betIndex + 1, gameInformation.gameData.coin_value.length - 1)
+        return this.betIdx < gameInformation.gameData.coin_value.length - 1;
+    }
+
+    public getLessEnabled(): boolean {
+        return this.betIdx > 0;
     }
 
     //=============================以上確定使用======================================
@@ -312,10 +319,10 @@ export class DataManager {
     //     return bigWinLevel;
     // }
 
-    // public isIdle(): boolean {
-    //     return false;
-    //     // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
-    // }
+    public isIdle(): boolean {
+        return false;
+        // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
+    }
 
     // public setState(state: s5g.game.proto.ESTATEID): void {
     //     this.curState = state;

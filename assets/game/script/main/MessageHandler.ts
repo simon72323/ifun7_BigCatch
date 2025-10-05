@@ -10,6 +10,7 @@ import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
 
 // import { GameData } from '@game/script/main/GameData';
 import { GameConst, SymbolID } from '@game/script/data/GameConst';
+import { IWinLineData, IWinScatterData } from '@game/script/data/GameType';
 import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { DropTask } from '@game/script/task/DropTask';
@@ -33,7 +34,6 @@ import { IGameResult, ISpinData } from '@common/script/network/NetworkApi';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
-import { IWinLineData, IWinScatterData } from '../data/GameType';
 
 
 /**
@@ -282,8 +282,7 @@ export class MessageHandler {
             }
             //繼續FS下一轉
             else {
-                let task = new SpinTask();
-                TaskManager.getInstance().addTask(task);
+                TaskManager.getInstance().addTask(new SpinTask());
             }
         }
     }
