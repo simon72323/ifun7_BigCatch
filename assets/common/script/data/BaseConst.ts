@@ -23,7 +23,7 @@ import { Timeout } from '@common/script/types/BaseType';
  */
 export class BaseConst {
     /**自動轉次數選項 */
-    public static AUTO_OPTIONS: number[] = [10, 20, 30, 50, 100, 150, 200, -1];
+    // public static AUTO_OPTIONS: number[] = [10, 25, 50, 75, 100, 250, 500, 750, 1000, -1];
     /**BIGWIN表演時間 */
     public static BIG_WIN_LEVEL_TIME: number = 5;
     /**TOTALWIN表演時間 */

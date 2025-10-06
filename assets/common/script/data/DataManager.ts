@@ -8,7 +8,7 @@
 // import { BaseConst } from '@common/script/data/BaseConst';
 import { gameInformation } from '@common/script/data/GameInformation';
 // import { IGameData } from '@common/script/network/NetworkApi';
-import { AutoMode, CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
+import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
 
@@ -35,15 +35,16 @@ export class DataManager {
     public isSoundEnabled: boolean = true;
     /** 音樂狀態 */
     public isMusicEnabled: boolean = true;
-    /** 自動旋轉模式 */
-    public curAutoMode: AutoMode = AutoMode.Off;
-    /** 自動旋轉次數索引 */
-    // public autoIndex: number = 0;
+    /** 是否自動旋轉模式 */
+    public isAutoMode: boolean = false;
     /** 剩餘自動旋轉次數 */
     public autoSpinCount: number = 0;
+    /** 是否選擇自動旋轉次數 */
+    public isAutoTimes: boolean = false;
+    /** 紀錄選擇的自動旋轉次數索引 */
+    // public autoTimesIndex: number = 0;
     /** 停止直到免費轉 */
-    // public isStopUntilFeature: boolean = false;
-
+    public isStopUntilFeature: boolean = false;
 
 
     /** 是否購買免費遊戲 */

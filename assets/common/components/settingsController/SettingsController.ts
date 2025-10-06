@@ -5,8 +5,9 @@ import { _decorator, Animation, Button, Component, EventKeyboard, EventTouch, Ke
 // import { addBtnClickEvent, XUtils } from '@base/script/utils/XUtils';
 
 
-import { AutoSpin } from '@common/components/autoSpin/AutoSpin';
+
 import { Notice } from '@common/components/notice/Notice';
+import { AutoSpin } from '@common/components/settingsController/AutoSpin';
 
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
@@ -16,7 +17,7 @@ import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { ISpinData } from '@common/script/network/NetworkApi';
 import { NetworkManager } from '@common/script/network/NetworkManager';
-import { AudioMode, AutoMode, GameState, TurboMode } from '@common/script/types/BaseType';
+import { AudioMode, GameState, TurboMode } from '@common/script/types/BaseType';
 import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
 
 
@@ -24,12 +25,12 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SettingsController')
 export class SettingsController extends Component {
-    public static clickTurbo: XEvent = new XEvent();
-    public static clickLess: XEvent = new XEvent();
-    public static clickSpin: XEvent = new XEvent();
-    public static clickPlus: XEvent = new XEvent();
-    public static clickAuto: XEvent = new XEvent();
-    public static clickMenu: XEvent = new XEvent();
+    // public static clickTurbo: XEvent = new XEvent();
+    // public static clickLess: XEvent = new XEvent();
+    // public static clickSpin: XEvent = new XEvent();
+    // public static clickPlus: XEvent = new XEvent();
+    // public static clickAuto: XEvent = new XEvent();
+    // public static clickMenu: XEvent = new XEvent();
 
     /**刷新獲得 */
     public static refreshWin: XEvent1<number> = new XEvent1<number>();
@@ -117,7 +118,7 @@ export class SettingsController extends Component {
     /**
      * 遊戲初始化設定
      */
-    onLoad() {
+    protected onLoad() {
         this.setNode();//設定節點
         this.setupBtnEvent();//設定按鈕Click事件
         this.setEventListen();//設定事件監聽
@@ -174,7 +175,7 @@ export class SettingsController extends Component {
      */
     private setEventListen() {
         // this.spinBtn.node.on(Button.EventType.CLICK, this.onClickSpin, this);
-        BaseEvent.resetSpin.on(this.onClickResetSpin, this);
+        BaseEvent.resetSpin.on(this.onResetSpin, this);
 
         SettingsController.refreshCredit.on(this.refreshCredit, this);//監聽刷新餘額事件
         SettingsController.refreshBet.on(this.refreshBet, this);//監聽刷新下注事件
@@ -182,6 +183,19 @@ export class SettingsController extends Component {
         SettingsController.setEnabled.on(this.setBtnInteractable, this);//監聽設定是否可用事件
         SettingsController.updateAutoSpinCount.on(this.updateAutoSpinCount, this);
         SettingsController.setTurbo.on(this.setTurboMode, this);//設定快速模式
+    }
+
+    /**
+     * 清除事件監聽
+     */
+    protected onDestroy() {
+        BaseEvent.resetSpin.off(this);
+        SettingsController.refreshCredit.off(this);
+        SettingsController.refreshBet.off(this);
+        SettingsController.refreshWin.off(this);
+        SettingsController.setEnabled.off(this);
+        SettingsController.updateAutoSpinCount.off(this);
+        SettingsController.setTurbo.off(this);
     }
 
     /**
@@ -269,15 +283,14 @@ export class SettingsController extends Component {
     //============================= 按鈕事件 =============================
 
     /**
-     * 執行Spin
+     * 按下Spin按鈕事件
      */
     private async onClickSpin() {
         if (this.curSettingPage === 1) return;
 
-        //自動轉過程若點擊手動轉要停止自動
-        if (DataManager.getInstance().curAutoMode != AutoMode.Off) {
-            DataManager.getInstance().curAutoMode = AutoMode.Off;
-            DataManager.getInstance().autoSpinCount = 0;
+        //如果是自動轉過程若點擊手動轉要停止自動
+        if (DataManager.getInstance().isAutoMode) {
+            this.onClickStopAutoSpin();
             return;
         }
 
@@ -291,34 +304,10 @@ export class SettingsController extends Component {
         } else {
             BaseEvent.clickSkip.emit();
         }
-        //TODO:關閉遊戲符號資訊
-        //TODO:關閉自動SPIN功能
-
-        //TODO:判斷餘額是否足夠，不足要顯示錯誤訊息
-        // if (!DataManager.getInstance().checkCredit()) {
-        //     Notice.showNoBalance.emit();//顯示餘額不足提示
-        //     return;
-        // }
-
-        // this.setBtnInteractable(false);//禁用控制器按鈕
-        //判斷此次spin是否為購買免費遊戲(等待server回傳)
-        // if (buyFreeBet > 0) {
-        //     await NetworkManager.getInstance().sendBuyFreeSpin(buyFreeBet);
-        // } else {
-        //     await NetworkManager.getInstance().sendSpin();
-        // }
-
-        //設定遊戲狀態為Running
-        // DataManager.getInstance().gameState = GameState.Running;
-        // this.spinBtn.active = false;//隱藏Spin按鈕
-        // this.stopSpinBtn.active = true;//顯示StopSpin按鈕
-
-        //發送點擊spin事件(確認執行)
-        // BaseEvent.clickSpin.emit();
     }
 
     /**
-     * click按鈕動畫
+     * 按下按鈕動畫
      */
     private clickAnim(node: Node) {
         tween(node).to(0.1, { scale: new Vec3(0.7, 0.7, 0.7) }).to(0.15, { scale: new Vec3(1, 1, 1) }, { easing: 'backOut' }).start();
@@ -335,7 +324,7 @@ export class SettingsController extends Component {
     /**
      * 執行ResetSpin動畫
      */
-    private onClickResetSpin() {
+    private onResetSpin() {
         const animation = this.stopSpinBtn.getComponent(Animation);
         animation.once(Animation.EventType.FINISHED, () => {
             this.stopSpinBtn.node.active = false;
@@ -347,7 +336,7 @@ export class SettingsController extends Component {
     }
 
     /**
-     * 停止spin
+     * 按下停止spin按鈕事件
      */
     private onClickStopSpin() {
         // this.stopSpinBtn.getComponent(Button).interactable = false;//禁用停止按鈕
@@ -363,13 +352,9 @@ export class SettingsController extends Component {
      */
     private onClickStopAutoSpin() {
         this.stopAutoSpinBtn.node.active = false;
-        DataManager.getInstance().curAutoMode = AutoMode.Off;
+        DataManager.getInstance().isAutoMode = false;
         DataManager.getInstance().autoSpinCount = 0;
         this.updateAutoSpinCount();
-        // AutoSpin.close.emit();
-        // AutoSpin.StopAutoSpin();
-        // this.freeSpin.active = false;
-        // this.spinBtn.active = true;
     }
 
     /**

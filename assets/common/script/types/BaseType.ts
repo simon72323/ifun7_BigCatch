@@ -23,16 +23,16 @@ export enum OrientationtMode {
 }
 
 /**Auto模式 */
-export enum AutoMode {
-    /**禁用 */
-    Off = 0,
-    /**無限轉 */
-    Infinite = 1,
-    /**直到免費轉 */
-    UntilFeature = 2,
-    /**轉N次 */
-    Limited = 3,
-}
+// export enum AutoMode {
+//     /**禁用 */
+//     Off = 0,
+//     /**無限轉 */
+//     Infinite = 1,
+//     /**直到免費轉 */
+//     UntilFeature = 2,
+//     /**轉N次 */
+//     Limited = 3,
+// }
 
 /**場景類型 */
 export enum ModuleID {
