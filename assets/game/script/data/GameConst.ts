@@ -46,7 +46,7 @@ export class GameConst {
             bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
         },
         // 快速模式
-        quick: {
+        speed: {
             showWinDuration: 0.6,      // 中獎演示時間
             explodeTime: 0.6,          // 消去動畫時間
             autoSpinTime: 0.3,        // 自動轉停止後，等待一段時間再開始下一輪
@@ -66,18 +66,19 @@ export class GameConst {
             symbolFallTime: 0.2,      // 符號掉落速度倍率
             bigWinEndDelay: 0.2,       // BigWin結束延遲
             bonusTimeAddInterval: 0.1  // 獎勵時間累加間隔
-        },
-        // 超速模式
-        ultra: {
-            showWinDuration: 0.1,      // 中獎演示時間
-            explodeTime: 0.1,          // 消去動畫時間
-            autoSpinTime: 0.1,        // 自動轉停止後，等待一段時間再開始下一輪
-            reelStopTime: 0,        // 每個轉軸停止間隔時間
-            reelMiTime: 0,          // 每個轉軸瞇牌時間
-            symbolFallTime: 0,      // 符號掉落速度倍率
-            bigWinEndDelay: 0,       // BigWin結束延遲
-            bonusTimeAddInterval: 0  // 獎勵時間累加間隔
         }
+        // ,
+        // 超速模式
+        // ultra: {
+        //     showWinDuration: 0.1,      // 中獎演示時間
+        //     explodeTime: 0.1,          // 消去動畫時間
+        //     autoSpinTime: 0.1,        // 自動轉停止後，等待一段時間再開始下一輪
+        //     reelStopTime: 0,        // 每個轉軸停止間隔時間
+        //     reelMiTime: 0,          // 每個轉軸瞇牌時間
+        //     symbolFallTime: 0,      // 符號掉落速度倍率
+        //     bigWinEndDelay: 0,       // BigWin結束延遲
+        //     bonusTimeAddInterval: 0  // 獎勵時間累加間隔
+        // }
     };
 }
 
@@ -103,14 +104,14 @@ export enum SymbolID {
 }
 
 /**語系資源目錄 */
-export enum LangBundleDir {
-    banner = 'banner',
-    bigwin = 'bigwin',
-    board = 'board',
-    featureBuy = 'featureBuy',
-    fs = 'fs',
-    paytable = 'paytable',
-}
+// export enum LangBundleDir {
+//     banner = 'banner',
+//     bigwin = 'bigwin',
+//     board = 'board',
+//     featureBuy = 'featureBuy',
+//     fs = 'fs',
+//     paytable = 'paytable',
+// }
 
 export enum GameAnimationName {
     /**scale:0(0s)->scale:1.2(in 0.2s)->scale:1(in 0.1s) */

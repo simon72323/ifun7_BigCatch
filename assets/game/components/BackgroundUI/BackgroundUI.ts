@@ -1,7 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { ModuleID } from '@base/script/types/BaseType';
+import { ModuleID } from '@common/script/types/BaseType';
 const { ccclass } = _decorator;
 
 /**
@@ -28,7 +28,7 @@ export class BackgroundUI extends Component {
      */
     private onChangeScene(id: ModuleID) {
         this.ng_bkg.active = id === ModuleID.BS;
-        this.fg_bkg.active = id === ModuleID.FS;
+        this.fg_bkg.active = id === ModuleID.FG;
     }
 }
 

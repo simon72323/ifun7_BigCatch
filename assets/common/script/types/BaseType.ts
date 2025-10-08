@@ -67,13 +67,13 @@ export enum TurboMode {
 /**
  * SpinBtn狀態
  */
-export enum SpinBtnState {
-    Idle = 0,
-    Loop,
-    Win,
-    Auto,
-    Disabled
-}
+// export enum SpinBtnState {
+//     Idle = 0,
+//     Loop,
+//     Win,
+//     Auto,
+//     Disabled
+// }
 
 // export enum playAction {
 //     NormalNAutoNSpeed = 0,

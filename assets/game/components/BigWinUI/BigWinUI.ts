@@ -1,16 +1,19 @@
 import { _decorator, Button, Color, Component, KeyCode, Label, Node, sp, Sprite, tween, Tween } from 'cc';
 
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseAnimationName, BigWinType } from '@base/script/types/BaseType';
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
 
-import { LangBundleDir } from '@game/script/constant/GameConst';
+import { BaseConst } from '@common/script/data/BaseConst';
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent, XEvent1 } from '@common/script/event/XEvent';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+// import { BundleLoader } from '@base/script/main/BundleLoader';
+import { BaseAnimationName, BigWinType } from '@common/script/types/BaseType';
+import { Utils } from '@common/script/utils/Utils';
+
+// import { XUtils } from '@base/script/utils/XUtils';
+
+// import { LangBundleDir } from '@game/script/constant/GameConst';
 
 type BigWinConfig = {
     /**音效 */
@@ -164,14 +167,14 @@ export class BigWinUI extends Component {
 
         this.label = this.node.getChildByPath('announce_win_ani/Slot/num_totalwin').getComponent(Label);
 
-        let lang: string = DataManager.getInstance().urlParam.lang;
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.bigwin}`, (langRes: any) => {
-            this.titleNodeList[0].getComponent(Sprite).spriteFrame = langRes['title_bigwin'];
-            this.titleNodeList[1].getComponent(Sprite).spriteFrame = langRes['title_megawin'];
-            this.titleNodeList[2].getComponent(Sprite).spriteFrame = langRes['title_superwin'];
-            this.titleNodeList[3].getComponent(Sprite).spriteFrame = langRes['title_ultrawin'];
-            this.titleNodeList[4].getComponent(Sprite).spriteFrame = langRes['title_ultimatewin'];
-        });
+        // let lang: string = DataManager.getInstance().urlParam.lang;
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.bigwin}`, (langRes: any) => {
+        //     this.titleNodeList[0].getComponent(Sprite).spriteFrame = langRes['title_bigwin'];
+        //     this.titleNodeList[1].getComponent(Sprite).spriteFrame = langRes['title_megawin'];
+        //     this.titleNodeList[2].getComponent(Sprite).spriteFrame = langRes['title_superwin'];
+        //     this.titleNodeList[3].getComponent(Sprite).spriteFrame = langRes['title_ultrawin'];
+        //     this.titleNodeList[4].getComponent(Sprite).spriteFrame = langRes['title_ultimatewin'];
+        // });
 
         for (let i: number = 0; i < 5; ++i) {
             this.titleNodeList.push(this.node.getChildByPath(`announce_win_ani/title_${i}`));
@@ -208,17 +211,17 @@ export class BigWinUI extends Component {
         this.label.string = '';
         this.label.color = Color.WHITE;
 
-        XUtils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.3);
+        // Utils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.3);
 
-        XUtils.ClearSpine(this.announce_coin_ani);
+        Utils.ClearSpine(this.announce_coin_ani);
         this.announce_coin_ani.addAnimation(0, CoinAnimation.start, false);
         this.announce_coin_ani.addAnimation(0, CoinAnimation.loop, true);
 
-        AudioManager.getInstance().play(AudioKey.Win);
-        AudioManager.getInstance().play(AudioKey.WinRolling);
+        AudioManager.getInstance().playSound(AudioKey.Win);
+        AudioManager.getInstance().playSound(AudioKey.WinRolling);
 
-        AudioManager.getInstance().edit(AudioKey.BsMusic, 0.3);
-        AudioManager.getInstance().edit(AudioKey.FsMusic, 0.3);
+        AudioManager.getInstance().lowerMusic();
+        // AudioManager.getInstance().edit(AudioKey.FsMusic, 0.3);
 
         this.tweenAtLevel();
     }

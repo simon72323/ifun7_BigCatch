@@ -62,6 +62,7 @@ export class SpinBtn extends BaseSpinBtn {
         this.autoLabel.string = value.toString();
     }
 
+
     /**
      * 設定按鈕狀態
      * @param state 

@@ -3,13 +3,15 @@
 // import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 // import { XUtils } from '@base/script/utils/XUtils';
 
-// import { SlotData } from '@game/script/data/SlotData';
+import { SlotData } from '@game/script/data/SlotData';
 
 // import { BaseConst } from '@common/script/data/BaseConst';
+import { BetData } from '@common/script/data/BetData';
 import { gameInformation } from '@common/script/data/GameInformation';
 // import { IGameData } from '@common/script/network/NetworkApi';
-import { CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
+import { BigWinType, CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
+
 
 
 
@@ -45,6 +47,10 @@ export class DataManager {
     // public autoTimesIndex: number = 0;
     /** 停止直到免費轉 */
     public isStopUntilFeature: boolean = false;
+    /** 剩餘免費旋轉次數 */
+    public freeSpinCount: number = 0;
+
+
 
 
     /** 是否購買免費遊戲 */
@@ -58,13 +64,10 @@ export class DataManager {
     /** 當前加速模式(免費遊戲會強制設為Normal) */
     public curTurboMode: TurboMode = TurboMode.Normal;
     /** 當前遊戲狀態 */
-    public curGameState: GameState = GameState.Ready;
+    // public curGameState: GameState = GameState.Ready;
     /** 大贏跑分倍率 */
     public bigWinMultiple: number[] = [10, 20, 50];
-    /** 當前下注索引 */
-    public betIdx: number = 1;
-    /** 當前下注值 */
-    private betValue: number = 0;
+
     /** 玩家餘額 */
     public userCredit: number = 0;
     /** 是否跳過 */
@@ -72,7 +75,7 @@ export class DataManager {
 
 
     /** 獲取slot資料 */
-    // public slotData: SlotData = new SlotData();
+    public slotData: SlotData = new SlotData();
 
 
 
@@ -88,7 +91,7 @@ export class DataManager {
     public urlParam: UrlParam = new UrlParam();
 
     /**下注相關資料 */
-    // public bet: BetData = new BetData();
+    public bet: BetData = new BetData();
 
     /**轉動過程設定的新模式,待機時帶入 */
     // public tempTurboMode: TurboMode = TurboMode.Normal;
@@ -193,48 +196,48 @@ export class DataManager {
      * 取得總下注金額
      * @returns 
      */
-    public getBetTotal() {
-        const gameData = gameInformation.gameData;
-        const coinValue = gameData.coin_value[gameData.coin_value_default_index];
-        const lineBet = gameData.line_bet[gameData.line_bet_default_index];
-        const lineTotal = gameData.line_total;
-        return Utils.accNumber(coinValue * lineBet * lineTotal);//處理浮點數問題
-    }
+    // public getBetTotal() {
+    //     const gameData = gameInformation.gameData;
+    //     const coinValue = gameData.coin_value[gameData.coin_value_default_index];
+    //     const lineBet = gameData.line_bet[gameData.line_bet_default_index];
+    //     const lineTotal = gameData.line_total;
+    //     return Utils.accNumber(coinValue * lineBet * lineTotal);//處理浮點數問題
+    // }
 
     /**
      * 取得免費遊戲總購買金額(免費遊戲購買倍率 x 總下注)
      * @returns 
      */
-    public getBuyFeatureTotal(): number {
-        return gameInformation.gameData.buy_spin.multiplier * this.getBetTotal();
-    }
+    // public getBuyFeatureTotal(): number {
+    //     return gameInformation.gameData.buy_spin.multiplier * this.getBetTotal();
+    // }
 
-    /**
-     * 改變下注並回傳下注值
-     * @param changeValue 改變值（正數為增加，負數為減少）
-     */
-    public getChangeBetValue(changeValue: number): number {
-        this.betIdx += changeValue;
-        const gameData = gameInformation.gameData;
-        const length = gameData.coin_value.length;
-        const betIdxMin = gameData.bet_available_idx;
+    // /**
+    //  * 改變下注並回傳下注值
+    //  * @param changeValue 改變值（正數為增加，負數為減少）
+    //  */
+    // public getChangeBetValue(changeValue: number): number {
+    //     this.betIdx += changeValue;
+    //     const gameData = gameInformation.gameData;
+    //     const length = gameData.coin_value.length;
+    //     const betIdxMin = gameData.bet_available_idx;
 
-        if (changeValue > 0) {
-            // 增加下注
-            if (this.betIdx >= length) {
-                this.betIdx = betIdxMin;
-            }
-        } else {
-            // 減少下注
-            if (this.betIdx < betIdxMin) {
-                this.betIdx = length - 1;
-            }
-        }
+    //     if (changeValue > 0) {
+    //         // 增加下注
+    //         if (this.betIdx >= length) {
+    //             this.betIdx = betIdxMin;
+    //         }
+    //     } else {
+    //         // 減少下注
+    //         if (this.betIdx < betIdxMin) {
+    //             this.betIdx = length - 1;
+    //         }
+    //     }
 
-        // 更新下注值
-        this.betValue = gameData.coin_value[this.betIdx];
-        return this.betValue;
-    }
+    //     // 更新下注值
+    //     this.betValue = gameData.coin_value[this.betIdx];
+    //     return this.betValue;
+    // }
 
     /**
      * 取得完整下注紀錄網址
@@ -253,26 +256,6 @@ export class DataManager {
         return this.moduleID === ModuleID.BS;
     }
 
-    public plus(): void {
-        this.betIdx = Math.min(this.betIdx + 1, gameInformation.gameData.coin_value.length - 1);
-        // this.betIdx = gameInformation.gameData.coin_value[this.totalIndex];
-        // this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
-    }
-
-    public less(): void {
-        this.betIdx = Math.max(this.betIdx - 1, 0);
-        // this.betIdx = this.TotalArrayX[this.TotalIndex][0];
-        // this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
-    }
-
-    public getPlusEnabled(): boolean {
-        // this.betIndex = Math.min(this.betIndex + 1, gameInformation.gameData.coin_value.length - 1)
-        return this.betIdx < gameInformation.gameData.coin_value.length - 1;
-    }
-
-    public getLessEnabled(): boolean {
-        return this.betIdx > 0;
-    }
 
     //=============================以上確定使用======================================
 
@@ -295,30 +278,6 @@ export class DataManager {
         }
         return mode;
     }
-
-    /**
-     * 取得贏錢倍數
-     * @param value 
-     * @returns 
-     */
-    // public getWinMultipleByValue(value: number): number {
-    //     return value / this.bet.getCurBetXCurLine();
-    // }
-
-    /**
-     * 取得value對應BigWin類型
-     * @param value 
-     */
-    // public getBigWinTypeByValue(value: number): BigWinType {
-    //     let bigWinLevel: BigWinType = BigWinType.non;
-    //     let multiple: number = this.getWinMultipleByValue(value);
-    //     for (let i = 0; i < this.bigWinMultiple.length; i++) {
-    //         if (multiple >= this.bigWinMultiple[i]) {
-    //             bigWinLevel = i;
-    //         }
-    //     }
-    //     return bigWinLevel;
-    // }
 
     public isIdle(): boolean {
         return false;

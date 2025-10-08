@@ -1,17 +1,23 @@
 import { _decorator, Animation, Component, Label, Node, sp, Sprite, SpriteFrame, Tween, Vec3 } from 'cc';
 
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseLang, ModuleID } from '@base/script/types/BaseType';
-import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
-
 import { BannerAD } from '@game/components/BannerUI/BannerAD';
-import { GameAnimationName, GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+import { GameAudioKey } from '@game/script/data/GameConst';
+
+
+// import { BaseConst } from '@common/script/data/BaseConst';
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
+// import { BundleLoader } from '@common/script/loading/BundleLoader';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseLang, ModuleID } from '@common/script/types/BaseType';
+import { Utils } from '@common/script/utils/Utils';
+
+
+// import { XUtils } from '@common/script/utils/XUtils';
+
+// import { GameAnimationName, GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
 
 enum TitleType {
     originWin = 0,
@@ -131,34 +137,34 @@ export class BannerUI extends Component {
 
         let lang: string = DataManager.getInstance().urlParam.lang;
 
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {
-            this.bannerReTextList.push(langRes['RetriggerInfo']);
-            this.bannerReTextList.push(langRes['RetriggerMax']);
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {
+        //     this.bannerReTextList.push(langRes['RetriggerInfo']);
+        //     this.bannerReTextList.push(langRes['RetriggerMax']);
 
-            this.node.getChildByPath('BannerWin/text_win').getComponent(Sprite).spriteFrame = langRes['text_win'];
-            this.node.getChildByPath('BannerWin/text_totalwin').getComponent(Sprite).spriteFrame = langRes['text_totalwin'];
-            this.node.getChildByPath('BannerRetrigger/text_retrigger').getComponent(Sprite).spriteFrame = langRes['text_retrigger'];
-            this.retriggerLabel.node.setPosition(this.retriggerPosMap[lang], 0);
-        });
+        //     this.node.getChildByPath('BannerWin/text_win').getComponent(Sprite).spriteFrame = langRes['text_win'];
+        //     this.node.getChildByPath('BannerWin/text_totalwin').getComponent(Sprite).spriteFrame = langRes['text_totalwin'];
+        //     this.node.getChildByPath('BannerRetrigger/text_retrigger').getComponent(Sprite).spriteFrame = langRes['text_retrigger'];
+        //     this.retriggerLabel.node.setPosition(this.retriggerPosMap[lang], 0);
+        // });
 
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.banner}`, (langRes: any) => {
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.banner}`, (langRes: any) => {
 
-            this.bsPageFrame.push(langRes['banner01']);
-            this.bsPageFrame.push(langRes['banner02']);
-            this.bsPageFrame.push(langRes['banner03']);
-            this.bsPageFrame.push(langRes['banner04']);
+        //     this.bsPageFrame.push(langRes['banner01']);
+        //     this.bsPageFrame.push(langRes['banner02']);
+        //     this.bsPageFrame.push(langRes['banner03']);
+        //     this.bsPageFrame.push(langRes['banner04']);
 
-            this.fsPageFrame.push(langRes['banner02']);
-            this.fsPageFrame.push(langRes['banner03']);
-            this.fsPageFrame.push(langRes['banner04']);
-            this.fsPageFrame.push(langRes['banner05']);
+        //     this.fsPageFrame.push(langRes['banner02']);
+        //     this.fsPageFrame.push(langRes['banner03']);
+        //     this.fsPageFrame.push(langRes['banner04']);
+        //     this.fsPageFrame.push(langRes['banner05']);
 
-            this.onReset();
-            this.targetPageFrame = this.bsPageFrame;
-            this.bannerAD.setup(this.targetPageFrame);
-            this.bannerAD.play();
+        //     this.onReset();
+        //     this.targetPageFrame = this.bsPageFrame;
+        //     this.bannerAD.setup(this.targetPageFrame);
+        //     this.bannerAD.play();
 
-        });
+        // });
 
         BannerUI.retrigger.on(this.retrigger, this);
 
@@ -250,46 +256,46 @@ export class BannerUI extends Component {
 
             //更新數值
             if (type == TitleType.win) {
-                AudioManager.getInstance().play(GameAudioKey.win);
-                this.BannerWin.getComponent(Animation).play(GameAnimationName.ScaleJumpWinTxt);
+                AudioManager.getInstance().playSound(GameAudioKey.win);
+                // this.BannerWin.getComponent(Animation).play(GameAnimationName.ScaleJumpWinTxt);
             }
             if (multiple > 1) {
-                XUtils.ClearSpine(this.info_bar_ani);
+                Utils.ClearSpine(this.info_bar_ani);
                 this.info_bar_ani.addAnimation(0, WinBarAnimation.multiply, false);
                 this.info_bar_ani.addAnimation(0, WinBarAnimation.multiply_loop, true);
 
-                XUtils.ClearSpine(this.info_bar_ani_bg);
+                Utils.ClearSpine(this.info_bar_ani_bg);
                 this.info_bar_ani_bg.addAnimation(0, WinBarAnimation.none_total_win, false);
                 this.info_bar_ani_bg.addAnimation(0, WinBarAnimation.none, true);
             }
             else {
-                XUtils.ClearSpine(this.info_bar_ani);
+                Utils.ClearSpine(this.info_bar_ani);
                 this.info_bar_ani.addAnimation(0, WinBarAnimation.win_start, false);
                 this.info_bar_ani.addAnimation(0, WinBarAnimation.win_loop, true);
             }
 
-            this.winLabel.string = XUtils.NumberToCentString(value);
+            this.winLabel.string = Utils.numberFormat(value);
         }
     }
 
     private onTotalWinComplete(): void {
 
-        AudioManager.getInstance().play(GameAudioKey.wt);
+        AudioManager.getInstance().playSound(GameAudioKey.wt);
 
-        this.winLabel.string = XUtils.NumberToCentString(this.totalWinData.currentValue);
+        this.winLabel.string = Utils.numberFormat(this.totalWinData.currentValue);
 
-        this.BannerWin.getComponent(Animation).play(GameAnimationName.ScaleJumpWinTxt);
+        // this.BannerWin.getComponent(Animation).play(GameAnimationName.ScaleJumpWinTxt);
 
-        XUtils.ClearSpine(this.info_bar_ani);
+        Utils.ClearSpine(this.info_bar_ani);
         this.info_bar_ani.addAnimation(0, WinBarAnimation.total_win, false);
         this.info_bar_ani.addAnimation(0, WinBarAnimation.total_win_loop, true);
 
-        XUtils.ClearSpine(this.info_bar_ani_bg);
+        Utils.ClearSpine(this.info_bar_ani_bg);
         this.info_bar_ani_bg.addAnimation(0, WinBarAnimation.none_total_win, false);
         this.info_bar_ani_bg.addAnimation(0, WinBarAnimation.none, true);
 
         //WinBar音效都是用在'共贏得'
-        AudioManager.getInstance().play(this.vfxLevel == 1 ? AudioKey.WinBar1 : AudioKey.WinBar2);
+        AudioManager.getInstance().playSound(this.vfxLevel == 1 ? AudioKey.WinBar1 : AudioKey.WinBar2);
 
         BannerUI.totalWinComplete.emit();
     }
@@ -316,7 +322,7 @@ export class BannerUI extends Component {
         this.BannerWin.active = false;
         this.BannerRetrigger.active = false;
 
-        XUtils.ClearSpine(this.info_bar_ani);
+        Utils.ClearSpine(this.info_bar_ani);
         this.info_bar_ani.addAnimation(0, WinBarAnimation.nomal, true);
 
         this.bannerAD.node.active = true;

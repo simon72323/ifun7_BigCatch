@@ -96,7 +96,7 @@ export class AutoSpin extends Component {
     }
 
     /**
-     * 執行自動遊戲
+     * 按下執行按鈕
      */
     private onClickStart() {
         this.onClose();

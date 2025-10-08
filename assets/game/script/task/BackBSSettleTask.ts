@@ -1,17 +1,22 @@
-import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { GameTask } from '@base/script/tasks/GameTask';
-import { BigWinType, SpinButtonState } from '@base/script/types/BaseType';
-import { XUtils } from '@base/script/utils/XUtils';
+// import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+
+
+
+// import { BigWinType, SpinButtonState } from '@base/script/types/BaseType';
+// import { XUtils } from '@base/script/utils/XUtils';
 
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { SlotMachineID } from '@game/script/constant/GameConst';
-import { GameData } from '@game/script/main/GameData';
+import { SlotMachineID } from '@game/script/data/GameConst';
+// import { GameData } from '@game/script/main/GameData';
+
+
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { GameTask } from '@common/script/tasks/GameTask';
 
 /**
  * FS返回NG總結算(先BigWin再橫幅)
@@ -28,8 +33,8 @@ export class BackBSSettleTask extends GameTask {
 
     execute(): void {
 
-        AudioManager.getInstance().stop(AudioKey.FsMusic);
-        AudioManager.getInstance().play(AudioKey.BsMusic);
+        // AudioManager.getInstance().stopMusic(AudioKey.FsMusic);
+        AudioManager.getInstance().playMusic(AudioKey.BsMusic);
 
         //回復盤面
         SlotMachine2.change.emit(SlotMachineID.BS, DataManager.getInstance().getData<GameData>().bsLastMap);

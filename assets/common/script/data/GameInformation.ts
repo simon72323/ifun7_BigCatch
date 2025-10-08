@@ -95,6 +95,12 @@ export class GameInformation {
         this._isInitialized = false;
         this.initUrlParameters();
     }
+
+    //================ 獲取下注資料 ======================
+
+    //================ 獲取下注資料 ======================
+
+    //================ 獲取下注資料 ======================
 }
 
 export const gameInformation = new GameInformation();
