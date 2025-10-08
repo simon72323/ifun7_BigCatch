@@ -1,11 +1,10 @@
 import { _decorator } from 'cc';
 
-import { gameInformation } from '@common/script/data/GameInformation';
+import { DataManager } from '@common/script/data/DataManager';
 import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 import { HTTP_METHODS, HttpRequestUtils, IPayload } from '@common/script/network/HttpRequestUtils';
-import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IGameMenu, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
+import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
 
-import { Utils } from '@common/script/utils/Utils';
 
 
 const { ccclass, property } = _decorator;
@@ -75,13 +74,13 @@ export class NetworkManager {
     private async sendRequest(command: string, data: any = {}): Promise<IResponseData> {
         const content: IRequestData = {
             command,
-            token: gameInformation.token,
+            token: DataManager.getInstance().urlParam.token,
             data
         };
 
         // 設置請求資料
         const payload: IPayload = {
-            url: gameInformation.serverUrl,
+            url: DataManager.getInstance().urlParam.serverUrl,
             method: HTTP_METHODS.POST,
             content: JSON.stringify(content)
         };
@@ -114,9 +113,9 @@ export class NetworkManager {
      */
     public async sendSpin(betCredit: number, SpinID: number, callback: (spinResult: ISpinData) => void): Promise<void> {
         try {
-            const gameData = gameInformation.gameData;
+            const gameData = DataManager.getInstance().gameData;
             const response = await this.sendRequest(NetworkApi.SPIN, {
-                game_id: gameInformation.gameId,
+                game_id: DataManager.getInstance().urlParam.gameId,
                 coin_value: gameData.coin_value[gameData.coin_value_default_index],
                 line_bet: gameData.line_bet[gameData.line_bet_default_index],
                 line_num: gameData.line_total,
@@ -124,7 +123,7 @@ export class NetworkManager {
                 buy_spin: SpinID
             });
             // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
-            gameInformation.spinResult = response.data;
+            DataManager.getInstance().spinResult = response.data;
             callback(response.data);// 成功回調
         } catch (error) {
             // console.error('[NetworkManager] sendSpin error =>', error);
@@ -187,7 +186,7 @@ export class NetworkManager {
         }
         promotionBriefResponse = promotionBriefResponse.concat(temp);
         //更新資料
-        gameInformation.promotionData = promotionBriefResponse;
+        DataManager.getInstance().promotionData = promotionBriefResponse;
     }
 
     /**
@@ -277,7 +276,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
         console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
         // return response.data as IUserData;
-        gameInformation.userData = response.data;
+        DataManager.getInstance().userData = response.data;
     }
 
     /**
@@ -285,11 +284,11 @@ export class NetworkManager {
      */
     public async sendGameData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_GAME_DATA, {
-            game_id: gameInformation.gameId
+            game_id: DataManager.getInstance().urlParam.gameId
         });
         console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
         // return response.data as IGameData;
-        gameInformation.gameData = response.data;
+        DataManager.getInstance().gameData = response.data;
     }
 
     /**
@@ -320,26 +319,26 @@ export class NetworkManager {
             let menuGames = response.game;
             for (let i = 0; i < menuGames.length; i++) {
                 if (menuGames[i][1] == 1) {
-                    gameInformation.inGameMenuStore.new.push(menuGames[i][0]);
+                    DataManager.getInstance().inGameMenuStore.new.push(menuGames[i][0]);
                 } else if (menuGames[i][1] == 2) {
-                    gameInformation.inGameMenuStore.hot.push(menuGames[i][0]);
+                    DataManager.getInstance().inGameMenuStore.hot.push(menuGames[i][0]);
                 }
-                gameInformation.inGameMenuStore.gameList.push(menuGames[i][0]);
+                DataManager.getInstance().inGameMenuStore.gameList.push(menuGames[i][0]);
             }
 
             // * Process favorite game list
             let favGames = response.favorite;
             for (let i = 0; i < favGames.length; i++) {
-                gameInformation.inGameMenuStore.favList.push(favGames[i]);
+                DataManager.getInstance().inGameMenuStore.favList.push(favGames[i]);
             }
 
             // * Keeps imageURL
-            gameInformation.inGameMenuStore.imageURL = response.image;
+            DataManager.getInstance().inGameMenuStore.imageURL = response.image;
 
             // * Create game data
             let allGamesData = response.game_name;
             for (let i = 0; i < allGamesData.length; i++) {
-                gameInformation.gameNameList[allGamesData[i].game_id] = allGamesData[i].language;
+                DataManager.getInstance().gameNameList[allGamesData[i].game_id] = allGamesData[i].language;
             }
         }
     }

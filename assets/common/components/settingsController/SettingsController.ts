@@ -236,8 +236,8 @@ export class SettingsController extends Component {
 
         //true時要判斷更新+-按鈕是否可用，false時直接禁用
         if (enabled) {
-            this.addBetBtn.getComponent(Button).interactable = DataManager.getInstance().getPlusEnabled();
-            this.minusBetBtn.getComponent(Button).interactable = DataManager.getInstance().getLessEnabled();
+            this.addBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getPlusEnabled();
+            this.minusBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
         } else {
             this.addBetBtn.getComponent(Button).interactable = false;
             this.minusBetBtn.getComponent(Button).interactable = false;
@@ -411,7 +411,7 @@ export class SettingsController extends Component {
     private changeBet(event: EventTouch, eventData: string) {
         const changeValue = parseInt(eventData);
         //下注數值更新(添加幣別符號與格式化)
-        const betValue = DataManager.getInstance().getChangeBetValue(changeValue);
+        const betValue = DataManager.getInstance().bet.getChangeBetValue(changeValue);
         this.totalBetValue.string = BaseConfig.CurrencySymbol + Utils.numberFormat(betValue);
     }
 

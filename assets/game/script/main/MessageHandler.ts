@@ -15,7 +15,7 @@ import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { DropTask } from '@game/script/task/DropTask';
 import { EndGameTask } from '@game/script/task/EndGameTask';
-import { ExplodeTask } from '@game/script/task/ExplodeTask';
+// import { ExplodeTask } from '@game/script/task/ExplodeTask';
 import { FSOpeningTask } from '@game/script/task/FSOpeningTask';
 import { FSSettleTask } from '@game/script/task/FSSettleTask';
 import { FSUpdateRemainTimesTask } from '@game/script/task/FSUpdateRemainTimesTask';
@@ -28,7 +28,6 @@ import { StopTask } from '@game/script/task/StopTask';
 import { TransTask } from '@game/script/task/TransTask';
 
 import { DataManager } from '@common/script/data/DataManager';
-import { gameInformation } from '@common/script/data/GameInformation';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { IGameResult, ISpinData } from '@common/script/network/NetworkApi';
 import { TaskManager } from '@common/script/tasks/TaskManager';

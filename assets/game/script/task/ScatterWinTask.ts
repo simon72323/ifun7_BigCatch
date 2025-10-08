@@ -1,10 +1,12 @@
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { GameTask } from '@base/script/tasks/GameTask';
-import { XUtils } from '@base/script/utils/XUtils';
-
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { UIBlack } from '@game/components/UIBlack';
-import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from '@game/script/constant/GameConst';
+import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
+
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { GameTask } from '@common/script/tasks/GameTask';
+import { delay, Utils } from '@common/script/utils/Utils';
+
+
 
 /**
  * Scatter中獎
@@ -16,9 +18,9 @@ export class ScatterWinTask extends GameTask {
     /**最終盤視覺盤面資料 */
     public symbolPattern: number[];
 
-    public execute(): void {
+    public async execute(): Promise<void> {
 
-        AudioManager.getInstance().play(GameAudioKey.st);
+        AudioManager.getInstance().playSound(GameAudioKey.st);
 
         let winPos: number[] = [];
 
@@ -34,8 +36,10 @@ export class ScatterWinTask extends GameTask {
         //壓黑
         UIBlack.show.emit(BlackKey.UIBlack);
 
-        SlotMachine2.showWin.emit(SlotMachineID.BS, winPos);
-        XUtils.scheduleOnce(() => {
+        SlotMachine2.showWin.emit(winPos);
+
+        await delay(2);
+        Utils.scheduleOnce(() => {
             UIBlack.hide.emit(BlackKey.UIBlack);
             this.finish();
         }, 2, this);

@@ -7,11 +7,9 @@ import { BaseEvent } from '@common/script/event/BaseEvent';
  */
 export enum BigWinType {
     big = 0,
-    mega = 1,
-    super = 2,
-    ultra = 3,
-    ultimate = 4,
-    non = 5
+    super = 1,
+    mega = 2,
+    non = 9,
 }
 
 /**場景方向模式 */
@@ -250,36 +248,36 @@ export type Grid = {
 /**
  * URL參數
  */
-export class UrlParam {
-    /** */
-    public accessToken: string;
-    /** */
-    public subID: number;
-    /**金額模式 */
-    public creditMode: CreditMode;
-    /**幣別 */
-    public currency: string;
-    /**語系 */
-    public lang: string;
-    /** */
-    public return_url: string;
-    /** */
-    public return_target: string;
-    /**遊戲模式 */
-    public playMode: string;
-    /**正規語系 */
-    public langCode: string;
-    /**是否為新架構(新架構才有此參數) */
-    public isNewGameServer: boolean;
-    /**客製化參數 */
-    public customParam: string;
-    /**下注紀錄網址 */
-    public betrecordurl: string;
-    /**token */
-    public token: string;
-    /**serverurl */
-    public serverurl: string;
-}
+// export class UrlParam {
+//     /** */
+//     public accessToken: string;
+//     /** */
+//     public subID: number;
+//     /**金額模式 */
+//     public creditMode: CreditMode;
+//     /**幣別 */
+//     public currency: string;
+//     /**語系 */
+//     public lang: string;
+//     /** */
+//     public return_url: string;
+//     /** */
+//     public return_target: string;
+//     /**遊戲模式 */
+//     public playMode: string;
+//     /**正規語系 */
+//     public langCode: string;
+//     /**是否為新架構(新架構才有此參數) */
+//     public isNewGameServer: boolean;
+//     /**客製化參數 */
+//     public customParam: string;
+//     /**下注紀錄網址 */
+//     public betrecordurl: string;
+//     /**token */
+//     public token: string;
+//     /**serverurl */
+//     public serverurl: string;
+// }
 
 /**
  * 自動轉資料

@@ -1,16 +1,20 @@
 import { _decorator, Button, Component, Label, Node, sys, WebView } from 'cc';
 
-
-import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { WebViewEnum } from '@common/script/data/BaseConst';
-import { APIManager } from '@base/script/utils/APIManager';
 import { WindowEventManager } from '@base/script/utils/WindowEventManager';
-import { XEvent } from '@common/script/event/XEvent';
 
+// import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
 import { Notice } from '@common/components/notice/Notice';
+import { WebViewEnum } from '@common/script/data/BaseConst';
+// import { APIManager } from '@base/script/utils/APIManager';
 import { DataManager } from '@common/script/data/DataManager';
+import { XEvent } from '@common/script/event/XEvent';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+
+
+
+
+
 
 
 const { ccclass } = _decorator;
@@ -30,7 +34,7 @@ export class GameHelpWebView extends Component {
     onLoad() {
 
         let version = this.node.getChildByName('Version');
-        version.getComponent(Label).string = APIManager.getInstance().getVersion();
+        // version.getComponent(Label).string = APIManager.getInstance().getVersion();
         version.active = sys.isMobile;
 
         let btn = this.node.getChildByPath('Button');
@@ -40,9 +44,9 @@ export class GameHelpWebView extends Component {
         //點擊關閉
         btn.on(Button.EventType.CLICK, () => {
 
-            AudioManager.getInstance().play(AudioKey.BtnClick);
+            AudioManager.getInstance().playSound(AudioKey.BtnClick);
             DataManager.getInstance().isMenuOn = false;
-            SettingsPage2.show.emit();
+            // SettingsPage2.show.emit();
 
             this.node.active = false;
             this.webview.url = '';
@@ -92,9 +96,9 @@ export class GameHelpWebView extends Component {
         this.node.active = true;
         this.loading.active = true;
 
-        let useLogo: boolean = APIManager.getInstance().getLoadingLogoEnabled();
-        this.node.getChildByPath('S5GLoading/TxtLoading').active = !useLogo;
-        this.node.getChildByPath('S5GLoading/LogoLoading').active = useLogo;
+        // let useLogo: boolean = APIManager.getInstance().getLoadingLogoEnabled();
+        // this.node.getChildByPath('S5GLoading/TxtLoading').active = !useLogo;
+        // this.node.getChildByPath('S5GLoading/LogoLoading').active = useLogo;
 
         //讀取完成
         this.webViewNode.once(WebView.EventType.LOADED, () => {
@@ -105,7 +109,7 @@ export class GameHelpWebView extends Component {
 
         }, this);
 
-        this.webview.url = APIManager.getInstance().getGameHelpUrl();
+        // this.webview.url = APIManager.getInstance().getGameHelpUrl();
 
     }
 

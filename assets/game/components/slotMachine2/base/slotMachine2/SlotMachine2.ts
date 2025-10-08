@@ -61,44 +61,16 @@ export class SlotMachine2 extends Component {
     private symbolPrefab: Prefab = null;
 
     @property({ type: RealCurve, tooltip: '運動曲線\n[啟動] 時間:(0.00 ~ 0.50), 值:(-0.5 ~ 0)' })
-    private beginCurve = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }]
-        ]);
-        return curve;
-    })();
+    private beginCurve = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
 
     @property({ type: RealCurve, tooltip: '運動曲線\n' + '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n' })
-    private endCurve = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }]
-        ]);
-        return curve;
-    })();
+    private endCurve = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
 
     @property({ type: RealCurve, tooltip: '戲謔曲線\n' + '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n' })
-    private nudgeCurve = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }]
-        ]);
-        return curve;
-    })();
+    private nudgeCurve = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
 
     @property({ type: RealCurve, tooltip: '戲謔曲線2\n' + '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n' })
-    private nudgeCurve2 = (() => {
-        const curve = new RealCurve();
-        curve.assignSorted([
-            [0, { value: 0 }],
-            [1, { value: 1 }]
-        ]);
-        return curve;
-    })();
+    private nudgeCurve2 = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
 
     // @property({ type: CCInteger, tooltip: '方向(1:向下,-1:向上' })//暫時沒用
     private direction: number = 1;
@@ -276,7 +248,7 @@ export class SlotMachine2 extends Component {
                 }
             }, this);
 
-            let speedConfig = this.config.speedConfigList[DataManager.getInstance().turboMode];
+            let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
 
             //依序啟動
             script.call(() => {
@@ -359,7 +331,7 @@ export class SlotMachine2 extends Component {
      * @param skipNumReel 
      */
     public realStop(rngList: number[], skipNumReel: number = -1): void {
-        let speedConfig = this.config.speedConfigList[DataManager.getInstance().turboMode];
+        let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
         this.parser.rngList = rngList.concat();
         let numReel: number = skipNumReel > 0 ? skipNumReel : this.spinList.length;
         let isMi: boolean = false;
@@ -428,7 +400,7 @@ export class SlotMachine2 extends Component {
         if (this.dropList.length <= 0) {
             throw new Error('未設置dropList!');
         }
-        let speedConfig = this.config.speedConfigList[DataManager.getInstance().turboMode];
+        let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
 
         Tween.stopAllByTarget(this.node);
         let script = tween(this.node);
@@ -461,7 +433,7 @@ export class SlotMachine2 extends Component {
             throw new Error('未設置fillList!');
         }
 
-        let speedConfig = this.config.speedConfigList[DataManager.getInstance().turboMode];
+        let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
         let miList = this.parser.getMiList2(fromMap);
         let realMiList = this.fillList.map((reel) => { return miList[reel.reelIndex] && reel.getNumEmpty() > 0; });
 
@@ -520,16 +492,16 @@ export class SlotMachine2 extends Component {
      * @param winPos 
      */
     private onExplode(winPos: number[]): void {
-        for (let i = 0; i < this.dataList.length; i++) {
-            let reelErase: number[] = [];
-            winPos.forEach((p, idx) => {
-                let grid = Utils.posToGrid(p);
-                if (grid.col == i) {
-                    reelErase.push(p);
-                }
-            });
-            this.dataList[i].explode(reelErase);
-        }
+        // for (let i = 0; i < this.dataList.length; i++) {
+        //     let reelErase: number[] = [];
+        //     winPos.forEach((p, idx) => {
+        //         let grid = Utils.posToGrid(p);
+        //         if (grid.col == i) {
+        //             reelErase.push(p);
+        //         }
+        //     });
+        //     this.dataList[i].explode(reelErase);
+        // }
     }
 
     /**
@@ -547,16 +519,16 @@ export class SlotMachine2 extends Component {
      * @param winPos 
      */
     private onShowWin(winPos: number[]): void {
-        for (let i = 0; i < this.dataList.length; i++) {
-            let reelWin: number[] = [];
-            winPos.forEach((p, idx) => {
-                let grid = XUtils.posToGrid(p);
-                if (grid.col == i) {
-                    reelWin.push(p);
-                }
-            });
-            this.dataList[i].showWin(reelWin);
-        }
+        // for (let i = 0; i < this.dataList.length; i++) {
+        //     let reelWin: number[] = [];
+        //     winPos.forEach((p, idx) => {
+        //         let grid = XUtils.posToGrid(p);
+        //         if (grid.col == i) {
+        //             reelWin.push(p);
+        //         }
+        //     });
+        //     this.dataList[i].showWin(reelWin);
+        // }
     }
 
     /**
@@ -583,7 +555,7 @@ export class SlotMachine2 extends Component {
      * @param reelIndex 
      */
     private startMiAllAt(reelIndex: number): void {
-        if (this.config.speedConfigList[DataManager.getInstance().turboMode].miAllReel) {
+        if (this.config.speedConfigList[DataManager.getInstance().curTurboMode].miAllReel) {
             this.dataList.map((reel, index) => { reel.setIsMi(true); });
         }
         else {

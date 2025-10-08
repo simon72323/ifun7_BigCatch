@@ -1,9 +1,10 @@
 import { _decorator, Button, Component, Node, WebView } from 'cc';
 
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
+
 import { WebViewEnum } from '@common/script/data/BaseConst';
 import { XEvent, XEvent1 } from '@common/script/event/XEvent';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
 
 const { ccclass } = _decorator;
 
@@ -36,7 +37,7 @@ export class GameHistory extends Component {
         }, this);
 
         this.node.getChildByName('Back').on(Button.EventType.CLICK, () => {
-            AudioManager.getInstance().play(AudioKey.BtnClick);
+            AudioManager.getInstance().playSound(AudioKey.BtnClick);
             this.node.active = false;
             this.webView.getComponent(WebView).url = '';
             GameHistory.onHide.emit();

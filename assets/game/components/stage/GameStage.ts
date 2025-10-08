@@ -1,12 +1,4 @@
-import { _decorator, Animation, Component, easing, Node, sp, tween, Tween, Vec3 } from 'cc';
-
-// import { AutoPage } from '@base/components/autoPage/AutoPage';
-// import { GameHelpWebView } from '@base/components/gameHelp/GameHelpWebView';
-// import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-// import { SettingsPage2 } from '@base/components/settingsPage/SettingsPage2';
-// import { AudioManager } from '@common/script/manager/AudioManager';
-
-// import { XUtils } from '@base/script/utils/XUtils';
+import { _decorator, Animation, Component, easing, Node, tween, Tween, Vec3 } from 'cc';
 
 import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
@@ -18,15 +10,12 @@ import { IdleTask } from '@game/script/task/IdleTask';
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 
 import { DataManager } from '@common/script/data/DataManager';
-import { gameInformation } from '@common/script/data/GameInformation';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent } from '@common/script/event/XEvent';
 import { KeyboardManager } from '@common/script/manager/KeyboardManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
-
-
 
 // enum RollerAni {
 //     fg_mipie = 'fg_mipie',
@@ -94,7 +83,7 @@ export class GameStage extends Component {
 
         // SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
         SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);
-        SettingsController.refreshBet.emit(DataManager.getInstance().getBetTotal());
+        SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());
         SettingsController.refreshWin.emit(0);
 
         KeyboardManager.getInstance().initialize();
@@ -141,7 +130,7 @@ export class GameStage extends Component {
     /**點擊免費遊戲 */
     private clickFeatureBuyBtn(): void {
         DataManager.getInstance().isMenuOn = true;
-        FeatureBuyPage.show.emit(DataManager.getInstance().getBuyFeatureTotal());
+        FeatureBuyPage.show.emit(DataManager.getInstance().bet.getBuyFeatureTotal());
     }
 
     /**網路準備完成(loading時已經獲取完玩家與遊戲資料) */

@@ -1,11 +1,8 @@
-import { _decorator, Component, Label, Node, Sprite } from 'cc';
+import { _decorator, Component, Label, Node } from 'cc';
 
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BundleLoader } from '@base/script/main/BundleLoader';
 import { XEvent1 } from '@common/script/event/XEvent';
 
-import { LangBundleDir } from '@game/script/constant/GameConst';
+// import { LangBundleDir } from '@game/script/data/GameConst';
 
 const { ccclass } = _decorator;
 
@@ -24,15 +21,6 @@ export class FSUI extends Component {
         this.num_freeSpin = this.node.getChildByName('num_freeSpin').getComponent(Label);
         this.freespin_last = this.node.getChildByName('freespin_last');
         this.freespin_remaining = this.node.getChildByName('freespin_remaining');
-
-        //獲取語系字串
-        let lang: string = DataManager.getInstance().urlParam.lang;
-
-        //設置語系圖片
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.fs}`, (langRes: any) => {
-            this.freespin_last.getComponent(Sprite).spriteFrame = langRes['freespin_last'];
-            this.freespin_remaining.getComponent(Sprite).spriteFrame = langRes['freespin_remaining'];
-        });
 
         FSUI.refreshRemainTimes.on(this.onRefreshRemainTimes, this);//監聽刷新剩餘次數事件
     }

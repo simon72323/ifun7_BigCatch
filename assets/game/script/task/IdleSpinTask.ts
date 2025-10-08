@@ -1,25 +1,18 @@
-// import { InfoBar } from '@base/components/infoBar/InfoBar';
-// import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
+
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 
 import { Notice } from '@common/components/notice/Notice';
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
-// import { TimeoutManager } from '@common/script/manager/TimeoutManager';
+
 
 import { GameTask } from '@common/script/tasks/GameTask';
-import { TaskManager } from '@common/script/tasks/TaskManager';
-
-import { AutoMode, ModuleID, SpinBtnState, TurboMode } from '@common/script/types/BaseType';
-
-// import { TimeoutManager } from '@common/script/utils/TimeoutManager';
-// import { logger } from '@common/script/utils/XUtils';
+import { ModuleID, TurboMode } from '@common/script/types/BaseType';
 
 
 /**
@@ -34,8 +27,8 @@ export class IdleSpinTask extends GameTask {
         DataManager.getInstance().moduleID = ModuleID.BS;
 
         //判斷是否要自動轉
-        if (DataManager.getInstance().curAutoMode != AutoMode.Off) {
-            if (DataManager.getInstance().curAutoMode == AutoMode.Limited) {
+        if (DataManager.getInstance().isAutoMode) {
+            if (DataManager.getInstance().isAutoTimes) {
                 DataManager.getInstance().autoSpinCount -= 1;
                 SettingsController.updateAutoSpinCount.emit();
             }
@@ -52,7 +45,7 @@ export class IdleSpinTask extends GameTask {
      */
     private idleState(): void {
         SettingsController.setEnabled.emit(true);//設定可用狀態
-        SettingsController.refreshBet.emit(DataManager.getInstance().getBetTotal());//刷新下注
+        SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());//刷新下注
 
         BaseEvent.clickSpin.on(() => {
             this.onSpin(false);
@@ -73,7 +66,7 @@ export class IdleSpinTask extends GameTask {
     private onSpin(buyFs: boolean): void {
         //判斷要傳送一般spin還是免費spin(檢查一下免費遊戲按下時是否有變更成FS模式)
         // const isBS = DataManager.getInstance().isBS();
-        let betCredit = buyFs ? DataManager.getInstance().getBuyFeatureTotal() : DataManager.getInstance().getBetTotal();
+        let betCredit = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal() : DataManager.getInstance().bet.getBetTotal();
         let spinID = buyFs ? 1 : 0;
         DataManager.getInstance().isBuyFs = buyFs;
         SettingsController.refreshWin.emit(0);//刷新贏分=0
@@ -104,8 +97,8 @@ export class IdleSpinTask extends GameTask {
             }
 
             //判斷取消自動轉
-            if (DataManager.getInstance().curAutoMode != AutoMode.Off && DataManager.getInstance().autoSpinCount <= 0) {
-                DataManager.getInstance().curAutoMode = AutoMode.Off;
+            if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
+                DataManager.getInstance().isAutoMode = false;
             }
 
             BannerUI.reset.emit();//還原跑馬燈狀態

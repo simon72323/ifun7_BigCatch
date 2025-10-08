@@ -19,19 +19,6 @@ export class SlotData {
     /**金框資料 */
     public stripBadgeDataList: number[][] = [];
     private payloadKeyList: string[] = ['', '', 'H1', 'H2', 'H3', 'H4', 'L1', 'L2', 'L3', 'L4'];
-    /**BS初始金框盤面 */
-    // public bsInitGoldenPattern: number[] = [
-    //     0, 0, 0, 0, 0,
-    //     0, 0, 0, 0, 0,
-    //     0, 0, 0, 0, 0
-    // ];
-
-    // /**FS初始金框盤面 */
-    // public fsInitGoldenPattern: number[] = [
-    //     0, 0, 0, 0, 0,
-    //     0, 0, 0, 0, 0,
-    //     0, 0, 0, 0, 0
-    // ];
 
     /**BS最後盤面 */
     public bsLastMap: BaseSymbolData2[][] = [];
@@ -117,7 +104,7 @@ export class SlotData {
         let payData = this.payloadTemplate.symbolPoints[key];
         if (payData) {
             payData.forEach((data: { count: number, point: number }) => {
-                result.push({ count: data.count, cent: Utils.numberFormat(data.point * DataManager.getInstance().getBetTotal()) });
+                result.push({ count: data.count, cent: Utils.numberFormat(data.point * DataManager.getInstance().bet.getBetTotal()) });
             }, this);
         }
         return result;

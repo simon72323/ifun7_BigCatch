@@ -1,13 +1,12 @@
-import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { GameTask } from '@base/script/tasks/GameTask';
-import { BigWinType, ModuleID, SpinButtonState } from '@base/script/types/BaseType';
-import { XUtils } from '@base/script/utils/XUtils';
 
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
-import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
+
+import { SettingsController } from '@common/components/settingsController/SettingsController';
+import { DataManager } from '@common/script/data/DataManager';
+import { GameTask } from '@common/script/tasks/GameTask';
+import { BigWinType, ModuleID } from '@common/script/types/BaseType';
+import { delay } from '@common/script/utils/Utils';
 
 /**
  * 一局結束
@@ -32,15 +31,12 @@ export class EndGameTask extends GameTask {
         else {
 
             //BS單轉總分達到BigWin額外演示
-            if (DataManager.getInstance().getBigWinTypeByValue(this.win) != BigWinType.non) {
+            if (DataManager.getInstance().getBigWinTypeByValue(this.win) !== BigWinType.non) {
                 if (DataManager.getInstance().isBS() === true) {
-                    BSRoleUI.back.emit(() => {
-                        //角色演完再播BigWin
-                        BigWinUI.complete.once(() => {
-                            this.showTotalWin();
-                        }, this);
-                        BigWinUI.show.emit(this.win);
-                    });
+                    BigWinUI.complete.once(() => {
+                        this.showTotalWin();
+                    }, this);
+                    BigWinUI.show.emit(this.win);
                 }
                 else {
                     BigWinUI.complete.once(() => {
@@ -52,9 +48,6 @@ export class EndGameTask extends GameTask {
             }
             //一般獎項
             else if (this.win > 0) {
-                if (DataManager.getInstance().isBS() === true) {
-                    BSRoleUI.back.emit(null);
-                }
                 this.showTotalWin();
 
             }
@@ -70,22 +63,19 @@ export class EndGameTask extends GameTask {
         // new Error('Method not implemented.');
     }
 
-    private showTotalWin(): void {
-        SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
-
-        let rateWin = this.win * DataManager.getInstance().bet.getCurRate();
-        let multiple: number = DataManager.getInstance().getWinMultipleByValue(this.win);
-        BaseEvent.refreshCredit.emit(this.playerCent);
+    /**顯示總贏分 */
+    private async showTotalWin(): Promise<void> {
+        let rateWin = this.win * DataManager.getInstance().bet.getLineTotal();
+        let multiple: number = DataManager.getInstance().bet.getWinMultipleByValue(this.win);
+        SettingsController.refreshCredit.emit(this.playerCent);
 
         //因為可能要跑分, 收到totalWinComplete才能完成任務
-        BannerUI.totalWinComplete.once(() => {
-            //TotalWin顯示1秒
-            XUtils.scheduleOnce(() => {
-                this.finish();
-            }, 1, this);
+        BannerUI.totalWinComplete.once(async () => {
+            await delay(1);//TotalWin顯示1秒
+            this.finish();
         }, this);
 
         BannerUI.showTotalWin.emit(rateWin, multiple);
-        // BaseEvent.refreshWin.emit(rateWin);
+        SettingsController.refreshWin.emit(rateWin);
     }
 }

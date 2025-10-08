@@ -1,7 +1,6 @@
-import { GameTask } from '@base/script/tasks/GameTask';
-
 import { FSUI } from '@game/components/FSUI/FSUI';
 
+import { GameTask } from '@common/script/tasks/GameTask';
 
 /**
  * 更新剩餘次數 

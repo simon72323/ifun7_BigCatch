@@ -1,10 +1,10 @@
-import { DataManager } from '@common/script/data/DataManager';;
+
 
 import { BaseSlotParser2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSlotData2';
 import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
-import { GameConst, SymbolID } from '@game/script/constant/GameConst';
-import { GameData } from '@game/script/main/GameData';
+import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
+import { DataManager } from '@common/script/data/DataManager';
 /**
  * BSX5軸 遊戲客製化分析盤面
  */
@@ -29,10 +29,10 @@ export class SlotParser extends BaseSlotParser2 {
         if (!goldenPattern) {
             return;
         }
-        let stripDataList = DataManager.getInstance().getData<GameData>().stripBadgeDataList;
-        stripDataList.length = 0;
+        // let stripDataList = DataManager.getInstance().getData<GameData>().stripBadgeDataList;
+        // stripDataList.length = 0;
 
-        let numRow = DataManager.getInstance().getData().REEL_ROW;
+        let numRow = GameConst.REEL_ROW;
         let numCol: number = stripTable.length;
         for (let col: number = 0; col < numCol; ++col) {
             let strip = stripTable[col];
@@ -41,20 +41,20 @@ export class SlotParser extends BaseSlotParser2 {
             for (let row: number = 0; row < numRow; ++row) {
                 valueList[(rng - 1 + row + strip.length) % strip.length] = goldenPattern[row * numCol + col];
             }
-            stripDataList.push(valueList);
+            // stripDataList.push(valueList);
         }
 
         //轉動隨機金框
-        let goldenReel: number[] = DataManager.getInstance().getData<GameData>().getGoldenReelRange();
-        goldenReel.forEach((col) => {
-            let strip = stripTable[col];
-            strip.forEach((symbolID, rng) => {
-                //盤面未設定 & 非scatter的圖示 => 隨機出現金框
-                if (stripDataList[col][rng] === undefined && symbolID !== SymbolID.Scatter) {
-                    stripDataList[col][rng] = Math.random() < GameConst.RANDOM_GOLDEN ? 1 : 0;
-                }
-            }, this);
-        });
+        // let goldenReel: number[] = DataManager.getInstance().getData<GameData>().getGoldenReelRange();
+        // goldenReel.forEach((col) => {
+        //     let strip = stripTable[col];
+        //     strip.forEach((symbolID, rng) => {
+        //         //盤面未設定 & 非scatter的圖示 => 隨機出現金框
+        //         // if (stripDataList[col][rng] === undefined && symbolID !== SymbolID.Scatter) {
+        //         //     stripDataList[col][rng] = Math.random() < GameConst.RANDOM_GOLDEN ? 1 : 0;
+        //         // }
+        //     }, this);
+        // });
     }
 
     /**
@@ -62,20 +62,17 @@ export class SlotParser extends BaseSlotParser2 {
      * @returns 
      */
     public getMiList(): boolean[] {
-        let gameData = DataManager.getInstance().getData<GameData>();
-
         let miList: boolean[] = [];
         let scatterCount: number = 0;
-        for (let col: number = 0; col < gameData.REEL_COL; ++col) {
+        for (let col: number = 0; col < GameConst.REEL_COL; ++col) {
             miList.push(scatterCount >= 2);
-            for (let row: number = 0; row < gameData.REEL_ROW; ++row) {
-                let symbolID = this.symbolPattern[row * gameData.REEL_COL + col];
+            for (let row: number = 0; row < GameConst.REEL_ROW; ++row) {
+                let symbolID = this.symbolPattern[row * GameConst.REEL_COL + col];
                 if (symbolID === SymbolID.Scatter) {
                     scatterCount++;
                 }
             }
         }
-
         return miList;
     }
 
@@ -85,7 +82,7 @@ export class SlotParser extends BaseSlotParser2 {
      * @returns 
      */
     public getMiList2(fromMap: BaseSymbolData2[][]): boolean[] {
-        let gameData = DataManager.getInstance().getData<GameData>();
+        // let gameData = DataManager.getInstance().getData<GameData>();
         let miList: boolean[] = [];
         let scatterCount: number = 0;
         fromMap.forEach((symbolOfReel: BaseSymbolData2[], col) => {

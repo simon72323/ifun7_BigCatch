@@ -1,11 +1,12 @@
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { GameTask } from '@base/script/tasks/GameTask';
-import { XUtils } from '@base/script/utils/XUtils';
-
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { FSUI } from '@game/components/FSUI/FSUI';
-import { GameConst } from '@game/script/constant/GameConst';
+import { GameConst } from '@game/script/data/GameConst';
+
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { GameTask } from '@common/script/tasks/GameTask';
+import { Utils } from '@common/script/utils/Utils';
+
 
 /**
  * 增加次數
@@ -20,9 +21,9 @@ export class RetriggerTask extends GameTask {
     /**目標次數 */
     public to: number;
 
-    execute(): void {
+    async execute(): Promise<void> {
 
-        AudioManager.getInstance().play(AudioKey.Retrigger);
+        AudioManager.getInstance().playSound(AudioKey.Retrigger);
 
         //直接設定
         if (this.from === -1 || this.from === this.to) {
@@ -35,11 +36,11 @@ export class RetriggerTask extends GameTask {
             let repeat: number = round - 1;//schedule內會自動+1, 所以次數要-1
             BannerUI.retrigger.emit(round);
             FSUI.refreshRemainTimes.emit(this.from);
-            XUtils.schedule(() => {
+            Utils.schedule(() => {
                 FSUI.refreshRemainTimes.emit(++this.from);
             }, this, GameConst.BONUS_TIME_ADD_INTERVAL, repeat);
 
-            XUtils.scheduleOnce(() => {
+            Utils.scheduleOnce(() => {
                 this.finish();
             }, GameConst.BONUS_TIME_ADD_INTERVAL * (round + 1), this);
         }

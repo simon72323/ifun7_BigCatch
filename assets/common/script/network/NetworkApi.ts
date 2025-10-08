@@ -43,14 +43,14 @@ export interface IFreeSpinData {
 //========================= 接收遊戲資料 =========================
 export interface IGameData {
     game_id: number; // 遊戲 ID
-    line_bet: number[]; // 線注內容
-    coin_value: number[]; // 錢倍數內容
-    bet_available_idx: number; // 錢倍數可選 index 跟 coin_value 搭配使用
-    line_total: number; // 線數
-    line_available: number[]; // 合法的 lineNum，用於檢查 LineNum 是否合法
+    line_bet: number[]; // 線注選項
+    coin_value: number[]; // 下注倍數選項
+    bet_available_idx: number; // 錢倍數
+    line_total: number; // 總線數
+    line_available: number[]; // 合法的線數，用於檢查 LineNum 是否合法
 
-    line_bet_default_index: number; // 線注預設 index
-    coin_value_default_index: number; // 倍數預設 index
+    line_bet_default_index: number; // 線注預設索引
+    coin_value_default_index: number; // 下注倍數預設索引
 
     win: number; // total bet 的幾倍秀 win
     big_win: number; // total bet 的幾倍秀 big_win

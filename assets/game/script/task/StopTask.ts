@@ -1,19 +1,11 @@
-// import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-// import { AudioKey } from '@base/script/audio/AudioKey';
-// import { AudioManager } from '@common/script/manager/AudioManager';
 
-
-
-import { BSRoleUI } from '@game/components/characterUI/BSRoleUI';
 import { SkipUI } from '@game/components/SkipUI/SkipUI';
 import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { SlotMachineID } from '@game/script/data/GameConst';
 import { IWinLineData, IWinScatterData } from '@game/script/data/GameType';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { SpinBtnState } from '@common/script/types/BaseType';
 
 /**
  * 老虎機停輪

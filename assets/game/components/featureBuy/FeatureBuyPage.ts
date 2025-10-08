@@ -1,22 +1,13 @@
 import { _decorator, Button, Component, Label, sp, Sprite, UIOpacity } from 'cc';
 
-// import { AudioKey } from '@base/script/audio/AudioKey';
-// import { AudioManager } from '@common/script/manager/AudioManager';
+import { GameAudioKey } from '@game/script/data/GameConst';
 
-
-import { GameAudioKey, LangBundleDir } from '@game/script/data/GameConst';
-
-import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { BundleLoader } from '@common/script/loading/BundleLoader';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
-
-// import { BaseAnimationName } from '@base/script/types/BaseType';
-// import { XUtils } from '@base/script/utils/XUtils';
-// import { BundleLoader } from '@base/script/main/BundleLoader';
-
 
 enum BoxAni {
     start = 'start'
@@ -63,18 +54,18 @@ export class FeatureBuyPage extends Component {
         FeatureBuyPage.show.on(this.show, this);
         FeatureBuyPage.hide.on(this.hide, this);
 
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${DataManager.getInstance().urlParam.lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${DataManager.getInstance().urlParam.lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
 
-            this.node.getChildByPath('buyfeature_box_ani/label_featurebuy').getComponent(Sprite).spriteFrame = langRes['label_featurebuy'];
-            this.node.getChildByPath('buyfeature_box_ani/text_featurebuy').getComponent(Sprite).spriteFrame = langRes['text_featurebuy'];
-            this.node.getChildByPath('buyfeature_box_ani/title_featurebuy').getComponent(Sprite).spriteFrame = langRes['title_featurebuy'];
-            this.node.getChildByPath('buyfeature_box_ani/title_featurebuy_cost').getComponent(Sprite).spriteFrame = langRes['title_featurebuy_cost'];
+        //     this.node.getChildByPath('buyfeature_box_ani/label_featurebuy').getComponent(Sprite).spriteFrame = langRes['label_featurebuy'];
+        //     this.node.getChildByPath('buyfeature_box_ani/text_featurebuy').getComponent(Sprite).spriteFrame = langRes['text_featurebuy'];
+        //     this.node.getChildByPath('buyfeature_box_ani/title_featurebuy').getComponent(Sprite).spriteFrame = langRes['title_featurebuy'];
+        //     this.node.getChildByPath('buyfeature_box_ani/title_featurebuy_cost').getComponent(Sprite).spriteFrame = langRes['title_featurebuy_cost'];
 
-            buyBtn.normalSprite = buyBtn.hoverSprite = langRes['btn_buy_N'];
-            buyBtn.pressedSprite = buyBtn.disabledSprite = langRes['btn_buy_H'];
-            cancelBtn.normalSprite = cancelBtn.hoverSprite = langRes['btn_cancel_N'];
-            cancelBtn.pressedSprite = cancelBtn.disabledSprite = langRes['btn_cancel_H'];
-        });
+        //     buyBtn.normalSprite = buyBtn.hoverSprite = langRes['btn_buy_N'];
+        //     buyBtn.pressedSprite = buyBtn.disabledSprite = langRes['btn_buy_H'];
+        //     cancelBtn.normalSprite = cancelBtn.hoverSprite = langRes['btn_cancel_N'];
+        //     cancelBtn.pressedSprite = cancelBtn.disabledSprite = langRes['btn_cancel_H'];
+        // });
 
         this.node.active = false;
     }
@@ -90,7 +81,7 @@ export class FeatureBuyPage extends Component {
 
         this.costLabel.string = Utils.numberFormat(value);
 
-        // AudioManager.getInstance().play(AudioKey.Open, 0.6);
+        AudioManager.getInstance().playSound(AudioKey.Open);
 
 
 
@@ -119,8 +110,8 @@ export class FeatureBuyPage extends Component {
         this.forceHide();
         // });
 
-        // AudioManager.getInstance().play(AudioKey.Close);
-        // AudioManager.getInstance().play(AudioKey.Trans);
+        AudioManager.getInstance().playSound(AudioKey.Close);
+        AudioManager.getInstance().playSound(AudioKey.Trans);
 
     }
 
@@ -132,7 +123,7 @@ export class FeatureBuyPage extends Component {
             return;
         }
 
-        // AudioManager.getInstance().play(GameAudioKey.buy);
+        AudioManager.getInstance().playSound(GameAudioKey.buy);
         this.forceHide();
         BaseEvent.buyFeature.emit();
     }

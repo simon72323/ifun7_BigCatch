@@ -1,4 +1,4 @@
-import { GameTask } from '@base/script/tasks/GameTask';
+import { GameTask } from '@common/script/tasks/GameTask';
 
 /**
  * 更新免費遊戲次數

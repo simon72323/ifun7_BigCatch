@@ -3,10 +3,10 @@ import { _decorator, Component, easing, instantiate, Node, Prefab, Tween, tween,
 import { BaseDropSlotParser } from '@base/components/dropSlotMachine/BaseDropSlotParser';
 import { BaseDropSymbol } from '@base/components/dropSlotMachine/BaseDropSymbol';
 import { BaseDropSymbolData } from '@base/components/dropSlotMachine/BaseDropSymbolData';
-import { DataManager } from '@common/script/data/DataManager';;
-import { TurboMode } from '@base/script/types/BaseType';
+
+import { DataManager } from '@common/script/data/DataManager';
 import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+import { TurboMode } from '@common/script/types/BaseType';
 
 
 const { ccclass, property } = _decorator;
@@ -149,9 +149,9 @@ export class DropSlotMachine extends Component {
         DropSlotMachine.mainDrop.on((map: BaseDropSymbolData[], complete) => {
             //重置資料
             this.parser.reset();
-            let turboMode = DataManager.getInstance().getTurboMode();
+            let turboMode = DataManager.getInstance().curTurboMode;
             this.curSpeedConfig = this.normal;
-            if (turboMode === TurboMode.Speed) {
+            if (turboMode === TurboMode.Fast) {
                 this.curSpeedConfig = this.speed;
             }
             else if (turboMode === TurboMode.Turbo) {
@@ -424,9 +424,9 @@ export class DropSlotMachine extends Component {
      */
     public animate(winPos: number[], state: number): void {
         winPos.forEach((pos) => {
-            let grid = XUtils.posToGrid(pos);
-            let symbol = this.symbolMap[grid.col][grid.row];
-            symbol.animate(state);
+            // let grid = Utils.posToGrid(pos);
+            // let symbol = this.symbolMap[grid.col][grid.row];
+            // symbol.animate(state);
         }, this);
     }
 }

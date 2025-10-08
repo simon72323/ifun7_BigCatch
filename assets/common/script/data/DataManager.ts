@@ -1,19 +1,21 @@
-
-// import { APIManager } from '@base/script/utils/APIManager';
-// import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
-// import { XUtils } from '@base/script/utils/XUtils';
-
+import { GameConst } from '@game/script/data/GameConst';
 import { SlotData } from '@game/script/data/SlotData';
 
-// import { BaseConst } from '@common/script/data/BaseConst';
 import { BetData } from '@common/script/data/BetData';
-import { gameInformation } from '@common/script/data/GameInformation';
-// import { IGameData } from '@common/script/network/NetworkApi';
-import { BigWinType, CheatCodeData, CreditMode, DigitMode, GameState, ModuleID, StripTable, TurboMode, UrlParam } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
+import { UrlParam } from '@common/script/data/UrlParam';
+import { IGameData, IPromotionBrief, ISpinData, IUserData } from '@common/script/network/NetworkApi';
+import { BigWinType, CheatCodeData, CreditMode, DigitMode, ModuleID, StripTable, TurboMode } from '@common/script/types/BaseType';
 
 
 
+type InGameMenuStore = {
+    imageURL: string,
+    isAvailable: boolean,
+    hot: number[],
+    new: number[],
+    gameList: number[],
+    favList: number[]
+};
 
 /**
  * 遊戲資料控制器
@@ -51,8 +53,6 @@ export class DataManager {
     public freeSpinCount: number = 0;
 
 
-
-
     /** 是否購買免費遊戲 */
     public isBuyFs: boolean = false;
     /** 當前方向模式 */
@@ -66,7 +66,7 @@ export class DataManager {
     /** 當前遊戲狀態 */
     // public curGameState: GameState = GameState.Ready;
     /** 大贏跑分倍率 */
-    public bigWinMultiple: number[] = [10, 20, 50];
+    // public bigWinMultiple: number[] = [10, 20, 50];
 
     /** 玩家餘額 */
     public userCredit: number = 0;
@@ -74,24 +74,20 @@ export class DataManager {
     public hasSkip: boolean = false;
 
 
-    /** 獲取slot資料 */
-    public slotData: SlotData = new SlotData();
-
-
-
-
-
     /**是否要走API版本 */
     public useAPI: boolean = false;
 
     /**網址參數 */
-    private urlParamMap: Map<string, string> = new Map();
+    // private urlParamMap: Map<string, string> = new Map();
 
+    //=================================== 資料 ======================================
+    /** 獲取slot資料 */
+    public slotData: SlotData = new SlotData();
     /**網址參數 */
     public urlParam: UrlParam = new UrlParam();
-
     /**下注相關資料 */
     public bet: BetData = new BetData();
+    //=================================== 資料 ======================================
 
     /**轉動過程設定的新模式,待機時帶入 */
     // public tempTurboMode: TurboMode = TurboMode.Normal;
@@ -106,10 +102,10 @@ export class DataManager {
     public digitMode: DigitMode = DigitMode.DOT;
 
     /**遊戲ID */
-    public gameID: string;
+    // public gameID: string;
 
     /**預設socket網址(但API優先) */
-    public defaultSocketUrl: string;
+    // public defaultSocketUrl: string;
 
     /**購買功能限制倍率(超過倍率不允許使用) */
     public luckyStrikeBlockRate: number = 0;
@@ -168,10 +164,77 @@ export class DataManager {
     /**營運商ID */
     public operatorID: string;
     /**Token */
-    public token: string;
+    // public token: string;
 
     /** 當前下注索引 */
     // private betIndex: number = 0;
+
+    //============================= 網址參數 ======================================
+
+    //============================= 網址參數 ======================================
+
+    //============================= server資料 =====================================
+    /** 用戶資料 */
+    private _userData: IUserData;
+    public get userData(): IUserData {
+        return this._userData;
+    }
+
+    public set userData(userData: IUserData) {
+        this._userData = userData;
+        this.currency = userData.currency;
+    }
+
+    /** 遊戲資料 */
+    private _gameData: IGameData;
+    public get gameData(): IGameData {
+        return this._gameData;
+    }
+
+    public set gameData(gameData: IGameData) {
+        this._gameData = gameData;
+        this.bigWinMultiple.push(gameData.big_win);
+        this.bigWinMultiple.push(gameData.super_win);
+        this.bigWinMultiple.push(gameData.mega_win);
+
+        // 初始化 BetData 的數據依賴
+        this.bet.gameData = gameData;
+        this.bet.lineIdx = gameData.line_bet_default_index;
+        this.bet.betIdx = gameData.coin_value_default_index;
+    }
+
+    /** 下注回傳資料 */
+    private _spinResult: ISpinData;
+    public get spinResult(): ISpinData {
+        return this._spinResult;
+    }
+
+    public set spinResult(spinResult: ISpinData) {
+        this._spinResult = spinResult;
+    }
+
+    /** 幣別 */
+    public currency: string = '';
+    /** 大贏跑分倍率 */
+    public bigWinMultiple: number[] = [];
+    /** 促銷資料 */
+    public promotionData: IPromotionBrief[];
+    /** 遊戲內選單狀態(0=off，1=on) */
+    public inGameMenuStatus: boolean;
+    /** 遊戲內選單資料 */
+    public inGameMenuStore: InGameMenuStore = {
+        new: [],
+        hot: [],
+        gameList: [],
+        favList: [],
+        imageURL: '',
+        isAvailable: false
+    };
+
+    /** 遊戲選單資料(語系ID: 遊戲名稱) */
+    public gameNameList: { [key: number]: string } = {};
+    //============================= server資料 ======================================
+
 
     /**
      * 初始化資料
@@ -193,59 +256,12 @@ export class DataManager {
     }
 
     /**
-     * 取得總下注金額
-     * @returns 
-     */
-    // public getBetTotal() {
-    //     const gameData = gameInformation.gameData;
-    //     const coinValue = gameData.coin_value[gameData.coin_value_default_index];
-    //     const lineBet = gameData.line_bet[gameData.line_bet_default_index];
-    //     const lineTotal = gameData.line_total;
-    //     return Utils.accNumber(coinValue * lineBet * lineTotal);//處理浮點數問題
-    // }
-
-    /**
-     * 取得免費遊戲總購買金額(免費遊戲購買倍率 x 總下注)
-     * @returns 
-     */
-    // public getBuyFeatureTotal(): number {
-    //     return gameInformation.gameData.buy_spin.multiplier * this.getBetTotal();
-    // }
-
-    // /**
-    //  * 改變下注並回傳下注值
-    //  * @param changeValue 改變值（正數為增加，負數為減少）
-    //  */
-    // public getChangeBetValue(changeValue: number): number {
-    //     this.betIdx += changeValue;
-    //     const gameData = gameInformation.gameData;
-    //     const length = gameData.coin_value.length;
-    //     const betIdxMin = gameData.bet_available_idx;
-
-    //     if (changeValue > 0) {
-    //         // 增加下注
-    //         if (this.betIdx >= length) {
-    //             this.betIdx = betIdxMin;
-    //         }
-    //     } else {
-    //         // 減少下注
-    //         if (this.betIdx < betIdxMin) {
-    //             this.betIdx = length - 1;
-    //         }
-    //     }
-
-    //     // 更新下注值
-    //     this.betValue = gameData.coin_value[this.betIdx];
-    //     return this.betValue;
-    // }
-
-    /**
      * 取得完整下注紀錄網址
      * @returns 
      */
     public getFullBetrecordurl(): string {
-        const { betrecordurl, token, serverurl, lang } = this.urlParam;
-        return `${betrecordurl}?token=${token}&lang=${lang}&serverurl=${serverurl}`;
+        const { betRecordUrl, token, serverUrl, lang } = this.urlParam;
+        return `${betRecordUrl}?token=${token}&lang=${lang}&serverurl=${serverUrl}`;
     }
 
     /**
@@ -256,32 +272,35 @@ export class DataManager {
         return this.moduleID === ModuleID.BS;
     }
 
-
-    //=============================以上確定使用======================================
-
     /**
-     * 金額模式
+     * 取得value對應BigWin類型
+     * @param value 
      */
-    public parseCreditMode(param: string): CreditMode {
-        let mode: CreditMode;
-        if (param.length == 0) {
-            mode = CreditMode.Cent;
+    public getBigWinTypeByValue(value: number): BigWinType {
+        if (!this.bigWinMultiple || this.bigWinMultiple.length === 0) {
+            console.warn('BetData: bigWinMultiple not initialized');
+            return 0;
         }
-        if (param.substring(0, 1) == '0') {
-            mode = CreditMode.Cent;
+
+        let bigWinLevel: BigWinType;
+        const multiple: number = this.bet.getWinMultipleByValue(value);
+        for (let i = 0; i < this.bigWinMultiple.length; i++) {
+            if (multiple >= this.bigWinMultiple[i]) {
+                bigWinLevel = i;
+            }
         }
-        else if (param.substring(0, 1) == '1') {
-            mode = CreditMode.Dollar;
-        }
-        else if (param.substring(0, 1) == '2') {
-            mode = CreditMode.Credit;  //so far do no support
-        }
-        return mode;
+        return bigWinLevel;
     }
 
+
+    //=============================以上確定使用======================================
     public isIdle(): boolean {
         return false;
         // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
+    }
+
+    public isBlockKeyboard(): boolean {
+        return this.webViewVisible || this.isPayTable;
     }
 
     // public setState(state: s5g.game.proto.ESTATEID): void {
@@ -290,10 +309,30 @@ export class DataManager {
     // }
 
     /**
-     * 解析數字模式
-     * @param param 
-     * @returns 
+     * 金額模式
      */
+    // public parseCreditMode(param: string): CreditMode {
+    //     let mode: CreditMode;
+    //     if (param.length == 0) {
+    //         mode = CreditMode.Cent;
+    //     }
+    //     if (param.substring(0, 1) == '0') {
+    //         mode = CreditMode.Cent;
+    //     }
+    //     else if (param.substring(0, 1) == '1') {
+    //         mode = CreditMode.Dollar;
+    //     }
+    //     else if (param.substring(0, 1) == '2') {
+    //         mode = CreditMode.Credit;  //so far do no support
+    //     }
+    //     return mode;
+    // }
+
+    // /**
+    //  * 解析數字模式
+    //  * @param param 
+    //  * @returns 
+    //  */
     // private parseDigitMode(param: string): DigitMode {
     //     let mode: DigitMode;
     //     if (param.length == 0) {
@@ -308,11 +347,11 @@ export class DataManager {
     //     return mode;
     // }
 
-    /**
-     * 取得輪帶
-     * @param id 
-     * @returns 
-     */
+    // /**
+    //  * 取得輪帶
+    //  * @param id 
+    //  * @returns 
+    //  */
     // public getStripTable() {
     //     for (let i = 0; i < this.stripTables.length; i++) {
     //         if (this.stripTables[i]._id == this.moduleID) {
@@ -322,11 +361,11 @@ export class DataManager {
     //     return null;
     // }
 
-    /**
-     * 取得ID對應輪帶表
-     * @param id 
-     * @returns 
-     */
+    // /**
+    //  * 取得ID對應輪帶表
+    //  * @param id 
+    //  * @returns 
+    //  */
     // public getStripTableByID(id: ModuleID) {
     //     for (let i = 0; i < this.stripTables.length; i++) {
     //         if (this.stripTables[i]._id == id) {
@@ -335,11 +374,6 @@ export class DataManager {
     //     }
     //     return null;
     // }
-
-
-    public isBlockKeyboard(): boolean {
-        return this.webViewVisible || this.isPayTable;
-    }
 
     // public getSocketUrl(): string {
     //     return APIManager.getInstance().getSocketUrl() || this.defaultSocketUrl;
@@ -360,10 +394,10 @@ export class DataManager {
     // }
 
 
-    /**
-     * 免費遊戲金額為N個Bet
-     * @returns 
-     */
+    // /**
+    //  * 免費遊戲金額為N個Bet
+    //  * @returns 
+    //  */
     // public getFeatureBuyNumOfCost(): number {
     //     return this.getCurFeatureBuyMultiple() / this.bet.getLineAt(0);
     // }
@@ -393,8 +427,8 @@ export class DataManager {
     //     }
     // }
 
-    /**
-     * 取得免費遊戲購買倍率
+    // /**
+    //  * 取得免費遊戲購買倍率
     //  * @param type 
     //  * @returns 
     //  */
@@ -402,20 +436,20 @@ export class DataManager {
     //     return this.featureBuyMultipleList[type] / this.bet.getLineAt(0);
     // }
 
-    /**
-     * 是否為Demo模式
-     * @returns 
-     */
+    // /**
+    //  * 是否為Demo模式
+    //  * @returns 
+    //  */
     // public isDemoMode(): boolean {
     //     return this.urlParam.playMode == '1';
     // }
 
     //TODO:太多地方用, 還不確定明確用途, 暫時保留
-    /**
-     * 測試溢位
-     * @param value 
-     * @returns 
-     */
+    // /**
+    //  * 測試溢位
+    //  * @param value 
+    //  * @returns 
+    //  */
     // public TestOverFlow(value: number): boolean {
     //     if (value < 1000000000000) {
     //         return true;
@@ -426,18 +460,18 @@ export class DataManager {
     //     }
     // }
 
-    /**
-     * 設定加速模式
-     * @param mode 
-     */
+    // /**
+    //  * 設定加速模式
+    //  * @param mode 
+    //  */
     // public setTurboMode(mode: TurboMode) {
     //     this.turboMode = mode;
     // }
 
-    /**
-     * 取得加速模式
-     * @returns 
-     */
+    // /**
+    //  * 取得加速模式
+    //  * @returns 
+    //  */
     // public getTurboMode(): TurboMode {
     //     if (this.moduleID != ModuleID.BS) {
     //         return TurboMode.Normal;
@@ -447,20 +481,20 @@ export class DataManager {
     //     }
     // }
 
-    /**
-     * 非Normal都是加速
-     * @returns 
-     */
+    // /**
+    //  * 非Normal都是加速
+    //  * @returns 
+    //  */
     // public isTurboOn(): boolean {
     //     return this.getTurboMode() !== TurboMode.Normal;
     // }
 
 
-    /**
-     * Rng是1-base所以要-1
-     * @param rngList 
-     * @returns 
-     */
+    // /**
+    //  * Rng是1-base所以要-1
+    //  * @param rngList 
+    //  * @returns 
+    //  */
     // public getMapByRng(rngList: number[]): number[] {
     //     let stripTable = this.getStripTable();
     //     let strips = stripTable._strips;
@@ -476,7 +510,6 @@ export class DataManager {
     //             else {
     //                 symbol = 255;
     //             }
-
     //             map.push(symbol);
     //         }
     //     }

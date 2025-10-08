@@ -1,14 +1,9 @@
-import { _decorator, Animation, Component, UIOpacity } from 'cc';
+import { _decorator, Component, UIOpacity } from 'cc';
 
-import { BaseAnimationName } from '@base/script/types/BaseType';
 import { XEvent1 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+import { Utils } from '@common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
-
-/**
- * 
- */
 @ccclass('UIBlack')
 export class UIBlack extends Component {
 
@@ -18,10 +13,8 @@ export class UIBlack extends Component {
     public static show: XEvent1<string> = new XEvent1();
     public static hide: XEvent1<string> = new XEvent1();
 
-    private animation: Animation;
 
     onLoad() {
-        this.animation = this.node.getComponent(Animation);
         this.node.getComponent(UIOpacity).opacity = 0;
         this.node.active = false;
         UIBlack.fadeIn.on((name) => {
@@ -29,7 +22,7 @@ export class UIBlack extends Component {
                 return;
             }
             this.node.active = true;
-            XUtils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.3);
+            Utils.fadeIn(this.node, 0.3);
         }, this);
 
         UIBlack.fadeOut.on((name) => {
@@ -37,7 +30,7 @@ export class UIBlack extends Component {
                 return;
             }
 
-            XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.3, () => {
+            Utils.fadeOut(this.node, 0.3, () => {
                 this.node.active = false;
             });
         }, this);

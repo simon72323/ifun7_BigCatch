@@ -1,7 +1,8 @@
 import { _decorator, Component, Node } from 'cc';
 
 import { BaseDropSymbolData } from '@base/components/dropSlotMachine/BaseDropSymbolData';
-import { Grid } from '@base/script/types/BaseType';
+
+import { Grid } from '@common/script/types/BaseType';
 
 const { ccclass } = _decorator;
 

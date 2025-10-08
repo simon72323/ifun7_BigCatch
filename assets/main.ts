@@ -1,4 +1,5 @@
 import { sys } from 'cc';
+
 import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 
 /** 針對IOS14以下版本，禁用WEBP */

@@ -1,15 +1,14 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, SpriteFrame, tween, Tween } from 'cc';
 
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { XEvent, XEvent3 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+import { GameAudioKey } from '@game/script/data/GameConst';
 
-import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+import { BaseConst } from '@common/script/data/BaseConst';
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent, XEvent3 } from '@common/script/event/XEvent';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { Utils } from '@common/script/utils/Utils';
 
 enum TotalWinAnimation {
     ttw_loop = 'ttw_loop',
@@ -74,7 +73,7 @@ export class FSSettleUI extends Component {
 
             this.node.getChildByPath('totalwin_ani/title_totalwin').getComponent(Sprite).spriteFrame = value > 0 ? this.title_totalwin : this.title_fgend;
 
-            XUtils.ClearSpine(this.totalwin_ani);
+            Utils.ClearSpine(this.totalwin_ani);
             let start = value > 0 ? TotalWinAnimation.ttw_start : TotalWinAnimation.ttw_start_none;
             let loop = value > 0 ? TotalWinAnimation.ttw_loop : TotalWinAnimation.ttw_loop_none;
             this.totalwin_ani.addAnimation(0, start, false);
@@ -86,15 +85,15 @@ export class FSSettleUI extends Component {
             //轉場全遮蔽
             this.scheduleOnce(this.onFadeInComplete, 1);
 
-            AudioManager.getInstance().play(GameAudioKey.TW);
+            AudioManager.getInstance().playSound(GameAudioKey.TW);
 
 
-            AudioManager.getInstance().play(AudioKey.WinRolling);
+            AudioManager.getInstance().playSound(AudioKey.WinRolling);
 
             tween(this.settleObj)
                 .to(2, { currentValue: value }, {
                     onUpdate: (_target) => {
-                        this.num_totalwin.getComponent(Label).string = XUtils.NumberToCentString(this.settleObj.currentValue);
+                        this.num_totalwin.getComponent(Label).string = Utils.numberFormat(this.settleObj.currentValue);
                     },
                     easing: BaseConst.noisyEasing
                 })
@@ -109,11 +108,11 @@ export class FSSettleUI extends Component {
 
         }, this);
 
-        let lang: string = DataManager.getInstance().urlParam.lang;
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
-            this.title_totalwin = langRes['title_totalwin'];
-            this.title_fgend = langRes['title_fgend'];
-        });
+        // let lang: string = DataManager.getInstance().urlParam.lang;
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
+        //     this.title_totalwin = langRes['title_totalwin'];
+        //     this.title_fgend = langRes['title_fgend'];
+        // });
 
         this.node.active = false;
     }
@@ -134,14 +133,14 @@ export class FSSettleUI extends Component {
 
         this.sens.active = false;
         Tween.stopAllByTarget(this.settleObj);
-        this.num_totalwin.getComponent(Label).string = XUtils.NumberToCentString(this.settleObj.finalValue);
+        this.num_totalwin.getComponent(Label).string = Utils.numberFormat(this.settleObj.finalValue);
 
         this.onFadeInComplete();
 
         tween(this.node)
             .delay(1)
             .call(() => {
-                AudioManager.getInstance().stop(AudioKey.WinRolling);
+                AudioManager.getInstance().stopSound(AudioKey.WinRolling);
                 this.node.active = false;
                 let fn = this.cbComplete;
                 fn();

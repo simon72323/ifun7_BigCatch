@@ -1,15 +1,12 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, UIOpacity } from 'cc';
 
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseAnimationName } from '@base/script/types/BaseType';
-import { XEvent, XEvent1, XEvent3 } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+import { GameAudioKey } from '@game/script/data/GameConst';
 
-import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent, XEvent1, XEvent3 } from '@common/script/event/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { BaseAnimationName } from '@common/script/types/BaseType';
+import { Utils } from '@common/script/utils/Utils';
 
 enum BkgAnimation {
     loop = 'loop',
@@ -63,21 +60,21 @@ export class TransUI extends Component {
         this.black = this.node.getChildByPath('SpriteSplash');
         this.sens.active = false;
 
-        let lang: string = DataManager.getInstance().urlParam.lang;
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
-            this.node.getChildByPath('freegame_box_ani/title_congrats').getComponent(Sprite).spriteFrame = langRes['title_congrats'];
-            this.node.getChildByPath('freegame_box_ani/title_freesin').getComponent(Sprite).spriteFrame = langRes['title_freesin'];
-            this.node.getChildByPath('freegame_box_ani/title_youwon').getComponent(Sprite).spriteFrame = langRes['title_youwon'];
-        });
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${BaseConst.DIR_LOADING}`, (langRes: any) => {
-            XUtils.setButtonSprite(this.start_btn, langRes['start_btn_N'], langRes['start_btn_H']);
-        });
+        // let lang: string = DataManager.getInstance().urlParam.lang;
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.board}`, (langRes: any) => {
+        //     this.node.getChildByPath('freegame_box_ani/title_congrats').getComponent(Sprite).spriteFrame = langRes['title_congrats'];
+        //     this.node.getChildByPath('freegame_box_ani/title_freesin').getComponent(Sprite).spriteFrame = langRes['title_freesin'];
+        //     this.node.getChildByPath('freegame_box_ani/title_youwon').getComponent(Sprite).spriteFrame = langRes['title_youwon'];
+        // });
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${BaseConst.DIR_LOADING}`, (langRes: any) => {
+        //     XUtils.setButtonSprite(this.start_btn, langRes['start_btn_N'], langRes['start_btn_H']);
+        // });
 
 
         //轉場淡入
         TransUI.fadeIn.on((times, onCover, onComplete) => {
 
-            AudioManager.getInstance().play(GameAudioKey.FgTran);
+            AudioManager.getInstance().playSound(GameAudioKey.FgTran);
 
             this.cbFadeInComplete = onComplete;
 
@@ -89,12 +86,12 @@ export class TransUI extends Component {
             this.trans_ani.node.active = true;
             this.black.active = false;
 
-            XUtils.ClearSpine(this.freegame_box_ani);
+            Utils.ClearSpine(this.freegame_box_ani);
             this.freegame_box_ani.setAnimation(0, BkgAnimation.loop, true);
             this.num_freespinwin.string = times.toString();
 
             //過場
-            XUtils.ClearSpine(this.trans_ani);
+            Utils.ClearSpine(this.trans_ani);
             //播放完成開始計時10秒
             this.trans_ani.setCompleteListener(() => {
                 this.onFadeInComplete();
@@ -127,13 +124,13 @@ export class TransUI extends Component {
             BaseEvent.keyDown.off(this);
             this.start_btn.node.off(Button.EventType.CLICK, this.clickTrans, this);
 
-            XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.3);
+            Utils.fadeOut(this.node, 0.3);
             // AudioManager.getInstance().play(GameAudioKey.trans_end);
 
             this.freegame_box_ani.setAnimation(0, BkgAnimation.end, false);
             this.scheduleOnce(() => {
                 this.node.active = false;
-                AudioManager.getInstance().stop(GameAudioKey.FgTran);
+                AudioManager.getInstance().stopSound(GameAudioKey.FgTran);
 
                 onComplete?.();
             }, 1);
@@ -150,8 +147,8 @@ export class TransUI extends Component {
     private onSkip(): void {
         this.sens.off(Button.EventType.CLICK, this.onSkip, this);
         BaseEvent.keyDown.off(this);
-        AudioManager.getInstance().stop(GameAudioKey.FgTran, 1);
-        AudioManager.getInstance().play(GameAudioKey.confrats);
+        AudioManager.getInstance().stopSound(GameAudioKey.FgTran);
+        AudioManager.getInstance().playSound(GameAudioKey.confrats);
         this.onFadeInComplete();
     }
 

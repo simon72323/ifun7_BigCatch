@@ -16,7 +16,7 @@ import { TimeoutManager } from '@common/script/manager/TimeoutManager';
 // import { BaseIdleTask } from '@common/script/tasks/BaseIdleTask';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
-import { AutoMode, ModuleID } from '@common/script/types/BaseType';
+import { ModuleID } from '@common/script/types/BaseType';
 
 
 
@@ -71,8 +71,8 @@ export class IdleTask extends GameTask {
         // }
         // //自動轉
         // else 
-        if (DataManager.getInstance().curAutoMode != AutoMode.Off) {
-            if (DataManager.getInstance().curAutoMode == AutoMode.Limited) {
+        if (DataManager.getInstance().isAutoMode) {
+            if (DataManager.getInstance().isAutoTimes) {
                 DataManager.getInstance().autoSpinCount -= 1;
                 SettingsController.updateAutoSpinCount.emit();
             }
@@ -89,7 +89,7 @@ export class IdleTask extends GameTask {
      */
     private idleState(): void {
         SettingsController.setEnabled.emit(true);//設定可用狀態
-        SettingsController.refreshBet.emit(DataManager.getInstance().getBetTotal());//刷新下注
+        SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());//刷新下注
 
         BaseEvent.clickSpin.on(() => {
             this.onSpin(false);
@@ -117,8 +117,8 @@ export class IdleTask extends GameTask {
      * @param buyFs 是否購買免費遊戲
      */
     private onSpin(buyFs: boolean): void {
-        let curBet = buyFs ? DataManager.getInstance().getBuyFeatureTotal()
-            : DataManager.getInstance().getBetTotal();
+        let curBet = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()
+            : DataManager.getInstance().bet.getBetTotal();
         DataManager.getInstance().isBuyFs = buyFs;
 
         SettingsController.refreshWin.emit(0);//刷新贏分=0

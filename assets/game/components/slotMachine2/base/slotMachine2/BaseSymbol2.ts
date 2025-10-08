@@ -5,6 +5,8 @@ import { _decorator, Component, Node } from 'cc';
 import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
 import { SymbolState2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
 
+import { Grid } from '@common/script/types/BaseType';
+
 const { ccclass } = _decorator;
 
 /**

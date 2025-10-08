@@ -1,10 +1,11 @@
 import { _decorator, AudioSource, Button, Node, Sprite } from 'cc';
 
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
+
+// import { BaseConst } from '@common/script/data/BaseConst';
+// import { DataManager } from '@common/script/data/DataManager';;
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
+// import { BundleLoader } from '@base/script/main/BundleLoader';
 
 const { ccclass } = _decorator;
 
@@ -17,18 +18,18 @@ export class GameLoading extends BaseGameLoading {
 
     onLoad() {
         this.btnStart = this.node.getChildByPath('BtnStart');
-        const loadingBg = this.node.getChildByName('LoadingBg');
-        const button = this.btnStart.getComponent(Button);
+        // const loadingBg = this.node.getChildByName('LoadingBg');
+        // const button = this.btnStart.getComponent(Button);
 
         //加載多語系圖片
-        let dir: string = DataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING;
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, dir, (langRes: any) => {
-            loadingBg.getComponent(Sprite).spriteFrame = langRes['background_loading'];
-            button.normalSprite = langRes['start_btn_N'];
-            let btnDown = langRes['start_btn_H'];
-            button.pressedSprite = btnDown;
-            button.disabledSprite = btnDown;
-        });
+        // let dir: string = DataManager.getInstance().urlParam.lang + '/' + BaseConst.DIR_LOADING;
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, dir, (langRes: any) => {
+        //     loadingBg.getComponent(Sprite).spriteFrame = langRes['background_loading'];
+        //     button.normalSprite = langRes['start_btn_N'];
+        //     let btnDown = langRes['start_btn_H'];
+        //     button.pressedSprite = btnDown;
+        //     button.disabledSprite = btnDown;
+        // });
 
         //點擊按鈕
         this.btnStart.on(Button.EventType.CLICK, () => {

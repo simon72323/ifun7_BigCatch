@@ -1,20 +1,17 @@
-import { AudioKey } from '@base/script/audio/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { GameTask } from '@base/script/tasks/GameTask';
-import { AutoPlayMode, ModuleID } from '@base/script/types/BaseType';
-import { TimeoutManager } from '@base/script/utils/TimeoutManager';
-
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
-import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
 import { FSUI } from '@game/components/FSUI/FSUI';
-import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { TransUI } from '@game/components/TransUI/TransUI';
-import { GameAudioKey, GameConst } from '@game/script/constant/GameConst';
-import { GameData } from '@game/script/main/GameData';
+import { GameAudioKey } from '@game/script/data/GameConst';
+
+import { BaseConst } from '@common/script/data/BaseConst';
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { AudioKey } from '@common/script/manager/AudioKey';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { TimeoutManager } from '@common/script/manager/TimeoutManager';
+import { GameTask } from '@common/script/tasks/GameTask';
+import { ModuleID } from '@common/script/types/BaseType';
+
 
 /**
  * 轉場
@@ -31,11 +28,11 @@ export class TransTask extends GameTask {
 
     execute(): void {
 
-        DataManager.getInstance().curModuleID = DataManager.getInstance().nextModuleID;
+        DataManager.getInstance().moduleID = DataManager.getInstance().nextModuleID;
 
         //中免費轉停止
-        if (DataManager.getInstance().auto.isAutoPlay() === true && DataManager.getInstance().auto.mode === AutoPlayMode.tillBonus) {
-            DataManager.getInstance().auto.stopAuto();
+        if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
+            DataManager.getInstance().isAutoMode = false;
         }
 
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
@@ -45,13 +42,13 @@ export class TransTask extends GameTask {
         //設定初始次數
         // FeatureGameUI.refreshRemainTimes.emit(this.times);
 
-        AudioManager.getInstance().stop(AudioKey.BsMusic);
+        AudioManager.getInstance().stopMusic(AudioKey.BsMusic);
 
         //轉場開始
         TransUI.fadeIn.emit(this.times,
             () => {
                 //轉場全遮(更換場景資源)
-                BaseEvent.changeScene.emit(ModuleID.FS);
+                BaseEvent.changeScene.emit(ModuleID.FG);
 
                 //還原廣告狀態
                 BannerUI.reset.emit();
@@ -59,14 +56,11 @@ export class TransTask extends GameTask {
                 FSUI.refreshRemainTimes.emit(this.times);
                 // RevolverUI.setMultiplier.emit(GameConst.FS_INIT_MULTIPLIER);
 
-                //FS強制改回倍數1
-                RevolverUI.reset.emit(ModuleID.BS, GameConst.multiplierList[0]);
 
                 //初始化盤面
-                let gameData = DataManager.getInstance().getData<GameData>();
-                gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
-                SlotMachine2.setup.emit(0, gameData.slotParser);
-                FSRoleUI.idle.emit();
+                // let gameData = DataManager.getInstance().gameData;
+                // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
+                // SlotMachine2.setup.emit(0, gameData.slotParser);
 
             },
             () => {
@@ -85,8 +79,8 @@ export class TransTask extends GameTask {
      * 
      */
     private onTransEnd(): void {
-        AudioManager.getInstance().play(GameAudioKey.FgStart);
-        AudioManager.getInstance().play(AudioKey.FsMusic);
+        AudioManager.getInstance().playSound(GameAudioKey.FgStart);
+        AudioManager.getInstance().playMusic(AudioKey.FsMusic);
 
         TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_FEATURE_WAIT_START.key);
         TransUI.click.off(this);

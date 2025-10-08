@@ -12,7 +12,7 @@ import { NetworkManager } from '@common/script/network/NetworkManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 
-import { AutoMode, TurboMode } from '@common/script/types/BaseType';
+import { TurboMode } from '@common/script/types/BaseType';
 
 /**
  * 共用開始轉動流程(成功送出Spin請求)
@@ -44,8 +44,8 @@ export class SpinTask extends GameTask {
         }
 
         //取消自動轉
-        if (dataManager.curAutoMode != AutoMode.Off && dataManager.autoSpinCount <= 0) {
-            dataManager.curAutoMode = AutoMode.Off;
+        if (dataManager.isAutoMode && dataManager.autoSpinCount <= 0) {
+            dataManager.isAutoMode = false;
         }
 
         BannerUI.reset.emit();//還原跑馬燈狀態
@@ -63,7 +63,7 @@ export class SpinTask extends GameTask {
         }
 
         //判斷要傳送一般spin還是免費spin(檢查一下免費遊戲按下時是否有變更成FS模式)
-        let betCredit = isBS ? dataManager.getBetTotal() : dataManager.getBuyFeatureTotal();
+        let betCredit = isBS ? dataManager.bet.getBetTotal() : dataManager.bet.getBuyFeatureTotal();
         let spinID = isBS ? 0 : 1;
 
         //發送spin請求

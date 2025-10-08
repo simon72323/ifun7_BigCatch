@@ -97,7 +97,7 @@ export class Symbol2 extends BaseSymbol2 {
         // this.spine.node.active = false;
 
         this.node.getChildByName('Sens').on(Button.EventType.CLICK, () => {
-            if (DataManager.getInstance().isIdle() === false || DataManager.getInstance().isMenuOn == true || DataManager.getInstance().auto.isAutoPlay() == true) {
+            if (DataManager.getInstance().isIdle() === false || DataManager.getInstance().isMenuOn == true || DataManager.getInstance().isAutoMode) {
                 return;
             }
 
@@ -106,12 +106,12 @@ export class Symbol2 extends BaseSymbol2 {
             }
 
             let worldPos = this.node.parent.getComponent(UITransform).convertToWorldSpaceAR(this.node.getPosition());
-            let payData = DataManager.getInstance().getData<GameData>().getPayBySymbolID(this.symbolID);
+            let payData = DataManager.getInstance().slotData.getPayBySymbolID(this.symbolID);
             PayTableUI.show.emit(this.grid, this.symbolID, this.normal.spriteFrame, worldPos, payData);
         }, this);
 
 
-        SlotMachine2.startMi.on((id, column) => {
+        SlotMachine2.startMi.on((column) => {
             //是咪當前軸
             if (this.grid.col === column) {
                 this.isMi = true;
@@ -166,9 +166,9 @@ export class Symbol2 extends BaseSymbol2 {
             }
 
             //查輪帶資料表
-            if (stripIdx !== -1) {
-                this.isBadge = !!DataManager.getInstance().getData<GameData>().stripBadgeDataList[this.grid.col][stripIdx];
-            }
+            // if (stripIdx !== -1) {
+            //     this.isBadge = !!DataManager.getInstance().getData<GameData>().stripBadgeDataList[this.grid.col][stripIdx];
+            // }
             this.spine.skeletonData = this.spineDataList[newSymbolID];
             this.normal.spriteFrame = this.isBadge ? this.normalBadgeImageList[newSymbolID] : this.normalImageList[newSymbolID];
             this.blur.spriteFrame = this.isBadge ? this.blurBadgeImageList[newSymbolID] : this.blurImageList[newSymbolID];

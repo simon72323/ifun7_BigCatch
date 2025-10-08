@@ -1,15 +1,11 @@
 import { _decorator, Button, Component, Input, Node, sp, Sprite, SpriteFrame } from 'cc';
 
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseAnimationName } from '@base/script/types/BaseType';
-import { XEvent } from '@common/script/event/XEvent';
-import { XUtils } from '@base/script/utils/XUtils';
+import { GameAudioKey } from '@game/script/data/GameConst';
 
-import { GameAudioKey, LangBundleDir } from '@game/script/constant/GameConst';
+import { BaseEvent } from '@common/script/event/BaseEvent';
+import { XEvent } from '@common/script/event/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
+import { Utils } from '@common/script/utils/Utils';
 
 const { ccclass } = _decorator;
 
@@ -36,36 +32,36 @@ export class FeatureBuyBtn extends Component {
         //點擊免費遊戲
         this.FeatureBuyButton = this.node.getChildByName('btn');
         this.FeatureBuyButton.on(Button.EventType.CLICK, () => {
-            AudioManager.getInstance().play(GameAudioKey.FeatureBuy);
+            AudioManager.getInstance().playSound(GameAudioKey.FeatureBuy);
             FeatureBuyBtn.click.emit();
             this.spine.setAnimation(0, 'press', false);
         }, this);
         this.FeatureBuyButton.on(Input.EventType.TOUCH_START, () => {
             this.sprite.spriteFrame = this.btnSpriteList[1];
-            XUtils.ClearSpine(this.spine);
+            Utils.ClearSpine(this.spine);
             this.spine.setAnimation(0, 'loop', true);
         }, this);
         this.FeatureBuyButton.on(Input.EventType.TOUCH_END, () => {
             this.sprite.spriteFrame = this.btnSpriteList[0];
-            XUtils.ClearSpine(this.spine);
+            Utils.ClearSpine(this.spine);
             this.spine.setAnimation(0, 'loop', true);
         }, this);
         this.FeatureBuyButton.on(Input.EventType.TOUCH_CANCEL, () => {
             this.sprite.spriteFrame = this.btnSpriteList[0];
-            XUtils.ClearSpine(this.spine);
+            Utils.ClearSpine(this.spine);
             this.spine.setAnimation(0, 'loop', true);
         }, this);
 
         this.sprite = this.node.getChildByPath('buyfeature_button_ani/btn_featurebuy').getComponent(Sprite);
         this.spine = this.node.getChildByName('buyfeature_button_ani').getComponent(sp.Skeleton);
-        XUtils.ClearSpine(this.spine);
+        Utils.ClearSpine(this.spine);
         this.spine.setAnimation(0, 'loop', true);
 
         //設定是否可見(後台設定)
-        BaseEvent.buyFeatureVisible.on((visible) => {
-            this.isVisible = visible;
-            this.refresh();
-        }, this);
+        // BaseEvent.buyFeatureVisible.on((visible) => {
+        //     this.isVisible = visible;
+        //     this.refresh();
+        // }, this);
 
         //設定是否可用(各階段)
         BaseEvent.buyFeatureEnabled.on((enabled) => {
@@ -80,7 +76,7 @@ export class FeatureBuyBtn extends Component {
             }
             this.FeatureBuyButton.getComponent(Button).enabled = true;
 
-            XUtils.playAnimation(this.node, BaseAnimationName.fadeInOpacity, 0.5);
+            Utils.fadeIn(this.node, 0.5);
         }, this);
 
         //淡出
@@ -90,15 +86,8 @@ export class FeatureBuyBtn extends Component {
             }
 
             this.FeatureBuyButton.getComponent(Button).enabled = false;
-            XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.5);
+            Utils.fadeOut(this.node, 0.5);
         }, this);
-
-        let lang: string = DataManager.getInstance().urlParam.lang;
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.featureBuy}`, (langRes: any) => {
-            this.btnSpriteList = [langRes['btn_featurebuy_N'], langRes['btn_featurebuy_H']];
-            this.sprite.spriteFrame = this.btnSpriteList[0];
-        });
-
     }
 
     private refresh(): void {

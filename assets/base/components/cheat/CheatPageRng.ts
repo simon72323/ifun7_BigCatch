@@ -1,102 +1,103 @@
-import { _decorator, Button, Component, EditBox, instantiate, Label, Node, Pool, Prefab } from 'cc';
+// import { _decorator, Button, Component, EditBox, instantiate, Label, Node, Pool, Prefab } from 'cc';
 
-import { BaseRngItem } from '@base/components/cheat/BaseRngItem';
-import { DataManager } from '@common/script/data/DataManager';;
-import { CheatCodeData } from '@base/script/types/BaseType';
+// import { BaseRngItem } from '@base/components/cheat/BaseRngItem';
 
-const { ccclass } = _decorator;
+// import { DataManager } from '@common/script/data/DataManager';
+// import { CheatCodeData } from '@common/script/types/BaseType';
 
-@ccclass('CheatPageRng')
-export class CheatPageRng extends Component {
+// const { ccclass } = _decorator;
 
-    private itemPrefab: Prefab = null;
+// @ccclass('CheatPageRng')
+// export class CheatPageRng extends Component {
 
-    private itemPool: Pool<Node> = null;
+//     private itemPrefab: Prefab = null;
 
-    private moduleID: string = 'BS';
+//     private itemPool: Pool<Node> = null;
 
-    private content: Node = null;
+//     private moduleID: string = 'BS';
 
-    private rngList: number[][] = [];
+//     private content: Node = null;
 
-    onLoad() {
-        if (!this.itemPrefab) {
-            return;
-        }
-        let editBox = this.node.getChildByName('EditBox').getComponent(EditBox);
-        this.content = this.node.getChildByPath('ScrollView/view/content');
-        let stateLabel = this.node.getChildByPath('ScrollView/view/content/StateLabel').getComponent(Label);
-        stateLabel.node.removeFromParent();
-        this.itemPool = new Pool(() => {
-            return instantiate(this.itemPrefab);
-        }, 3);
+//     private rngList: number[][] = [];
 
-        for (let i: number = 0; i < 3; ++i) {
-            let toggleBtn = this.node.getChildByPath(`ToggleGroup/Toggle${i}`).getComponent(Button);
-            toggleBtn.node.on(Button.EventType.CLICK, (_v: any) => {
-                this.selectModule(i);
-            });
-        }
-        this.selectModule(0);
+//     onLoad() {
+//         if (!this.itemPrefab) {
+//             return;
+//         }
+//         let editBox = this.node.getChildByName('EditBox').getComponent(EditBox);
+//         this.content = this.node.getChildByPath('ScrollView/view/content');
+//         let stateLabel = this.node.getChildByPath('ScrollView/view/content/StateLabel').getComponent(Label);
+//         stateLabel.node.removeFromParent();
+//         this.itemPool = new Pool(() => {
+//             return instantiate(this.itemPrefab);
+//         }, 3);
 
-        editBox.node.on(EditBox.EventType.EDITING_DID_ENDED, (_box: EditBox) => {
-            while (this.content.children.length > 0) {
-                let child = this.content.children[0];
-                child.removeFromParent();
-                this.itemPool.free(child);
-            }
+//         for (let i: number = 0; i < 3; ++i) {
+//             let toggleBtn = this.node.getChildByPath(`ToggleGroup/Toggle${i}`).getComponent(Button);
+//             toggleBtn.node.on(Button.EventType.CLICK, (_v: any) => {
+//                 this.selectModule(i);
+//             });
+//         }
+//         this.selectModule(0);
 
-            let rngStringList = editBox.string.split('\n');
-            let invalid;
-            let len = rngStringList.length;
-            this.rngList.length = 0;
-            for (let i: number = 0; i < len; ++i) {
-                let rng = rngStringList[i].split(',').map((v) => Number(v));
-                invalid = rng.some((v) => isNaN(v));
-                if (invalid) {
-                    stateLabel.string = 'rng 設定不合法!';
-                    this.content.addChild(stateLabel.node);
-                    return;
-                }
-                let item = this.itemPool.alloc().getComponent(BaseRngItem);
-                item.setRng(this.moduleID, rng);
-                this.content.addChild(item.node);
-                this.rngList.push(rng);
-            }
+//         editBox.node.on(EditBox.EventType.EDITING_DID_ENDED, (_box: EditBox) => {
+//             while (this.content.children.length > 0) {
+//                 let child = this.content.children[0];
+//                 child.removeFromParent();
+//                 this.itemPool.free(child);
+//             }
 
-            let data = new CheatCodeData();
-            data.rngList = this.rngList;
-            DataManager.getInstance().cheatCodeData = data;
-        });
-    }
+//             let rngStringList = editBox.string.split('\n');
+//             let invalid;
+//             let len = rngStringList.length;
+//             this.rngList.length = 0;
+//             for (let i: number = 0; i < len; ++i) {
+//                 let rng = rngStringList[i].split(',').map((v) => Number(v));
+//                 invalid = rng.some((v) => isNaN(v));
+//                 if (invalid) {
+//                     stateLabel.string = 'rng 設定不合法!';
+//                     this.content.addChild(stateLabel.node);
+//                     return;
+//                 }
+//                 let item = this.itemPool.alloc().getComponent(BaseRngItem);
+//                 item.setRng(this.moduleID, rng);
+//                 this.content.addChild(item.node);
+//                 this.rngList.push(rng);
+//             }
 
-    /**
-     * 選擇rng模組
-     * @param idx 
-     */
-    private selectModule(idx: number) {
-        for (let i: number = 0; i < 3; ++i) {
-            let toggle = this.node.getChildByPath(`ToggleGroup/Toggle${i}`);
-            if (i == idx) {
-                toggle.getChildByPath('Toggle/Checkmark').active = true;
-                this.moduleID = toggle.getChildByName('Label').getComponent(Label).string;
-            }
-            else {
-                toggle.getChildByPath('Toggle/Checkmark').active = false;
-            }
-        }
+//             let data = new CheatCodeData();
+//             data.rngList = this.rngList;
+//             DataManager.getInstance().cheatCodeData = data;
+//         });
+//     }
 
-        let len = this.rngList.length;
-        for (let ri: number = 0; ri < len; ++ri) {
-            let item = this.content.children[ri].getComponent(BaseRngItem);
-            item.setRng(this.moduleID, this.rngList[ri]);
-        }
-    }
+//     /**
+//      * 選擇rng模組
+//      * @param idx 
+//      */
+//     private selectModule(idx: number) {
+//         for (let i: number = 0; i < 3; ++i) {
+//             let toggle = this.node.getChildByPath(`ToggleGroup/Toggle${i}`);
+//             if (i == idx) {
+//                 toggle.getChildByPath('Toggle/Checkmark').active = true;
+//                 this.moduleID = toggle.getChildByName('Label').getComponent(Label).string;
+//             }
+//             else {
+//                 toggle.getChildByPath('Toggle/Checkmark').active = false;
+//             }
+//         }
 
-    public setItemPrefab(prefab) {
-        this.itemPrefab = prefab;
-    }
+//         let len = this.rngList.length;
+//         for (let ri: number = 0; ri < len; ++ri) {
+//             let item = this.content.children[ri].getComponent(BaseRngItem);
+//             item.setRng(this.moduleID, this.rngList[ri]);
+//         }
+//     }
+
+//     public setItemPrefab(prefab) {
+//         this.itemPrefab = prefab;
+//     }
 
 
-}
+// }
 

@@ -1,12 +1,11 @@
 import { _decorator, Button, Component, Label, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';;
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { Grid } from '@base/script/types/BaseType';
-import { XEvent5 } from '@common/script/event/XEvent';
+import { SymbolID } from '@game/script/data/GameConst';
 
-import { LangBundleDir, SymbolID } from '@game/script/constant/GameConst';
+import { DataManager } from '@common/script/data/DataManager';
+import { XEvent5 } from '@common/script/event/XEvent';
+import { Grid } from '@common/script/types/BaseType';
+
 
 const { ccclass, property } = _decorator;
 
@@ -42,15 +41,15 @@ export class PayTableUI extends Component {
         PayTableUI.show.on(this.onShow, this);
         this.black.on(Button.EventType.CLICK, this.onHide, this);
 
-        let lang = DataManager.getInstance().urlParam.lang;
-        BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.paytable}`, (langRes: any) => {
-            this.node.getChildByPath('PaySymbol/Scatter/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_2'];
-            this.node.getChildByPath('PaySymbol/Scatter/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_2'];
+        // let lang = DataManager.getInstance().urlParam.lang;
+        // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.paytable}`, (langRes: any) => {
+        //     this.node.getChildByPath('PaySymbol/Scatter/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_2'];
+        //     this.node.getChildByPath('PaySymbol/Scatter/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_2'];
 
-            this.node.getChildByPath('PaySymbol/Wild/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_1'];
-            this.node.getChildByPath('PaySymbol/Wild/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_1'];
+        //     this.node.getChildByPath('PaySymbol/Wild/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_1'];
+        //     this.node.getChildByPath('PaySymbol/Wild/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_1'];
 
-        });
+        // });
 
         this.sensor.on(Button.EventType.CLICK, this.onHide, this);
 

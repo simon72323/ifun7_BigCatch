@@ -2,7 +2,7 @@ import { _decorator, Component, director, EventKeyboard, game, input, Input, ins
 
 import { BaseGameLoading } from '@base/components/loading/BaseGameLoading';
 
-import { APIManager } from '@base/script/utils/APIManager';
+// import { APIManager } from '@base/script/utils/APIManager';
 import { ErrorCode, ErrorManager } from '@base/script/utils/ErrorManager';
 
 
@@ -190,51 +190,51 @@ export class LoadingScene extends Component {
             }
             )();
             //不斷嘗試, 直到window.hostInitialize被掛上
-            this.tryLoadAPI();
+            // this.tryLoadAPI();
         }
     }
 
     /**
      * 嘗試載入API
      */
-    private tryLoadAPI() {
-        if (APIManager.getInstance().isReady() === true) {
-            APIManager.getInstance().setup();
-            this.GameVersion.getComponent(Label).string = APIManager.getInstance().getVersion();
-            this.loadGame();
-        }
-        else {
-            setTimeout(() => {
-                this.tryLoadAPI();
-            }, 100);
-        }
-    }
+    // private tryLoadAPI() {
+    //     if (APIManager.getInstance().isReady() === true) {
+    //         APIManager.getInstance().setup();
+    //         this.GameVersion.getComponent(Label).string = APIManager.getInstance().getVersion();
+    //         this.loadGame();
+    //     }
+    //     else {
+    //         setTimeout(() => {
+    //             this.tryLoadAPI();
+    //         }, 100);
+    //     }
+    // }
 
     /**
      * 載入遊戲
      */
     loadGame() {
         //是否使用logo
-        let useLogo: boolean = APIManager.getInstance().getLoadingLogoEnabled();
-        this.node.getChildByPath('FakeLoad/S5GLoading').active = true;
-        this.node.getChildByPath('Loader/AdBg').active = true;
-        this.node.getChildByPath('Loader/StartBefore').active = true;
+        // let useLogo: boolean = APIManager.getInstance().getLoadingLogoEnabled();
+        // this.node.getChildByPath('FakeLoad/S5GLoading').active = true;
+        // this.node.getChildByPath('Loader/AdBg').active = true;
+        // this.node.getChildByPath('Loader/StartBefore').active = true;
 
-        this.node.getChildByPath('FakeLoad/S5GLoading/TxtLoading').active = !useLogo;
-        this.node.getChildByPath('FakeLoad/S5GLoading/LogoLoading').active = useLogo;
-        this.node.getChildByPath('Loader/AdBg/TxtBg').active = !useLogo;
-        this.node.getChildByPath('Loader/AdBg/LogoBg').active = useLogo;
+        // this.node.getChildByPath('FakeLoad/S5GLoading/TxtLoading').active = !useLogo;
+        // this.node.getChildByPath('FakeLoad/S5GLoading/LogoLoading').active = useLogo;
+        // this.node.getChildByPath('Loader/AdBg/TxtBg').active = !useLogo;
+        // this.node.getChildByPath('Loader/AdBg/LogoBg').active = useLogo;
 
-        let lang = DataManager.getInstance().urlParam.lang;
-        this.node.getChildByPath('Loader/AdBg/LogoBg/Bg').active = lang !== BaseLang.tch;
-        this.node.getChildByPath('Loader/AdBg/LogoBg/BgTw').active = lang === BaseLang.tch;
+        // let lang = DataManager.getInstance().urlParam.lang;
+        // this.node.getChildByPath('Loader/AdBg/LogoBg/Bg').active = lang !== BaseLang.tch;
+        // this.node.getChildByPath('Loader/AdBg/LogoBg/BgTw').active = lang === BaseLang.tch;
 
-        this.node.getChildByPath('Loader/StartBefore/LoadingBar').setPosition(-360, useLogo ? 0 : -50);
-        this.node.getChildByPath('GameHistory/S5GLoading/TxtLoading').active = !useLogo;
-        this.node.getChildByPath('GameHistory/S5GLoading/LogoLoading').active = useLogo;
+        // this.node.getChildByPath('Loader/StartBefore/LoadingBar').setPosition(-360, useLogo ? 0 : -50);
+        // this.node.getChildByPath('GameHistory/S5GLoading/TxtLoading').active = !useLogo;
+        // this.node.getChildByPath('GameHistory/S5GLoading/LogoLoading').active = useLogo;
 
         //是否DEMO
-        this.demoLabel.node.active = DataManager.getInstance().isDemoMode();
+        // this.demoLabel.node.active = DataManager.getInstance().isDemoMode();
         // this.demoLabel.string = DataManager.getInstance().getLangSetting().demoStr;
         this.schedule(this.updateFakeLoad);
 

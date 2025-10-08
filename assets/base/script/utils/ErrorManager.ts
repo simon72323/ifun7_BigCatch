@@ -1,7 +1,7 @@
 
+import { Notice } from '@common/components/notice/Notice';
 import { AudioManager } from '@common/script/manager/AudioManager';
 
-import { Notice } from '@common/components/notice/Notice';
 // import { SocketManager } from '@base/script/socket/SocketManager';
 
 /**
@@ -32,9 +32,9 @@ export class ErrorManager {
         }
         this.dead = true;
 
-        Notice.showError.emit(code.toString());
+        Notice.showError.emit(code);
         // SocketManager.getInstance().disconnect();
-        AudioManager.getInstance().setMute(true);
+        // AudioManager.getInstance().setMute(true);
     }
 }
 
