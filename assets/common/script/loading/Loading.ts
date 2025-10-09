@@ -3,7 +3,7 @@ import { _decorator, Component, director, Label, Node, ProgressBar, sp } from 'c
 import { Notice } from '@common/components/notice/Notice';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
-import { gameInformation } from '@common/script/data/GameInformation';
+import { DataManager } from '@common/script/data/DataManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { i18n } from '@common/script/utils/i18n';
 import { Utils } from '@common/script/utils/Utils';
@@ -31,8 +31,8 @@ export class Loading extends Component {
 
         this.initUI();
         this.getCurrencyJson();//獲取幣別資料
-        gameInformation.initUrlParameters();//初始化URL參數
-        i18n.init(gameInformation.lang);//初始化語言
+        DataManager.getInstance().urlParam.initUrlParameters();//初始化URL參數
+        i18n.init(DataManager.getInstance().urlParam.lang);//初始化語言
 
         // GoogleAnalytics.instance.initialize();
     }
@@ -75,18 +75,18 @@ export class Loading extends Component {
      * 取得新的 token
      */
     private async getRenewToken() {
-        let paramToken = gameInformation.token;  // 從 URL 獲取的原始 token
+        let paramToken = DataManager.getInstance().urlParam.token;  // 從 URL 獲取的原始 token
         let token = sessionStorage.getItem(paramToken); // 檢查 sessionStorage 中是否有緩存的 token
 
         // 如果 sessionStorage 中有有效的 token，直接使用
         if (token != null && token.length > 0) {
-            gameInformation.token = token;
+            DataManager.getInstance().urlParam.token = token;
             return token;
         }
 
         // 如果沒有緩存的 token，才向伺服器請求新的 token
         const newToken = await NetworkManager.getInstance().sendRenewToken();
-        gameInformation.token = newToken; // 只更新 token
+        DataManager.getInstance().urlParam.token = newToken; // 只更新 token
         return newToken;
     }
 
@@ -126,7 +126,7 @@ export class Loading extends Component {
             currencyJson = await Utils.loadCurrency();
         }
 
-        const urlCurrency = gameInformation.currency;
+        const urlCurrency = DataManager.getInstance().currency;
         BaseConfig.CurrencySymbol = currencyJson.CurrencySymbol[urlCurrency];
         BaseConfig.DecimalPlaces = currencyJson.DecimalPlaces[urlCurrency];
     }

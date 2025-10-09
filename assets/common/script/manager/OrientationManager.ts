@@ -1,5 +1,5 @@
 
-import { _decorator, CCBoolean, Component, Layout, Node, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec3, Vec4 } from 'cc';
+import { _decorator, Component, Layout, Node, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec3 } from 'cc';
 import { EDITOR } from 'cc/env';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -30,10 +30,10 @@ class OrientationActive {
     @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
-    @property({ type: CCBoolean, tooltip: '直式顯示/隱藏' })
+    @property({ tooltip: '直式顯示/隱藏' })
     public portraitActive: boolean = false;
 
-    @property({ type: CCBoolean, tooltip: '橫式顯示/隱藏' })
+    @property({ tooltip: '橫式顯示/隱藏' })
     public landscapeActive: boolean = false;
 }
 
@@ -45,10 +45,10 @@ class OrientationScale {
     @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
-    @property({ type: Vec3, tooltip: '直式縮放比例' })
+    @property({ tooltip: '直式縮放比例' })
     public portraitScale: Vec3 = new Vec3(1, 1, 1);
 
-    @property({ type: Vec3, tooltip: '橫式縮放比例' })
+    @property({ tooltip: '橫式縮放比例' })
     public landscapeScale: Vec3 = new Vec3(1, 1, 1);
 }
 
@@ -60,10 +60,10 @@ class OrientationPosition {
     @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
-    @property({ type: Vec3, tooltip: '直式位置' })
+    @property({ tooltip: '直式位置' })
     public portraitPosition: Vec3 = new Vec3(0, 0, 0);
 
-    @property({ type: Vec3, tooltip: '橫式位置' })
+    @property({ tooltip: '橫式位置' })
     public landscapePosition: Vec3 = new Vec3(0, 0, 0);
 }
 
@@ -75,10 +75,10 @@ class OrientationSize {
     @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
-    @property({ type: Size, tooltip: '直式尺寸' })
+    @property({ tooltip: '直式尺寸' })
     public portraitSize: Size = new Size(0, 0);
 
-    @property({ type: Size, tooltip: '橫式尺寸' })
+    @property({ tooltip: '橫式尺寸' })
     public landscapeSize: Size = new Size(0, 0);
 }
 
@@ -105,22 +105,22 @@ class OrientationLayoutPadding {
     @property({ type: Node, tooltip: '目標節點' })
     public target: Node = null!;
 
-    @property({ type: Vec2, tooltip: '直式邊距 (左,右)' })
+    @property({ tooltip: '直式邊距 (左,右)' })
     public portraitPaddingLR: Vec2 = new Vec2(0, 0);
 
-    @property({ type: Vec2, tooltip: '直式邊距 (上,下)' })
+    @property({ tooltip: '直式邊距 (上,下)' })
     public portraitPaddingTB: Vec2 = new Vec2(0, 0);
 
-    @property({ type: Vec2, tooltip: '直式間距 (X,Y)' })
+    @property({ tooltip: '直式間距 (X,Y)' })
     public portraitSpacing: Vec2 = new Vec2(0, 0);
 
-    @property({ type: Vec2, tooltip: '橫式邊距 (左,右)' })
+    @property({ tooltip: '橫式邊距 (左,右)' })
     public landscapePaddingLR: Vec2 = new Vec2(0, 0);
 
-    @property({ type: Vec2, tooltip: '橫式邊距 (上,下)' })
+    @property({ tooltip: '橫式邊距 (上,下)' })
     public landscapePaddingTB: Vec2 = new Vec2(0, 0);
 
-    @property({ type: Vec2, tooltip: '橫式間距 (X,Y)' })
+    @property({ tooltip: '橫式間距 (X,Y)' })
     public landscapeSpacing: Vec2 = new Vec2(0, 0);
 }
 
@@ -128,7 +128,7 @@ class OrientationLayoutPadding {
 @ccclass('OrientationManager')
 export class OrientationManager extends Component {
     private _isLandscape: boolean = false;
-    @property({ type: CCBoolean, tooltip: '是否切換為橫式' })
+    @property({ tooltip: '是否切換為橫式' })
     get isLandscape(): boolean {
         return this._isLandscape;
     }

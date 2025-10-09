@@ -1,11 +1,8 @@
 import { _decorator, Component, director, SpriteFrame } from 'cc';
 
-import { BaseConst } from '@common/script/data/BaseConst';
-import { BundleLoader } from '@base/script/main/BundleLoader';
-import { BaseLangBundleDir } from '@base/script/types/BaseType';
-import { logger } from '@base/script/utils/XUtils';
-
 import { DataManager } from '@common/script/data/DataManager';
+import { BundleLoader } from '@common/script/loading/BundleLoader';
+
 
 const { ccclass } = _decorator;
 
@@ -27,13 +24,13 @@ export class ActivateScene extends Component {
             this.checkComplete();
         }, 1);
 
-        const lang = DataManager.getInstance().urlParam.lang;
+        // const lang = DataManager.getInstance().urlParam.lang;
 
         const loadingLoader = new BundleLoader();
         //加載幣別符號
-        loadingLoader.add(BaseConst.BUNDLE_BASE_CURRENCY, `${lang}/${BaseLangBundleDir.loading}`, SpriteFrame);
+        // loadingLoader.add(BaseConst.BUNDLE_BASE_CURRENCY, `${lang}/${BaseLangBundleDir.loading}`, SpriteFrame);
         //加載載入頁語系
-        loadingLoader.add(BaseConst.BUNDLE_LANGUAGE, `${lang}/${BaseConst.DIR_LOADING}`, SpriteFrame);
+        // loadingLoader.add(BaseConst.BUNDLE_LANGUAGE, `${lang}/${BaseConst.DIR_LOADING}`, SpriteFrame);
         await loadingLoader.load(true);
 
         this.bundleComplete = true;
@@ -50,7 +47,7 @@ export class ActivateScene extends Component {
         director.loadScene('load', () => {
             //移除loading元素
             document.getElementById('loading')?.remove();
-            logger('[ActivateScene] loadScene 完成!');
+            console.log('[ActivateScene] loadScene 完成!');
         });
     }
 }
