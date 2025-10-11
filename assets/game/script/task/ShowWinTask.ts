@@ -1,10 +1,13 @@
 // import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+
+
 import { UIBlack } from '@game/components/UIBlack';
 import { BlackKey, GameAudioKey, GameConst, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
 
+
 import { SettingsController } from '@common/components/settingsController/SettingsController';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
@@ -43,7 +46,7 @@ export class ShowWinTask extends GameTask {
 
     execute(): void {
 
-        SlotMachine2.showWin.emit(this.winPos);
+        SlotMachine.showWin.emit(this.winPos);
 
         // UIController
         // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);

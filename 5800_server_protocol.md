@@ -596,7 +596,7 @@ Response
 
 
 type ExtraGameResult struct {
-	NoMAddSpin     bool    `json:"no_m_add_spin"`    // 是否有額外加spin
+	NoMAddSpin     bool    `json:"no_m_add_spin"`    // 是否有額外加spin(代表釣起靴子)
 	TotalWildCount int     `json:"total_wild_count"` // 總wild數量
 	WildPos        [][]int `json:"wild_pos"`         // 當局wild位置
 }

@@ -27,7 +27,7 @@ export class BackBSSettleTask extends GameTask {
         AudioManager.getInstance().playMusic(AudioKey.BsMusic);
 
         //回復盤面
-        // SlotMachine2.change.emit(SlotMachineID.BS, DataManager.getInstance().gameData.bsLastMap);
+        // SlotMachine.change.emit(SlotMachineID.BS, DataManager.getInstance().gameData.bsLastMap);
         // UIController
         // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
 

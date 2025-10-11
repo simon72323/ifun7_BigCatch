@@ -1,11 +1,12 @@
-import { CheatUI } from '@base/components/cheat/CheatUI';
+
 // import { DelayTask } from '@base/script/tasks/DelayTask';
 // import { TaskManager } from '@base/script/tasks/TaskManager';
 // import { ModuleID } from '@base/script/types/BaseType';
 // import { XUtils } from '@base/script/utils/XUtils';
 
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
+// import { CheatUI } from '@base/components/cheat/CheatUI';
+
+import { SymbolData } from '@game/components/slotMachine/SymbolData';
 // import { GameConst, SlotMachineID, SymbolID } from '@game/script/constant/GameConst';
 
 // import { GameData } from '@game/script/main/GameData';
@@ -26,6 +27,8 @@ import { ShowWinTask } from '@game/script/task/ShowWinTask';
 import { SpinTask } from '@game/script/task/SpinTask';
 import { StopTask } from '@game/script/task/StopTask';
 import { TransTask } from '@game/script/task/TransTask';
+
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -124,7 +127,7 @@ export class MessageHandler {
     //             //因為要處理輪帶金框, 只有第一轉設定, 否則slotParser內的資料會被子盤面覆蓋
     //             // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, slotResult.rng, newSymbolPattern, goldenPattern);
     //             // gameData.slotParser.buyFS = DataManager.getInstance().buyFs;
-    //             // SlotMachine2.changeStrip.emit(SlotMachineID.BS, gameData.slotParser);
+    //             // SlotMachine.changeStrip.emit(SlotMachineID.BS, gameData.slotParser);
 
     //             let stop = new StopTask();
     //             // stop.rngList = slotResult.rng;
@@ -162,7 +165,7 @@ export class MessageHandler {
     //             TaskManager.getInstance().addTask(winTask);
 
     //             //檢查消去位置是否有金框, 遇到金框要轉換WILD
-    //             let changeMap: SymbolData2[][] = null;
+    //             let changeMap: SymbolData[][] = null;
     //             winPos.forEach((pos) => {
     //                 let winGrid = XUtils.posToGrid(pos);
     //                 let isGolden = !!goldenPattern[winGrid.row * gameData.REEL_COL + winGrid.col];
@@ -173,7 +176,7 @@ export class MessageHandler {
     //                     if (!changeMap[winGrid.col]) {
     //                         changeMap[winGrid.col] = [];
     //                     }
-    //                     let data = new SymbolData2();
+    //                     let data = new SymbolData();
     //                     data.symbolID = SymbolID.Wild;
     //                     data.isChange = true;
     //                     changeMap[winGrid.col][winGrid.row] = data;
@@ -218,7 +221,7 @@ export class MessageHandler {
     //             for (let col: number = 0; col < gameData.REEL_COL; ++col) {
     //                 gameData.bsLastMap[col] = [];
     //                 for (let row: number = 0; row < gameData.REEL_ROW; ++row) {
-    //                     let data = new SymbolData2();
+    //                     let data = new SymbolData();
     //                     let symbolID = newSymbolPattern[row * gameData.REEL_COL + col];
     //                     data.symbolID = symbolID;
     //                     data.isBadge = goldenPattern[row * gameData.REEL_COL + col] > 0;

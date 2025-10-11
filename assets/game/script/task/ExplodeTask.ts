@@ -9,8 +9,8 @@
 // import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
 // import { MultiplierUI } from '@game/components/MultiplierUI/MultiplierUI';
 // import { RevolverUI } from '@game/components/RevolverUI/RevolverUI';
-// import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
-// import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+// import { BaseSymbolData } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData';
+// import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 // import { GameStage } from '@game/components/stage/GameStage';
 // import { UIBlack } from '@game/components/UIBlack';
 // import { BlackKey, GameAudioKey, SlotMachineID } from '@game/script/constant/GameConst';
@@ -27,7 +27,7 @@
 //     public winPos: number[];
 
 //     /**轉換WILD資料 */
-//     public changeMap: BaseSymbolData2[][];
+//     public changeMap: BaseSymbolData[][];
 
 //     /**獲得金額(尚未xRate) */
 //     public win: number;
@@ -47,7 +47,7 @@
 //     /**執行 */
 //     public execute(): void {
 
-//         SlotMachine2.explode.emit(SlotMachineID.BS, this.winPos);
+//         SlotMachine.explode.emit(SlotMachineID.BS, this.winPos);
 
 //         AudioManager.getInstance().play(GameAudioKey.line);
 
@@ -55,7 +55,7 @@
 //         XUtils.scheduleOnce(() => {
 //             //有需要轉換WILD
 //             if (this.changeMap) {
-//                 SlotMachine2.change.emit(SlotMachineID.BS, this.changeMap);
+//                 SlotMachine.change.emit(SlotMachineID.BS, this.changeMap);
 //             }
 //             GameStage.shake.emit();
 

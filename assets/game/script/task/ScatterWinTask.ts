@@ -1,7 +1,9 @@
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
+
+
 import { UIBlack } from '@game/components/UIBlack';
 import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
 
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { delay, Utils } from '@common/script/utils/Utils';
@@ -36,7 +38,7 @@ export class ScatterWinTask extends GameTask {
         //壓黑
         UIBlack.show.emit(BlackKey.UIBlack);
 
-        SlotMachine2.showWin.emit(winPos);
+        SlotMachine.showWin.emit(winPos);
 
         await delay(2);
         Utils.scheduleOnce(() => {

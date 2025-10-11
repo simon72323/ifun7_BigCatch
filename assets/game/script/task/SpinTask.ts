@@ -1,8 +1,8 @@
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
@@ -37,7 +37,7 @@ export class SpinTask extends GameTask {
         if (dataManager.isBuyFs) {
             dataManager.curTurboMode = TurboMode.Normal;
             // dataManager.tempTurboMode = TurboMode.Normal;
-            SettingsController.setTurbo.emit(TurboMode.Normal);
+            BaseEvent.setTurboBtnState.emit(TurboMode.Normal);
 
             //購買免費遊戲強制取消Turbo, 但不跳通知
             // Notice.showMode.emit(DataManager.getInstance().TurboMode);
@@ -50,7 +50,7 @@ export class SpinTask extends GameTask {
 
         BannerUI.reset.emit();//還原跑馬燈狀態
         //考量到先轉型、後轉型, 所以音效要在spin監聽
-        SlotMachine2.spinComplete.once(() => {
+        SlotMachine.spinComplete.once(() => {
             // AudioManager.getInstance().playSound(GameAudioKey.in);
         }, this);
 
@@ -58,7 +58,7 @@ export class SpinTask extends GameTask {
         if (isBS) {
             //先轉型(免費遊戲直接給結果不轉動)
             // if (!DataManager.getInstance().isBuyFs && APIManager.getInstance().getSpinLate() === false) {
-            //     SlotMachine2.spin.emit();
+            //     SlotMachine.spin.emit();
             // }
         }
 

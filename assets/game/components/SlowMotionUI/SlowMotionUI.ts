@@ -1,8 +1,8 @@
 import { _decorator, Color, Component, sp } from 'cc';
 
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { GameAudioKey, GameConst } from '@game/script/data/GameConst';
 
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
 
@@ -30,14 +30,14 @@ export class SlowMotionUI extends Component {
             anm.setAnimation(0, SlowMotionAnimation.loop, true);
         }
 
-        SlotMachine2.startMi.on((column: number) => {
+        SlotMachine.startMi.on((column: number) => {
             //只播一次
             AudioManager.getInstance().playSound(GameAudioKey.waiting);
             this.isMi = true;
             this.setCurrentIndex(column);
         }, this);
 
-        SlotMachine2.stopMi.on(() => {
+        SlotMachine.stopMi.on(() => {
             if (!this.isMi) {
                 return;
             }

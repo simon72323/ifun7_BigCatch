@@ -2,6 +2,7 @@ import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enu
 import { PREVIEW, EDITOR } from 'cc/env';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
+import { Grid } from '@common/script/types/BaseType';
 
 
 // declare const gtag: (command: string, event: string, data?: any) => void;
@@ -225,6 +226,9 @@ export class Utils {
      * @param callback 
      */
     public static fadeIn(node: Node, time: number, callback?: () => void) {
+        if (node.getComponent(UIOpacity) == null) {
+            node.addComponent(UIOpacity);
+        }
         node.getComponent(UIOpacity).opacity = 0;
         tween(node.getComponent(UIOpacity))
             .to(time, { opacity: 255 })
@@ -241,9 +245,30 @@ export class Utils {
      * @param callback 
      */
     public static fadeOut(node: Node, time: number, callback?: () => void) {
+        if (node.getComponent(UIOpacity) == null) {
+            node.addComponent(UIOpacity);
+        }
         node.getComponent(UIOpacity).opacity = 255;
         tween(node.getComponent(UIOpacity))
             .to(time, { opacity: 0 })
+            .call(() => {
+                if (callback) callback();
+            })
+            .start();
+    }
+
+    /**
+     * 縮放動態
+     * @param node 
+     * @param time 
+     * @param startScale 起始縮放
+     * @param endScale 結束縮放
+     * @param callback 
+     */
+    public static tweenScaleTo(node: Node, time: number, startScale: number, endScale: number, callback?: () => void) {
+        node.scale = new Vec3(startScale, startScale, 1);
+        tween(node)
+            .to(time, { scale: new Vec3(endScale, endScale, 1) }, { easing: 'sineOut' })
             .call(() => {
                 if (callback) callback();
             })
@@ -735,6 +760,28 @@ export class Utils {
     //         return;
     //     }
     // }
+
+    /**
+     * 計算環狀距離
+     * @param a 
+     * @param b 
+     * @param length 
+     * @returns 
+     */
+    public static circularDistance(a: number, b: number, length: number): number {
+        return Math.min(Math.abs(a - b), length - Math.abs(a - b));
+    }
+
+    /**
+     * winPos轉換col,row
+     * @param pos 
+     * @returns 
+     */
+    public static posToGrid(pos: number): Grid {
+        let col = Math.floor(pos / 10);
+        let row = (pos % 10) - 1;
+        return { col, row };
+    }
 }
 
 export enum TWEEN_EASING_TYPE { '自定義曲線', 'linear', 'smooth', 'fade', 'constant', 'quadIn', 'quadOut', 'quadInOut', 'quadOutIn', 'cubicIn', 'cubicOut', 'cubicInOut', 'cubicOutIn', 'quartIn', 'quartOut', 'quartInOut', 'quartOutIn', 'quintIn', 'quintOut', 'quintInOut', 'quintOutIn', 'sineIn', 'sineOut', 'sineInOut', 'sineOutIn', 'expoIn', 'expoOut', 'expoInOut', 'expoOutIn', 'circIn', 'circOut', 'circInOut', 'circOutIn', 'elasticIn', 'elasticOut', 'elasticInOut', 'elasticOutIn', 'backIn', 'backOut', 'backInOut', 'backOutIn', 'bounceIn', 'bounceOut', 'bounceInOut', 'bounceOutIn' }

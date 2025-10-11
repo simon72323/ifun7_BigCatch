@@ -60,7 +60,7 @@ export class TransTask extends GameTask {
                 //初始化盤面
                 // let gameData = DataManager.getInstance().gameData;
                 // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
-                // SlotMachine2.setup.emit(0, gameData.slotParser);
+                // SlotMachine.setup.emit(0, gameData.slotParser);
 
             },
             () => {

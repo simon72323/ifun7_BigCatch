@@ -56,9 +56,23 @@ export class Loading extends Component {
     public async start() {
         // Utils.GoogleTag('EnterGame', { 'currency': urlParameters.currency, 'language': urlParameters.lang });
 
-        this.getRenewToken()
-            .then(NetworkManager.getInstance().sendUserData)
-            .then(NetworkManager.getInstance().sendGameData)
+        console.log('獲取資料');
+        // this.getRenewToken()
+        //     .then(this.sendUserData)
+        //     .then(this.sendGameData)
+        //     // .then(() => {
+        //     //     this.loadGameScene();
+        //     //     console.log('Loading Done');
+        //     // })
+        //     .catch(function (e) {
+        //         //要出現405錯誤
+        //         Notice.showError.emit(405);
+        //         console.error(e);
+        //         console.error('fail to load data from server');
+        //     });
+
+        this.sendUserData()
+            .then(this.sendGameData)
             .then(() => {
                 this.loadGameScene();
                 console.log('Loading Done');
@@ -69,6 +83,20 @@ export class Loading extends Component {
                 console.error(e);
                 console.error('fail to load data from server');
             });
+    }
+
+    /**
+     * 發送用戶資料
+     */
+    private async sendUserData() {
+        NetworkManager.getInstance().sendUserData();
+    }
+
+    /**
+     * 發送遊戲資料
+     */
+    private async sendGameData() {
+        NetworkManager.getInstance().sendGameData();
     }
 
     /**
@@ -118,11 +146,22 @@ export class Loading extends Component {
     public async getCurrencyJson() {
         let currencyJson = null;
         try {
-            console.log('準備取得網路 Json 資料');
-            currencyJson = await fetch('/webAssets/game/common.json').then(res => res.json());
-            console.log('取得網路 Json 資料成功: /webAssets/game/common.json');
+            // 動態構建 URL，根據當前 domain 變動
+            const protocol = window.location.protocol;
+            let hostname = window.location.hostname;
+
+            // 如果是 localhost，使用測試環境的 domain
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                hostname = 'gc.ifun7.vip';
+            }
+
+            const configUrl = `${protocol}//${hostname}/webAssets/game/common.json`;
+
+            console.log(`嘗試從以下位置獲取貨幣資料: ${configUrl}`);
+            currencyJson = await fetch(configUrl).then(res => res.json());
+            console.log(`取得網路貨幣資料成功: ${configUrl}`);
         } catch (error) {
-            console.log('無法取得網路 Json 資料，使用本地貨幣資料');
+            console.log('無法取得網路貨幣資料，使用本地貨幣資料');
             currencyJson = await Utils.loadCurrency();
         }
 

@@ -1,8 +1,8 @@
 
-import { BaseSymbolData2 } from '@game/components/slotMachine2/base/slotMachine2/BaseSymbolData2';
-import { SlotParser } from '@game/components/slotMachine2/SlotParser';
+import { SlotParser } from '@game/components/slotMachine/SlotParser';
 import { GameConst } from '@game/script/data/GameConst';
 
+import { BaseSymbolData } from '@common/components/slotMachine/BaseSymbolData';
 import { DataManager } from '@common/script/data/DataManager';
 import { Utils } from '@common/script/utils/Utils';
 
@@ -18,10 +18,10 @@ export class SlotData {
     public slotParser: SlotParser = new SlotParser();
     /**金框資料 */
     public stripBadgeDataList: number[][] = [];
-    private payloadKeyList: string[] = ['', '', 'H1', 'H2', 'H3', 'H4', 'L1', 'L2', 'L3', 'L4'];
+    private payloadKeyList: string[] = ['', 'H1', 'H2', 'H3', 'H4','F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'L1', 'L2', 'L3', 'L4', 'L5',''];
 
     /**BS最後盤面 */
-    public bsLastMap: BaseSymbolData2[][] = [];
+    public bsLastMap: BaseSymbolData[][] = [];
     /**此轉是否有skip(決定自動轉延遲時間) */
     public hasSkip: boolean = false;
 
@@ -37,52 +37,80 @@ export class SlotData {
     private payloadTemplate = {
         symbolPoints: {
             H1: [
-                { count: 6, point: 2.5 },
-                { count: 5, point: 1.5 },
-                { count: 4, point: 1 },
-                { count: 3, point: 0.5 }
+                { count: 5, point: 200 },
+                { count: 4, point: 20 },
+                { count: 3, point: 5 },
+                { count: 2, point: 0.5 }
             ],
             H2: [
-                { count: 6, point: 1.5 },
-                { count: 5, point: 1 },
-                { count: 4, point: 0.75 },
-                { count: 3, point: 0.4 }
+                { count: 5, point: 100 },
+                { count: 4, point: 15 },
+                { count: 3, point: 3}
             ],
             H3: [
-                { count: 6, point: 1 },
-                { count: 5, point: 0.75 },
-                { count: 4, point: 0.5 },
-                { count: 3, point: 0.25 }
+                { count: 5, point: 50 },
+                { count: 4, point: 10},
+                { count: 3, point: 2 }
             ],
             H4: [
-                { count: 6, point: 1 },
-                { count: 5, point: 0.75 },
-                { count: 4, point: 0.5 },
-                { count: 3, point: 0.25 }
+                { count: 5, point: 50 },
+                { count: 4, point: 10},
+                { count: 3, point: 2 }
+            ],
+            F1: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
+            ],
+            F2: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
+            ],
+            F3: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
+            ],
+            F4: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
+            ],
+            F5: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
+            ],
+            F6: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
             ],
             L1: [
-                { count: 6, point: 0.5 },
-                { count: 5, point: 0.3 },
-                { count: 4, point: 0.2 },
-                { count: 3, point: 0.1 }
+                { count: 5, point: 10 },
+                { count: 4, point: 2.5 },
+                { count: 3, point: 0.2 }
             ],
             L2: [
-                { count: 6, point: 0.5 },
-                { count: 5, point: 0.3 },
-                { count: 4, point: 0.2 },
-                { count: 3, point: 0.1 }
+                { count: 5, point: 10 },
+                { count: 4, point: 2.5 },
+                { count: 3, point: 0.2 }
             ],
             L3: [
-                { count: 6, point: 0.25 },
-                { count: 5, point: 0.15 },
-                { count: 4, point: 0.1 },
-                { count: 3, point: 0.05 }
+                { count: 5, point: 5 },
+                { count: 4, point: 1 },
+                { count: 3, point: 0.2 }
             ],
             L4: [
-                { count: 6, point: 0.25 },
-                { count: 5, point: 0.15 },
-                { count: 4, point: 0.1 },
-                { count: 3, point: 0.05 }
+                { count: 5, point: 5 },
+                { count: 4, point: 1 },
+                { count: 3, point: 0.2 }
+            ],
+            L5: [
+                { count: 5, point: 5 },
+                { count: 4, point: 1 },
+                { count: 3, point: 0.2 }
             ]
         },
         bet: {

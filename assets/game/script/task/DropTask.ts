@@ -1,8 +1,8 @@
 
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { SymbolData2 } from '@game/components/slotMachine2/SymbolData2';
+import { SymbolData } from '@game/components/slotMachine/SymbolData';
 import { GameAudioKey, GameConst, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
 
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 
@@ -23,18 +23,18 @@ export class DropTask extends GameTask {
 
         //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
 
-        let fromAllToReel: SymbolData2[][] = [];
-        let allToReel: SymbolData2[][] = [];
+        let fromAllToReel: SymbolData[][] = [];
+        let allToReel: SymbolData[][] = [];
         for (let col: number = 0; col < GameConst.REEL_COL; col++) {
-            let toReel: SymbolData2[] = [];
-            let fromReel: SymbolData2[] = [];
+            let toReel: SymbolData[] = [];
+            let fromReel: SymbolData[] = [];
             for (let row: number = 0; row < GameConst.REEL_ROW; row++) {
-                let fromData = new SymbolData2();
+                let fromData = new SymbolData();
                 fromData.symbolID = this.preSymbolPattern[col + 6 * row];
                 fromData.isBadge = false;
                 fromReel.push(fromData);
 
-                let data = new SymbolData2();
+                let data = new SymbolData();
                 data.symbolID = this.newSymbolPattern[col + 6 * row];
                 data.isBadge = this.goldenPattern[col + 6 * row] > 0;
                 toReel.push(data);
@@ -43,15 +43,15 @@ export class DropTask extends GameTask {
             allToReel.push(toReel);
         }
 
-        // SlotMachine2.drop.emit(SlotMachineID.BS, () => {
+        // SlotMachine.drop.emit(SlotMachineID.BS, () => {
 
         // });
 
         // let numScatterInPreSymbolPattern = this.preSymbolPattern.filter((symbolID) => symbolID === SymbolID.Scatter).length;
         //瞇牌掉落
         // if (numScatterInPreSymbolPattern >= GameConst.BONUS_WIN_COUNT - 1) {
-        //     SlotMachine2.drop.emit(SlotMachineID.BS, () => {
-        //         SlotMachine2.fill.emit(SlotMachineID.BS, fromAllToReel, allToReel, () => {
+        //     SlotMachine.drop.emit(SlotMachineID.BS, () => {
+        //         SlotMachine.fill.emit(SlotMachineID.BS, fromAllToReel, allToReel, () => {
         //             this.finish();
         //         });
         //     });
@@ -59,12 +59,12 @@ export class DropTask extends GameTask {
 
         // //一般掉落
         // else {
-        //     SlotMachine2.fill.emit(SlotMachineID.BS, fromAllToReel, allToReel, () => {
+        //     SlotMachine.fill.emit(SlotMachineID.BS, fromAllToReel, allToReel, () => {
         //         this.finish();
         //     });
         // }
 
-        SlotMachine2.fillOnReel.once(() => {
+        SlotMachine.fillOnReel.once(() => {
             AudioManager.getInstance().playSound(GameAudioKey.down);
         }, this);
     }

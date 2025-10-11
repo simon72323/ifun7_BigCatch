@@ -1,7 +1,9 @@
 import { game, ResolutionPolicy, view, Game } from 'cc';
+import { EDITOR } from 'cc/env';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { OrientationtMode } from '@common/script/types/BaseType';
+
 
 /**
  * 屏幕適配管理器 - 靜態類
@@ -24,9 +26,10 @@ export class ScreenAdapter {
      * 初始化屏幕適配
      */
     private static setupResize() {
+        if (EDITOR) return;
         // 等待遊戲完全加載後再設置監聽
         game.on(Game.EVENT_ENGINE_INITED, () => {
-            // 優先使用 ResizeObserver
+            // // 優先使用 ResizeObserver
             if (typeof ResizeObserver !== 'undefined') {
                 ScreenAdapter.resizeObserver = new ResizeObserver(() => ScreenAdapter.handleResize());
                 ScreenAdapter.resizeObserver.observe(game.canvas);

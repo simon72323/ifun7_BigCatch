@@ -86,21 +86,31 @@ export class GameConst {
 export enum SymbolID {
     Wild = 0,
     H1 = 1,
-    H2,
-    H3,
-    H4,
+    H2 = 2,
+    H3 = 3,
+    H4 = 4,
     F1 = 5,
-    F2,
-    F3,
-    F4,
-    F5,
-    F6,
-    LA = 11,
-    LK,
-    LQ,
-    LJ,
-    LT,
-    Scatter = 16,
+    F2 = 6,
+    F3 = 7,
+    F4 = 8,
+    F5 = 9,
+    F6 = 10,
+    LA = 15,
+    LK = 16,
+    LQ = 17,
+    LJ = 18,
+    LT = 19,
+    Scatter = 20,
+}
+
+/**魚倍率 */
+export enum FishOdds {
+    F1 = 2,
+    F2 = 5,
+    F3 = 10,
+    F4 = 15,
+    F5 = 20,
+    F6 = 25,
 }
 
 /**語系資源目錄 */

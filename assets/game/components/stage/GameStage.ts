@@ -2,12 +2,12 @@ import { _decorator, Animation, Component, easing, Node, tween, Tween, Vec3 } fr
 
 import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { GameAnimationName, GameAudioKey } from '@game/script/data/GameConst';
 import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -59,8 +59,8 @@ export class GameStage extends Component {
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
         // SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
 
-        SlotMachine2.startMi.on(this.startMi, this);//監聽開始咪牌事件
-        SlotMachine2.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
+        SlotMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
+        SlotMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
     }
 
     /**
@@ -79,7 +79,7 @@ export class GameStage extends Component {
         //初始化盤面
         // let gameData = gameInformation.gameData;
         // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
-        // SlotMachine2.setup.emit(gameData.slotParser);
+        // SlotMachine.setup.emit(gameData.slotParser);
 
         // SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
         SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);

@@ -1,9 +1,10 @@
 
 import { BannerUI } from '@game/components/BannerUI/BannerUI';
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 
 import { Notice } from '@common/components/notice/Notice';
 import { SettingsController } from '@common/components/settingsController/SettingsController';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
@@ -93,7 +94,7 @@ export class IdleSpinTask extends GameTask {
             //購買免費遊戲強制取消Turbo, 但不跳通知
             if (buyFs) {
                 DataManager.getInstance().curTurboMode = TurboMode.Normal;
-                SettingsController.setTurbo.emit(TurboMode.Normal);
+                BaseEvent.setTurboBtnState.emit(TurboMode.Normal);
             }
 
             //判斷取消自動轉
@@ -103,7 +104,7 @@ export class IdleSpinTask extends GameTask {
 
             BannerUI.reset.emit();//還原跑馬燈狀態
             //考量到先轉型、後轉型, 所以音效要在spin監聽
-            SlotMachine2.spinComplete.once(() => {
+            SlotMachine.spinComplete.once(() => {
                 // AudioManager.getInstance().playSound(GameAudioKey.in);
             }, this);
 

@@ -2,7 +2,7 @@ import { KeyCode } from 'cc';
 
 import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { ISpinData } from '@common/script/network/NetworkApi';
-import { ModuleID, OrientationtMode } from '@common/script/types/BaseType';
+import { ModuleID, OrientationtMode, TurboMode } from '@common/script/types/BaseType';
 
 /**
  * 共用遊戲事件
@@ -27,6 +27,20 @@ export class BaseEvent {
     /**傳送Spin結果 */
     public static onSpinResult: XEvent1<ISpinData> = new XEvent1();
     //========================= server事件 =========================
+
+    //=========================== settingsController事件 =========================
+    /**開啟遊戲說明 */
+    public static showGameInformation: XEvent = new XEvent();
+    /**開啟自動遊戲 */
+    public static showAutoSpin: XEvent = new XEvent();
+
+    /**設定快速模式按鈕狀態 */
+    public static setTurboBtnState: XEvent1<TurboMode> = new XEvent1();
+    /**執行自動遊戲 */
+    public static runAutoSpin: XEvent = new XEvent();
+    /**設定自動模式按鈕狀態 */
+    // public static setAutoBtnState: XEvent1<boolean> = new XEvent1();
+    //=========================== settingsController事件 =========================
 
 
     /**初始化封包完成 */

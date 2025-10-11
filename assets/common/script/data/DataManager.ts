@@ -62,7 +62,7 @@ export class DataManager {
     /** 下一模式 */
     public nextModuleID: ModuleID = ModuleID.BS;
     /** 當前加速模式(免費遊戲會強制設為Normal) */
-    public curTurboMode: TurboMode = TurboMode.Normal;
+    public curTurboMode: TurboMode = TurboMode.Fast;
     /** 當前遊戲狀態 */
     // public curGameState: GameState = GameState.Ready;
     /** 大贏跑分倍率 */

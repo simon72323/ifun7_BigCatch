@@ -1,8 +1,8 @@
 
 import { SkipUI } from '@game/components/SkipUI/SkipUI';
-import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
 import { IWinLineData, IWinScatterData } from '@game/script/data/GameType';
 
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@common/script/tasks/GameTask';
@@ -34,7 +34,7 @@ export class StopTask extends GameTask {
 
 
         //老虎機停止
-        SlotMachine2.stop.emit(() => {
+        SlotMachine.stop.emit(() => {
             this.checkFinish();
         });
 
@@ -64,7 +64,7 @@ export class StopTask extends GameTask {
         DataManager.getInstance().hasSkip = true;
         SkipUI.hide.emit();
         BaseEvent.clickSkip.off(this);
-        SlotMachine2.skip.emit();
+        SlotMachine.skip.emit();
 
     }
 

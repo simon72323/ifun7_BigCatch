@@ -7,8 +7,8 @@
 // import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
 // // import { FSRoleUI } from '@game/components/characterUI/FSRoleUI';
 // import { FSSettleUI } from '@game/components/SettleUI/FSSettleUI';
-// import { SlotMachine2 } from '@game/components/slotMachine2/base/slotMachine2/SlotMachine2';
-// import { SlotReelConfig2 } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
+// import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+// import { SlotReelConfig } from '@game/components/slotMachine2/base/slotMachine2/SlotType2';
 // import { TransUI } from '@game/components/TransUI/TransUI';
 // import { MessageHandler } from '@game/script/main/MessageHandler';
 
@@ -220,7 +220,7 @@
 //     //     this.registerRNGButton('炸彈', [1, 19, 31, 13, 39, 36]);
 //     //     this.registerRNGButton('帽子', [90, 40, 1, 1, 1, 1]);
 
-//     //     let speedConfig = (find('Canvas/Game/ScaleNode/ReelController').getComponent(SlotMachine2)['config'] as SlotReelConfig2).speedConfigList[0];
+//     //     let speedConfig = (find('Canvas/Game/ScaleNode/ReelController').getComponent(SlotMachine)['config'] as SlotReelConfig).speedConfigList[0];
 //     //     CheatUI.registerSlider.emit('節奏', 'Slot', '啟動間隔', [0, 1, speedConfig.spinInterval], (value) => {
 //     //         speedConfig.spinInterval = value;
 //     //     });

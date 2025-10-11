@@ -1,8 +1,9 @@
 import { _decorator } from 'cc';
 
+import { Notice } from '@common/components/notice/Notice';
 import { DataManager } from '@common/script/data/DataManager';
 import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
-import { HTTP_METHODS, HttpRequestUtils, IPayload } from '@common/script/network/HttpRequestUtils';
+import { FETCH_METHODS, FetchRequestUtils, IFetchPayload } from '@common/script/network/FetchRequestUtils';
 import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
 
 
@@ -19,12 +20,12 @@ export class NetworkManager {
         return NetworkManager._instance;
     }
 
-    protected httpRequest: HttpRequestUtils;
+    protected fetchRequest: FetchRequestUtils;
     protected errorCodeConfig: ErrorCodeConfig;
 
     constructor() {
-        this.httpRequest = new HttpRequestUtils();
-        this.httpRequest.onErrorDelegate.add(this.onHttpError.bind(this));
+        this.fetchRequest = new FetchRequestUtils();
+        this.fetchRequest.onErrorDelegate.add(this.onFetchError.bind(this));
         this.errorCodeConfig = new ErrorCodeConfig();
     }
 
@@ -32,10 +33,19 @@ export class NetworkManager {
      * 錯誤處理
      * @param errorCode 錯誤代碼
      */
-    protected onHttpError(errorCode: number): void {
+    protected onFetchError(errorCode: number): void {
+        console.error(`網路錯誤: ${errorCode}`);
+
+        // 根據錯誤代碼顯示相應的錯誤彈窗
         if (errorCode === -1) {
-            console.error(`網路錯誤: ${errorCode}`);
-            // TODO: 處理網路錯誤
+            // 網路連線錯誤
+            Notice.showError.emit(-1);
+        } else if (errorCode === -2) {
+            // 超時錯誤
+            Notice.showError.emit(-1); // 使用相同的網路錯誤提示
+        } else {
+            // 其他HTTP錯誤狀態碼
+            Notice.showError.emit(errorCode);
         }
     }
 
@@ -49,16 +59,18 @@ export class NetworkManager {
             const errorMessage = this.errorCodeConfig.errorCodes.get(response.error_code) || 'Unknown Error';
             const fullErrorMessage = `${response.error_code} - ${errorMessage}`;
 
-            // if (this.errorCodeConfig.retryErrorCodes.includes(response.error_code)) {
-            //     // TODO: 重試邏輯(有重新連線按鈕)
-            //     console.warn(`需要重試的錯誤: ${fullErrorMessage}`);
-            // } else 
-            if (this.errorCodeConfig.closeAndContinueCodes.includes(response.error_code)) {
-                // TODO: 顯示關閉按鈕錯誤對話框(有OK按鈕，會關閉視窗並繼續)
+            if (this.errorCodeConfig.retryErrorCodes.includes(response.error_code)) {
+                // 需要重試的錯誤 - 顯示錯誤彈窗，用戶可以點擊重新連線
+                console.warn(`需要重試的錯誤: ${fullErrorMessage}`);
+                Notice.showError.emit(response.error_code);
+            } else if (this.errorCodeConfig.closeAndContinueCodes.includes(response.error_code)) {
+                // 需要關閉並繼續的錯誤 - 顯示錯誤彈窗(有OK按鈕，會關閉視窗並繼續)
                 console.error(`需要關閉並繼續的錯誤: ${fullErrorMessage}`);
+                Notice.showError.emit(response.error_code);
             } else {
-                // TODO: 顯示一般錯誤對話框(有重新連線按鈕)
+                // 一般錯誤 - 顯示錯誤彈窗(有重新連線按鈕)
                 console.error(`一般錯誤: ${fullErrorMessage}`);
+                Notice.showError.emit(response.error_code);
             }
             return false; // 有錯誤
         }
@@ -79,14 +91,15 @@ export class NetworkManager {
         };
 
         // 設置請求資料
-        const payload: IPayload = {
+        const fetchPayload: IFetchPayload = {
             url: DataManager.getInstance().urlParam.serverUrl,
-            method: HTTP_METHODS.POST,
+            method: FETCH_METHODS.POST,
             content: JSON.stringify(content)
         };
+        console.log('sendRequest', fetchPayload);
 
         return new Promise((resolve, reject) => {
-            this.httpRequest.sendRequest(payload, (response: IResponseData) => {
+            this.fetchRequest.sendRequest(fetchPayload, (response: IResponseData) => {
                 if (this.checkErrorCode(response)) {
                     resolve(response);  // 沒有錯誤，成功
                 }

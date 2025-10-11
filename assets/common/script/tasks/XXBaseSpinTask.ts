@@ -90,14 +90,14 @@
 //         BannerUI.reset.emit();
 
 //         //考量到先轉型、後轉型, 所以音效要在spin監聽
-//         SlotMachine2.spinComplete.once(() => {
+//         SlotMachine.spinComplete.once(() => {
 //             AudioManager.getInstance().playSound(GameAudioKey.in);
 //         }, this);
 
 //         if (DataManager.getInstance().isBS()) {
 //             //先轉型(免費遊戲直接給結果不轉動)
 //             if (!DataManager.getInstance().isBuyFs && APIManager.getInstance().getSpinLate() === false) {
-//                 SlotMachine2.spin.emit();
+//                 SlotMachine.spin.emit();
 //             }
 //         }
 
