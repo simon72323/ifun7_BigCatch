@@ -1,4 +1,7 @@
+// import { FSUI } from '@game/components/FSUI/FSUI';
+
 import { GameTask } from '@common/script/tasks/GameTask';
+
 
 /**
  * 更新免費遊戲次數
@@ -13,7 +16,7 @@ export class UpdateFreeTimesTask extends GameTask {
     execute(): void {
 
         //直接設定
-        // FeatureGameUI.refreshRemainTimes.emit(this.times);
+        // FSUI.refreshRemainTimes.emit(this.times);
         this.finish();
     }
 

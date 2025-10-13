@@ -24,23 +24,12 @@ export class SlotReel extends Component {
     public static BEGIN_COMPLETE: string = 'BEGIN_COMPLETE';
     /**停止完成 */
     public static STOP_COMPLETE: string = 'STOP_COMPLETE';
-    /**掉落完成 */
-    public static DROP_COMPLETE: string = 'DROP_COMPLETE';
-    /**新盤面掉落完成 */
-    public static FILL_COMPLETE: string = 'FILL_COMPLETE';
 
     /**第一軸走的顆數,後面的軸要停輪時至少要走到相等顆數才能停, 否則有可能後面的軸先停 */
     public static firstReelCount: number = 0;
 
     /**節點位置 */
     private posList: Node[] = [];
-
-    /**輪帶資料 */
-    private strip: number[] = [];
-    /**當期輪帶索引 */
-    private currentRng: number = -1;
-    /**最終輪帶索引 */
-    private finalRng: number = -1;
 
     /**輪帶上圖示 */
     private symbolList: BaseSymbol[] = [];
@@ -76,9 +65,6 @@ export class SlotReel extends Component {
 
     // private randomSeed: number = 0;
 
-    /**戲謔類型 */
-    private nudgeType: number = -1;
-
     /**
      * 設置輪帶
      * @param strip 
@@ -101,11 +87,16 @@ export class SlotReel extends Component {
         let idx: number = 0;
         let posNode = this.node.getChildByName(`NodePos${idx}`);
         while (posNode != null) {
+            // let worldPos = this.node.getComponent(UITransform).convertToWorldSpaceAR(posNode.getPosition());
+            // const layerPos = config.layerList[0].getComponent(UITransform).convertToNodeSpaceAR(worldPos);
+            // posNode.setPosition(layerPos);
             this.posList.push(posNode);
             let symbol = instantiate(config.symbolPrefab).getComponent(BaseSymbol);
             symbol.setLayerList(config.layerList);
-            config.layerList[0][reelIndex].addChild(symbol.node);
+            config.layerList[0].children[reelIndex].addChild(symbol.node);
             symbol.setPosIndex(idx);
+            symbol.setGrid(reelIndex, idx);
+            // symbol.setSymbolID(reelSymbolID[idx]);
             this.symbolList.push(symbol);
             symbol.node.setPosition(posNode.getPosition());
             idx++;
@@ -115,23 +106,57 @@ export class SlotReel extends Component {
 
     /**
      * 初始化盤面
-     * @param strip 輪帶資料
-     * @param rng 輪帶索引
+     * @param symbolIDs 軸符號
      */
-    public setupSymbolIDs(symbolIDs: number[]): void {
+    public initSymbolIDs(symbolIDs: number[]): void {
+        // console.log('setReelSymbolID', symbolIDs);
         const posLength = Math.floor(this.posList.length / 3);
         // this.currentRng = this.getRng(rng - 1);
         this.symbolList.forEach((symbol, idx) => {
             if (idx >= posLength && idx < posLength * 2) {
-                symbol.symbolID = symbolIDs[idx - posLength];
+                symbol.setSymbolID(symbolIDs[idx - posLength]);
+                // symbol.symbolID = symbolIDs[idx - posLength];
                 symbol.isInView = true;
             } else {
-                symbol.setRandomSymbol();//上下隨機symbol圖
+                let randomID = Math.floor(Math.random() * 16);
+                //11~16要加4才會是正確的symbolID
+                const symbolID = randomID > 10 ? randomID + 4 : randomID;
+                symbol.setSymbolID(symbolID);
+                // symbol.setRandomSymbol();//上下隨機symbol圖
             }
             symbol.setState(SymbolState.Normal);
         });
     }
 
+    /**
+     * 此軸停止的symbolID
+     * @param symbolIDs 此軸停止的symbolID
+     */
+    public setReelSymbolID(symbolIDs: number[]): void {
+        console.log('此軸停止的symbolID', this.reelIndex, symbolIDs);
+        this.forceResult = symbolIDs;
+        // console.log('setReelSymbolID', symbolIDs);
+        // const posLength = Math.floor(this.posList.length / 3);
+        // // this.currentRng = this.getRng(rng - 1);
+        // this.symbolList.forEach((symbol, idx) => {
+        //     if (idx >= posLength && idx < posLength * 2) {
+        //         symbol.setSymbolID(symbolIDs[idx - posLength]);
+        //         symbol.isInView = true;
+        //     } else {
+        //         let randomID = Math.floor(Math.random() * 16);
+        //         //11~16要加4才會是正確的symbolID
+        //         const symbolID = randomID > 10 ? randomID + 4 : randomID;
+        //         symbol.setSymbolID(symbolID);
+        //     }
+        //     symbol.setState(SymbolState.Normal);
+        // });
+    }
+
+    /**
+     * 取得位置索引
+     * @param idx 
+     * @returns 
+     */
     private getPosIdx(idx: number): number {
         return (idx + this.posList.length) % this.posList.length;
     }
@@ -158,7 +183,6 @@ export class SlotReel extends Component {
                 symbol.setRandomSymbol();//隨機給symbolID
             }
             symbol.onSpin();//會回到初始狀態且isInView=false
-            symbol.setIsEmpty(false);//非空圖示
         });
         this.setSymbolState(SymbolState.Normal);
         this.reset();
@@ -171,16 +195,15 @@ export class SlotReel extends Component {
         this.curveTime = 0;
         this.curSpinTime = 0;
         this.curSpinCount = 0;
-        this.nudgeType = -1;
     }
 
     /**
      * 要求停止
      * @param rng 
      */
-    public stop(rng: number): void {
+    public stop(): void {
         this.requestStop = true;
-        this.finalRng = this.getRng(rng - 1);
+        // this.finalRng = this.getRng(rng - 1);
     }
 
     /**
@@ -189,10 +212,15 @@ export class SlotReel extends Component {
     public skip(): void {
         this.reelState = ReelState.END;
         this.curveTime = 0;//this.config.getSpeedConfig().endCurveTime * .8;
-        this.currentRng = this.finalRng;
+        // 直接使用强制结果
         this.symbolList.forEach((symbol, idx) => {
-            let stripIdx = this.getRng(this.currentRng - this.keepRow + symbol.getPosIndex() + this.config.direction);
-            symbol.setSymbolID(this.strip[stripIdx], stripIdx);
+            if (this.forceResult.length > 0) {
+                let symbolID = this.forceResult[idx] || this.forceResult[0];
+                symbol.setSymbolID(symbolID);
+            } else {
+                // 如果没有强制结果，使用随机符号
+                symbol.setRandomSymbol();
+            }
         });
     }
 
@@ -230,15 +258,13 @@ export class SlotReel extends Component {
         //最後N顆(線性)
         else if (this.reelState === ReelState.STOPPING_1) {
             this.updateSymbols(1, 0);
-            let lastCount: number = this.config.maxRow + this.config.maxRow;//最後顆數以最列數最多的軸為準, 避免後面的軸顆數比較少的話會比前面的軸先停
-            this.setCurrentRng(this.finalRng + lastCount);
             this.reelState = ReelState.STOPPING;
             this.updateStoppingState();
 
         }
         //最後N顆(線性)
         else if (this.reelState === ReelState.STOPPING) {
-            // this.debug('STOPPING');
+            // this.debug('STOPPING');'
             this.updateStoppingState();
         }
         //煞車
@@ -246,12 +272,6 @@ export class SlotReel extends Component {
             // this.debug('END');
             this.updateEndState();
         }
-        //煞車
-        else if (this.reelState === ReelState.NUDGE) {
-            // this.debug('NUDGE');
-            this.updateEndState();
-        }
-
     }
 
     /**
@@ -292,10 +312,6 @@ export class SlotReel extends Component {
                 curve = this.config.endCurve;
                 curveTime = time / this.config.getSpeedConfig().endCurveTime;
                 break;
-            case ReelState.NUDGE:
-                curve = this.config.nudgeCurveList[this.nudgeType];
-                curveTime = time / this.config.getSpeedConfig().nudgeCurveTime;
-                break;
         }
         //曲線
         if (curve) {
@@ -321,7 +337,7 @@ export class SlotReel extends Component {
             this.curveTime = this.curveTime % this.config.getSpeedConfig().beginCurveTime;
             this.updateSymbols(1, this.getCurveValue(this.curveTime));
             this.setSymbolState(SymbolState.Blur);
-            this.setCurrentRng(this.currentRng - this.config.direction);
+            // this.setCurrentRng(this.currentRng - this.config.direction);
         }
         else {
             let curveValue = this.getCurveValue(this.curveTime);
@@ -360,7 +376,7 @@ export class SlotReel extends Component {
             else {
                 this.curveTime = this.curveTime % loopCurveTime;
                 this.updateSymbols(1, this.getCurveValue(this.curveTime));
-                this.setCurrentRng(this.currentRng - this.config.direction);
+                // this.setCurrentRng(this.currentRng - this.config.direction);
                 this.curSpinCount++;
             }
         }
@@ -370,25 +386,27 @@ export class SlotReel extends Component {
      * 最後N顆
      */
     private updateStoppingState(): void {
+        // let loopCurveTime = this.isMi ? this.config.getSpeedConfig().slowMotionLoopCurveTime : this.config.getSpeedConfig().loopCurveTime;
+        this.reelState = ReelState.END;
+        this.setSymbolState(SymbolState.Normal);
 
-        let loopCurveTime = this.isMi ? this.config.getSpeedConfig().slowMotionLoopCurveTime : this.config.getSpeedConfig().loopCurveTime;
         //到達終點
-        if (this.currentRng === this.getRng(this.finalRng + this.config.direction)) {
-            this.reelState = this.nudgeType !== -1 ? ReelState.NUDGE : ReelState.END;
+        // if (this.currentRng === this.getRng(this.finalRng + this.config.direction)) {
+        //     this.reelState =  ReelState.END;
 
-            this.setSymbolState(SymbolState.Normal);
-        }
-        //繼續loop
-        else {
-            if (this.curveTime >= loopCurveTime) {
-                this.curveTime = this.curveTime % loopCurveTime;
-                this.updateSymbols(1, this.getCurveValue(this.curveTime));
-                this.setCurrentRng(this.currentRng - this.config.direction, true);
-            }
-            else {
-                this.updateSymbols(0, this.getCurveValue(this.curveTime));
-            }
-        }
+        //     this.setSymbolState(SymbolState.Normal);
+        // }
+        // //繼續loop
+        // else {
+        //     if (this.curveTime >= loopCurveTime) {
+        //         this.curveTime = this.curveTime % loopCurveTime;
+        //         this.updateSymbols(1, this.getCurveValue(this.curveTime));
+        //         this.setCurrentRng(this.currentRng - this.config.direction, true);
+        //     }
+        //     else {
+        //         this.updateSymbols(0, this.getCurveValue(this.curveTime));
+        //     }
+        // }
     }
 
     /**
@@ -397,14 +415,11 @@ export class SlotReel extends Component {
     private updateEndState(): void {
 
         let isCurveFinish = false;
-        if (this.reelState === ReelState.NUDGE) {
-            isCurveFinish = this.curveTime >= this.config.getSpeedConfig().nudgeCurveTime;
-        }
-        else if (this.reelState === ReelState.END) {
+        if (this.reelState === ReelState.END) {
             isCurveFinish = this.curveTime >= this.config.getSpeedConfig().endCurveTime;
         }
         if (isCurveFinish) {
-            this.currentRng = this.finalRng;
+            // this.currentRng = this.finalRng;
             this.reelState = ReelState.STOPPED;
             this.updateSymbols(1, 0);
             this.setSymbolState(SymbolState.Normal);
@@ -414,7 +429,7 @@ export class SlotReel extends Component {
                 symbol.hit(isInView);
             });
             //停輪時強制刷新盤面, 否則下次spin開始時, 畫面上的symbol會與輪帶資料不符
-            this.setCurrentRng(this.finalRng, true);
+            // this.setCurrentRng(true);
             this.reset();
             this.node.emit(SlotReel.STOP_COMPLETE, this.reelIndex);
 
@@ -424,31 +439,24 @@ export class SlotReel extends Component {
         }
     }
 
-    private getRng(value: number): number {
-        return (value + this.strip.length) % this.strip.length;
-    }
-
     /**
      * 設定目前輪帶索引位置
      * @param rng 
      */
-    private setCurrentRng(rng: number, isFinal: boolean = false): void {
-        this.currentRng = this.getRng(rng);
-        let symbol = this.symbolList.find(symbol => symbol.getPosIndex() === 0);
-        let symbolID: number;
-        //最後N顆強塞盤面
-        if (this.reelState === ReelState.STOPPING &&
-            this.forceResult.length > 0 &&
-            Utils.circularDistance(this.getRng(rng), this.getRng(this.finalRng), this.strip.length) <= (this.keepRow * 2)) {
-            symbolID = this.forceResult.pop();
-            symbol.setSymbolID(symbolID, -1, isFinal);
-        }
-        else {
-            let symbol0Rng = this.getRng(this.currentRng - (this.config.direction * this.keepRow));//轉換成拿來換圖的那一顆索引
-            symbolID = this.strip[symbol0Rng];
-            symbol.setSymbolID(symbolID, symbol0Rng, isFinal);
-        }
-    }
+    // private setCurrentRng(isFinal: boolean = false): void {
+    //     let symbol = this.symbolList.find(symbol => symbol.getPosIndex() === 0);
+    //     let symbolID: number;
+
+    //     // 直接使用强制结果
+    //     // if (this.forceResult.length > 0) {
+    //     symbolID = this.forceResult.pop();
+    //     symbol.setSymbolID(symbolID, isFinal);
+    //     // } else {
+    //     //     // 如果没有强制结果，使用随机符号
+    //     //     symbolID = Math.floor(Math.random() * 20) + 1; // 假设符号ID范围1-20
+    //     //     symbol.setSymbolID(symbolID, isFinal);
+    //     // }
+    // }
 
     /**
      * 更新位置資訊
@@ -464,7 +472,6 @@ export class SlotReel extends Component {
 
             let curNode = this.posList[this.getPosIdx(symbol.getPosIndex())];
             let nextNode = this.posList[this.getPosIdx(symbol.getPosIndex() + this.config.direction)];
-
             //座標
             symbol.node.setPosition(this.interpolate(curNode.getPosition(), nextNode.getPosition(), ratio));
 
@@ -483,266 +490,6 @@ export class SlotReel extends Component {
         });
     }
 
-    // private debug(data: any): void {
-    // console.warn(data);
-    // }
-
-    /**
-     * 向下掉落補空
-     * @param toMap 
-     */
-    public drop(): void {
-
-        //該軸消去顆數
-        let numDrop = this.getNumDrop();
-
-        console.log('drop empty ', this.reelIndex, numDrop);
-        //沒有空格
-        if (numDrop <= 0) {
-            console.log('reel drop none complete ', this.reelIndex);
-            this.node.emit(SlotReel.DROP_COMPLETE, this.reelIndex);
-            return;
-        }
-
-        /**找到實心可掉落數量 */
-        let numExpectDrop = 0;
-
-        //由下往上, 檢查可見的5格(4~0)
-        let len = this.symbolList.length;
-        for (let i = len - 1; i > 0; i--) {
-
-            let toPos = i;
-            let solidPos: number;
-
-            let emptySymbol: BaseSymbol = this.findSymbolByPosIndex(toPos);
-            let solidSymbol: BaseSymbol;
-
-            //跳過實心圖示
-            if (emptySymbol.getIsEmpty() === false) {
-                continue;
-            }
-
-            //找到空心圖示
-            // this.debug(`位置 ${this.reelIndex},${toPos} 已空`);
-
-            //從該位置向上找實心圖示
-            solidPos = toPos - 1;
-
-            while (true) {
-                solidSymbol = this.findSymbolByPosIndex(solidPos);
-                if (this.isInView(solidPos) === false) {
-                    //畫面內已找不到需要掉落物件
-                    solidSymbol = null;
-                    break;
-                }
-                if (!solidSymbol) {
-                    //空心以上已經沒有圖示物件
-                    break;
-                }
-                //此位置已標記空, 繼續向上找
-                else if (solidSymbol.getIsEmpty() == true) {
-                    solidPos = solidPos - 1;
-                }
-                //找到可用實心圖示
-                else {
-                    numExpectDrop++;
-                    break;
-                }
-            }
-
-            if (!solidSymbol) {
-                continue;
-            }
-
-            //把空的向上移動(交換位置)
-            // this.debug(`target 拿 ${solidSymbol.getPosIndex()} 來補`);
-            emptySymbol.setPosIndex(solidSymbol.getPosIndex());
-            emptySymbol.copyPositionAndScaleFrom(this.posList[emptySymbol.getPosIndex()]);
-
-            //準備落下物件先標記空, 避免後續掉落取到相同目標
-            solidSymbol.setIsEmpty(true);
-            //先校正回掉落前的位置, 再開始掉落
-            solidSymbol.setPosIndex(toPos);
-
-            //實心物件向下掉落移動
-            tween(solidSymbol.node)
-                //掉落演示
-                .to(this.config.getSpeedConfig().dropTime, {
-                    position: this.posList[toPos].getPosition(),
-                    scale: this.posList[toPos].getScale()
-                }, {
-                    easing: easing.backOut
-                })
-                //掉落到定位
-                .call(() => {
-                    solidSymbol.setIsEmpty(false);
-                    let isInView = this.isInView(toPos);
-                    solidSymbol.hit(isInView);
-
-                    numExpectDrop--;
-                    //該軸實心圖示掉落完成
-                    if (numExpectDrop <= 0) {
-                        console.log('reel drop complete ', this.reelIndex);
-
-                        this.node.emit(SlotReel.DROP_COMPLETE, this.reelIndex);
-                    }
-
-                })
-                .start();
-        }
-    }
-
-    public getNumEmpty(): number {
-        return this.symbolList.filter(symbol => symbol.getIsEmpty() == true).length;
-    }
-
-    public getNumDrop(): number {
-        let count = 0;
-        let len = this.symbolList.length;
-        let findEmpty: boolean = false;
-        for (let i = len - 1; i > -1; --i) {
-            let symbol = this.findSymbolByPosIndex(i);
-            //找到空的,開始向上計算實心物件個數
-            if (findEmpty) {
-                if (symbol.getIsEmpty() === false && this.isInView(symbol.getPosIndex())) {
-                    count++;
-                }
-            }
-            else if (symbol.getIsEmpty() === true) {
-                findEmpty = true;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * 掉落
-     * @param toMap 
-     */
-    public fill(toMap: BaseSymbolData[], dropRowDelay: number): void {
-
-        //該軸消去顆數
-        let numEmpty = this.getNumEmpty();
-        //沒有空格
-        if (numEmpty <= 0) {
-            console.log('reel fill none complete ', this.reelIndex);
-            this.node.emit(SlotReel.FILL_COMPLETE, this.reelIndex);
-            return;
-        }
-
-        /**找到實心可掉落數量 */
-        let numExpectDrop = 0;
-
-        //由下往上, 檢查可見的5格(4~0)
-        let len = this.symbolList.length;
-        for (let i = len - 1; i > 0; i--) {
-
-            let toPos = i;
-            let solidPos: number;
-
-            let emptySymbol: BaseSymbol = this.findSymbolByPosIndex(toPos);
-            let solidSymbol: BaseSymbol;
-
-            //跳過實心圖示
-            if (emptySymbol.getIsEmpty() === false) {
-                continue;
-            }
-
-            //找到空心圖示
-            // this.debug(`位置 ${this.reelIndex},${toPos} 已空`);
-
-            //從該位置向上找實心圖示
-            solidPos = toPos - 1;
-
-            while (true) {
-                solidSymbol = this.findSymbolByPosIndex(solidPos);
-                if (!solidSymbol) {
-                    //空心以上已經沒有圖示物件
-                    break;
-                }
-                //此位置已標記空, 繼續向上找
-                else if (solidSymbol.getIsEmpty() == true) {
-                    solidPos = solidPos - 1;
-                }
-                //找到可用實心圖示
-                else {
-                    numExpectDrop++;
-                    break;
-                }
-            }
-
-            if (!solidSymbol) {
-                continue;
-            }
-
-            //把空的向上移動(交換位置)
-            // this.debug(`target 拿 ${solidSymbol.getPosIndex()} 來補`);
-            emptySymbol.setPosIndex(solidSymbol.getPosIndex());
-            emptySymbol.copyPositionAndScaleFrom(this.posList[emptySymbol.getPosIndex()]);
-
-            //準備落下物件先標記空, 避免後續掉落取到相同目標
-            solidSymbol.setIsEmpty(true);
-            //先校正回掉落前的位置, 再開始掉落
-            solidSymbol.setPosIndex(toPos);
-
-            //有給最終盤面
-            if (toMap) {
-                if (this.isInView(toPos) === true) {
-                    solidSymbol.setSymbolData(toMap[i - this.keepRow]);
-                }
-                //盤面外(上方4-0)
-                else {
-                    //預覽 = 最終位置(輪帶-消去數量) -1(往上一格) -(4~0)
-                    let previewStripIdx = this.getRng(this.finalRng - numEmpty - (this.keepRow - i));
-                    let symbolID = this.strip[previewStripIdx];
-                    solidSymbol.setSymbolID(symbolID, previewStripIdx);
-                }
-            }
-            //沒給最終盤面
-            else {
-                //預覽 = 最終位置(輪帶-消去數量) -1(往上一格) -(4~0)
-                let previewStripIdx = this.getRng(this.finalRng - numEmpty - (this.keepRow - i));
-                let symbolID = this.strip[previewStripIdx];
-                solidSymbol.setSymbolID(symbolID, previewStripIdx);
-            }
-
-
-            //實心物件向下掉落移動
-            tween(solidSymbol.node)
-                .delay(dropRowDelay * (i - this.keepRow))
-                //掉落演示
-                .to(this.config.getSpeedConfig().dropTime, {
-                    position: this.posList[toPos].getPosition(),
-                    scale: this.posList[toPos].getScale()
-                }, {
-                    easing: easing.backOut
-                })
-                //掉落到定位
-                .call(() => {
-                    solidSymbol.setIsEmpty(false);
-                    let isInView = this.isInView(toPos);
-                    solidSymbol.hit(isInView);
-
-                    numExpectDrop--;
-                    //該軸實心圖示掉落完成
-                    if (numExpectDrop <= 0) {
-                        //更新rng
-                        this.finalRng -= numEmpty;
-                        this.symbolList.forEach((v) => {
-                            v.setIsEmpty(false);
-                        }, this);
-
-                        console.log('reel fill complete ', this.reelIndex);
-
-                        this.node.emit(SlotReel.FILL_COMPLETE, this.reelIndex);
-                    }
-
-
-                })
-                .start();
-        }
-    }
-
     /**是否在畫面內(目前因為是base無法與GameData共用判斷式, 後續再想解決辦法) */
     private isInView(posIndex: number): boolean {
         return posIndex >= this.keepRow && posIndex <= (this.keepRow + this.viewRow - 1);
@@ -753,40 +500,15 @@ export class SlotReel extends Component {
      * @param posIndex 
      * @returns 
      */
-    private findSymbolByPosIndex(posIndex: number): BaseSymbol {
-        return this.symbolList.find(symbol => symbol.getPosIndex() == posIndex);
-    }
-
-    /**
-     * 消去
-     * @param pos 
-     */
-    public explode(pos: number[]): void {
-        let explodeRow = [];
-        pos.forEach((v) => {
-            let grid = Utils.posToGrid(v);
-            explodeRow.push(grid.row + this.keepRow);
-        });
-
-
-        this.symbolList.forEach((symbol) => {
-            let posIdx = symbol.getPosIndex();
-            if (explodeRow.indexOf(posIdx) !== -1) {
-                if (this.isInView(posIdx) === false) {
-                    throw new Error('資料異常:消去畫面外圖示!!');
-                }
-                symbol.setIsEmpty(true);
-                symbol.setSymbolID(-1, -1);
-                symbol.explode();
-            }
-        }, this);
-    }
+    // private findSymbolByPosIndex(posIndex: number): BaseSymbol {
+    //     return this.symbolList.find(symbol => symbol.getPosIndex() == posIndex);
+    // }
 
     /**
      * 得分位置
      * @param pos 
      */
-    public showWin(pos: number[]): void {
+    public showSymbolWin(pos: number[]): void {
 
         let winRow = [];
         pos.forEach((v) => {
@@ -797,10 +519,10 @@ export class SlotReel extends Component {
         this.symbolList.forEach((symbol) => {
             let posIdx = symbol.getPosIndex();
             if (winRow.indexOf(posIdx) !== -1) {
-                symbol.showWin();
+                symbol.showSymbolWin();
             }
             else {
-                symbol.hideWin();
+                symbol.hideSymbolWin();
             }
         }, this);
     }
@@ -809,9 +531,9 @@ export class SlotReel extends Component {
      * 關閉中獎效果
      * @param pos 
      */
-    public hideWin(): void {
+    public hideSymbolWin(): void {
         this.symbolList.forEach((symbol) => {
-            symbol.hideWin();
+            symbol.hideSymbolWin();
         }, this);
     }
 
@@ -843,35 +565,12 @@ export class SlotReel extends Component {
         }, this);
     }
 
-    public setNudgeType(type: number): void {
-        this.nudgeType = type;
-    }
-
-
     /**
      * 開始瞇牌
      */
     public setVisible(visible: boolean): void {
         this.symbolList.forEach((symbol) => {
             symbol.setVisible(visible);
-        }, this);
-    }
-
-    /**
-     * 直接變盤
-     * @param toMap 
-     */
-    public change(toMap: BaseSymbolData[]): void {
-        if (!toMap) {
-            return;
-        }
-
-        toMap.forEach((value, idx) => {
-            let symbol = this.findSymbolByPosIndex(idx + this.keepRow);
-            symbol.changeSymbolData(value);
-            if (value) {
-                symbol.setIsEmpty(false);
-            }
         }, this);
     }
 

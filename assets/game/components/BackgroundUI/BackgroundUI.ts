@@ -10,12 +10,12 @@ const { ccclass } = _decorator;
 @ccclass('BackgroundUI')
 export class BackgroundUI extends Component {
 
-    private fg_bkg: Node;
-    private ng_bkg: Node;
+    private bg_fg: Node;
+    private bg_mg: Node;
 
     onLoad() {
-        this.ng_bkg = this.node.getChildByName('ng_bkg_ani');
-        this.fg_bkg = this.node.getChildByName('fg_bkg_ani');
+        this.bg_mg = this.node.getChildByName('bg_mg');
+        this.bg_fg = this.node.getChildByName('bg_fg');
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
 
@@ -27,8 +27,8 @@ export class BackgroundUI extends Component {
      * @param id 
      */
     private onChangeScene(id: ModuleID) {
-        this.ng_bkg.active = id === ModuleID.BS;
-        this.fg_bkg.active = id === ModuleID.FG;
+        this.bg_mg.active = id === ModuleID.BS;
+        this.bg_fg.active = id === ModuleID.FG;
     }
 }
 

@@ -4,9 +4,11 @@ import { Notice } from '@common/components/notice/Notice';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { i18n } from '@common/script/utils/i18n';
 import { Utils } from '@common/script/utils/Utils';
+
 
 const { ccclass, property, disallowMultiple } = _decorator;
 
@@ -56,6 +58,11 @@ export class Loading extends Component {
     public async start() {
         // Utils.GoogleTag('EnterGame', { 'currency': urlParameters.currency, 'language': urlParameters.lang });
 
+        //監聽資源載入完成
+        // BaseEvent.initResourceComplete.once(() => {
+        //     this.node.active = false;//關閉載入畫面
+        // }, this);
+
         console.log('獲取資料');
         // this.getRenewToken()
         //     .then(this.sendUserData)
@@ -77,7 +84,7 @@ export class Loading extends Component {
                 this.loadGameScene();
                 console.log('Loading Done');
             })
-            .catch(function (e) {
+            .catch((e: any) => {
                 //要出現405錯誤
                 Notice.showError.emit(405);
                 console.error(e);
@@ -89,14 +96,14 @@ export class Loading extends Component {
      * 發送用戶資料
      */
     private async sendUserData() {
-        NetworkManager.getInstance().sendUserData();
+        await NetworkManager.getInstance().sendUserData();
     }
 
     /**
      * 發送遊戲資料
      */
     private async sendGameData() {
-        NetworkManager.getInstance().sendGameData();
+        await NetworkManager.getInstance().sendGameData();
     }
 
     /**

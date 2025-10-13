@@ -41,19 +41,11 @@ export class BaseSymbol extends Component {
         this.layerList = list;
     }
 
-    public setIsEmpty(v: boolean): void {
-        this.empty = v;
-    }
-
-    public getIsEmpty(): boolean {
-        return this.empty;
-    }
-
     /**
      * 設定圖示ID
      * @param newSymbolID 
      */
-    public setSymbolID(_newSymbolID: number, _stripIdx: number, _isFinal: boolean = false): void {
+    public setSymbolID(_newSymbolID: number, _isFinal: boolean = false): void {
         //override
     }
 
@@ -66,14 +58,6 @@ export class BaseSymbol extends Component {
     }
 
     /**
-     * 設定圖示ID
-     * @param newSymbolID 
-     */
-    public changeSymbolData(_data: BaseSymbolData): void {
-        //override
-    }
-
-    /**
      * 設定圖示狀態
      * @param newSymbolID 
      */
@@ -81,29 +65,28 @@ export class BaseSymbol extends Component {
         //override
     }
 
-    public setPosIndex(index: number): void {
-        this.posIndex = index;
-        this.node.name = `symbol_${index}`;
+    public setGrid(col: number, row: number): void {
+        this.grid = { col, row };
+        this.node.name = `symbol_${col}_${row}`;
     }
 
-    public copyPositionAndScaleFrom(node: Node): void {
-        this.node.setPosition(node.getPosition());
-        this.node.setScale(node.getScale());
+    public getGrid(): Grid {
+        return this.grid;
+    }
+
+    public setPosIndex(index: number): void {
+        this.posIndex = index;
     }
 
     public getPosIndex(): number {
         return this.posIndex;
     }
 
-    public showWin(): void {
+    public showSymbolWin(): void {
         //override
     }
 
-    public hideWin(): void {
-        //override
-    }
-
-    public explode(): void {
+    public hideSymbolWin(): void {
         //override
     }
 
@@ -112,7 +95,7 @@ export class BaseSymbol extends Component {
     }
 
     /**掉落到盤面時(轉動消去都會觸發, 只有畫面內的symbol會觸發) */
-    public hit(_isInView: boolean): void {
+    public hit(isInView: boolean): void {
         //override
     }
 

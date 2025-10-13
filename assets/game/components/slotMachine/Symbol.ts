@@ -46,17 +46,9 @@ export class Symbol extends BaseSymbol {
     @property({ type: SpriteFrame })
     private normalImageList: SpriteFrame[] = [];
 
-    /**徽章圖示(一般狀態) */
-    @property({ type: SpriteFrame })
-    private normalBadgeImageList: SpriteFrame[] = [];
-
     /**圖示(模糊狀態) */
     @property({ type: SpriteFrame })
     private blurImageList: SpriteFrame[] = [];
-
-    /**徽章圖示(模糊狀態) */
-    @property({ type: SpriteFrame })
-    private blurBadgeImageList: SpriteFrame[] = [];
 
     /**圖示Spine動畫 */
     @property({ type: sp.SkeletonData })
@@ -84,8 +76,6 @@ export class Symbol extends BaseSymbol {
     /**權重 */
     public weight: number = 0;
 
-    private isBadge: boolean = false;
-
     /**
      * 初始化
      */
@@ -108,9 +98,9 @@ export class Symbol extends BaseSymbol {
                 return;
             }
 
-            let worldPos = this.node.parent.getComponent(UITransform).convertToWorldSpaceAR(this.node.getPosition());
-            let payData = DataManager.getInstance().slotData.getPayBySymbolID(this.symbolID);
-            PayTableUI.show.emit(this.grid, this.symbolID, this.normal.spriteFrame, worldPos, payData);
+            // let worldPos = this.node.parent.getComponent(UITransform).convertToWorldSpaceAR(this.node.getPosition());
+            // let payData = DataManager.getInstance().slotData.getPayBySymbolID(this.symbolID);
+            // PayTableUI.show.emit(this.grid, this.symbolID, this.normal.spriteFrame, worldPos, payData);
         }, this);
 
 
@@ -125,8 +115,8 @@ export class Symbol extends BaseSymbol {
             }
             else {
                 this.isMi = false;
-                if (this.isScatter() === true && this.isInView) {
-                    this.playSymbolAni(ScatterAni.mipie, true);
+                if (this.isScatter() && this.isInView) {
+                    this.spine.setAnimation(0, ScatterAni.mipie, true);
                 }
             }
         }, this);
@@ -143,38 +133,30 @@ export class Symbol extends BaseSymbol {
      * 開始spin時空的圖示要隨機給symbolID
      */
     public setRandomSymbol(): void {
-        this.symbolID = Math.floor(Math.random() * GameConst.symbolCount);
+        let randomID = Math.floor(Math.random() * GameConst.symbolCount);
+        //11~16要加4才會是正確的symbolID
+        this.symbolID = randomID > 10 ? randomID + 4 : randomID;
     }
 
     /**
      * 設定圖示ID
      * @param newSymbolID 
-     * @param stripIdx 
-     * @returns 
      */
-    public setSymbolID(newSymbolID: number, stripIdx: number): void {
-        this.idLabel.string = `${stripIdx}`;
+    public setSymbolID(newSymbolID: number): void {
+        console.log('setSymbolID', newSymbolID);
+        this.idLabel.string = `${newSymbolID}`;
+        this.posLabel.string = `${this.posIndex}`;
 
         //圖示沒變動不重覆設定
         this.symbolID = newSymbolID;
-        this.weight = GameConst.symbolWeight[newSymbolID];
-
-        //消去掉落不會再給新的badge資料, 所以不能清除
-        // this.isBadge = false;
+        this.weight = newSymbolID === SymbolID.Scatter ? 99 : 0;
 
         if (newSymbolID != -1) {
-            //scatter和wild強制設false,防呆
-            if (this.isScatter() === true || this.isWild() === true) {
-                this.isBadge = false;
-            }
-
-            //查輪帶資料表
-            // if (stripIdx !== -1) {
-            //     this.isBadge = !!DataManager.getInstance().getData<GameData>().stripBadgeDataList[this.grid.col][stripIdx];
-            // }
-            this.spine.skeletonData = this.spineDataList[newSymbolID];
-            this.normal.spriteFrame = this.isBadge ? this.normalBadgeImageList[newSymbolID] : this.normalImageList[newSymbolID];
-            this.blur.spriteFrame = this.isBadge ? this.blurBadgeImageList[newSymbolID] : this.blurImageList[newSymbolID];
+            //此盤面15~20圖示要減4,才會跟貼圖ID對應
+            const imageID = newSymbolID > 10 ? newSymbolID - 4 : newSymbolID;
+            this.spine.skeletonData = this.spineDataList[imageID];
+            this.normal.spriteFrame = this.normalImageList[imageID];
+            this.blur.spriteFrame = this.blurImageList[imageID];
 
             if (this.isScatter() === true && this.isInView) {
                 this.addChildToLayer(SymbolLayer.Scatter);
@@ -196,39 +178,36 @@ export class Symbol extends BaseSymbol {
      * 掉落補充
      * @param data 
      */
-    public setSymbolData(data: SymbolData): void {
-        this.isBadge = data.isBadge;
-        this.setSymbolID(data.symbolID, -1);
-    }
+    // public setSymbolData(data: SymbolData): void {
+    //     this.setSymbolID(data.symbolID, -1);
+    // }
 
     /**
      * 變盤
      * @param data 
      */
-    public changeSymbolData(data: SymbolData): void {
-        if (!data) {
-            return;
-        }
+    // public changeSymbolData(data: SymbolData): void {
+    //     if (!data) {
+    //         return;
+    //     }
 
-        this.isBadge = data.isBadge;
-
-        //變盤
-        if (data.isChange) {
-            //只有WILD會進來
-            if (data.symbolID === SymbolID.Wild) {
-                this.wild.node.active = true;
-                Utils.ClearSpine(this.wild);
-                this.wild.setCompleteListener(() => {
-                    this.setSymbolID(data.symbolID, -1);
-                });
-                this.wild.setAnimation(0, SymbolAni.open, false);
-            }
-        }
-        //回復BS盤面
-        else {
-            this.setSymbolID(data.symbolID, -1);
-        }
-    }
+    //     //變盤
+    //     if (data.isChange) {
+    //         //只有WILD會進來
+    //         if (data.symbolID === SymbolID.Wild) {
+    //             this.wild.node.active = true;
+    //             Utils.ClearSpine(this.wild);
+    //             this.wild.setCompleteListener(() => {
+    //                 this.setSymbolID(data.symbolID, -1);
+    //             });
+    //             this.wild.setAnimation(0, SymbolAni.open, false);
+    //         }
+    //     }
+    //     //回復BS盤面
+    //     else {
+    //         this.setSymbolID(data.symbolID, -1);
+    //     }
+    // }
 
     /**
      * 開始轉動
@@ -256,15 +235,14 @@ export class Symbol extends BaseSymbol {
         this.wild.node.active = false;
 
         if (this.symbolID !== -1) {
-            //scatter沒有模糊圖
-            if (this.isWild() === true) {
-                this.normal.node.active = true;
-                this.blur.node.active = false;
-            }
-            else {
-                this.normal.node.active = (state == SymbolState.Normal || this.isMi);
-                this.blur.node.active = (state == SymbolState.Blur && !this.isMi);
-            }
+            // if (this.isWild()) {
+            //     this.normal.node.active = true;
+            //     this.blur.node.active = false;
+            // }
+            // else {
+            this.normal.node.active = (state == SymbolState.Normal || this.isMi);
+            this.blur.node.active = (state == SymbolState.Blur && !this.isMi);
+            // }
         }
         else {
             this.normal.node.active = false;
@@ -275,21 +253,18 @@ export class Symbol extends BaseSymbol {
     /**
      * 中獎演示
      */
-    public showWin(): void {
-        if (this.isScatter() === true) {
-            this.playSymbolAni(ScatterAni.start, false, () => {
-                this.playSymbolAni(ScatterAni.loop, true);
-            });
-        }
-        else {
-            this.playSymbolAni(SymbolAni.win, false);
-        }
+    public showSymbolWin(): void {
+        this.spine.node.active = true;
+        this.normal.node.active = false;
+        this.addChildToLayer(SymbolLayer.Win);
+        const animName = this.isScatter() ? ScatterAni.loop : SymbolAni.win;
+        this.spine.setAnimation(0, animName, true);
     }
 
     /**
      * 取消中獎效果
      */
-    public hideWin(): void {
+    public hideSymbolWin(): void {
         this.reset();
     }
 
@@ -306,15 +281,6 @@ export class Symbol extends BaseSymbol {
     }
 
     /**
-     * 爆炸演示
-     */
-    // public explode() {
-    //     this.spine.timeScale = DataManager.getInstance().getData<GameData>().getTurboSetting().explodeTimeScale;
-    //     this.playSymbolAni(SymbolAni.explo, false);
-    //     this.symbolID = -1;
-    // }
-
-    /**
      * 圖示落地
      * @returns 
      */
@@ -324,46 +290,46 @@ export class Symbol extends BaseSymbol {
                 // AudioManager.getInstance().playOneShot(GameAudioKey.scatter);
 
                 //畫面內的scatter只播一次hit
-                if (this.isInView === false) {
-                    this.playSymbolAni(ScatterAni.got, false);
-                }
+                // if (this.isInView === false) {
+                //     this.playSymbolAni(ScatterAni.got, false);
+                // }
             }
             else {
-                this.playSymbolAni(SymbolAni.drop, false);
+                // this.playSymbolAni(SymbolAni.drop, false);
             }
         }
         this.isInView = isInView;
     }
 
-    /**
-     * 播放圖示動畫, 完成後放回原層級
-     * @param name 
-     * @param onComplete 
-     */
-    private playSymbolAni(name: string, loop: boolean, onComplete?: () => void): void {
-        this.spine.node.active = true;
-        this.normal.node.active = false;
-        this.addChildToLayer(SymbolLayer.Win);
-        Utils.ClearSpine(this.spine);
+    // /**
+    //  * 播放圖示動畫, 完成後放回原層級
+    //  * @param name 
+    //  * @param onComplete 
+    //  */
+    // private playSymbolAni(name: string, loop: boolean, onComplete?: () => void): void {
+    //     this.spine.node.active = true;
+    //     this.normal.node.active = false;
+    //     this.addChildToLayer(SymbolLayer.Win);
+    //     Utils.ClearSpine(this.spine);
 
-        //非loop動畫會監聽完成並回復normal
-        if (!loop) {
-            this.spine.setCompleteListener(() => {
-                this.spine.setCompleteListener(null);
-                this.spine.timeScale = 1;
-                this.spine.node.active = false;
-                this.addChildToLayer(SymbolLayer.Reel);
+    //     //非loop動畫會監聽完成並回復normal
+    //     if (!loop) {
+    //         this.spine.setCompleteListener(() => {
+    //             this.spine.setCompleteListener(null);
+    //             this.spine.timeScale = 1;
+    //             this.spine.node.active = false;
+    //             this.addChildToLayer(SymbolLayer.Reel);
 
-                //explode時symbolID為-1
-                if (this.symbolID !== -1) {
-                    this.normal.node.active = true;
-                }
-                onComplete?.();
-            });
-        }
+    //             //explode時symbolID為-1
+    //             if (this.symbolID !== -1) {
+    //                 this.normal.node.active = true;
+    //             }
+    //             onComplete?.();
+    //         });
+    //     }
 
-        this.spine.setAnimation(0, this.isBadge ? name + '_badge' : name, loop);
-    }
+    //     this.spine.setAnimation(0, name, loop);
+    // }
 
     /**
      * 開始瞇牌
@@ -376,9 +342,9 @@ export class Symbol extends BaseSymbol {
         return this.symbolID === SymbolID.Scatter;
     }
 
-    private isWild(): boolean {
-        return this.symbolID === SymbolID.Wild;
-    }
+    // private isWild(): boolean {
+    //     return this.symbolID === SymbolID.Wild;
+    // }
 
     /**
      * 調整圖示層級
@@ -386,18 +352,16 @@ export class Symbol extends BaseSymbol {
      */
     private addChildToLayer(layerIdx: SymbolLayer): void {
         let layer = this.layerList[layerIdx];
-        layer.addChild(this.node);
+        layer.children[this.grid.col].addChild(this.node);
         let sortChildren = layer.children.concat();
         sortChildren.sort((a, b) => {
-            if (a.getComponent(Symbol).weight > b.getComponent(Symbol).weight) {
-                return 1;
+            if (a.position.y > b.position.y) {
+                return -1; // y值大的排在前面
             }
-            else if (a.getComponent(Symbol).weight < b.getComponent(Symbol).weight) {
-                return -1;
+            else if (a.position.y < b.position.y) {
+                return 1;  // y值小的排在后面
             }
-            else {
-                return a.getComponent(Symbol).posIndex - b.getComponent(Symbol).posIndex;
-            }
+            return 0; // y值相等时保持原顺序
         });
         sortChildren.forEach((a, i) => a.setSiblingIndex(i));
     }

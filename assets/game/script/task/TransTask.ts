@@ -1,5 +1,5 @@
-import { BannerUI } from '@game/components/BannerUI/BannerUI';
-import { FSUI } from '@game/components/FSUI/FSUI';
+// import { BannerUI } from '@game/components/BannerUI/BannerUI';
+// import { FSUI } from '@game/components/FSUI/FSUI';
 import { TransUI } from '@game/components/TransUI/TransUI';
 import { GameAudioKey } from '@game/script/data/GameConst';
 
@@ -21,14 +21,14 @@ export class TransTask extends GameTask {
     protected name: string = 'TransTask';
 
     /**轉場目標 */
-    public to: ModuleID;
+    public toModuleID: ModuleID;
 
     /**次數 */
     public times: number;
 
     execute(): void {
 
-        DataManager.getInstance().moduleID = DataManager.getInstance().nextModuleID;
+        DataManager.getInstance().moduleID = this.toModuleID;
 
         //中免費轉停止
         if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
@@ -51,9 +51,9 @@ export class TransTask extends GameTask {
                 BaseEvent.changeScene.emit(ModuleID.FG);
 
                 //還原廣告狀態
-                BannerUI.reset.emit();
+                // BannerUI.reset.emit();
 
-                FSUI.refreshRemainTimes.emit(this.times);
+                // FSUI.refreshRemainTimes.emit(this.times);
                 // RevolverUI.setMultiplier.emit(GameConst.FS_INIT_MULTIPLIER);
 
 

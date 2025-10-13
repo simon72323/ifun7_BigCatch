@@ -175,13 +175,14 @@ export class Utils {
      * 根據中獎線ID獲取路徑位置
      * @param payLineId 中獎線ID (從1開始)
      * @param amount 需要的位置数量
+     * @param slotPattern 盤面符號
      * @param payLineData 中獎線路徑配置
      * @returns 路徑位置數組
      */
-    public static getLinePathPosition(payLineId: number, amount: number, gameResult: number[], payLineData: number[][]): { winPos: number[], symbolIDs: number[] } {
+    public static getLinePathPosition(payLineId: number, amount: number, slotPattern: number[][], payLineData: number[][]): { winPos: number[], winSymbolIDs: number[] } {
         const linePath = payLineData[payLineId - 1]; // payLineId從1開始
         let winPos: number[] = [];
-        let symbolIDs: number[] = [];
+        let winSymbolIDs: number[] = [];
 
         // 從payLineData推導出行數 (假設所有路徑都有相同的行數)
         const rowCount = Math.max(...payLineData.flat()) + 1; // 最大行號 + 1
@@ -191,10 +192,10 @@ export class Utils {
             const row = linePath[col];
             const pos = col * rowCount + row;
             winPos.push(pos);
-            symbolIDs.push(gameResult[pos]);
+            winSymbolIDs.push(slotPattern[row][col]);
         }
 
-        return { winPos, symbolIDs };
+        return { winPos, winSymbolIDs };
     }
 
     /**

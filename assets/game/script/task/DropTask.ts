@@ -31,12 +31,10 @@ export class DropTask extends GameTask {
             for (let row: number = 0; row < GameConst.REEL_ROW; row++) {
                 let fromData = new SymbolData();
                 fromData.symbolID = this.preSymbolPattern[col + 6 * row];
-                fromData.isBadge = false;
                 fromReel.push(fromData);
 
                 let data = new SymbolData();
                 data.symbolID = this.newSymbolPattern[col + 6 * row];
-                data.isBadge = this.goldenPattern[col + 6 * row] > 0;
                 toReel.push(data);
             }
             fromAllToReel.push(fromReel);

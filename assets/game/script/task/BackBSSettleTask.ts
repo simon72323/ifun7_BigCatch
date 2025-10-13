@@ -1,8 +1,4 @@
-import { BannerUI } from '@game/components/BannerUI/BannerUI';
 
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-
-import { DataManager } from '@common/script/data/DataManager';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
@@ -16,10 +12,10 @@ export class BackBSSettleTask extends GameTask {
     protected name: string = 'BackBSSettleTask';
 
     /**目前累計獲得金額(右下角Win) */
-    public sumWin: number;
+    // public sumWin: number;
 
     /**剩餘額度 */
-    public playerCent: number;
+    // public playerCent: number;
 
     execute(): void {
 
@@ -39,14 +35,14 @@ export class BackBSSettleTask extends GameTask {
      */
     private async onTaskEnd(): Promise<void> {
 
-        SettingsController.refreshCredit.emit(this.playerCent);
-        SettingsController.refreshWin.emit(this.sumWin * DataManager.getInstance().bet.getLineTotal());
+        // SettingsController.refreshCredit.emit(this.playerCent);
+        // SettingsController.refreshWin.emit(this.sumWin * DataManager.getInstance().bet.getLineTotal());
 
         //橫幅贏分
-        if (this.sumWin > 0) {
-            let multiple: number = DataManager.getInstance().bet.getWinMultipleByValue(this.sumWin);
-            BannerUI.showTotalWin.emit(this.sumWin * DataManager.getInstance().bet.getLineTotal(), multiple);
-        }
+        // if (this.sumWin > 0) {
+        //     let multiple: number = DataManager.getInstance().bet.getWinMultipleByValue(this.sumWin);
+        //     BannerUI.showTotalWin.emit(this.sumWin * DataManager.getInstance().bet.getLineTotal(), multiple);
+        // }
 
         //要多等一秒
         await delay(1);

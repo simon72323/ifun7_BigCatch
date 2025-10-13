@@ -2,7 +2,7 @@ import { _decorator, Animation, Component, easing, Node, tween, Tween, Vec3 } fr
 
 import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
-import { GameAnimationName, GameAudioKey } from '@game/script/data/GameConst';
+import { GameAnimationName, GameAudioKey, GameConst } from '@game/script/data/GameConst';
 import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
 
@@ -36,17 +36,18 @@ export class GameStage extends Component {
     private isMi: boolean = false;
     private scaleNode: Node;
     onLoad() {
-        this.initGame();//初始化
         //初始化盤面
         //初始化遊戲資料
 
         //===================不確定cocos內做，且收到要做甚麼?===================
         //獲取促銷簡介、遊戲內選單狀態、遊戲內選單
-        NetworkManager.getInstance().sendPromotionBrief()
-            .then(NetworkManager.getInstance().sendInGameMenuStatus)
-            .then(NetworkManager.getInstance().sendInGameMenu)
-            .catch(() => {
-                console.log('fail to fetch the brief of promotion or the status of in game menu from server');
+        this.sendPromotionBrief()
+            .then(this.sendInGameMenuStatus)
+            // .then(this.sendInGameMenu)
+            .then(this.initGame.bind(this))
+            .catch((e: any) => {
+                console.error(e);
+                // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
             });
         //===================不確定cocos內做，且收到要做甚麼?===================
 
@@ -63,6 +64,19 @@ export class GameStage extends Component {
         SlotMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
     }
 
+    private async sendPromotionBrief() {
+        await NetworkManager.getInstance().sendPromotionBrief();
+    }
+
+    private async sendInGameMenuStatus() {
+        await NetworkManager.getInstance().sendInGameMenuStatus();
+        // this.initGame();
+    }
+
+    private async sendInGameMenu() {
+        await NetworkManager.getInstance().sendInGameMenu();
+    }
+
     /**
      * 遊戲初始化內容
      */
@@ -77,9 +91,10 @@ export class GameStage extends Component {
         //註冊聲音
 
         //初始化盤面
-        // let gameData = gameInformation.gameData;
-        // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.bsInitRng, null, gameData.bsInitGoldenPattern);
-        // SlotMachine.setup.emit(gameData.slotParser);
+        // let slotParser = DataManager.getInstance().slotData.slotParser;
+        // slotParser.slotPattern = GameConst.BS_INIT_RESULT;
+        SlotMachine.initReelSymbolID.emit(GameConst.BS_INIT_RESULT);
+        // SlotMachine.setSlotParser.emit(slotParser);
 
         // SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
         SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);
@@ -90,17 +105,11 @@ export class GameStage extends Component {
         MessageHandler.getInstance().initialize();//初始化消息處理
         // UIManager.getInstance().initialize();//需要注意各UI onLoad時機
 
-        // if (DataManager.getInstance().recoverData) {
-        // let recoverTask = new RecoverTask();
-        // }
-
         //讀取完成後通知LoadingScene可以關閉
-        BaseEvent.initResourceComplete.emit();
-
-        //監聽開始遊戲事件 --------------------------------------------------------
-        BaseEvent.startGame.once(() => {
-            TaskManager.getInstance().addTask(new IdleTask());
-        }, this);
+        // BaseEvent.initResourceComplete.emit();
+        //開始遊戲--------------------------------------------------------
+        console.log('開始遊戲');
+        TaskManager.getInstance().addTask(new IdleTask());
     }
 
     /**震動 */
@@ -159,13 +168,17 @@ export class GameStage extends Component {
      * @param id 
      */
     private onChangeScene(id: ModuleID) {
-        this.node.getChildByPath('ScaleNode/BSUI1').active = id === ModuleID.BS;
-        this.node.getChildByPath('ScaleNode/BSUI2').active = id === ModuleID.BS;
-        this.node.getChildByPath('ScaleNode/FSUI').active = id !== ModuleID.BS;
+        // this.node.getChildByPath('ScaleNode/BSUI1').active = id === ModuleID.BS;
+        // this.node.getChildByPath('ScaleNode/BSUI2').active = id === ModuleID.BS;
+        // this.node.getChildByPath('ScaleNode/FSUI').active = id !== ModuleID.BS;
 
         // if (id === ModuleID.BS) {
         //     XUtils.ClearSpine(this.roller_ani);
         //     this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
         // }
+    }
+
+    update(deltaTime: number) {
+        TaskManager.getInstance().update(deltaTime);
     }
 }

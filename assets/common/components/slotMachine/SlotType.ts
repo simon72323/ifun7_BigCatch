@@ -30,8 +30,6 @@ export enum ReelState {
     END,
     /**已停止 */
     STOPPED,
-    /**戲謔 */
-    NUDGE
 }
 
 const { ccclass, property } = _decorator;
@@ -45,8 +43,6 @@ export class SlotReelConfig {
     beginCurve: RealCurve;
     /**結尾曲線 */
     endCurve: RealCurve;
-    /**結尾曲線 */
-    nudgeCurveList: RealCurve[];
     /**方向 */
     direction: number = 1;
     /**速度參數 */
@@ -84,17 +80,14 @@ export class SpeedConfig {
     @property({ type: CCFloat, tooltip: '結尾曲線秒數' })
     public endCurveTime: number = 0.1;
 
-    @property({ type: CCFloat, tooltip: '戲謔曲線秒數' })
-    public nudgeCurveTime: number = 1;
-
     @property({ type: CCFloat, tooltip: '至少滾動N秒' })
     public spinTime: number = 1;
 
-    @property({ type: CCFloat, tooltip: '掉落軸間隔秒數' })
-    public dropInterval: number = 0.1;
+    // @property({ type: CCFloat, tooltip: '掉落軸間隔秒數' })
+    // public dropInterval: number = 0.1;
 
-    @property({ type: CCFloat, tooltip: '掉落秒數' })
-    public dropTime: number = 0.1;
+    // @property({ type: CCFloat, tooltip: '掉落秒數' })
+    // public dropTime: number = 0.1;
 
     @property({ type: CCFloat, tooltip: '瞇牌秒數' })
     public slowMotionTime: number = 3;

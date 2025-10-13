@@ -7,35 +7,33 @@ import { Utils } from '@common/script/utils/Utils';
 export class BetData {
 
     /** 當前下注索引 */
-    private _betIdx: number = 1;
-    public set betIdx(value: number) {
-        this._betIdx = value;
+    private betIdx: number = 1;
+    public setBetIdx(value: number): void {
+        this.betIdx = value;
     }
 
     /** 當前線注索引 */
-    private _lineIdx: number = 0;
-    public set lineIdx(value: number) {
-        this._lineIdx = value;
+    private lineIdx: number = 0;
+    public setLineIdx(value: number): void {
+        this.lineIdx = value;
     }
 
     /** 遊戲數據引用 */
-    private _gameData: IGameData;
-    public set gameData(gameData: IGameData) {
-        this._gameData = gameData;
+    private gameData: IGameData;
+    public setGameData(gameData: IGameData): void {
+        this.gameData = gameData;
     }
 
     /** 當前下注額 */
-    private _coinValue: number = 0;
-    public get coinValue() {
-        return this._coinValue;
+    private coinValue: number = 0;
+    public setCoinValue(value: number): void {
+        this.coinValue = value;
     }
 
-    /**
-     * 設置遊戲數據
-     */
-    // public setGameData(gameData: IGameData): void {
-    //     this._gameData = gameData;
-    // }
+    public getCoinValue(): number {
+        return this.coinValue;
+    }
+
 
     /**
      * 設置大贏倍率數據
@@ -75,7 +73,7 @@ export class BetData {
      * @returns 總下注金額(總線數 x 下注值 x 線注)
      */
     public getBetTotal(): number {
-        return Utils.accMul(this._gameData.line_total, this.getCurBetXCurLine());
+        return Utils.accMul(this.gameData.line_total, this.getCurBetXCurLine());
     }
 
     /**
@@ -83,7 +81,7 @@ export class BetData {
      * @returns 
      */
     public getBuyFeatureTotal(): number {
-        return Utils.accMul(this._gameData.buy_spin.multiplier, this.getBetTotal());
+        return Utils.accMul(this.gameData.buy_spin.multiplier, this.getBetTotal());
     }
 
     /**
@@ -91,32 +89,32 @@ export class BetData {
      * @param changeValue 改變值（正數為增加，負數為減少）
      */
     public getChangeBetValue(changeValue: number): number {
-        this._betIdx += changeValue;
-        const length = this._gameData.coin_value.length;
-        const betIdxMin = this._gameData.bet_available_idx;
+        this.betIdx += changeValue;
+        const length = this.gameData.coin_value.length;
+        const betIdxMin = this.gameData.bet_available_idx;
 
         if (changeValue > 0) {
             // 增加下注
-            if (this._betIdx >= length) {
-                this._betIdx = betIdxMin;
+            if (this.betIdx >= length) {
+                this.betIdx = betIdxMin;
             }
         } else {
             // 減少下注
-            if (this._betIdx < betIdxMin) {
-                this._betIdx = length - 1;
+            if (this.betIdx < betIdxMin) {
+                this.betIdx = length - 1;
             }
         }
 
         // 更新下注值
-        this._coinValue = this._gameData.coin_value[this._betIdx];
-        return this._coinValue;
+        this.coinValue = this.gameData.coin_value[this.betIdx];
+        return this.coinValue;
     }
 
     /**
      * 增加下注
      */
     public plus(): void {
-        this._betIdx = Math.min(this._betIdx + 1, this._gameData.coin_value.length - 1);
+        this.betIdx = Math.min(this.betIdx + 1, this.gameData.coin_value.length - 1);
         // this.betIdx = gameInformation.gameData.coin_value[this.totalIndex];
         // this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
     }
@@ -125,7 +123,7 @@ export class BetData {
      * 減少下注
      */
     public less(): void {
-        this._betIdx = Math.max(this._betIdx - 1, 0);
+        this.betIdx = Math.max(this.betIdx - 1, 0);
         // this.betIdx = this.TotalArrayX[this.TotalIndex][0];
         // this.rateIdx = this.TotalArrayX[this.TotalIndex][1];
     }
@@ -135,7 +133,7 @@ export class BetData {
      * @returns 
      */
     public getPlusEnabled(): boolean {
-        return this._betIdx < this._gameData.coin_value.length - 1;
+        return this.betIdx < this.gameData.coin_value.length - 1;
     }
 
     /**
@@ -143,7 +141,7 @@ export class BetData {
      * @returns 
      */
     public getLessEnabled(): boolean {
-        return this._betIdx > 0;
+        return this.betIdx > 0;
     }
 
     /**
@@ -159,8 +157,8 @@ export class BetData {
      * @returns 下注值 x 線注
      */
     public getCurBetXCurLine(): number {
-        const lineBet = this._gameData.line_bet[this._lineIdx];
-        return Utils.accMul(this._coinValue, lineBet);
+        const lineBet = this.gameData.line_bet[this.lineIdx];
+        return Utils.accMul(this.coinValue, lineBet);
     }
 
     /**
@@ -168,7 +166,7 @@ export class BetData {
      * @returns 
      */
     public getLineTotal(): number {
-        return this._gameData.line_total;
+        return this.gameData.line_total;
     }
     //================ 下注相關資料 ======================
 

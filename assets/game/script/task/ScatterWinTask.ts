@@ -1,50 +1,28 @@
-
-
 import { UIBlack } from '@game/components/UIBlack';
-import { BlackKey, GameAudioKey, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
+import { BlackKey, GameAudioKey } from '@game/script/data/GameConst';
 
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { delay, Utils } from '@common/script/utils/Utils';
-
-
+import { delay } from '@common/script/utils/Utils';
 
 /**
  * Scatter中獎
  */
 export class ScatterWinTask extends GameTask {
-
     protected name: string = 'ScatterWinTask';
-
-    /**最終盤視覺盤面資料 */
-    public symbolPattern: number[];
+    /**中獎位置 */
+    public winPos: number[];
+    /**派彩金額 */
+    public payCredit: number;
 
     public async execute(): Promise<void> {
-
         AudioManager.getInstance().playSound(GameAudioKey.st);
-
-        let winPos: number[] = [];
-
-        //整理出中獎位置
-        this.symbolPattern.forEach((symbolID, mapIdx) => {
-            if (symbolID === SymbolID.Scatter) {
-                let row = mapIdx % 6;
-                let col = Math.floor(mapIdx / 6);
-                winPos.push(row * 10 + col + 1);
-            }
-        }, this);
-
-        //壓黑
-        UIBlack.show.emit(BlackKey.UIBlack);
-
-        SlotMachine.showWin.emit(winPos);
-
+        UIBlack.show.emit(BlackKey.UIBlack); //壓黑
+        SlotMachine.showSymbolWin.emit(this.winPos); //顯示中獎位置
         await delay(2);
-        Utils.scheduleOnce(() => {
-            UIBlack.hide.emit(BlackKey.UIBlack);
-            this.finish();
-        }, 2, this);
+        UIBlack.hide.emit(BlackKey.UIBlack);
+        this.finish();
     }
 
     update(deltaTime: number): void {

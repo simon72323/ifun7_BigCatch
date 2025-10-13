@@ -96,7 +96,6 @@ export class NetworkManager {
             method: FETCH_METHODS.POST,
             content: JSON.stringify(content)
         };
-        console.log('sendRequest', fetchPayload);
 
         return new Promise((resolve, reject) => {
             this.fetchRequest.sendRequest(fetchPayload, (response: IResponseData) => {
@@ -127,14 +126,16 @@ export class NetworkManager {
     public async sendSpin(betCredit: number, SpinID: number, callback: (spinResult: ISpinData) => void): Promise<void> {
         try {
             const gameData = DataManager.getInstance().gameData;
-            const response = await this.sendRequest(NetworkApi.SPIN, {
+            const data = {
                 game_id: DataManager.getInstance().urlParam.gameId,
                 coin_value: gameData.coin_value[gameData.coin_value_default_index],
                 line_bet: gameData.line_bet[gameData.line_bet_default_index],
                 line_num: gameData.line_total,
                 bet_credit: betCredit,
                 buy_spin: SpinID
-            });
+            };
+            const response = await this.sendRequest(NetworkApi.SPIN, data);
+            console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
             // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
             DataManager.getInstance().spinResult = response.data;
             callback(response.data);// 成功回調
@@ -289,7 +290,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
         console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
         // return response.data as IUserData;
-        DataManager.getInstance().userData = response.data;
+        DataManager.getInstance().userData = response.data[0];
     }
 
     /**
@@ -301,7 +302,7 @@ export class NetworkManager {
         });
         console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
         // return response.data as IGameData;
-        DataManager.getInstance().gameData = response.data;
+        DataManager.getInstance().gameData = response.data[0];
     }
 
     /**

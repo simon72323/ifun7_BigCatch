@@ -51,12 +51,6 @@ export class SlotMachine extends Component {
     @property({ type: RealCurve, tooltip: '運動曲線\n' + '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n' })
     private endCurve = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
 
-    @property({ type: RealCurve, tooltip: '戲謔曲線\n' + '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n' })
-    private nudgeCurve = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
-
-    @property({ type: RealCurve, tooltip: '戲謔曲線2\n' + '[結束] 時間:(0.50 ~ 1.00), 值:(0 ~ 1)\n' })
-    private nudgeCurve2 = (() => { const curve = new RealCurve(); curve.assignSorted([[0, { value: 0 }], [1, { value: 1 }]]); return curve; })();
-
     // @property({ type: CCInteger, tooltip: '方向(1:向下,-1:向上' })//暫時沒用
     private direction: number = 1;
 
@@ -71,9 +65,12 @@ export class SlotMachine extends Component {
 
     private reelRunNode: Node = null;
 
-    /**初始化老虎機(id, parser) */
-    public static setup: XEvent1<BaseSlotParser> = new XEvent1();
-    public static changeStrip: XEvent1<BaseSlotParser> = new XEvent1();
+    /**初始化老虎機 */
+    public static setSlotParser: XEvent1<BaseSlotParser> = new XEvent1();
+
+    /**初始化軸符號 */
+    public static initReelSymbolID: XEvent1<number[][]> = new XEvent1();
+    // public static changeStrip: XEvent1<BaseSlotParser> = new XEvent1();
     /**老虎機開始轉動 */
     public static spin: XEvent = new XEvent();
     public static spinComplete: XEvent = new XEvent();
@@ -81,7 +78,7 @@ export class SlotMachine extends Component {
     /**SR指定盤面(map)必須在stop前呼叫 */
     public static setForceResult: XEvent1<number[][]> = new XEvent1();
 
-    /**老虎機停止(rngList) */
+    /**老虎機停止 */
     public static stop: XEvent1<() => void> = new XEvent1();
 
     /**急停(id) */
@@ -91,25 +88,11 @@ export class SlotMachine extends Component {
     public static stopOnReel: XEvent1<number> = new XEvent1();
     public static stopComplete: XEvent = new XEvent();
 
-    /**掉落到定位通知(只有有空缺圖示的軸才會提示) */
-    public static fillOnReel: XEvent1<number> = new XEvent1();
-
-    /**當前盤面向下補空 */
-    public static drop: XEvent1<() => void> = new XEvent1();
-
-    /**新盤面落下(fromMap, toMap, 沒給表示用輪帶資料) */
-    public static fill: XEvent3<BaseSymbolData[][], BaseSymbolData[][], () => void> = new XEvent3();
-
-    /**消去(winPos) */
-    public static explode: XEvent1<number[]> = new XEvent1();
-
     /**中獎(winPos) */
-    public static showWin: XEvent1<number[]> = new XEvent1();
+    public static showSymbolWin: XEvent1<number[]> = new XEvent1();
     /**關閉中獎(winPos) */
-    public static hideWin: XEvent = new XEvent();
+    public static hideSymbolWin: XEvent = new XEvent();
 
-    /**變盤(toMap) */
-    public static change: XEvent1<BaseSymbolData[][]> = new XEvent1();
 
     /**開始瞇牌 */
     public static startMi: XEvent1<number> = new XEvent1();
@@ -123,9 +106,6 @@ export class SlotMachine extends Component {
 
     /**停輪callback */
     private stopCallback: () => void = null;
-
-    /**輪帶索引清單 */
-    private finalRngList: number[];
 
     /**老虎機狀態 */
     private state: SlotMachineState = SlotMachineState.IDLE;
@@ -154,7 +134,6 @@ export class SlotMachine extends Component {
         config.symbolPrefab = this.symbolPrefab;
         config.beginCurve = this.beginCurve;
         config.endCurve = this.endCurve;
-        config.nudgeCurveList = [this.nudgeCurve, this.nudgeCurve2];
         config.speedConfigList = [this.normal, this.fast, this.turbo];
         config.direction = this.direction;
         config.layerList = this.layerList;
@@ -166,48 +145,41 @@ export class SlotMachine extends Component {
             reel.init(idx, config);
         }, this);
 
-        // SlotMachine.setup.on(this.setupStripTableAndRng, this);
-        // SlotMachine.changeStrip.on(this.changeStripTable, this);
+        SlotMachine.initReelSymbolID.on(this.initReelSymbolID, this);
+        SlotMachine.setSlotParser.on(this.setSlotParser, this);
         SlotMachine.spin.on(this.onSpin, this);
         SlotMachine.setForceResult.on(this.onForceResult, this);
         SlotMachine.stop.on(this.onStop, this);
         SlotMachine.skip.on(this.onSkip, this);
 
-        //舊盤面落下
-        SlotMachine.drop.on(this.onDrop, this);
-
         //新盤面補入
-        SlotMachine.fill.on(this.onFill, this);
-        SlotMachine.explode.on(this.onExplode, this);
-        SlotMachine.showWin.on(this.onShowWin, this);
-        SlotMachine.hideWin.on(this.onHideWin, this);
-        SlotMachine.change.on(this.onChange, this);
+        SlotMachine.showSymbolWin.on(this.onShowSymbolWin, this);
+        SlotMachine.hideSymbolWin.on(this.onHideSymbolWin, this);
 
         SlotMachine.setReelVisible.on(this.onSetReelVisible, this);
     }
 
     /**
-     * 初始化
-     * @param stripTable 
-     * @param rngList 
+     * 初始化盤面符號
+     * @param reelSymbolID 盤面符號
      */
-    // private setupStripTableAndRng(parser: BaseSlotParser): void {
-    //     this.parser = parser;
-    //     for (let i = 0; i < this.dataList.length; i++) {
-    //         this.dataList[i].setupStripAndRng(parser.stripTable[i], parser.rngList[i]);
-    //     }
-    // }
+    private initReelSymbolID(reelSymbolID: number[][]): void {
+        for (let i = 0; i < this.spinList.length; i++) {
+            this.spinList[i].initSymbolIDs(reelSymbolID[i]);
+        }
+    }
 
     /**
-     * 變盤
-     * @param parser 
+     * 設定盤面停止符號(二維陣列)
+     * @param slotPattern 盤面停止符號(二維陣列)
      */
-    // private changeStripTable(parser: BaseSlotParser): void {
-    //     this.parser = parser;
-    //     for (let i = 0; i < this.dataList.length; i++) {
-    //         this.dataList[i].setStrip(parser.stripTable[i]);
-    //     }
-    // }
+    private setSlotParser(slotParser: BaseSlotParser): void {
+        this.parser = slotParser;
+        console.log('設定盤面停止符號', slotParser);
+        for (let i = 0; i < this.spinList.length; i++) {
+            this.spinList[i].setReelSymbolID(slotParser.slotPattern[i]);
+        }
+    }
 
     /**
      * 開始轉動
@@ -220,18 +192,17 @@ export class SlotMachine extends Component {
         SlotMachine.spinComplete.emit();
 
         Tween.stopAllByTarget(this.reelRunNode);
-        let script = tween(this.reelRunNode);
+        let tweenAnim = tween(this.reelRunNode);
 
         let count: number = this.spinList.length;
         this.spinList.forEach((reel, index) => {
             reel.node.once(SlotReel.BEGIN_COMPLETE, (idx: number) => {
-                reel.node.off(SlotReel.BEGIN_COMPLETE);
                 count -= 1;
                 if (count <= 0) {
                     this.state = SlotMachineState.LOOP;
                     //所有軸啟動完成確認是否已要求停止
                     if (this.requestStop) {
-                        this.realStop(this.finalRngList);
+                        this.realStop();
                     }
                 }
             }, this);
@@ -239,14 +210,14 @@ export class SlotMachine extends Component {
             let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
 
             //依序啟動
-            script.call(() => {
+            tweenAnim.call(() => {
                 reel.spin();
             });
-            script.delay(speedConfig.spinInterval);
+            tweenAnim.delay(speedConfig.spinInterval);
         });
 
         //腳本排完一次執行
-        script.start();
+        tweenAnim.start();
     }
 
     /**
@@ -260,11 +231,10 @@ export class SlotMachine extends Component {
 
     /**
      * 要求停輪
-     * @param rngList 
+     * @param onComplete 完成callback
      */
     private onStop(onComplete?: () => void): void {
         this.requestStop = true;
-        // this.finalRngList = rngList;
         this.stopCallback = onComplete;
 
         //後轉型, 要補開始轉動做
@@ -277,7 +247,7 @@ export class SlotMachine extends Component {
         }
         //已經在循環, 可以停
         else if (this.state === SlotMachineState.LOOP) {
-            this.realStop(this.finalRngList);
+            this.realStop();
         }
     }
 
@@ -297,10 +267,10 @@ export class SlotMachine extends Component {
         //要監聽停止(非STOPPED)
         let numSkipReel = this.spinList.filter((reel) => reel.isStopped() !== true).length;
         //要處理SKIP(非STOPPED、非END)
-        this.realStop(this.finalRngList, numSkipReel);
+        this.realStop(numSkipReel);
         this.spinList.forEach((reel, idx) => {
             if (reel.isEnding() !== true) {
-                reel.stop(this.finalRngList[idx]);
+                reel.stop();
                 reel.skip();
             }
         }, this);
@@ -314,30 +284,23 @@ export class SlotMachine extends Component {
 
     /**
      * 停止
-     * @param rngList 
      * @param skipNumReel 
      */
-    public realStop(rngList: number[], skipNumReel: number = -1): void {
+    public realStop(skipNumReel: number = -1): void {
         let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
-        this.parser.rngList = rngList.concat();
         let numReel: number = skipNumReel > 0 ? skipNumReel : this.spinList.length;
         let isMi: boolean = false;
-        //第N軸要瞇牌
+        //判斷第N軸是否要瞇牌
         let miList = this.parser.getMiList();
-        let nudgeTypeList = this.parser.getNudgeTypeList();
-        nudgeTypeList?.map((nudgeType, index) => {
-            this.spinList[index].setNudgeType(nudgeType);
-        });
 
         Tween.stopAllByTarget(this.reelRunNode);
-        let script = tween(this.reelRunNode);
+        let tweenAnim = tween(this.reelRunNode);
 
         for (let col = 0; col < this.spinList.length; col++) {
             let nextReel = this.spinList[col + 1];
             //軸完全停止
             this.spinList[col].node.off(SlotReel.STOP_COMPLETE);
             this.spinList[col].node.once(SlotReel.STOP_COMPLETE, (stopReelIndex: number) => {
-                this.spinList[col].node.off(SlotReel.STOP_COMPLETE);
                 //瞇牌
                 if (nextReel && miList[nextReel.reelIndex] === true) {
                     //通知所有軸開始瞇牌
@@ -351,7 +314,7 @@ export class SlotMachine extends Component {
                 }
 
                 //單軸停止
-                SlotMachine.stopOnReel.emit(stopReelIndex);
+                // SlotMachine.stopOnReel.emit(stopReelIndex);
 
                 numReel -= 1;
                 //全部軸停止
@@ -367,163 +330,40 @@ export class SlotMachine extends Component {
             }, this);
 
             //依序停止
-            script.call(() => {
-                let idx = this.spinList.indexOf(this.spinList[col]);
-                this.spinList[col].stop(rngList[idx]);
+            tweenAnim.call(() => {
+                // let idx = this.spinList.indexOf(this.spinList[col]);
+                this.spinList[col].stop();
             });
             //加入軸間隔時間
             let stopDelay = miList[col + 1] ? speedConfig.slowMotionTime : speedConfig.stopInterval;
-            script.delay(stopDelay);
+            tweenAnim.delay(stopDelay);
         }
-        script.start();//腳本排完一次執行
-    }
-
-    /**
-     * 向下掉落補空位置
-     * @param allToReel N軸symbol
-     */
-    private onDrop(onComplete?: () => void): void {
-
-        if (this.spinList.length <= 0) {
-            throw new Error('未設置dropList!');
-        }
-        let speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
-
-        Tween.stopAllByTarget(this.reelRunNode);
-        let script = tween(this.reelRunNode);
-
-        //過濾需要落下的軸(沒有空格的也會傳DROP_COMPLETE)
-        let count: number = this.spinList.length;
-        this.spinList.forEach((reel, idx) => {
-            reel.node.once(SlotReel.DROP_COMPLETE, (idx: number) => {
-                console.log('dropComplete ', idx);
-                count -= 1;
-                if (count <= 0) onComplete?.();
-            }, this);
-
-            //依序掉落
-            script.call(() => { reel.drop(); });
-            script.delay(speedConfig.dropInterval);
-        }, this);
-        script.start();//腳本排完一次執行
-    }
-
-    /**
-     * 補新盤面
-     * @param fromMap N軸symbol
-     * @param toMap N軸symbol
-     * @param onComplete 
-     */
-    private onFill(fromMap: BaseSymbolData[][], toMap: BaseSymbolData[][], onComplete?: () => void): void {
-
-        if (this.spinList.length <= 0) {
-            throw new Error('未設置fillList!');
-        }
-
-        const speedConfig = this.config.speedConfigList[DataManager.getInstance().curTurboMode];
-        const miList = this.parser.getMiList2(fromMap);
-        const realMiList = this.spinList.map((reel) => { return miList[reel.reelIndex] && reel.getNumEmpty() > 0; });
-
-        Tween.stopAllByTarget(this.reelRunNode);
-        const script = tween(this.reelRunNode);
-        let isMi: boolean = false;
-        //過濾需要落下的軸
-        let numFillReel = this.spinList.length;
-        const numEmptyList: number[] = [];
-        this.spinList.forEach((reel, idx, list) => {
-
-            numEmptyList[reel.reelIndex] = reel.getNumEmpty();
-
-            //掉落完成(沒有空格的也會傳FILL_COMPLETE)
-            reel.node.once(SlotReel.FILL_COMPLETE, (stopReelIndex: number) => {
-                numFillReel -= 1;
-
-                //真的有補圖示的軸才發通知
-                if (numEmptyList[stopReelIndex] > 0) {
-                    SlotMachine.fillOnReel.emit(stopReelIndex);
-                }
-
-                if (numFillReel <= 0) {
-                    if (isMi) this.stopMiAll();
-                    onComplete?.();
-                }
-            }, this);
-
-
-            //軸等待啟動時間
-            let miDelay = realMiList[idx] ? 1 : 0;
-            script.call(() => {
-                if (realMiList[idx] === true) {
-                    isMi = true;
-                    //通知所有軸開始瞇牌
-                    this.startMiAllAt(reel.reelIndex);
-                }
-            });
-            script.delay(miDelay);
-
-            //依序開始填充缺空圖示
-            script.call(() => {
-                const dataIdx = this.spinList.indexOf(this.spinList[idx]);
-                reel.fill(toMap?.[dataIdx], 0);
-            });
-
-            let fillDelay = realMiList[idx] ? speedConfig.dropInterval + 0.2 : speedConfig.dropInterval;
-            script.delay(fillDelay);
-
-        }, this);
-        script.start();//腳本排完一次執行
-    }
-
-    /**
-     * 消去
-     * @param winPos 
-     */
-    private onExplode(winPos: number[]): void {
-        // for (let i = 0; i < this.dataList.length; i++) {
-        //     let reelErase: number[] = [];
-        //     winPos.forEach((p, idx) => {
-        //         let grid = Utils.posToGrid(p);
-        //         if (grid.col == i) {
-        //             reelErase.push(p);
-        //         }
-        //     });
-        //     this.dataList[i].explode(reelErase);
-        // }
-    }
-
-    /**
-     * 變盤
-     * @param changeMap 
-     */
-    private onChange(changeMap: BaseSymbolData[][]): void {
-        for (let i = 0; i < this.spinList.length; i++) {
-            this.spinList[i].change(changeMap[i]);
-        }
+        tweenAnim.start();//腳本排完一次執行
     }
 
     /**
      * 中獎
      * @param winPos 
      */
-    private onShowWin(winPos: number[]): void {
-        // for (let i = 0; i < this.dataList.length; i++) {
-        //     let reelWin: number[] = [];
-        //     winPos.forEach((p, idx) => {
-        //         let grid = XUtils.posToGrid(p);
-        //         if (grid.col == i) {
-        //             reelWin.push(p);
-        //         }
-        //     });
-        //     this.dataList[i].showWin(reelWin);
-        // }
+    private onShowSymbolWin(winPos: number[]): void {
+        for (let i = 0; i < this.spinList.length; i++) {
+            let reelWin: number[] = [];
+            winPos.forEach((p, idx) => {
+                let grid = Utils.posToGrid(p);
+                if (grid.col == i) {
+                    reelWin.push(p);
+                }
+            });
+            this.spinList[i].showSymbolWin(reelWin);
+        }
     }
 
     /**
      * 關閉中獎效果
      */
-    private onHideWin(): void {
+    private onHideSymbolWin(): void {
         for (let i = 0; i < this.spinList.length; i++) {
-            this.spinList[i].hideWin();
+            this.spinList[i].hideSymbolWin();
         }
     }
 

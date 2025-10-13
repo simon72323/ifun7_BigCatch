@@ -7,7 +7,7 @@ export class GameConst {
     /**消去演示時間 */
     public static EXPLODE_TIME: number = 1;
     /**圖示權重(越大越上層) */
-    public static symbolWeight: number[] = [0, 99, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // public static symbolWeight: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 99];
     /**圖示ID數量 */
     public static symbolCount: number = 16;
     /**倍數清單 */
@@ -31,54 +31,26 @@ export class GameConst {
     public static REEL_ROW: number = 3;
     /**自訂BigWin倍數 */
     public static BIG_WIN_MULTIPLE: number[] = [10, 20, 40, 80, 120];
+    /**scatter中獎次數 */
+    public static scatterTimes: number[] = [0, 0, 10, 15, 20];
+
+    /**BS初始盤面結果 */
+    public static BS_INIT_RESULT: number[][] = [
+        [15, 16, 17],
+        [1, 6, 2],
+        [8, 0, 7],
+        [3, 5, 4],
+        [18, 19, 20]
+    ];
 
     /**遊戲表演時間 */
     public static SLOT_TIME = {
-        // 正常模式
-        normal: {
-            showWinDuration: 1,      // 中獎演示時間
-            explodeTime: 1,          // 消去動畫時間
-            autoSpinTime: 0.5,        // 自動轉停止後，等待一段時間再開始下一輪
-            reelStopTime: 0.1,        // 每個轉軸停止間隔時間
-            reelMiTime: 1,          // 每個轉軸瞇牌時間
-            symbolFallTime: 0.5,      // 符號掉落速度倍率
-            bigWinEndDelay: 0.5,       // BigWin結束延遲
-            bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
-        },
-        // 快速模式
-        speed: {
-            showWinDuration: 0.6,      // 中獎演示時間
-            explodeTime: 0.6,          // 消去動畫時間
-            autoSpinTime: 0.3,        // 自動轉停止後，等待一段時間再開始下一輪
-            reelStopTime: 0.05,        // 每個轉軸停止間隔時間
-            reelMiTime: 0.6,          // 每個轉軸瞇牌時間
-            symbolFallTime: 0.3,      // 符號掉落速度倍率
-            bigWinEndDelay: 0.3,       // BigWin結束延遲
-            bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
-        },
-        // 極速模式
-        turbo: {
-            showWinDuration: 0.4,      // 中獎演示時間
-            explodeTime: 0.4,          // 消去動畫時間
-            autoSpinTime: 0.2,        // 自動轉停止後，等待一段時間再開始下一輪
-            reelStopTime: 0,        // 每個轉軸停止間隔時間
-            reelMiTime: 0.4,          // 每個轉軸瞇牌時間
-            symbolFallTime: 0.2,      // 符號掉落速度倍率
-            bigWinEndDelay: 0.2,       // BigWin結束延遲
-            bonusTimeAddInterval: 0.1  // 獎勵時間累加間隔
-        }
-        // ,
-        // 超速模式
-        // ultra: {
-        //     showWinDuration: 0.1,      // 中獎演示時間
-        //     explodeTime: 0.1,          // 消去動畫時間
-        //     autoSpinTime: 0.1,        // 自動轉停止後，等待一段時間再開始下一輪
-        //     reelStopTime: 0,        // 每個轉軸停止間隔時間
-        //     reelMiTime: 0,          // 每個轉軸瞇牌時間
-        //     symbolFallTime: 0,      // 符號掉落速度倍率
-        //     bigWinEndDelay: 0,       // BigWin結束延遲
-        //     bonusTimeAddInterval: 0  // 獎勵時間累加間隔
-        // }
+        showWinDuration: 1,      // 中獎演示時間
+        autoSpinTime: 0.5,        // 自動轉停止後，等待一段時間再開始下一輪
+        reelStopTime: 0.1,        // 每個轉軸停止間隔時間
+        reelMiTime: 1,          // 每個轉軸瞇牌時間
+        bigWinEndDelay: 0.5,       // BigWin結束延遲
+        bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
     };
 }
 

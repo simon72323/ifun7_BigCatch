@@ -182,6 +182,7 @@ export class DataManager {
 
     public set userData(userData: IUserData) {
         this._userData = userData;
+        this.userCredit = userData.credit;
         this.currency = userData.currency;
     }
 
@@ -192,15 +193,17 @@ export class DataManager {
     }
 
     public set gameData(gameData: IGameData) {
+        console.log('設置遊戲資料', gameData);
         this._gameData = gameData;
         this.bigWinMultiple.push(gameData.big_win);
         this.bigWinMultiple.push(gameData.super_win);
         this.bigWinMultiple.push(gameData.mega_win);
 
         // 初始化 BetData 的數據依賴
-        this.bet.gameData = gameData;
-        this.bet.lineIdx = gameData.line_bet_default_index;
-        this.bet.betIdx = gameData.coin_value_default_index;
+        this.bet.setGameData(gameData);
+        this.bet.setLineIdx(gameData.line_bet_default_index);
+        this.bet.setBetIdx(gameData.coin_value_default_index);
+        this.bet.setCoinValue(gameData.coin_value[gameData.coin_value_default_index]);
     }
 
     /** 下注回傳資料 */

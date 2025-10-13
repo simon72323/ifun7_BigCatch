@@ -7,32 +7,28 @@ import { SpinTask } from '@game/script/task/SpinTask';
 import { Notice } from '@common/components/notice/Notice';
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 
-import { BaseConst } from '@common/script/data/BaseConst';
+// import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
-import { TimeoutManager } from '@common/script/manager/TimeoutManager';
+// import { TimeoutManager } from '@common/script/manager/TimeoutManager';
 // import { BaseIdleTask } from '@common/script/tasks/BaseIdleTask';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
 
 
-
-
-
 /**
  * 待機
  */
 export class IdleTask extends GameTask {
-
     protected name: string = 'IdleTask';
 
     /**是否為首次Idle */
     private static isFirstIdle: boolean = true;
 
-    private static payoutCallback: () => void;
+    // private static payoutCallback: () => void;
 
     // execute(): void {
     //     //檢查是否剛活動結束要跳結算
@@ -45,6 +41,7 @@ export class IdleTask extends GameTask {
     // }
 
     execute(): void {
+        console.log('待機狀態');
         DataManager.getInstance().moduleID = ModuleID.BS;
 
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
@@ -88,9 +85,11 @@ export class IdleTask extends GameTask {
      * 待機狀態
      */
     private idleState(): void {
-        SettingsController.setEnabled.emit(true);//設定可用狀態
+        BaseEvent.resetSpin.emit();//重置Spin按鈕
+        // SettingsController.setEnabled.emit(true);//設定可用狀態
         SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());//刷新下注
 
+        console.log('待機狀態監聽按下');
         BaseEvent.clickSpin.on(() => {
             this.onSpin(false);
         }, this);
@@ -101,15 +100,10 @@ export class IdleTask extends GameTask {
             this.onSpin(true);
         }, this);
 
-        // let data = new CheatCodeData();
-        // data.rngList = [[45, 84, 55, 76, 80, 40]];
-        // data.rngList = [[78, 70, 55, 0, 79, 62]];
-        // DataManager.getInstance().cheatCodeData = data;
-
-        // if (IdleTask.firstIn) {
-        // IdleTask.firstIn = false;
-        // AudioManager.getInstance().playMusic(AudioKey.BsMusic);//播放背景音樂
-        // }
+        if (IdleTask.isFirstIdle) {
+            IdleTask.isFirstIdle = false;
+            AudioManager.getInstance().playMusic(AudioKey.BsMusic);//播放背景音樂
+        }
     }
 
     /**
@@ -121,6 +115,7 @@ export class IdleTask extends GameTask {
             : DataManager.getInstance().bet.getBetTotal();
         DataManager.getInstance().isBuyFs = buyFs;
 
+        console.log('收到Spin請求', curBet);
         SettingsController.refreshWin.emit(0);//刷新贏分=0
 
         //免費轉

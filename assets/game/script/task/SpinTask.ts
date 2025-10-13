@@ -1,4 +1,4 @@
-import { BannerUI } from '@game/components/BannerUI/BannerUI';
+// import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
@@ -48,7 +48,7 @@ export class SpinTask extends GameTask {
             dataManager.isAutoMode = false;
         }
 
-        BannerUI.reset.emit();//還原跑馬燈狀態
+        // BannerUI.reset.emit();//還原跑馬燈狀態
         //考量到先轉型、後轉型, 所以音效要在spin監聽
         SlotMachine.spinComplete.once(() => {
             // AudioManager.getInstance().playSound(GameAudioKey.in);
@@ -57,8 +57,8 @@ export class SpinTask extends GameTask {
         const isBS = dataManager.isBS();
         if (isBS) {
             //先轉型(免費遊戲直接給結果不轉動)
-            // if (!DataManager.getInstance().isBuyFs && APIManager.getInstance().getSpinLate() === false) {
-            //     SlotMachine.spin.emit();
+            // if (!DataManager.getInstance().isBuyFs) {
+            SlotMachine.spin.emit();
             // }
         }
 
@@ -67,10 +67,11 @@ export class SpinTask extends GameTask {
         let spinID = isBS ? 0 : 1;
 
         //發送spin請求
+        console.log('發送spin請求', betCredit, spinID);
         NetworkManager.getInstance().sendSpin(betCredit, spinID, (spinResult) => {
             dataManager.isBuyFs = false;//還原免費遊戲
             // DataManager.getInstance().featureBuyType = 0;
-            AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
+            // AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
 
             //判斷是否有spin成功回傳資料
             if (spinResult) {

@@ -1,10 +1,9 @@
-// import { SettingsPage1 } from '@base/components/settingsPage/SettingsPage1';
-import { BannerUI } from '@game/components/BannerUI/BannerUI';
 
+// import { BannerUI } from '@game/components/BannerUI/BannerUI';
 
 import { UIBlack } from '@game/components/UIBlack';
 import { BlackKey, GameAudioKey, GameConst, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
-
+import { IWinLineData } from '@game/script/data/GameType';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
@@ -12,66 +11,61 @@ import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-// import { SpinButtonState } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
-
-
-
-// import { GameData } from '@game/script/data/GameData';
+import { delay, Utils } from '@common/script/utils/Utils';
 
 /**
  * 顯示贏分
  */
 export class ShowWinTask extends GameTask {
-
     protected name: string = 'ShowWinTask';
+    /**中線資料 */
+    public winLineData: IWinLineData[];
+    /**是否中sub game(否的話中線會輪播) */
+    public hasSubGame: boolean;
+    /**賠付金額 */
+    public payCreditTotal: number;
+    /**玩家剩餘金額 */
+    public userCredit: number;
 
+    /**是否輪播中線 */
+    private isLoopWin: boolean = false;
 
-    /**中獎位置 */
-    public winPos: number[];
-    /**中獎圖示 */
-    public winSymbolID: number[];
+    async execute(): Promise<void> {
+        this.isLoopWin = true;
+        UIBlack.show.emit(BlackKey.UIBlack); //壓黑
 
-    /**獲得金額(尚未乘上倍率xRate) */
-    public originalWin: number;
+        const allWinPos = Utils.uniq(this.winLineData.flatMap((data) => data.winPos)); //全部中獎位置(不重複)
+        SlotMachine.showSymbolWin.emit(allWinPos); //顯示全部中獎位置
 
-    /**目前累計獲得金額(尚未xRate) */
-    public sumWin: number;
+        // const allWinlineID = this.winLineData.flatMap((data) => data.lineID); //全部中線ID
+        // BannerUI.showWin.emit(this.payCreditTotal, 1); //顯示總贏分
 
-    /** */
-    public playerCent: number;
+        //更新公版分數
+        SettingsController.refreshWin.emit(this.payCreditTotal);
+        SettingsController.refreshCredit.emit(this.userCredit);
 
-    /**原倍數 */
-    public curMultiplier: number;
+        await delay(GameConst.SLOT_TIME.showWinDuration);
+        this.finish();
 
-    execute(): void {
+        if (this.hasSubGame) return; // 如果沒有sub game則跳過輪播
 
-        SlotMachine.showWin.emit(this.winPos);
+        BaseEvent.clickSpin.once(() => {
+            this.isLoopWin = false;
+        }, this);
 
-        // UIController
-        // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
-
-
-        //壓黑
-        UIBlack.show.emit(BlackKey.UIBlack);
-
-        //橫幅贏分
-        let rateOriginWin = this.originalWin * DataManager.getInstance().bet.getLineTotal();
-        if (this.curMultiplier > 1) {
-            BannerUI.showOriginWin.emit(rateOriginWin);
+        // 輪播中線
+        while (this.isLoopWin) {
+            for (let i = 0; i < this.winLineData.length; i++) {
+                if (!this.isLoopWin) break; // 檢查是否被停止
+                SlotMachine.showSymbolWin.emit(this.winLineData[i].winPos); // 顯示當前中獎symbol
+                await delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
+            }
+            // 輪播完一輪後，再次顯示全部位置
+            if (this.isLoopWin) {
+                SlotMachine.showSymbolWin.emit(allWinPos); // 顯示全部中獎symbol
+                await delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
+            }
         }
-        else {
-            BannerUI.showWin.emit(rateOriginWin, this.curMultiplier);
-
-            //同參考:一倍時才顯示WIN及刷新贏分
-            let rateSumWin = this.sumWin * DataManager.getInstance().bet.getLineTotal();
-            SettingsController.refreshWin.emit(rateSumWin);
-            SettingsController.refreshCredit.emit(this.playerCent);
-        }
-
-        Utils.scheduleOnce(() => {
-            this.finish();
-        }, GameConst.SLOT_TIME.normal.showWinDuration, this);
     }
 
     update(deltaTime: number): void {

@@ -5,21 +5,21 @@ import { BaseSymbolData } from '@common/components/slotMachine/BaseSymbolData';
  */
 export abstract class BaseSlotParser {
     /**輪帶表 */
-    public stripTable: number[][];
+    // public stripTable: number[][];
     /**輪帶索引 */
-    public rngList: number[];
+    // public rngList: number[];
+
+    /**盤面結果符號ID */
+    public slotPattern: number[][];
 
     /**強制結果 */
     public forceResult: number[][];
     /**子類別分析盤面,回傳瞇牌結果[true, false, ...] */
     abstract getMiList(): boolean[];
-    abstract getMiList2(fromMap: BaseSymbolData[][]): boolean[];
+    // abstract getMiList2(fromMap: BaseSymbolData[][]): boolean[];
 
     /**軸圖示清單 */
     public symbols: number[][];
-
-    /**取得各軸戲謔狀態(用不到回傳null) */
-    abstract getNudgeTypeList(): number[];
 
     abstract canSkip(): boolean;
 }

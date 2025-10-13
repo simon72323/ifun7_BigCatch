@@ -182,10 +182,13 @@ export interface ISymbolInfo {
 }
 
 export interface IExtraInfo {
-    game_result: number[][]; // 遊戲結果
-    near_win: number; // 接近中獎
-    free_spin: IFreeSpinInfo; // 免費旋轉資訊
-    all_wild_position: number[][]; // 所有 wild 位置
+    no_m_add_spin: boolean; // 是否有額外加spin
+    total_wild_count: number; // 總wild數量
+    wild_pos: number[][]; // 當局wild位置
+    // game_result: number[][]; // 遊戲結果
+    // near_win: number; // 接近中獎
+    // free_spin: IFreeSpinInfo; // 免費旋轉資訊
+    // all_wild_position: number[][]; // 所有 wild 位置
 }
 
 export interface IFreeSpinInfo {

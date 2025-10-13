@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "spinDown",
+    "_name": "spinBtnDown",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
@@ -11,7 +11,7 @@
     "speed": 1,
     "wrapMode": 1,
     "enableTrsBlending": false,
-    "_duration": 0.2,
+    "_duration": 0.13333333333333333,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -68,7 +68,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.2
+      0.13333333333333333
     ],
     "_values": [
       {
@@ -144,7 +144,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.2
+      0.13333333333333333
     ],
     "_values": [
       {
@@ -171,9 +171,7 @@
         "leftTangent": 0,
         "leftTangentWeight": 1,
         "easingMethod": 0,
-        "__editorExtras__": {
-          "broken": null
-        }
+        "__editorExtras__": null
       }
     ],
     "preExtrapolation": 1,
@@ -189,7 +187,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.2
+      0.13333333333333333
     ],
     "_values": [
       {
@@ -216,9 +214,7 @@
         "leftTangent": 0,
         "leftTangentWeight": 1,
         "easingMethod": 0,
-        "__editorExtras__": {
-          "broken": null
-        }
+        "__editorExtras__": null
       }
     ],
     "preExtrapolation": 1,
@@ -234,7 +230,7 @@
     "__type__": "cc.RealCurve",
     "_times": [
       0,
-      0.2
+      0.13333333333333333
     ],
     "_values": [
       {
@@ -261,9 +257,7 @@
         "leftTangent": 0,
         "leftTangentWeight": 1,
         "easingMethod": 0,
-        "__editorExtras__": {
-          "broken": null
-        }
+        "__editorExtras__": null
       }
     ],
     "preExtrapolation": 1,
@@ -324,7 +318,7 @@
     "_times": [
       0,
       0.03333333333333333,
-      0.13333333333333333
+      0.1
     ],
     "_values": [
       {
@@ -382,7 +376,7 @@
     "_times": [
       0,
       0.03333333333333333,
-      0.13333333333333333
+      0.1
     ],
     "_values": [
       {
@@ -440,7 +434,7 @@
     "_times": [
       0,
       0.03333333333333333,
-      0.13333333333333333
+      0.1
     ],
     "_values": [
       {

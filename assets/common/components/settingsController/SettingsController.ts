@@ -232,6 +232,7 @@ export class SettingsController extends Component {
         this.autoBtn.getComponent(Button).interactable = enabled;
         this.turboBtn.getComponent(Button).interactable = enabled;
         this.optionBtn.getComponent(Button).interactable = enabled;
+        this.informationBtn.getComponent(Button).interactable = enabled;
 
         //true時要判斷更新+-按鈕是否可用，false時直接禁用
         if (enabled) {
@@ -300,13 +301,14 @@ export class SettingsController extends Component {
         // if (DataManager.getInstance().curGameState === GameState.Ready) {
         this.setBtnInteractable(false);//禁用控制器按鈕
         BaseEvent.clickSpin.emit(false);
+        console.log('發送Spin請求');
 
         //切換成停止按鈕
-        Utils.fadeOut(this.spinBtn, 0.2, () => {
+        Utils.fadeOut(this.spinBtn, 0.1, () => {
             this.spinBtn.active = false;
             this.stopSpinBtn.active = true;
             this.stopSpinBtn.getComponent(Button).interactable = true;
-            this.stopSpinBtn.getComponent(Animation).play('stopSpinBtnDown');
+            this.stopSpinBtn.getComponent(Animation).play('stopSpinShow');
         });
         // } else {
         // BaseEvent.clickSkip.emit();//傳送跳過
@@ -325,14 +327,18 @@ export class SettingsController extends Component {
      * @param node 節點
      */
     private rotateAnim(node: Node) {
-        tween(node).by(1, { angle: 360 }, { easing: 'linear' }).start();
+        tween(node).by(0.2, { angle: -180 }, { easing: 'linear' })
+            .call(() => {
+                node.angle = 0;
+            })
+            .start();
     }
 
     /**
      * 執行回歸重置Spin按鈕
      */
     private onResetSpin() {
-        Utils.fadeOut(this.stopSpinBtn, 0.2, () => {
+        Utils.fadeOut(this.stopSpinBtn, 0.1, () => {
             this.stopSpinBtn.active = false;
             this.spinBtn.active = true;
             this.spinBtn.getComponent(Animation).play('spinBtnShow');
@@ -536,11 +542,13 @@ export class SettingsController extends Component {
     //============================= 刷新BetInfo資訊 =============================
     /**刷新可用餘額 */
     private refreshCredit(value: number): void {
+        console.log('刷新可用餘額', value);
         this.balanceValue.string = Utils.numberFormat(value);
     }
 
     /**刷新下注 */
     private refreshBet(value: number): void {
+        console.log('刷新下注', value);
         Tween.stopAllByTarget(this.totalBetValue.node);
         let newBet = Utils.numberFormat(value);
         let oldBet = this.totalBetValue.string;
@@ -556,6 +564,7 @@ export class SettingsController extends Component {
 
     /**刷新獲得 */
     private refreshWin(value: number): void {
+        console.log('刷新獲得', value);
         this.totalWinValue.string = Utils.numberFormat(value);
     }
     //============================= 刷新BetInfo資訊 =============================

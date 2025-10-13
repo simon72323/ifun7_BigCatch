@@ -8,7 +8,5 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('SymbolData')
 export class SymbolData extends BaseSymbolData {
-    /**是否有金框 */
-    public isBadge: boolean = false;
 }
 
