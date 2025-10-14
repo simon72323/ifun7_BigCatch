@@ -57,6 +57,16 @@ export class BaseSymbol extends Component {
         //override
     }
 
+    /** 模糊貼圖顯示 */
+    public blurShow(): void {
+        //override
+    }
+
+    /** 模糊貼圖隱藏 */
+    public blurHide(): void {
+        //override
+    }
+
     /**
      * 設定圖示狀態
      * @param newSymbolID 

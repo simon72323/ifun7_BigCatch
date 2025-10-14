@@ -251,6 +251,23 @@ export class Symbol extends BaseSymbol {
     }
 
     /**
+     * 模糊貼圖顯示
+     */
+    public blurShow(): void {
+        Utils.fadeIn(this.blur.node, 0.2);
+        this.blur.node.active = true;
+    }
+
+    /**
+     * 模糊貼圖隱藏
+     */
+    public blurHide(): void {
+        Utils.fadeOut(this.blur.node, 0.2, () => {
+            this.blur.node.active = false;
+        });
+    }
+
+    /**
      * 中獎演示
      */
     public showSymbolWin(): void {
