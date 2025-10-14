@@ -2,9 +2,11 @@ import { _decorator, Color, Component, sp } from 'cc';
 
 import { GameAudioKey, GameConst } from '@game/script/data/GameConst';
 
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+// import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
+
 
 enum SlowMotionAnimation {
     begin = 'begin',
@@ -14,6 +16,9 @@ enum SlowMotionAnimation {
 
 const { ccclass, property } = _decorator;
 
+/**
+ * 咪牌特效
+ */
 @ccclass('SlowMotionUI')
 export class SlowMotionUI extends Component {
 
@@ -30,14 +35,14 @@ export class SlowMotionUI extends Component {
             anm.setAnimation(0, SlowMotionAnimation.loop, true);
         }
 
-        SlotMachine.startMi.on((column: number) => {
+        SlotReelMachine.startMi.on((column: number) => {
             //只播一次
             AudioManager.getInstance().playSound(GameAudioKey.waiting);
             this.isMi = true;
             this.setCurrentIndex(column);
         }, this);
 
-        SlotMachine.stopMi.on(() => {
+        SlotReelMachine.stopMi.on(() => {
             if (!this.isMi) {
                 return;
             }

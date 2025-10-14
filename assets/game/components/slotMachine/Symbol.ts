@@ -6,12 +6,14 @@ import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
 
 import { BaseSymbol } from '@common/components/slotMachine/BaseSymbol';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+// import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { SymbolState } from '@common/components/slotMachine/SlotType';
 
 
 import { DataManager } from '@common/script/data/DataManager';
 import { Utils } from '@common/script/utils/Utils';
+
 
 enum SymbolLayer {
     Reel = 0,
@@ -104,24 +106,24 @@ export class Symbol extends BaseSymbol {
         }, this);
 
 
-        SlotMachine.startMi.on((column) => {
+        SlotReelMachine.startMi.on((column) => {
             //是咪當前軸
-            if (this.grid.col === column) {
-                this.isMi = true;
-                //為了讓scatter能完整演示hit動畫,否則瞇牌時會改用normal圖片,就看不到hit動畫
-                if (this.isScatter() === false) {
-                    this.setState(this.state);
-                }
+            // if (this.grid.col === column) {
+            //     this.isMi = true;
+            //     //為了讓scatter能完整演示hit動畫,否則瞇牌時會改用normal圖片,就看不到hit動畫
+            //     if (this.isScatter() === false) {
+            //         this.setState(this.state);
+            //     }
+            // }
+            // else {
+            // this.isMi = false;
+            if (this.isScatter() && this.isInView) {
+                this.spine.setAnimation(0, ScatterAni.mipie, true);
             }
-            else {
-                this.isMi = false;
-                if (this.isScatter() && this.isInView) {
-                    this.spine.setAnimation(0, ScatterAni.mipie, true);
-                }
-            }
+            // }
         }, this);
 
-        SlotMachine.stopMi.on(() => {
+        SlotReelMachine.stopMi.on(() => {
             this.isMi = false;
             if (this.isScatter() === true) {
                 this.setState(this.state);
@@ -218,7 +220,7 @@ export class Symbol extends BaseSymbol {
     }
 
     /**
-     * 全部軸停下時
+     * symbol停下時
      */
     public onStop(): void {
         //要先設定完isMi狀態才能刷新layer
@@ -298,24 +300,24 @@ export class Symbol extends BaseSymbol {
     }
 
     /**
-     * 圖示落地
+     * 圖示落地(只有畫面內的會執行)
      * @returns 
      */
-    public hit(isInView: boolean): void {
-        if (isInView) {
-            if (this.isScatter() === true) {
-                // AudioManager.getInstance().playOneShot(GameAudioKey.scatter);
+    public hit(): void {
+        // if (isInView) {
+        if (this.isScatter() === true) {
+            // AudioManager.getInstance().playOneShot(GameAudioKey.scatter);
 
-                //畫面內的scatter只播一次hit
-                // if (this.isInView === false) {
-                //     this.playSymbolAni(ScatterAni.got, false);
-                // }
-            }
-            else {
-                // this.playSymbolAni(SymbolAni.drop, false);
-            }
+            //畫面內的scatter只播一次hit
+            // if (this.isInView === false) {
+            //     this.playSymbolAni(ScatterAni.got, false);
+            // }
         }
-        this.isInView = isInView;
+        else {
+            // this.playSymbolAni(SymbolAni.drop, false);
+        }
+        // }
+        // this.isInView = isInView;
     }
 
     // /**
