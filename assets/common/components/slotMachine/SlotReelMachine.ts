@@ -13,7 +13,7 @@ import { delay, Utils } from '@common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
 
-class ReelSpeedConfig {
+export class ReelSpeedConfig {
     @property({ type: CCFloat, tooltip: '轉動/停止間隔秒數' })
     public spinInterval: number = 0.1;
 
@@ -38,7 +38,6 @@ class ReelSpeedConfig {
  */
 @ccclass('SlotReelMachine')
 export class SlotReelMachine extends Component {
-
     /**初始化軸符號 */
     public static initReelSymbolID: XEvent1<number[][]> = new XEvent1();
     /**開始轉動slot */
@@ -56,7 +55,7 @@ export class SlotReelMachine extends Component {
     @property({ type: CCInteger, tooltip: '縱軸列數' })
     public static reelRow: number = 3;
 
-    @property({ type: Node, tooltip: '轉動軸(順序)' })
+    @property({ type: Node, tooltip: '轉動軸(順序),注意子節點下層需要多長一個symbol節點' })
     public reelList: Node[] = [];
 
     @property({ type: Node, tooltip: 'scatter層' })
@@ -222,6 +221,7 @@ export class SlotReelMachine extends Component {
                 topSymbolIDs.push(symbol.symbolID);
             }
 
+            //設置隨機symbolID
             for (let i = 0; i < reelNode.children.length; i++) {
                 const symbol = reelNode.children[i].getComponent(BaseSymbol);
                 if (i >= SlotReelMachine.reelRow * 2) {
@@ -339,26 +339,27 @@ export class SlotReelMachine extends Component {
         Tween.stopAllByTarget(reelNode);//停止該行轉動
         //根據目前Y軸位置判斷是否需要重最上面掉落
         const curPosY = reelNode.position.y;//當前的位置
-        const backNumber = Math.ceil((singleHeight - curPosY) / this.symbolSize.height);//需要回推的symbol數量
-        // const setPosY = singleHeight - Math.abs(curPosY % this.symbolSize.height);//偏移量
+        const symbolHeight = this.symbolSize.height;
+        const backNumber = Math.ceil((singleHeight - curPosY) / symbolHeight);//需要回推的symbol數量
+        const offsetPosY = (curPosY % symbolHeight + symbolHeight) % symbolHeight;//偏移量
 
-        //獲取停止前最下層的symbolID
+        //獲取停止前最下層的symbolID(+1代表要多獲取到下層最後一個symbol)
         let downSymbolIDs: number[] = [];
-        for (let i = 0; i < row1x; i++) {
+        for (let i = 0; i < row1x + 1; i++) {
             const idx = row2x - (backNumber - i);
             const symbol = reelNode.children[idx].getComponent(BaseSymbol);
             downSymbolIDs.push(symbol.symbolID);
         }
-        reelNode.position = new Vec3(reelNode.x, singleHeight, 0);//slot回歸到上面
+        reelNode.position = new Vec3(reelNode.x, singleHeight + offsetPosY, 0);//slot回歸到上面(加上偏移量)
         let reelStopSymbols: BaseSymbol[] = [];//該軸的停止symbol
 
-        //設置symbol圖案(結果)
-        for (let i = 0; i < reelNode.children.length; i++) {
+        //設置symbol圖案(結果)(+1代表要多獲取到下層最後一個symbol)
+        for (let i = 0; i < reelNode.children.length + 1; i++) {
             const symbol = reelNode.children[i].getComponent(BaseSymbol);
             if (i < row1x) {
                 symbol.setSymbolID(this.getRandomSymbolID());//上層的symbolID
             } else if (i >= row2x) {
-                symbol.setSymbolID(downSymbolIDs[i - row2x]);//下層的symbolID
+                symbol.setSymbolID(downSymbolIDs[i - row2x]);//下層的symbolID(多設置下層最後一個symbol)
             } else {
                 symbol.setSymbolID(stopSymbolIDs?.[i - row1x] ?? this.getRandomSymbolID());//中層的symbolID(結果或隨機)
                 reelStopSymbols.push(symbol);
@@ -437,22 +438,22 @@ export class SlotReelMachine extends Component {
         return randomID;
     }
 
-    // /**
-    //  * 中獎
-    //  * @param winPos 
-    //  */
-    // private onShowSymbolWin(winPos: number[]): void {
-    //     for (let i = 0; i < this.spinList.length; i++) {
-    //         let reelWin: number[] = [];
-    //         winPos.forEach((p, idx) => {
-    //             let grid = Utils.posToGrid(p);
-    //             if (grid.col == i) {
-    //                 reelWin.push(p);
-    //             }
-    //         });
-    //         this.spinList[i].showSymbolWin(reelWin);
-    //     }
-    // }
+    /**
+     * 中獎
+     * @param winPos 
+     */
+    private onShowSymbolWin(winPos: number[]): void {
+        for (let i = 0; i < this.spinList.length; i++) {
+            let reelWin: number[] = [];
+            winPos.forEach((p, idx) => {
+                let grid = Utils.posToGrid(p);
+                if (grid.col == i) {
+                    reelWin.push(p);
+                }
+            });
+            this.spinList[i].showSymbolWin(reelWin);
+        }
+    }
 
     // /**
     //  * 關閉中獎效果
