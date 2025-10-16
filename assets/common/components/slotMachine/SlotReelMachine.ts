@@ -1,49 +1,29 @@
 import { _decorator, Component, CCInteger, Node, Prefab, tween, CCFloat, instantiate, UITransform, Vec3, Tween, Size } from 'cc';
 
-import { SymbolID } from '@game/script/data/GameConst';
-
 import { BaseSymbol } from '@common/components/slotMachine/BaseSymbol';
 
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
+import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { TurboMode } from '@common/script/types/BaseType';
 import { delay, Utils } from '@common/script/utils/Utils';
 
 
 const { ccclass, property } = _decorator;
-
-export class ReelSpeedConfig {
-    @property({ type: CCFloat, tooltip: '轉動/停止間隔秒數' })
-    public spinInterval: number = 0.1;
-
-    @property({ type: CCFloat, tooltip: '停止間隔秒數' })
-    public stopInterval: number = 0.25;
-
-    @property({ type: CCFloat, tooltip: '啟動秒數(loop是他的一半時間)' })
-    public beginTime: number = 0.5;
-
-    @property({ type: CCFloat, tooltip: '停止秒數' })
-    public stopTime: number = 0.5;
-
-    @property({ type: CCFloat, tooltip: '至少滾動N秒' })
-    public spinTime: number = 1;
-
-    @property({ type: CCFloat, tooltip: '瞇牌秒數' })
-    public mipiTime: number = 2;
-}
-
 /**
  * 老虎機
  */
 @ccclass('SlotReelMachine')
 export class SlotReelMachine extends Component {
-    /**初始化軸符號 */
-    public static initReelSymbolID: XEvent1<number[][]> = new XEvent1();
+    /**初始化盤面結果 */
+    public static initResultParser: XEvent1<number[][]> = new XEvent1();
     /**開始轉動slot */
-    public static slotRun: XEvent = new XEvent();
+    public static slotRun: XEvent2<number[][], boolean[]> = new XEvent2();
     /**停止轉動slot */
-    public static slotStop: XEvent = new XEvent();
+    public static slotStop: XEvent1<() => void> = new XEvent1();
+    /**急停 */
+    public static slotSkip: XEvent = new XEvent();
     /**開始瞇牌 */
     public static startMi: XEvent1<number> = new XEvent1();
     /**停止瞇牌 */
@@ -73,17 +53,6 @@ export class SlotReelMachine extends Component {
     @property({ type: Prefab, tooltip: 'symbol' })
     private symbolPrefab: Prefab = null!;
 
-    @property({ type: ReelSpeedConfig, tooltip: '一般參數', group: '一般' })
-    private normal: ReelSpeedConfig = new ReelSpeedConfig();
-
-    @property({ type: ReelSpeedConfig, tooltip: '閃電參數', group: '閃電' })
-    private fast: ReelSpeedConfig = new ReelSpeedConfig();
-
-    @property({ type: ReelSpeedConfig, tooltip: 'Turbo參數', group: 'Turbo' })
-    private turbo: ReelSpeedConfig = new ReelSpeedConfig();
-
-    private speedList: ReelSpeedConfig[] = [this.normal, this.fast, this.turbo];
-
     @property({ type: String, tooltip: '大機率出現的symbolID,用逗號分隔' })
     private randomSymbolID: string = '';
 
@@ -96,14 +65,10 @@ export class SlotReelMachine extends Component {
     @property({ type: Size, tooltip: 'symbol尺寸' })
     private symbolSize: Size = new Size(164, 258);
 
-    @property({ type: CCInteger, tooltip: '獲得免費遊戲的scatter數量' })
-    private scatterWinCount: number = 3;
-
     private isRunMi = false;//是否執行瞇牌
-    private resultSymbolID: number[][] = [];//結果符號
+    private resultPattern: number[][] = [];//結果符號
+    private mipieList: boolean[] = [];//各軸瞇牌狀態
     private reelStopState: boolean[] = Array(this.reelList.length).fill(false);//各軸停止狀態
-    // private reelMiState: boolean[] = Array(this.reelList.length).fill(false);//各軸瞇牌狀態
-    private scatterCount: number = 0;//紀錄當前的scatter數量
 
     /**
      * 建立物件
@@ -111,9 +76,11 @@ export class SlotReelMachine extends Component {
     onLoad() {
         // this.poolManager = PoolManager.getInstance();//獲得pool實例
         this.initCreatReel();//生成節點
-        SlotReelMachine.initReelSymbolID.on(this.initReelSymbolID, this);
+        SlotReelMachine.initResultParser.on(this.initResultParser, this);
         SlotReelMachine.slotRun.on(this.onSlotRun, this);
         SlotReelMachine.slotStop.on(this.onSlotStop, this);
+        SlotReelMachine.slotSkip.on(this.onSlotSkip, this);
+
         // SlotMachine.setSlotParser.on(this.setSlotParser, this);
         // SlotMachine.spin.on(this.onSpin, this);
         // SlotMachine.setForceResult.on(this.onForceResult, this);
@@ -155,9 +122,9 @@ export class SlotReelMachine extends Component {
 
     /**
      * 初始畫盤面符號
-     * @param initSymbolID 初始化符號
+     * @param initParset 初始化盤面符號
      */
-    private initReelSymbolID(initSymbolID: number[][]) {
+    private initResultParser(initParser: number[][]) {
         for (let i = 0; i < this.reelList.length; i++) {
             const reelNode = this.reelList[i];
             reelNode.children.forEach((child, idx) => {
@@ -166,7 +133,7 @@ export class SlotReelMachine extends Component {
                 if (idx < SlotReelMachine.reelRow || idx >= SlotReelMachine.reelRow * 2) {
                     symbol.setSymbolID(this.getRandomSymbolID());
                 } else {
-                    symbol.setSymbolID(initSymbolID[i][idx]);
+                    symbol.setSymbolID(initParser[i][idx]);
                 }
             });
         }
@@ -175,23 +142,28 @@ export class SlotReelMachine extends Component {
     //====================================== slot轉動流程 ======================================
     /**
      * 開始轉動slot
+     * @param resultPattern 盤面結果
+     * @param mipieList 各軸瞇牌狀態
      */
-    private async onSlotRun() {
+    private async onSlotRun(resultPattern: number[][], mipieList: boolean[]) {
+        this.resultPattern = resultPattern;//設定盤面結果
+        this.mipieList = mipieList;//設定各軸瞇牌狀態
+
         //至少轉動spinTime秒後才啟用急停節點監聽(一次性)
-        const spinTime = this.speedList[DataManager.getInstance().curTurboMode].spinTime;
+        const spinTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].spinTime;
         tween(this.skipNode).delay(spinTime).call(() => {
             this.skipNode.once(Node.EventType.TOUCH_END, this.onSlotSkip, this);
         }).start();
         for (let i = 0; i < this.reelList.length; i++) {
             this.startSlotRun(i);
-            await delay(this.speedList[DataManager.getInstance().curTurboMode].spinInterval);
+            await delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].spinInterval);
         }
     }
 
     /**
      * 停止轉動slot
      */
-    private async onSlotStop() {
+    private async onSlotStop(callback: () => void) {
         for (let i = 0; i < this.reelList.length; i++) {
             const { runTime, backTime } = await this.handleMi(i);//判斷是否執行咪牌與回傳停止時間
             await this.stopSlotRun(i, runTime, backTime);
@@ -200,6 +172,7 @@ export class SlotReelMachine extends Component {
                 this.stopMiAll();//停止咪牌
             }
         }
+        callback();//執行callback
     }
 
     /**
@@ -207,7 +180,7 @@ export class SlotReelMachine extends Component {
      * @param reelIndex 哪行slot
      */
     private startSlotRun(reelIndex: number) {
-        const beginTime = this.speedList[DataManager.getInstance().curTurboMode].beginTime;//啟動時間
+        const beginTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].beginTime;//啟動時間
         const reelNode = this.reelList[reelIndex];//該行slotRun
         const singleHeight = reelNode.getComponent(UITransform)!.contentSize.height / 3;//上中下單區塊高度
         this.blurShow(reelNode);//顯示模糊貼圖
@@ -252,11 +225,10 @@ export class SlotReelMachine extends Component {
      * @returns 輪軸停止時間和回彈時間
      */
     private async handleMi(reelIndex: number): Promise<{ runTime: number, backTime: number }> {
-        //判斷是否聽牌，scatter數量>=scatterWin數量-1時
-        if (this.scatterCount < this.scatterWinCount - 1) {
-            const stopTime = this.speedList[DataManager.getInstance().curTurboMode].stopTime;
+        //判斷此軸是否咪牌
+        if (this.mipieList[reelIndex]) {
+            const stopTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].stopTime;
             return { runTime: stopTime * 0.8, backTime: stopTime * 0.2 };
-
         } else {
             this.isRunMi = true;//執行咪牌狀態
             SlotReelMachine.startMi.emit(reelIndex);//傳送該軸咪牌事件
@@ -265,7 +237,7 @@ export class SlotReelMachine extends Component {
             if (DataManager.getInstance().curTurboMode !== TurboMode.Turbo) {
                 await this.mipieLoopSlotRun(reelIndex);//執行減速聽牌(哪行slot)
             }
-            const mipieTime = this.speedList[DataManager.getInstance().curTurboMode].mipiTime;
+            const mipieTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].mipiTime;
             return { runTime: mipieTime * 0.9, backTime: mipieTime * 0.1 };
         }
     }
@@ -284,7 +256,7 @@ export class SlotReelMachine extends Component {
             //重置reel到最上面(不取值)
             this.resetReelToTop(reelNode);
 
-            const mipieTime = this.speedList[DataManager.getInstance().curTurboMode].mipiTime;
+            const mipieTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].mipiTime;
             this.blurHide(reelNode);//模糊貼圖隱藏
             tween(reelNode)
                 .to(mipieTime, { position: new Vec3(reelNode.x, -singleHeight, 0) })
@@ -302,7 +274,7 @@ export class SlotReelMachine extends Component {
     private async stopSlotRun(reelIndex: number, runTime: number, backTime: number): Promise<void> {
         return new Promise(async resolve => {
             this.reelStopState[reelIndex] = true;//設定該行已執行停止轉動
-            const stopSymbolIDs = this.resultSymbolID[reelIndex];//該軸的結果符號
+            const stopSymbolIDs = this.resultPattern[reelIndex];//該軸的結果符號
             const reelNode = this.reelList[reelIndex];//該行slotRun
 
             //重置reel到最上面，並回傳最下層symbol陣列
@@ -320,7 +292,7 @@ export class SlotReelMachine extends Component {
                         symbol.hit(true);//圖示落地
                     });
                     //計算scatter數量
-                    this.scatterCount += stopSymbolIDs.filter(id => id === SymbolID.Scatter).length;
+                    // this.scatterCount += stopSymbolIDs.filter(id => id === SymbolID.Scatter).length;
                     resolve();//結束slot轉動
                 }).start();
         });
@@ -379,7 +351,7 @@ export class SlotReelMachine extends Component {
             if (!this.reelStopState[i]) {
                 this.reelStopState[i] = true;//設定該行已執行停止轉動
                 Tween.stopAllByTarget(this.reelList[i]);//停止該行動畫
-                const stopTime = this.speedList[DataManager.getInstance().curTurboMode].stopTime;
+                const stopTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].stopTime;
                 const runTime = stopTime * 0.8;
                 const backTime = stopTime * 0.2;
                 this.stopSlotRun(i, runTime, backTime);//執行停止slot轉動
@@ -442,18 +414,18 @@ export class SlotReelMachine extends Component {
      * 中獎
      * @param winPos 
      */
-    private onShowSymbolWin(winPos: number[]): void {
-        for (let i = 0; i < this.spinList.length; i++) {
-            let reelWin: number[] = [];
-            winPos.forEach((p, idx) => {
-                let grid = Utils.posToGrid(p);
-                if (grid.col == i) {
-                    reelWin.push(p);
-                }
-            });
-            this.spinList[i].showSymbolWin(reelWin);
-        }
-    }
+    // private onShowSymbolWin(winPos: number[]): void {
+    //     for (let i = 0; i < this.reelList.length; i++) {
+    //         let reelWin: number[] = [];
+    //         winPos.forEach((p, idx) => {
+    //             let grid = Utils.posToGrid(p);
+    //             if (grid.col == i) {
+    //                 reelWin.push(p);
+    //             }
+    //         });
+    //         this.reelList[i].showSymbolWin(reelWin);
+    //     }
+    // }
 
     // /**
     //  * 關閉中獎效果

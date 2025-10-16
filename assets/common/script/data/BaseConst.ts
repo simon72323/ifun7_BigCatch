@@ -51,6 +51,40 @@ export class BaseConst {
     public static DIR_LOADING: string = 'loading';
     //============================= bundle資料夾名稱 =============================
 
+    /**遊戲轉動時間 */
+    public static SLOT_TIME = {
+        normal: {
+            spinIntervalTime: 0.1,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0.25,  // 停止間隔秒數
+            beginTime: 0.5,   // 啟動秒數(loop是他的一半時間)
+            stopTime: 0.5,  // 停止秒數
+            spinTime: 1,  // 至少滾動N秒
+            mipieTime: 2,   // 瞇牌秒數
+            showWinTime: 1,      // 中獎演示時間
+            waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
+        },
+        fast: {
+            spinIntervalTime: 0,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0,  // 停止間隔秒數
+            beginTime: 0.4,   // 啟動秒數(loop是他的一半時間)
+            stopTime: 0.4,  // 停止秒數
+            spinTime: 1,  // 至少滾動N秒
+            mipieTime: 2,   // 瞇牌秒數
+            showWinTime: 1,      // 中獎演示時間
+            waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
+        },
+        turbo: {
+            spinIntervalTime: 0,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0,  // 停止間隔秒數
+            beginTime: 0.3,   // 啟動秒數(loop是他的一半時間)
+            stopTime: 0.3,  // 停止秒數
+            spinTime: 0.75,  // 至少滾動N秒
+            mipieTime: 2,   // 瞇牌秒數
+            showWinTime: 1,      // 中獎演示時間
+            waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
+        }
+    };
+
     /**
      * 跑分隨機值
      * @param t 

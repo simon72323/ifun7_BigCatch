@@ -9,15 +9,14 @@ import { EndGameTask } from '@game/script/task/EndGameTask';
 import { FSOpeningTask } from '@game/script/task/FSOpeningTask';
 import { FSSettleTask } from '@game/script/task/FSSettleTask';
 import { IdleTask } from '@game/script/task/IdleTask';
-
-import { ScatterWinTask } from '@game/script/task/ScatterWinTask';
-import { ShowWinTask } from '@game/script/task/ShowWinTask';
 import { SpinTask } from '@game/script/task/SpinTask';
 import { StopTask } from '@game/script/task/StopTask';
 import { TransTask } from '@game/script/task/TransTask';
 import { UpdateFreeTimesTask } from '@game/script/task/UpdateFreeTimesTask';
+import { WinScatterTask } from '@game/script/task/WinScatterTask';
+import { WinSymbolTask } from '@game/script/task/WinSymbolTask';
 
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -70,12 +69,12 @@ export class MessageHandler {
 
         allResult.forEach((data, resultIndex) => {
             // let subIdx = resultIndex - 1;//第幾個subResult(allResult[0]是SlotResult)
-            const slotPattern: number[][] = data.game_result;//此回合盤面符號(二維陣列)
-            console.log('收到盤面結果', slotPattern);
+            const resultPattern: number[][] = data.game_result;//此回合盤面符號(二維陣列)
+            console.log('收到盤面結果', resultPattern);
 
             //執行盤面停止
             const stopTask = new StopTask();
-            stopTask.slotPattern = slotPattern;
+            stopTask.resultPattern = resultPattern;
             TaskManager.getInstance().addTask(stopTask);
 
             //執行等待scatter表演
@@ -91,11 +90,11 @@ export class MessageHandler {
                     let winLineData: IWinLineData[] = [];//此盤面細部中獎資料
                     //轉換中獎線資料
                     data.pay_line.forEach((payLine) => {
-                        const data = Utils.getLinePathPosition(payLine.pay_line, payLine.amount, slotPattern, GameConst.payLineData);
+                        const data = Utils.getLinePathPosition(payLine.pay_line, payLine.amount, resultPattern, GameConst.payLineData);
                         winLineData.push({ lineID: payLine.pay_line, winPos: data.winPos, winSymbolIDs: data.winSymbolIDs, payCredit: payLine.pay_credit });
                     });
                     //中獎線
-                    const winTask = new ShowWinTask();
+                    const winTask = new WinSymbolTask();
                     winTask.hasSubGame = slotResult.get_sub_game;
                     winTask.winLineData = winLineData;
                     // winTask.winScatterData = winScatterData;
@@ -118,14 +117,14 @@ export class MessageHandler {
                 });
 
                 //執行scatter表演
-                const scatterWinTask = new ScatterWinTask();
+                const scatterWinTask = new WinScatterTask();
                 scatterWinTask.winPos = scatterWinPos;
                 scatterWinTask.payCredit = data.scatter_info.pay_credit;
                 // scatterWin.winScatterData = winScatterData;
                 TaskManager.getInstance().addTask(scatterWinTask);
 
                 //轉場到FG
-                const scatterTimes = GameConst.scatterTimes[data.scatter_info.amount];
+                const scatterTimes = GameConst.SCATTER_TIMES[data.scatter_info.amount];
                 const transTask = new TransTask();
                 transTask.toModuleID = ModuleID.FG;
                 transTask.times = scatterTimes;

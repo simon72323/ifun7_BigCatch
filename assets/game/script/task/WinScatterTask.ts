@@ -9,8 +9,8 @@ import { delay } from '@common/script/utils/Utils';
 /**
  * Scatter中獎
  */
-export class ScatterWinTask extends GameTask {
-    protected name: string = 'ScatterWinTask';
+export class WinScatterTask extends GameTask {
+    protected name: string = 'WinScatterTask';
     /**中獎位置 */
     public winPos: number[];
     /**派彩金額 */

@@ -1,8 +1,7 @@
-
-import { SkipUI } from '@game/components/SkipUI/SkipUI';
+import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@common/script/tasks/GameTask';
@@ -16,7 +15,7 @@ export class StopTask extends GameTask {
     protected name: string = 'StopTask';
 
     /**盤面停止符號(二維陣列) */
-    public slotPattern: number[][];
+    public resultPattern: number[][];
     /**輪帶索引 */
     // public rngList: number[];
 
@@ -33,51 +32,49 @@ export class StopTask extends GameTask {
 
 
     execute(): void {
-
-        DataManager.getInstance().hasSkip = false;
+        // DataManager.getInstance().hasSkip = false;
 
         //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
         // BSRoleUI.scatterWin.emit(this.isScatterWin);
 
         //設定老虎機盤面停止符號
-        let slotParser = DataManager.getInstance().slotData.slotParser;
-        slotParser.slotPattern = this.slotPattern;
-        console.log('發送盤面結果', slotParser);
-        SlotMachine.setSlotParser.emit(slotParser);
+        // let slotParser = DataManager.getInstance().slotData.slotParser;
+        // slotParser.slotPattern = this.resultPattern;
+        const mipieList = this.getMipieList();//獲取該次咪牌狀態
+        SlotReelMachine.slotRun.emit(this.resultPattern, mipieList);//開始轉動盤面
 
         //老虎機停止
-        SlotMachine.stop.emit(() => {
-            this.checkFinish();
+        SlotReelMachine.slotStop.emit(() => {
+            SettingsController.setEnabled.emit(false);//公版規定, 停盤後Spin按鈕禁用
+            BaseEvent.clickSkip.off(this);
+            this.finish();
         });
 
-        //急停
-        BaseEvent.clickSkip.once(this.onSkip, this);
-        SkipUI.show.emit();
+        //監聽急停
+        BaseEvent.clickSkip.once(() => {
+            DataManager.getInstance().hasSkip = true;
+            BaseEvent.clickSkip.off(this);
+            SlotReelMachine.slotSkip.emit();
+        }, this);
     }
 
     /**
-     * 檢查是否完成
+     * 獲取該次咪牌狀態
+     * @returns 
      */
-    private checkFinish(): void {
-
-        //公版規定, 停盤後Spin按鈕禁用
-        SettingsController.setEnabled.emit(false);
-
-        BaseEvent.clickSkip.off(this);
-        SkipUI.hide.emit();
-
-        this.finish();
-    }
-
-    /**
-     * 跳過
-     */
-    private onSkip(): void {
-        DataManager.getInstance().hasSkip = true;
-        SkipUI.hide.emit();
-        BaseEvent.clickSkip.off(this);
-        SlotMachine.skip.emit();
-
+    public getMipieList(): boolean[] {
+        let mipieList: boolean[] = [];
+        let scatterCount: number = 0;
+        for (let col: number = 0; col < GameConst.REEL_COL; ++col) {
+            mipieList.push(scatterCount >= GameConst.SCATTER_WIN_COUNT - 1);
+            for (let row: number = 0; row < GameConst.REEL_ROW; ++row) {
+                let symbolID = this.resultPattern[row][col];
+                if (symbolID === SymbolID.Scatter) {
+                    scatterCount++;
+                }
+            }
+        }
+        return mipieList;
     }
 
     update(deltaTime: number): void {

@@ -31,7 +31,7 @@ export class SlotData {
      * @returns 
      */
     public needMi(count: number): boolean {
-        return count === GameConst.BONUS_WIN_COUNT - 1;
+        return count === GameConst.SCATTER_WIN_COUNT - 1;
     }
 
     private payloadTemplate = {

@@ -1,15 +1,17 @@
+import { BaseConst } from '@common/script/data/BaseConst';
+
 /**
  * 遊戲常數
  */
 export class GameConst {
     /**Scatter中獎數量 */
-    public static BONUS_WIN_COUNT: number = 3;
+    public static SCATTER_WIN_COUNT: number = 3;
     /**消去演示時間 */
     public static EXPLODE_TIME: number = 1;
     /**圖示權重(越大越上層) */
     // public static symbolWeight: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 99];
     /**圖示ID數量 */
-    public static symbolCount: number = 16;
+    // public static symbolCount: number = 16;
     /**倍數清單 */
     // public static multiplierList: number[] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
 
@@ -32,7 +34,7 @@ export class GameConst {
     /**自訂BigWin倍數 */
     public static BIG_WIN_MULTIPLE: number[] = [10, 20, 40, 80, 120];
     /**scatter中獎次數 */
-    public static scatterTimes: number[] = [0, 0, 10, 15, 20];
+    public static SCATTER_TIMES: number[] = [0, 0, 10, 15, 20];
 
     /**BS初始盤面結果 */
     public static BS_INIT_RESULT: number[][] = [
@@ -44,14 +46,11 @@ export class GameConst {
     ];
 
     /**遊戲表演時間 */
-    public static SLOT_TIME = {
-        showWinDuration: 1,      // 中獎演示時間
-        autoSpinTime: 0.5,        // 自動轉停止後，等待一段時間再開始下一輪
-        reelStopTime: 0.1,        // 每個轉軸停止間隔時間
-        reelMiTime: 1,          // 每個轉軸瞇牌時間
-        bigWinEndDelay: 0.5,       // BigWin結束延遲
-        bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
-    };
+    // public static COMMON_TIME = {
+    //     autoSpinTime: 0.5,        // 自動轉停止後，等待一段時間再開始下一輪
+    //     bigWinEndDelay: 0.5,       // BigWin結束延遲
+    //     bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
+    // };
 }
 
 /**符號ID */

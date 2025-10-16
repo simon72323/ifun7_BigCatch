@@ -7,6 +7,8 @@ import { IWinLineData } from '@game/script/data/GameType';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+
+import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
@@ -16,8 +18,8 @@ import { delay, Utils } from '@common/script/utils/Utils';
 /**
  * 顯示贏分
  */
-export class ShowWinTask extends GameTask {
-    protected name: string = 'ShowWinTask';
+export class WinSymbolTask extends GameTask {
+    protected name: string = 'WinSymbolTask';
     /**中線資料 */
     public winLineData: IWinLineData[];
     /**是否中sub game(否的話中線會輪播) */
@@ -44,7 +46,7 @@ export class ShowWinTask extends GameTask {
         SettingsController.refreshWin.emit(this.payCreditTotal);
         SettingsController.refreshCredit.emit(this.userCredit);
 
-        await delay(GameConst.SLOT_TIME.showWinDuration);
+        await delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
         this.finish();
 
         if (this.hasSubGame) return; // 如果沒有sub game則跳過輪播
@@ -58,12 +60,12 @@ export class ShowWinTask extends GameTask {
             for (let i = 0; i < this.winLineData.length; i++) {
                 if (!this.isLoopWin) break; // 檢查是否被停止
                 SlotMachine.showSymbolWin.emit(this.winLineData[i].winPos); // 顯示當前中獎symbol
-                await delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
+                await delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime); // 等待輹播間隔
             }
             // 輪播完一輪後，再次顯示全部位置
             if (this.isLoopWin) {
                 SlotMachine.showSymbolWin.emit(allWinPos); // 顯示全部中獎symbol
-                await delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
+                await delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime); // 等待輹播間隔
             }
         }
     }
