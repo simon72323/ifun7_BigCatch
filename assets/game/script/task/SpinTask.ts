@@ -1,17 +1,13 @@
-// import { BannerUI } from '@game/components/BannerUI/BannerUI';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
-
 import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
-
 import { TurboMode } from '@common/script/types/BaseType';
 
 /**
@@ -21,7 +17,7 @@ export class SpinTask extends GameTask {
 
     protected name: string = 'BaseSpinTask';
 
-    execute(): void {
+    async execute(): Promise<void> {
         console.log('==========================================新局開始==========================================');
 
         const dataManager = DataManager.getInstance();
@@ -50,17 +46,17 @@ export class SpinTask extends GameTask {
 
         // BannerUI.reset.emit();//還原跑馬燈狀態
         //考量到先轉型、後轉型, 所以音效要在spin監聽
-        SlotMachine.spinComplete.once(() => {
-            // AudioManager.getInstance().playSound(GameAudioKey.in);
-        }, this);
+        // SlotMachine.spinComplete.once(() => {
+        //     // AudioManager.getInstance().playSound(GameAudioKey.in);
+        // }, this);
 
         const isBS = dataManager.isBS();
-        if (isBS) {
-            //先轉型(免費遊戲直接給結果不轉動)
-            // if (!DataManager.getInstance().isBuyFs) {
-            SlotMachine.spin.emit();
-            // }
-        }
+        // if (isBS) {
+        //     //先轉型(免費遊戲直接給結果不轉動)
+        //     // if (!DataManager.getInstance().isBuyFs) {
+        //     SlotMachine.spin.emit();
+        //     // }
+        // }
 
         //判斷要傳送一般spin還是免費spin(檢查一下免費遊戲按下時是否有變更成FS模式)
         let betCredit = isBS ? dataManager.bet.getBetTotal() : dataManager.bet.getBuyFeatureTotal();

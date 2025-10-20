@@ -362,3 +362,20 @@ export class CheatCodeData {
     public rng: number[];
     public rngList: number[][];
 }
+
+/**
+ * 網頁視窗列舉
+ */
+export enum WebViewEnum {
+    GameHistory = 0,
+    GameHelp,
+    Promo
+}
+
+/**
+ * 跑分數據
+ */
+export type RunNumber = {
+    curValue: number;
+    finalValue: number;
+}

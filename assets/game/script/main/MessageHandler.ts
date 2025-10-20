@@ -1,6 +1,4 @@
 import { GameConst } from '@game/script/data/GameConst';
-import { IWinLineData } from '@game/script/data/GameType';
-
 import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { BonusTask } from '@game/script/task/BonusTask';
@@ -16,7 +14,7 @@ import { UpdateFreeTimesTask } from '@game/script/task/UpdateFreeTimesTask';
 import { WinScatterTask } from '@game/script/task/WinScatterTask';
 import { WinSymbolTask } from '@game/script/task/WinSymbolTask';
 
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { IWinLineData } from '@common/components/slotMachine/SlotType';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -25,8 +23,6 @@ import { DelayTask } from '@common/script/tasks/DelayTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
-
-
 
 
 /**
@@ -106,7 +102,7 @@ export class MessageHandler {
             //一轉結束
             const endTask = new EndGameTask();
             endTask.payCreditTotal = data.pay_credit_total;
-            endTask.userCredit = slotResult.user_credit;
+            // endTask.userCredit = slotResult.user_credit;
             TaskManager.getInstance().addTask(endTask);
 
             //第0局要檢查是否要進入FS

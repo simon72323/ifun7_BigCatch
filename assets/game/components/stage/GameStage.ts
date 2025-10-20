@@ -2,12 +2,12 @@ import { _decorator, Animation, Component, easing, Node, tween, Tween, Vec3 } fr
 
 import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
-import { GameAnimationName, GameAudioKey, GameConst } from '@game/script/data/GameConst';
+import { GameAnimationName, GameConst } from '@game/script/data/GameConst';
 import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -17,13 +17,6 @@ import { NetworkManager } from '@common/script/network/NetworkManager';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
 
-// enum RollerAni {
-//     fg_mipie = 'fg_mipie',
-//     fg_roller = 'fg_roller',
-//     intofg_roller = 'intofg_roller',
-//     ng_mipie = 'ng_mipie',
-//     ng_roller = 'ng_roller',
-// }
 
 const { ccclass, property } = _decorator;
 
@@ -60,8 +53,8 @@ export class GameStage extends Component {
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
         // SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
 
-        SlotMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
-        SlotMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
+        SlotReelMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
+        SlotReelMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
     }
 
     private async sendPromotionBrief() {
@@ -91,12 +84,9 @@ export class GameStage extends Component {
         //註冊聲音
 
         //初始化盤面
-        // let slotParser = DataManager.getInstance().slotData.slotParser;
-        // slotParser.slotPattern = GameConst.BS_INIT_RESULT;
-        SlotMachine.initReelSymbolID.emit(GameConst.BS_INIT_RESULT);
-        // SlotMachine.setSlotParser.emit(slotParser);
+        SlotReelMachine.initResultParser.emit(GameConst.BS_INIT_RESULT);
 
-        // SettingsPage1.lessEnabled.emit(DataManager.getInstance().bet.getLessEnabled());
+        //更新玩家資料
         SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);
         SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());
         SettingsController.refreshWin.emit(0);

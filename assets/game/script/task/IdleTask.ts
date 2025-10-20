@@ -91,7 +91,7 @@ export class IdleTask extends GameTask {
 
         console.log('待機狀態監聽按下');
         BaseEvent.clickSpin.on(() => {
-            this.onSpin(false);
+            this.onSpin();
         }, this);
 
         //購買功能
@@ -110,7 +110,7 @@ export class IdleTask extends GameTask {
      * 執行Spin
      * @param buyFs 是否購買免費遊戲
      */
-    private onSpin(buyFs: boolean): void {
+    private onSpin(buyFs: boolean = false): void {
         let curBet = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()
             : DataManager.getInstance().bet.getBetTotal();
         DataManager.getInstance().isBuyFs = buyFs;

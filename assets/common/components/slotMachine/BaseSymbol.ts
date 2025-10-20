@@ -16,30 +16,28 @@ const { ccclass } = _decorator;
 export class BaseSymbol extends Component {
 
     /**圖示編號 */
-    public symbolID = -1;
+    public symbolID: number = -1;
 
     /**對應pos節點索引 */
-    protected posIndex: number = -1;
+    public posID: number = -1;
+
+    /**原父節點 */
+    public parentNode: Node = null;
+
+    /**scatter層 */
+    public scatterLayer: Node = null;
+
+    /**win層 */
+    public winLayer: Node = null;
 
     /**盤面欄列位置 */
-    protected grid: Grid = { col: 0, row: 0 };
+    public grid: Grid = { col: 0, row: 0 };
 
     /**是否為空圖示 */
-    private empty: boolean = false;
+    // private empty: boolean = false;
 
-    /**層級清單 */
-    protected layerList: Node[] = [];
-
-    /**是否在畫面中 */
-    public isInView: boolean = true;
-
-    /**
-     * 設定圖示層級清單
-     * @param list 
-     */
-    public setLayerList(list: Node[]): void {
-        this.layerList = list;
-    }
+    /**是否停止 */
+    public isStop: boolean = true;
 
     /**
      * 設定圖示ID
@@ -67,47 +65,19 @@ export class BaseSymbol extends Component {
         //override
     }
 
-    /**
-     * 設定圖示狀態
-     * @param newSymbolID 
-     */
-    public setState(_state: SymbolState): void {
+
+    public symbolWin(): void {
         //override
     }
 
-    public setGrid(col: number, row: number): void {
-        this.grid = { col, row };
-        this.node.name = `symbol_${col}_${row}`;
-    }
-
-    public getGrid(): Grid {
-        return this.grid;
-    }
-
-    public setPosIndex(index: number): void {
-        this.posIndex = index;
-    }
-
-    public getPosIndex(): number {
-        return this.posIndex;
-    }
-
-    public showSymbolWin(): void {
+    public symbolLose(): void {
         //override
     }
 
-    public hideSymbolWin(): void {
+    public setRandomSymbolID(): void {
         //override
     }
 
-    public setRandomSymbol(): void {
-        //override
-    }
-
-    /**掉落到盤面時(轉動消去都會觸發, 只有畫面內的symbol會觸發) */
-    public hit(isInView: boolean): void {
-        //override
-    }
 
     /**Spin時(所有symbol) */
     public onSpin(): void {
@@ -125,9 +95,9 @@ export class BaseSymbol extends Component {
     }
 
     /**設定是否可見 */
-    public setVisible(_visible: boolean): void {
-        //override
-    }
+    // public setVisible(_visible: boolean): void {
+    //     //override
+    // }
 }
 
 

@@ -11,6 +11,16 @@ export enum SymbolState {
     Ani
 }
 
+/**
+ * 中獎線資料
+ */
+export interface IWinLineData {
+    lineID: number;
+    winPos: number[];
+    winSymbolIDs: number[];
+    payCredit: number;
+}
+
 
 /**
  * 軸狀態定義

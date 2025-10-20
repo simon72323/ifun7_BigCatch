@@ -43,19 +43,22 @@ export class StopTask extends GameTask {
         const mipieList = this.getMipieList();//獲取該次咪牌狀態
         SlotReelMachine.slotRun.emit(this.resultPattern, mipieList);//開始轉動盤面
 
-        //老虎機停止
-        SlotReelMachine.slotStop.emit(() => {
-            SettingsController.setEnabled.emit(false);//公版規定, 停盤後Spin按鈕禁用
-            BaseEvent.clickSkip.off(this);
-            this.finish();
-        });
+        //監聽轉動結束
+        SlotReelMachine.slotRunFinish.once(() => {
+            //老虎機停止
+            SlotReelMachine.slotStop.emit(() => {
+                SettingsController.setEnabled.emit(false);//公版規定, 停盤後Spin按鈕禁用
+                BaseEvent.clickSkip.off(this);
+                this.finish();
+            });
+        }, this);
 
         //監聽急停
-        BaseEvent.clickSkip.once(() => {
-            DataManager.getInstance().hasSkip = true;
-            BaseEvent.clickSkip.off(this);
-            SlotReelMachine.slotSkip.emit();
-        }, this);
+        // BaseEvent.clickSkip.once(() => {
+        //     DataManager.getInstance().hasSkip = true;
+        //     BaseEvent.clickSkip.off(this);
+        //     SlotReelMachine.slotSkip.emit();
+        // }, this);
     }
 
     /**

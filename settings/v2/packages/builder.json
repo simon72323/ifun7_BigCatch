@@ -33,6 +33,16 @@
             }
           }
         }
+      },
+      "acmUQQ3+dJXKgcuQ/k9hXx": {
+        "name": "png8",
+        "options": {
+          "web": {
+            "png": {
+              "quality": 80
+            }
+          }
+        }
       }
     },
     "genMipmaps": false

@@ -1,4 +1,4 @@
-import { Timeout } from '@common/script/types/BaseType';
+import { Timeout, TurboMode } from '@common/script/types/BaseType';
 
 // export enum BaseFont {
 //     /**一般數字 ['0123456789|2', '.,|1'] */
@@ -8,15 +8,6 @@ import { Timeout } from '@common/script/types/BaseType';
 // export enum OperatorName {
 //     BP = 'bp',
 // }
-
-/**
- * 網頁視窗列舉
- */
-export enum WebViewEnum {
-    GameHistory = 0,
-    GameHelp,
-    Promo
-}
 
 /**
  * 公版全域常數(絕對不會改的資料放這, 若放BaseDataManager容易出現循環引用問題)
@@ -53,7 +44,7 @@ export class BaseConst {
 
     /**遊戲轉動時間 */
     public static SLOT_TIME = {
-        normal: {
+        [TurboMode.Normal]: {
             spinIntervalTime: 0.1,  // 轉動/停止間隔秒數
             stopIntervalTime: 0.25,  // 停止間隔秒數
             beginTime: 0.5,   // 啟動秒數(loop是他的一半時間)
@@ -63,7 +54,7 @@ export class BaseConst {
             showWinTime: 1,      // 中獎演示時間
             waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
         },
-        fast: {
+        [TurboMode.Fast]: {
             spinIntervalTime: 0,  // 轉動/停止間隔秒數
             stopIntervalTime: 0,  // 停止間隔秒數
             beginTime: 0.4,   // 啟動秒數(loop是他的一半時間)
@@ -73,7 +64,7 @@ export class BaseConst {
             showWinTime: 1,      // 中獎演示時間
             waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
         },
-        turbo: {
+        [TurboMode.Turbo]: {
             spinIntervalTime: 0,  // 轉動/停止間隔秒數
             stopIntervalTime: 0,  // 停止間隔秒數
             beginTime: 0.3,   // 啟動秒數(loop是他的一半時間)
@@ -84,20 +75,4 @@ export class BaseConst {
             waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
         }
     };
-
-    /**
-     * 跑分隨機值
-     * @param t 
-     * @returns 
-     */
-    public static noisyEasing(t: number): number {
-        // 加一點正向亂數，但不能超過1，也不能比t小
-        const noise = Math.random() * 0.01; // 隨機減少最多 0.1
-        if (t < 0.9) {
-            return t - t * noise;
-        }
-        else {
-            return t;
-        }
-    }
 }

@@ -1,17 +1,20 @@
 
 // import { BannerUI } from '@game/components/BannerUI/BannerUI';
 
-import { UIBlack } from '@game/components/UIBlack';
+// import { UIBlack } from '@game/components/UIBlack';
 import { BlackKey, GameAudioKey, GameConst, SlotMachineID, SymbolID } from '@game/script/data/GameConst';
-import { IWinLineData } from '@game/script/data/GameType';
+// import { IWinLineData } from '@game/script/data/GameType';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { IWinLineData } from '@common/components/slotMachine/SlotType';
+
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { delay, Utils } from '@common/script/utils/Utils';
+import { Utils } from '@common/script/utils/Utils';
+
 
 /**
  * 顯示贏分
@@ -44,7 +47,7 @@ export class WinFishTask extends GameTask {
         //     SettingsController.refreshWin.emit(this.payCreditTotal);
         //     SettingsController.refreshCredit.emit(this.userCredit);
 
-        //     await delay(GameConst.SLOT_TIME.showWinDuration);
+        //     await Utils.delay(GameConst.SLOT_TIME.showWinDuration);
         //     this.finish();
 
         //     if (this.hasSubGame) return; // 如果沒有sub game則跳過輪播
@@ -58,12 +61,12 @@ export class WinFishTask extends GameTask {
         //         for (let i = 0; i < this.winLineData.length; i++) {
         //             if (!this.isLoopWin) break; // 檢查是否被停止
         //             SlotMachine.showSymbolWin.emit(this.winLineData[i].winPos); // 顯示當前中獎symbol
-        //             await delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
+        //             await Utils.delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
         //         }
         //         // 輪播完一輪後，再次顯示全部位置
         //         if (this.isLoopWin) {
         //             SlotMachine.showSymbolWin.emit(allWinPos); // 顯示全部中獎symbol
-        //             await delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
+        //             await Utils.delay(GameConst.SLOT_TIME.showWinDuration); // 等待輪播間隔
         //         }
         //     }
     }

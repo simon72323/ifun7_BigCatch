@@ -2,7 +2,7 @@
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { delay } from '@common/script/utils/Utils';
+import { Utils } from '@common/script/utils/Utils';
 
 /**
  * FS返回NG總結算(先BigWin再橫幅)
@@ -45,7 +45,7 @@ export class BackBSSettleTask extends GameTask {
         // }
 
         //要多等一秒
-        await delay(1);
+        await Utils.delay(1);
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);

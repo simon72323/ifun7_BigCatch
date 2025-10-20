@@ -1,4 +1,4 @@
-import { FSSettleUI } from '@game/components/SettleUI/FSSettleUI';
+import { TotalWinUI } from '@game/components/TotalWinUI/TotalWinUI';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -22,7 +22,7 @@ export class FSSettleTask extends GameTask {
 
         AudioManager.getInstance().stopMusic(AudioKey.FsMusic);
 
-        FSSettleUI.show.emit(this.win * DataManager.getInstance().bet.getLineTotal(),
+        TotalWinUI.show.emit(this.win * DataManager.getInstance().bet.getLineTotal(),
             //轉場全遮蔽
             () => {
                 BaseEvent.changeScene.emit(ModuleID.BS);

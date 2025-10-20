@@ -1,8 +1,8 @@
-import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle, sp } from 'cc';
+import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle, sp, Label } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
-import { Grid } from '@common/script/types/BaseType';
+import { Grid, RunNumber } from '@common/script/types/BaseType';
 
 
 // declare const gtag: (command: string, event: string, data?: any) => void;
@@ -215,6 +215,64 @@ export class Utils {
         obj.clearTracks();
         obj.setToSetupPose();
         obj.setCompleteListener(null);
+    }
+
+    /**
+     * 跑分動畫
+     * @param time 動畫時間
+     * @param nodeLabel 顯示label
+     * @param runNum 跑分數據(curValue: 起點值, finalValue: 最終值)
+     * @param callback 
+     */
+    public static runNumber(time: number, nodeLabel: Label, runNum: RunNumber, callback?: () => void) {
+        tween(runNum)
+            .to(time, { curValue: runNum.finalValue }, {
+                onUpdate: () => {
+                    nodeLabel.string = Utils.numberFormat(runNum.curValue);
+                },
+                easing: Utils.noisyEasing
+            })
+            .call(() => {
+                callback?.();
+            })
+            .start();
+    }
+
+    /**
+     * 跑分隨機值
+     * @param t 
+     * @returns 
+     */
+    public static noisyEasing(t: number): number {
+        // 加一點正向亂數，但不能超過1，也不能比t小
+        const noise = Math.random() * 0.01; // 隨機減少最多 0.1
+        if (t < 0.9) {
+            return t - t * noise;
+        }
+        else {
+            return t;
+        }
+    }
+
+    /**
+     * 延遲
+     * @param s 延遲秒數
+     * @returns 
+     */
+    public static async delay(s: number): Promise<void> {
+        return new Promise<void>(resolve => {
+            Utils.scheduleOnce(() => resolve(), s, this);
+        });
+    }
+
+    /**
+     * 等待下一幀
+     * @returns 
+     */
+    public static async waitNextFrame(): Promise<void> {
+        return new Promise<void>(resolve => {
+            Utils.scheduleOnce(() => resolve(), 0, this);
+        });
     }
     //================= 用到的 Utils =================
 
@@ -817,27 +875,6 @@ export class CurveRangeProperty {
             return value;
         };
     }
-}
-
-/**
- * 延遲
- * @param ms 
- * @returns 
- */
-export async function delay(ms: number): Promise<void> {
-    return new Promise<void>(resolve => {
-        Utils.scheduleOnce(() => resolve(), ms, null);
-    });
-}
-
-/**
- * 等待下一幀
- * @returns 
- */
-export async function waitNextFrame(): Promise<void> {
-    return new Promise<void>(resolve => {
-        Utils.scheduleOnce(() => resolve(), 0, null);
-    });
 }
 
 /**

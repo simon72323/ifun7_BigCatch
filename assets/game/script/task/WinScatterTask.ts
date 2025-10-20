@@ -1,10 +1,10 @@
-import { UIBlack } from '@game/components/UIBlack';
+import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { BlackKey, GameAudioKey } from '@game/script/data/GameConst';
 
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { delay } from '@common/script/utils/Utils';
+import { Utils } from '@common/script/utils/Utils';
 
 /**
  * Scatter中獎
@@ -18,10 +18,10 @@ export class WinScatterTask extends GameTask {
 
     public async execute(): Promise<void> {
         AudioManager.getInstance().playSound(GameAudioKey.st);
-        UIBlack.show.emit(BlackKey.UIBlack); //壓黑
+        ReelBlackUI.show.emit(); //壓黑
         SlotMachine.showSymbolWin.emit(this.winPos); //顯示中獎位置
-        await delay(2);
-        UIBlack.hide.emit(BlackKey.UIBlack);
+        await Utils.delay(2);
+        ReelBlackUI.hide.emit();
         this.finish();
     }
 

@@ -1,11 +1,11 @@
 
 
-
-import { GameConst } from '@game/script/data/GameConst';
+import { BaseConst } from '@common/script/data/BaseConst';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { delay } from '@common/script/utils/Utils';
+import { Utils } from '@common/script/utils/Utils';
+
 
 
 /**
@@ -18,7 +18,7 @@ export class AutoSpinDelayTask extends GameTask {
         //自動轉 & 沒有skip 才延遲0.3秒
         if (dataManager.isAutoMode && !dataManager.slotData.hasSkip) {
             //延遲時間依照速度模式
-            await delay(GameConst.SLOT_TIME[dataManager.curTurboMode].autoSpinTime);
+            await Utils.delay(BaseConst.SLOT_TIME[dataManager.curTurboMode].waitNextSpinTime);
             this.finish();
         }
         else {
