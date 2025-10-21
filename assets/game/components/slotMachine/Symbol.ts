@@ -199,14 +199,14 @@ export class Symbol extends BaseSymbol {
     public blurShow(): void {
         Utils.fadeIn(this.blur.node, 0.2);
         this.blur.node.active = true;
-        Utils.fadeOut(this.normal.node, 0.2);
+        // Utils.fadeOut(this.normal.node, 0.05);
     }
 
     /**
      * 模糊貼圖隱藏
      */
     public blurHide(): void {
-        Utils.fadeIn(this.normal.node, 0.2);
+        // Utils.fadeIn(this.normal.node, 0.05);
         Utils.fadeOut(this.blur.node, 0.2, () => {
             this.blur.node.active = false;
         });
@@ -238,6 +238,7 @@ export class Symbol extends BaseSymbol {
         this.normal.node.active = true;
         this.spine.node.active = false;
         this.wild.node.active = false;
+        this.blur.node.active = false;
         this.setFishState();//設置魚的金額與狀態
     }
 

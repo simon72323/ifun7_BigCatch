@@ -23,10 +23,11 @@ export class EndGameTask extends GameTask {
     async execute(): Promise<void> {
         const dataManager = DataManager.getInstance();
         //BS單轉總分達到BigWin額外演示
-        if (dataManager.getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
-            await this.waitForBigWinComplete();
-            await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
-        }
+        // if (dataManager.getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
+        //     console.log('waitForBigWinComplete');
+        //     await this.waitForBigWinComplete();
+        //     await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
+        // }
         // else if (this.payCreditTotal > 0) {
         //     await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
         // }

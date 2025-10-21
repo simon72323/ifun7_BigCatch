@@ -282,10 +282,10 @@ export class DataManager {
     public getBigWinTypeByValue(value: number): BigWinType {
         if (!this.bigWinMultiple || this.bigWinMultiple.length === 0) {
             console.warn('BetData: bigWinMultiple not initialized');
-            return 0;
+            return BigWinType.non;
         }
 
-        let bigWinLevel: BigWinType;
+        let bigWinLevel: BigWinType = BigWinType.non;
         const multiple: number = this.bet.getWinMultipleByValue(value);
         for (let i = 0; i < this.bigWinMultiple.length; i++) {
             if (multiple >= this.bigWinMultiple[i]) {
