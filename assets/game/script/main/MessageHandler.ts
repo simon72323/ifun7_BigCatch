@@ -76,7 +76,7 @@ export class MessageHandler {
             //執行等待scatter表演
             // TaskManager.getInstance().addTask(new DelayTask(data.scatter_info.amount > 0 ? 0.5 : 0.2));
             // 有贏分才表演中獎流程
-            if (data.pay_credit_total > 9999999999) {
+            if (data.pay_credit_total > 0) {
                 if (resultIndex > 0) {
                     //處理wild撈魚得分並增加wild次數
                 }
@@ -89,6 +89,7 @@ export class MessageHandler {
                         const data = Utils.getLinePathPosition(payLine.pay_line, payLine.amount, resultPattern, GameConst.payLineData);
                         winLineData.push({ lineID: payLine.pay_line, winPos: data.winPos, winSymbolIDs: data.winSymbolIDs, payCredit: payLine.pay_credit });
                     });
+                    console.log('winLineData', winLineData);
                     //中獎線
                     const winTask = new WinSymbolTask();
                     winTask.hasSubGame = slotResult.get_sub_game;

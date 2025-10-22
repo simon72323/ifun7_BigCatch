@@ -69,6 +69,7 @@ export class WinSymbolTask extends GameTask {
      * @param allWinPos 
      */
     private async showWinAll(allWinPos: number[]): Promise<void> {
+        console.log('中獎位置', allWinPos);
         SlotReelMachine.showSymbolWin.emit(allWinPos); //傳送中線資料
         WinScoreUI.showWin.emit(this.payCreditTotal);
         await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime); // 等待輪播間隔

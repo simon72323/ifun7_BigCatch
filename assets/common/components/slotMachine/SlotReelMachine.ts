@@ -218,7 +218,6 @@ export class SlotReelMachine extends Component {
         const loopTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].loopTime;//循環時間
         const reelNode = this.reelList[reelIndex];//該行slotRun
         const singleHeight = this.symbolHeight * this.reelRow[reelIndex];//單區塊高度
-        this.blurShow(reelIndex);//顯示模糊貼圖
 
         const bottomSymbols = this.reelBottomSymbol[reelIndex];
         const mainSymbols = this.reelMainSymbol[reelIndex];
@@ -226,6 +225,7 @@ export class SlotReelMachine extends Component {
         const topPosition = new Vec3(reelNode.x, singleHeight, 0);
         const bottomPosition = new Vec3(reelNode.x, -singleHeight, 0);
 
+        this.blurShow(reelIndex);//顯示模糊貼圖
         //循環轉動
         const LoopSlotRun = () => {
             //先設置下層的symbolID = 上層的symbolID
@@ -251,7 +251,9 @@ export class SlotReelMachine extends Component {
         //起始轉動後持續循環轉動
         tween(reelNode)
             .to(beginTime, { position: bottomPosition }, { easing: easing.backIn })
-            .call(LoopSlotRun)
+            .call(() => {
+                LoopSlotRun();
+            })
             .start();
     }
 
@@ -312,18 +314,17 @@ export class SlotReelMachine extends Component {
     private async stopSlotRun(reelIndex: number, runTime: number, backTime: number): Promise<void> {
         return new Promise(async resolve => {
             if (this.reelStopState[reelIndex]) return;
+            let isResolve = false;
             this.reelStopState[reelIndex] = true;//設定該行已執行停止轉動
             const stopSymbolIDs = this.resultPattern[reelIndex];//該軸的結果符號
             const reelNode = this.reelList[reelIndex];//該行slotRun
 
             //重置reel到最上面，並回傳最下層symbol陣列
             const reelStopSymbols = this.resetReelToTop(reelIndex, stopSymbolIDs);
-            console.log('runTime', runTime);
-            console.log('backTime', backTime);
 
             this.blurHide(reelIndex);//模糊貼圖隱藏
             tween(reelNode)
-                .to(runTime, { position: new Vec3(reelNode.x, -20, 0) }, { easing: easing.sineOut })
+                .to(runTime, { position: new Vec3(reelNode.x, -10, 0) }, { easing: easing.cubicOut })
                 .call(() => {
                     // AudioManager.getInstance().playOnceSound(G5251AudioName.ReelStop);//播放回彈音效
                 })
@@ -337,15 +338,17 @@ export class SlotReelMachine extends Component {
                         this.stopMiAll();//停止咪牌
                         SlotReelMachine.slotRunFinish.emit();//發送轉動完成事件
                     }
-                    resolve();
+                    if (!isResolve) resolve();
                 }).start();
 
-            //如果此軸不是咪牌，則等待stopIntervalTime後就結束
-            if (!this.mipieList[reelIndex]) {
+            //如果此軸不是咪牌且不是最後一軸，則等待stopIntervalTime後就結束
+            if (!this.mipieList[reelIndex] && reelIndex !== this.reelList.length - 1) {
                 const stopIntervalTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].stopIntervalTime;
                 if (stopIntervalTime > 0) {
                     await Utils.delay(stopIntervalTime);
                 }
+                isResolve = true;
+                resolve();
             }
         });
     }
@@ -501,18 +504,20 @@ export class SlotReelMachine extends Component {
      */
     private onShowSymbolWin(winPos: number[]): void {
         // const winPos = Utils.uniq(winLineData.flatMap((data) => data.winPos)); //全部中獎位置(不重複)
-        const losePos = Array.from({ length: this.reelMainSymbol.length }, (_, i) => i)
+        const losePos = Array.from({ length: this.allReelMainSymbols.length }, (_, i) => i)
             .filter(pos => !winPos.includes(pos));
+
+        console.log('this.reelMainSymbol.length', this.allReelMainSymbols.length);
+        console.log('losePos', losePos);
 
         for (let i = 0; i < winPos.length; i++) {
             const winSymbol = this.allReelMainSymbols[winPos[i]];
-            // winSymbol.node.parent = this.winLayer.children[winPos[i]];//移動到勝利層
             winSymbol.symbolWin();
         }
-        for (let i = 0; i < losePos.length; i++) {
-            const loseSymbol = this.allReelMainSymbols[losePos[i]];
-            loseSymbol.symbolLose();
-        }
+        // for (let i = 0; i < losePos.length; i++) {
+        //     const loseSymbol = this.allReelMainSymbols[losePos[i]];
+        //     loseSymbol.symbolLose();
+        // }
     }
 
     // /**

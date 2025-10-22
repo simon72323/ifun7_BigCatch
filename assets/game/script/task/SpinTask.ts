@@ -10,6 +10,7 @@ import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { TurboMode } from '@common/script/types/BaseType';
 
+
 /**
  * 共用開始轉動流程(成功送出Spin請求)
  */
@@ -64,19 +65,25 @@ export class SpinTask extends GameTask {
 
         //發送spin請求
         console.log('發送spin請求', betCredit, spinID);
-        NetworkManager.getInstance().sendSpin(betCredit, spinID, (spinResult) => {
-            dataManager.isBuyFs = false;//還原免費遊戲
-            // DataManager.getInstance().featureBuyType = 0;
-            // AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
 
-            //判斷是否有spin成功回傳資料
-            if (spinResult) {
-                BaseEvent.onSpinResult.emit(spinResult);
-            } else if (isBS) {
-                TaskManager.getInstance().addTask(new IdleTask());//Spin失敗且是BS模式要回idle
-            }
-            this.finish();
-        });
+        //跑假資料
+        const fakeSpinResult = { 'game_id': 5800, 'main_game': { 'pay_credit_total': 1.5, 'game_result': [[1, 17, 18], [19, 1, 1], [5, 6, 16], [18, 19, 6], [20, 17, 16]], 'pay_line': [{ 'pay_line': 6, 'symbol_id': 1, 'amount': 2, 'pay_credit': 1.5, 'multiplier': 1 }], 'scatter_info': { 'id': [20], 'position': [[4, 0]], 'amount': 1, 'multiplier': 0, 'pay_credit': 0, 'pay_rate': 0 }, 'wild_info': null, 'scatter_extra': null, 'extra': null }, 'get_sub_game': false, 'sub_game': { 'game_result': null, 'pay_credit_total': 0, 'over_win': false }, 'get_jackpot': false, 'jackpot': { 'jackpot_id': '', 'jackpot_credit': 0, 'symbol_id': null }, 'get_jackpot_increment': false, 'jackpot_increment': null, 'grand': 0, 'major': 0, 'minor': 0, 'mini': 0, 'user_credit': 499999995.5, 'bet_credit': 3, 'payout_credit': 1.5, 'change_credit': -1.5, 'effect_credit': 3, 'buy_spin': 0, 'buy_spin_multiplier': 1, 'extra': null };
+        BaseEvent.onSpinResult.emit(fakeSpinResult);
+
+        //真資料
+        // NetworkManager.getInstance().sendSpin(betCredit, spinID, (spinResult) => {
+        //     dataManager.isBuyFs = false;//還原免費遊戲
+        //     // DataManager.getInstance().featureBuyType = 0;
+        //     // AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
+
+        //     //判斷是否有spin成功回傳資料
+        //     if (spinResult) {
+        //         BaseEvent.onSpinResult.emit(spinResult);
+        //     } else if (isBS) {
+        //         TaskManager.getInstance().addTask(new IdleTask());//Spin失敗且是BS模式要回idle
+        //     }
+        //     this.finish();
+        // });
     }
 
     /**持續更新 */

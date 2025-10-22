@@ -46,10 +46,25 @@ export class Utils {
     public static numberFormat(value: number): string {
         let decimalPoint = BaseConfig.DecimalPlaces;
         const preciseValue = Utils.accMul(value, 1);
-        return Number(preciseValue.toFixed(decimalPoint)).toLocaleString('en', {
-            minimumFractionDigits: decimalPoint
-        });
+        return preciseValue.toLocaleString('en', { minimumFractionDigits: decimalPoint, maximumFractionDigits: decimalPoint });
     }
+
+    /**
+     * 將數字格式化，不進行四捨五入
+     * @param value 要格式化的數字
+     * @param fixed 小數位數
+     * @returns 格式化後的字符串
+     */
+    // public static toFixedNoRound(value: number | string, fixed: number): string {
+    //     let item: number = (typeof value === 'string') ? parseInt(value) : value;
+    //     let re = new RegExp('^-?\\d+(?:\\.\\d{0,' + (fixed || -1) + '})?');
+    //     let itemString = item.toFixed(fixed);
+    //     let rt = itemString.match(re)[0];
+    //     let result = rt.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    //     while (result.endsWith('0') == true) result = result.substring(0, result.length - 1);
+    //     if (result.endsWith('.') == true) result = result.substring(0, result.length - 1);
+    //     return result;
+    // }
 
     /**
      * 精確數字
@@ -180,7 +195,8 @@ export class Utils {
      * @returns 路徑位置數組
      */
     public static getLinePathPosition(payLineId: number, amount: number, slotPattern: number[][], payLineData: number[][]): { winPos: number[], winSymbolIDs: number[] } {
-        const linePath = payLineData[payLineId - 1]; // payLineId從1開始
+        const linePath = payLineData[payLineId];
+        console.log('linePath', linePath);
         let winPos: number[] = [];
         let winSymbolIDs: number[] = [];
 
@@ -560,39 +576,22 @@ export class Utils {
      * @param allowThousand 是否允許千分位
      * @returns 轉換後的字符串
      */
-    public static changeUnit(value: number | string, allowThousand: boolean = true): string {
-        const THOUSAND: number = 1000;
-        const MILLION: number = 1000000;
-        const BILLION: number = 1000000000;
+    // public static changeUnit(value: number | string, allowThousand: boolean = true): string {
+    //     const THOUSAND: number = 1000;
+    //     const MILLION: number = 1000000;
+    //     const BILLION: number = 1000000000;
 
-        let item: number = (typeof value === 'string') ? parseInt(value) : value;
-        if (item / BILLION >= 1) {
-            return Utils.toFixedNoRound(item / BILLION, 3) + 'B';
-        } else if (item / MILLION >= 1) {
-            return Utils.toFixedNoRound(item / MILLION, 3) + 'M';
-        } else if (allowThousand && item / THOUSAND >= 1) {
-            return Utils.toFixedNoRound(item / THOUSAND, 3) + 'K';
-        } else {
-            return Utils.numberFormat(item);
-        }
-    }
-
-    /**
-     * 將數字格式化，不進行四捨五入
-     * @param value 要格式化的數字
-     * @param fixed 小數位數
-     * @returns 格式化後的字符串
-     */
-    public static toFixedNoRound(value: number | string, fixed: number): string {
-        let item: number = (typeof value === 'string') ? parseInt(value) : value;
-        let re = new RegExp('^-?\\d+(?:\\.\\d{0,' + (fixed || -1) + '})?');
-        let itemString = item.toFixed(fixed);
-        let rt = itemString.match(re)[0];
-        let result = rt.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        while (result.endsWith('0') == true) result = result.substring(0, result.length - 1);
-        if (result.endsWith('.') == true) result = result.substring(0, result.length - 1);
-        return result;
-    }
+    //     let item: number = (typeof value === 'string') ? parseInt(value) : value;
+    //     if (item / BILLION >= 1) {
+    //         return Utils.toFixedNoRound(item / BILLION, 3) + 'B';
+    //     } else if (item / MILLION >= 1) {
+    //         return Utils.toFixedNoRound(item / MILLION, 3) + 'M';
+    //     } else if (allowThousand && item / THOUSAND >= 1) {
+    //         return Utils.toFixedNoRound(item / THOUSAND, 3) + 'K';
+    //     } else {
+    //         return Utils.numberFormat(item);
+    //     }
+    // }
 
     /**
      * 將字符串中的 `{0}...{1}` 替換為參數
@@ -622,10 +621,10 @@ export class Utils {
      * @param value 要格式化的數字
      * @returns 格式化後的字符串
      */
-    public static numberFormatM(value: number) {
-        if (value < 1000000) return Utils.numberFormat(value);
-        return Utils.toFixedNoRound(value / 1000000, 3) + 'M';
-    }
+    // public static numberFormatM(value: number) {
+    //     if (value < 1000000) return Utils.numberFormat(value);
+    //     return Utils.toFixedNoRound(value / 1000000, 3) + 'M';
+    // }
 
     /**
      * 數字格式化，添加千分位逗號

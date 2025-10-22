@@ -197,7 +197,7 @@ export class Symbol extends BaseSymbol {
      * 模糊貼圖顯示
      */
     public blurShow(): void {
-        Utils.fadeIn(this.blur.node, 0.2);
+        Utils.fadeIn(this.blur.node, 0.3);
         this.blur.node.active = true;
         // Utils.fadeOut(this.normal.node, 0.05);
     }
@@ -207,7 +207,7 @@ export class Symbol extends BaseSymbol {
      */
     public blurHide(): void {
         // Utils.fadeIn(this.normal.node, 0.05);
-        Utils.fadeOut(this.blur.node, 0.2, () => {
+        Utils.fadeOut(this.blur.node, 0.3, () => {
             this.blur.node.active = false;
         });
     }
@@ -218,7 +218,7 @@ export class Symbol extends BaseSymbol {
     public symbolWin(): void {
         this.spine.node.active = true;
         this.normal.node.active = false;
-        this.node.parent = this.winLayer;//移動到勝利層
+        this.node.parent = this.winLayer.children[this.posID];//移動到勝利層
         const animName = symbolAniNameMap.get(this.symbolID);
         this.spine.setAnimation(0, animName, true);
     }
@@ -273,7 +273,7 @@ export class Symbol extends BaseSymbol {
         if (this.symbolID >= SymbolID.F1 && this.symbolID <= SymbolID.F6) {
             this.score.active = true;
             const isBS = DataManager.getInstance().isBS();
-            this.score.getComponent(UIOpacity).opacity = isBS ? 80 : 255;
+            this.score.getComponent(UIOpacity).opacity = isBS ? 128 : 255;
             const betCredit = DataManager.getInstance().bet.getBetTotal();
             const fishScore = fishOddsMap.get(this.symbolID) * betCredit;
             this.score.getChildByName('Label').getComponent(Label).string = Utils.numberFormat(fishScore);

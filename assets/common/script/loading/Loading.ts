@@ -32,7 +32,6 @@ export class Loading extends Component {
         // E2ETest.E2EStartLoading();
 
         this.initUI();
-        this.getCurrencyJson();//獲取幣別資料
         DataManager.getInstance().urlParam.initUrlParameters();//初始化URL參數
         i18n.init(DataManager.getInstance().urlParam.lang);//初始化語言
 
@@ -80,6 +79,7 @@ export class Loading extends Component {
 
         this.sendUserData()
             .then(this.sendGameData)
+            .then(this.getCurrencyJson)
             .then(() => {
                 this.loadGameScene();
                 console.log('Loading Done');
@@ -174,6 +174,6 @@ export class Loading extends Component {
 
         const urlCurrency = DataManager.getInstance().currency;
         BaseConfig.CurrencySymbol = currencyJson.CurrencySymbol[urlCurrency];
-        BaseConfig.DecimalPlaces = currencyJson.DecimalPlaces[urlCurrency];
+        BaseConfig.DecimalPlaces = parseInt(currencyJson.DecimalPlaces[urlCurrency]);
     }
 }

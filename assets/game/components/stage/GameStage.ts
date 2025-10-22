@@ -26,6 +26,9 @@ export class GameStage extends Component {
     public static shake: XEvent = new XEvent();
     public static fsOpening: XEvent = new XEvent();
 
+    @property({ type: Boolean, tooltip: '是否為假老虎機' })
+    private isFake: boolean = false;
+
     private isMi: boolean = false;
     private scaleNode: Node;
     onLoad() {
@@ -34,14 +37,24 @@ export class GameStage extends Component {
 
         //===================不確定cocos內做，且收到要做甚麼?===================
         //獲取促銷簡介、遊戲內選單狀態、遊戲內選單
-        this.sendPromotionBrief()
-            .then(this.sendInGameMenuStatus)
-            // .then(this.sendInGameMenu)
-            .then(this.initGame.bind(this))
-            .catch((e: any) => {
-                console.error(e);
-                // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
-            });
+        const fakeData1 = { 'name': '', 'account': 'token5800', 'agent_account': 'CS8901', 'credit': 500000000, 'currency': 'IDR', 'free_spin_data': [{ 'free_spin_id': '', 'bet': 0, 'end_date': '', 'rounds_left': 0 }], 'is_anchor': false, 'simulator_data': {} };
+        DataManager.getInstance().userData = fakeData1;
+        const fakeData2 = { 'game_id': 5800, 'line_bet': [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], 'coin_value': [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34], 'bet_available_idx': 0, 'line_total': 30, 'line_available': [30], 'line_bet_default_index': 0, 'coin_value_default_index': 0, 'win': 1, 'big_win': 20, 'super_win': 50, 'mega_win': 100, 'spin_mode': 1, 'buy_spin': { 'allow_buy': 1, 'multiplier': 50, 'limit_total': 6000000 } };
+        DataManager.getInstance().gameData = fakeData2;
+
+        if (!this.isFake) {
+            this.sendPromotionBrief()
+                .then(this.sendInGameMenuStatus)
+                // .then(this.sendInGameMenu)
+                .then(this.initGame.bind(this))
+                .catch((e: any) => {
+                    console.error(e);
+                    // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
+                });
+        } else {
+            this.initGame();
+        }
+
         //===================不確定cocos內做，且收到要做甚麼?===================
 
         // BaseEvent.initMessageComplete.once(this.netReady, this);//監聽網路準備完成事件(一次)
@@ -58,10 +71,12 @@ export class GameStage extends Component {
     }
 
     private async sendPromotionBrief() {
+        if (this.isFake) return;
         await NetworkManager.getInstance().sendPromotionBrief();
     }
 
     private async sendInGameMenuStatus() {
+        if (this.isFake) return;
         await NetworkManager.getInstance().sendInGameMenuStatus();
         // this.initGame();
     }

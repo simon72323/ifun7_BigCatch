@@ -24,7 +24,7 @@ export class WinScoreUI extends Component {
      * 顯示贏得分數
      * @param value 贏得分數
      */
-    private showWin(value: number): void {
+    private async showWin(value: number): Promise<void> {
         this.node.active = true;
         Utils.fadeIn(this.node, 0.2);
         this.node.scale = new Vec3(0.5, 0.5, 1);
@@ -33,11 +33,12 @@ export class WinScoreUI extends Component {
             .to(0.5, { scale: new Vec3(1, 1, 1) }, { easing: 'sineIn' })
             .start();
         //跑分動畫
+        this.runNum.curValue = 0;
         this.runNum.finalValue = value;
-        Utils.runNumber(1, this.winLabel, this.runNum, () => {
-            Utils.fadeOut(this.node, 0.2, () => {
-                this.node.active = false;
-            });
+        Utils.runNumber(0.5, this.winLabel, this.runNum);
+        await Utils.delay(1);
+        Utils.fadeOut(this.node, 0.2, () => {
+            this.node.active = false;
         });
     }
 }

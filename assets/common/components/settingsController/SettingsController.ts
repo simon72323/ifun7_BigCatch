@@ -11,7 +11,7 @@ import { AudioManager } from '@common/script/manager/AudioManager';
 import { ISpinData } from '@common/script/network/NetworkApi';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { AudioMode, GameState, ModuleID, TurboMode } from '@common/script/types/BaseType';
-import { addBtnClickEvent, delay, Utils } from '@common/script/utils/Utils';
+import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
 
@@ -543,7 +543,7 @@ export class SettingsController extends Component {
     /**刷新可用餘額 */
     private refreshCredit(value: number): void {
         console.log('刷新可用餘額', value);
-        this.balanceValue.string = Utils.numberFormat(value);
+        this.balanceValue.string = BaseConfig.CurrencySymbol + Utils.numberFormat(value);
     }
 
     /**刷新下注 */
@@ -559,13 +559,12 @@ export class SettingsController extends Component {
                 .to(0.15, { scale: new Vec3(1, 1, 1) })
                 .start();
         }
-        this.totalBetValue.string = newBet;
+        this.totalBetValue.string = BaseConfig.CurrencySymbol + newBet;
     }
 
     /**刷新獲得 */
     private refreshWin(value: number): void {
-        console.log('刷新獲得', value);
-        this.totalWinValue.string = Utils.numberFormat(value);
+        this.totalWinValue.string = BaseConfig.CurrencySymbol + Utils.numberFormat(value);
     }
     //============================= 刷新BetInfo資訊 =============================
 }
