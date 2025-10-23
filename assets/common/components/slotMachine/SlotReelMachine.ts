@@ -127,6 +127,7 @@ export class SlotReelMachine extends Component {
      * @param initParset 初始化盤面符號
      */
     private initResultParser(initParser: number[][]) {
+        console.log('初始化盤面符號', initParser);
         for (let i = 0; i < this.reelList.length; i++) {
             const reelNode = this.reelList[i];
             const row1x = this.reelRow[i];//row1倍數量

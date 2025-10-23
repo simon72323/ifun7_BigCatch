@@ -54,6 +54,10 @@ export class BaseEvent {
 
     /**點擊SPIN */
     public static clickSpin: XEvent1<boolean> = new XEvent1();
+
+    /**停止中獎線輪播 */
+    public static stopLineLoop: XEvent = new XEvent();
+
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();
     /**點擊自動 */

@@ -50,7 +50,7 @@ export class DataManager {
     /** 停止直到免費轉 */
     public isStopUntilFeature: boolean = false;
     /** 剩餘免費旋轉次數 */
-    public freeSpinCount: number = 0;
+    public freeSpinTimes: number = 0;
 
 
     /** 是否購買免費遊戲 */

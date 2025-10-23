@@ -1,6 +1,6 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity } from 'cc';
 
-import { SymbolID } from '@game/script/data/GameConst';
+import { FISH_ODDS, SymbolID } from '@game/script/data/GameConst';
 
 import { BaseSymbol } from '@common/components/slotMachine/BaseSymbol';
 import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
@@ -8,6 +8,7 @@ import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine'
 import { DataManager } from '@common/script/data/DataManager';
 import { Utils } from '@common/script/utils/Utils';
 
+/**圖示ID對應的索引 */
 const symbolImageMap = new Map<number, number>([
     [SymbolID.Wild, 0],     // Wild -> 0
     [SymbolID.H1, 1],       // H1 -> 1
@@ -20,14 +21,17 @@ const symbolImageMap = new Map<number, number>([
     [SymbolID.F4, 8],       // F4 -> 8
     [SymbolID.F5, 9],       // F5 -> 9
     [SymbolID.F6, 10],      // F6 -> 10
-    [SymbolID.LA, 11],      // LA -> 11
-    [SymbolID.LK, 12],      // LK -> 12
-    [SymbolID.LQ, 13],      // LQ -> 13
-    [SymbolID.LJ, 14],      // LJ -> 14
-    [SymbolID.LT, 15],      // LT -> 15
-    [SymbolID.Scatter, 16]  // Scatter -> 16
+    [SymbolID.F7, 11],      // F7 -> 11
+    [SymbolID.F8, 12],      // F8 -> 12
+    [SymbolID.LA, 13],      // LA -> 13
+    [SymbolID.LK, 14],      // LK -> 14
+    [SymbolID.LQ, 15],      // LQ -> 15
+    [SymbolID.LJ, 16],      // LJ -> 16
+    [SymbolID.LT, 17],      // LT -> 17
+    [SymbolID.Scatter, 18]  // Scatter -> 18
 ]);
 
+/**圖示ID對應的動畫名稱 */
 const symbolAniNameMap = new Map<number, string>([
     [SymbolID.Wild, 'animation'],
     [SymbolID.H1, 'H1'],
@@ -40,22 +44,14 @@ const symbolAniNameMap = new Map<number, string>([
     [SymbolID.F4, 'F4'],
     [SymbolID.F5, 'F5'],
     [SymbolID.F6, 'F6'],
+    [SymbolID.F7, 'F7'],
+    [SymbolID.F8, 'F8'],
     [SymbolID.LA, 'LA'],
     [SymbolID.LK, 'LK'],
     [SymbolID.LQ, 'LQ'],
     [SymbolID.LJ, 'LJ'],
     [SymbolID.LT, 'LT'],
     [SymbolID.Scatter, 'animation']
-]);
-
-/**魚倍率 */
-const fishOddsMap = new Map<number, number>([
-    [SymbolID.F1, 2],
-    [SymbolID.F2, 5],
-    [SymbolID.F3, 10],
-    [SymbolID.F4, 15],
-    [SymbolID.F5, 20],
-    [SymbolID.F6, 25]
 ]);
 
 const { ccclass, property } = _decorator;
@@ -265,7 +261,6 @@ export class Symbol extends BaseSymbol {
         return this.symbolID === SymbolID.Wild;
     }
 
-
     /**
      * 設定魚的狀態
      */
@@ -275,7 +270,7 @@ export class Symbol extends BaseSymbol {
             const isBS = DataManager.getInstance().isBS();
             this.score.getComponent(UIOpacity).opacity = isBS ? 128 : 255;
             const betCredit = DataManager.getInstance().bet.getBetTotal();
-            const fishScore = fishOddsMap.get(this.symbolID) * betCredit;
+            const fishScore = FISH_ODDS[this.symbolID] * betCredit;
             this.score.getChildByName('Label').getComponent(Label).string = Utils.numberFormat(fishScore);
         }
         else {

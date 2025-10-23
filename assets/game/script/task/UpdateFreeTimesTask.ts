@@ -1,6 +1,8 @@
-// import { FSUI } from '@game/components/FSUI/FSUI';
+import { FSUI } from '@game/components/FSUI/FSUI';
 
+import { DataManager } from '@common/script/data/DataManager';
 import { GameTask } from '@common/script/tasks/GameTask';
+
 
 
 /**
@@ -10,13 +12,10 @@ export class UpdateFreeTimesTask extends GameTask {
 
     protected name: string = 'UpdateFreeTimesTask';
 
-    /**目標次數 */
-    public times: number;
 
     execute(): void {
 
-        //直接設定
-        // FSUI.refreshRemainTimes.emit(this.times);
+        FSUI.refreshRemainTimes.emit(DataManager.getInstance().freeSpinTimes);
         this.finish();
     }
 

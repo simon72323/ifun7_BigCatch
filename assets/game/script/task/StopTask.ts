@@ -32,6 +32,7 @@ export class StopTask extends GameTask {
 
 
     execute(): void {
+        console.log('StopTask execute', this.resultPattern);
         // DataManager.getInstance().hasSkip = false;
 
         //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
@@ -40,6 +41,9 @@ export class StopTask extends GameTask {
         //設定老虎機盤面停止符號
         // let slotParser = DataManager.getInstance().slotData.slotParser;
         // slotParser.slotPattern = this.resultPattern;
+
+        BaseEvent.stopLineLoop.emit();//停止中獎線輪播
+
         const mipieList = this.getMipieList();//獲取該次咪牌狀態
         SlotReelMachine.slotRun.emit(this.resultPattern, mipieList);//開始轉動盤面
 

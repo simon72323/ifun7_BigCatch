@@ -255,6 +255,27 @@ export class Utils {
     }
 
     /**
+     * 跑分動畫(帶幣別，無return)
+     * @param time 動畫時間
+     * @param nodeLabel 顯示label
+     * @param runNum 跑分數據(curValue: 起點值, finalValue: 最終值)
+     */
+    public static runNumberCurrency(time: number, nodeLabel: Label, runNum: RunNumber) {
+        tween(runNum)
+            .to(time, { curValue: runNum.finalValue }, {
+                onUpdate: () => {
+                    nodeLabel.string = BaseConfig.CurrencySymbol + Utils.numberFormat(runNum.curValue);
+                },
+                easing: Utils.noisyEasing
+            })
+            .call(() => {
+                nodeLabel.string = BaseConfig.CurrencySymbol + Utils.numberFormat(runNum.curValue);
+                // callback?.();
+            })
+            .start();
+    }
+
+    /**
      * 跑分隨機值
      * @param t 
      * @returns 

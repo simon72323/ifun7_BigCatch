@@ -66,6 +66,8 @@ export enum SymbolID {
     F4 = 8,
     F5 = 9,
     F6 = 10,
+    F7 = 11,
+    F8 = 12,
     LA = 15,
     LK = 16,
     LQ = 17,
@@ -75,14 +77,16 @@ export enum SymbolID {
 }
 
 /**魚倍率 */
-export enum FishOdds {
-    F1 = 2,
-    F2 = 5,
-    F3 = 10,
-    F4 = 15,
-    F5 = 20,
-    F6 = 25,
-}
+export const FISH_ODDS = {
+    [SymbolID.F1]: 2,
+    [SymbolID.F2]: 5,
+    [SymbolID.F3]: 10,
+    [SymbolID.F4]: 15,
+    [SymbolID.F5]: 20,
+    [SymbolID.F6]: 25,
+    [SymbolID.F7]: 50,
+    [SymbolID.F8]: 2000
+} as const;
 
 /**語系資源目錄 */
 // export enum LangBundleDir {

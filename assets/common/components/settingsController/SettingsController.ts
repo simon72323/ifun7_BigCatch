@@ -6,7 +6,7 @@ import { Notice } from '@common/components/notice/Notice';
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
+import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { ISpinData } from '@common/script/network/NetworkApi';
 import { NetworkManager } from '@common/script/network/NetworkManager';
@@ -396,7 +396,7 @@ export class SettingsController extends Component {
      */
     private updateFreeSpinCount() {
         const freeSpinLabel = this.freeSpin.getChildByName('Label').getComponent(Label);
-        freeSpinLabel.string = DataManager.getInstance().freeSpinCount.toString();
+        freeSpinLabel.string = DataManager.getInstance().freeSpinTimes.toString();
     }
 
     //===============================spinNode相關操作=================================
@@ -542,8 +542,9 @@ export class SettingsController extends Component {
     //============================= 刷新BetInfo資訊 =============================
     /**刷新可用餘額 */
     private refreshCredit(value: number): void {
-        console.log('刷新可用餘額', value);
-        this.balanceValue.string = BaseConfig.CurrencySymbol + Utils.numberFormat(value);
+        const userCredit = DataManager.getInstance().userCredit;
+        if (userCredit === value) return;
+        Utils.runNumberCurrency(0.3, this.balanceValue, { curValue: userCredit, finalValue: value });
     }
 
     /**刷新下注 */
@@ -564,7 +565,8 @@ export class SettingsController extends Component {
 
     /**刷新獲得 */
     private refreshWin(value: number): void {
-        this.totalWinValue.string = BaseConfig.CurrencySymbol + Utils.numberFormat(value);
+        if(value === 0) return;
+        Utils.runNumberCurrency(0.3, this.totalWinValue, { curValue: 0, finalValue: value });
     }
     //============================= 刷新BetInfo資訊 =============================
 }

@@ -52,7 +52,9 @@ export class GameStage extends Component {
                     // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
                 });
         } else {
-            this.initGame();
+            this.scheduleOnce(() => {
+                this.initGame();
+            }, 0.1);
         }
 
         //===================不確定cocos內做，且收到要做甚麼?===================
@@ -89,6 +91,7 @@ export class GameStage extends Component {
      * 遊戲初始化內容
      */
     private initGame() {
+        console.log('遊戲初始化內容');
         this.scaleNode = this.node.getChildByName('ScaleNode');
         this.onChangeScene(ModuleID.BS);
         // AutoPage.setup.emit([10, 50, 100, 250, 1000]);
@@ -183,6 +186,7 @@ export class GameStage extends Component {
         // }
     }
 
+    /**持續更新任務 */
     update(deltaTime: number) {
         TaskManager.getInstance().update(deltaTime);
     }

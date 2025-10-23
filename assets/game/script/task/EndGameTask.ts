@@ -1,18 +1,22 @@
 
 import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
 
+import { IWinLineData } from '@common/components/slotMachine/SlotType';
+
 import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { BigWinType } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
+
 /**
  * 一局結束(判斷bigwin表演)
  */
 export class EndGameTask extends GameTask {
     protected name: string = 'EndGameTask';
-
+    /**中線資料 */
+    public winLineData: IWinLineData[];
     /**總贏分 */
     public payCreditTotal: number = 0;
 
@@ -23,14 +27,11 @@ export class EndGameTask extends GameTask {
     async execute(): Promise<void> {
         const dataManager = DataManager.getInstance();
         //BS單轉總分達到BigWin額外演示
-        // if (dataManager.getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
-        //     console.log('waitForBigWinComplete');
-        //     await this.waitForBigWinComplete();
-        //     await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
-        // }
-        // else if (this.payCreditTotal > 0) {
-        //     await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
-        // }
+        if (dataManager.getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
+            console.log('waitForBigWinComplete');
+            await this.waitForBigWinComplete();
+        }
+        await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
         this.finish();
     }
 

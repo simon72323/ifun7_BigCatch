@@ -15,7 +15,7 @@ export enum SymbolState {
  * 中獎線資料
  */
 export interface IWinLineData {
-    lineID: number;
+    payLineID: number;
     winPos: number[];
     winSymbolIDs: number[];
     payCredit: number;
