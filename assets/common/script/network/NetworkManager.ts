@@ -119,19 +119,18 @@ export class NetworkManager {
 
     /**
      * 發送spin請求（支援免費旋轉）
-     * @param betCredit 下注金額
      * @param SpinID 0=一般投注，1=免費投注
      * @param callback spinResult=回傳spin結果（失敗回傳null）
      */
-    public async sendSpin(betCredit: number, SpinID: number, callback: (spinResult: ISpinData) => void): Promise<void> {
+    public async sendSpin(SpinID: number, callback: (spinResult: ISpinData) => void): Promise<void> {
         try {
-            const gameData = DataManager.getInstance().gameData;
+            const betData = DataManager.getInstance().bet;
             const data = {
                 game_id: DataManager.getInstance().urlParam.gameId,
-                coin_value: gameData.coin_value[gameData.coin_value_default_index],
-                line_bet: gameData.line_bet[gameData.line_bet_default_index],
-                line_num: gameData.line_total,
-                bet_credit: betCredit,
+                coin_value: betData.getCoinValue(),
+                line_bet: betData.getLineBet(),
+                line_num: betData.getLineTotal(),
+                bet_credit: betData.getBetTotal(),
                 buy_spin: SpinID
             };
             const response = await this.sendRequest(NetworkApi.SPIN, data);

@@ -1,6 +1,7 @@
 import { Node, Tween, tween, Vec3 } from 'cc';
 
 import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
+import { CharacterUI } from '@game/components/CharacterUI/CharacterUI';
 import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
 import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { Symbol } from '@game/components/slotMachine/Symbol';
@@ -21,6 +22,7 @@ import { BigWinType } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
 
+
 /**
  * 顯示贏分
  */
@@ -37,8 +39,8 @@ export class WinSymbolTask extends GameTask {
     /**是否子遊戲資料(免費遊戲) */
     public isSubGame: boolean = false;
 
-    private moveTime: number = 0.7;//移動時間
-    private moveIntervalTime: number = 0.4;//移動間隔時間
+    private moveTime: number = 0.4;//移動時間
+    private moveIntervalTime: number = 0.3;//移動間隔時間
 
     private loopData: {} = {};
 
@@ -54,6 +56,7 @@ export class WinSymbolTask extends GameTask {
             return;
         }
 
+        CharacterUI.win.emit();//表演角色贏分動態
         const dataManager = DataManager.getInstance();
 
         //處裡中獎線
@@ -89,6 +92,7 @@ export class WinSymbolTask extends GameTask {
 
         //監聽停止中獎線輪播(StopTask會觸發此事件)
         BaseEvent.stopLineLoop.once(() => {
+            CharacterUI.idle.emit();//表演角色idle動態
             Tween.stopAllByTarget(this.loopData);
         }, this);
         this.complete();
@@ -114,7 +118,7 @@ export class WinSymbolTask extends GameTask {
         for (let i = 0; i < allWildPos.length; i++) {
             promiseList.push(this.wildScoreMove(i));
             //漁夫表演間隔時間
-            await Utils.delay(this.moveIntervalTime);
+            await Utils.delay(0.1);
         }
         await Promise.all(promiseList);
         //更新免費遊戲 wild倍率

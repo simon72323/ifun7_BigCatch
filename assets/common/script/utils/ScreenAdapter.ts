@@ -11,21 +11,21 @@ import { OrientationtMode } from '@common/script/types/BaseType';
  */
 export class ScreenAdapter {
     private static resizeObserver: ResizeObserver | null = null;
-    private static isInitialized: boolean = false;
+    // private static isInitialized: boolean = false;
 
     /**
      * 初始化屏幕適配（在遊戲啟動時調用）
      */
-    public static init(): void {
-        if (ScreenAdapter.isInitialized) return;
-        ScreenAdapter.setupResize();
-        ScreenAdapter.isInitialized = true;
-    }
+    // public static init(): void {
+    //     if (ScreenAdapter.isInitialized) return;
+    //     ScreenAdapter.setupResize();
+    //     ScreenAdapter.isInitialized = true;
+    // }
 
     /**
      * 初始化屏幕適配
      */
-    private static setupResize() {
+    public static setupResize() {
         if (EDITOR) return;
         // 等待遊戲完全加載後再設置監聽
         game.on(Game.EVENT_ENGINE_INITED, () => {
@@ -37,6 +37,7 @@ export class ScreenAdapter {
                 window.addEventListener('resize', ScreenAdapter.handleResize);
             }
             // 初始設置一次
+            console.log('初始設置一次');
             ScreenAdapter.handleResize();
         });
     }
@@ -56,8 +57,10 @@ export class ScreenAdapter {
     /** 
      * 處理畫面大小變化 
      */
-    private static handleResize() {
+    public static handleResize() {
+        console.log('處理畫面大小變化');
         if (!game.canvas) return;
+        console.log('game.canvas', game.canvas);
 
         const rect = game.canvas.getBoundingClientRect();
         const aspectRatio = rect.width / rect.height;
@@ -68,10 +71,12 @@ export class ScreenAdapter {
         if (aspectRatio > (720 / 1280)) {
             // 橫屏模式
             view.setDesignResolutionSize(1280, 720, ResolutionPolicy.SHOW_ALL);
+            console.log('橫屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
             // 豎屏模式
             view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
+            console.log('豎屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
     }
@@ -80,7 +85,8 @@ export class ScreenAdapter {
      * 銷毀屏幕適配（如果需要）
      */
     public static destroy() {
+        console.log('銷毀屏幕適配');
         ScreenAdapter.cleanupResize();
-        ScreenAdapter.isInitialized = false;
+        // ScreenAdapter.isInitialized = false;
     }
 }

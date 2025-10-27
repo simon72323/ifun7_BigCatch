@@ -196,9 +196,9 @@ export class DataManager {
         // this.bigWinMultiple.push(gameData.big_win);
         // this.bigWinMultiple.push(gameData.super_win);
         // this.bigWinMultiple.push(gameData.mega_win);
-        this.bigWinMultiple.push(2);
-        this.bigWinMultiple.push(4);
-        this.bigWinMultiple.push(8);
+        this.bigWinMultiple.push(5);
+        this.bigWinMultiple.push(10);
+        this.bigWinMultiple.push(20);
 
         // 初始化 BetData 的數據依賴
         this.bet.setGameData(gameData);

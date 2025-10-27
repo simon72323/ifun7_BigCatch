@@ -30,10 +30,6 @@ export class BetData {
         this.coinValue = value;
     }
 
-    public getCoinValue(): number {
-        return this.coinValue;
-    }
-
 
     /**
      * 設置大贏倍率數據
@@ -73,7 +69,35 @@ export class BetData {
      * @returns 總下注金額(總線數 x 下注值 x 線注)
      */
     public getBetTotal(): number {
-        return Utils.accMul(this.gameData.line_total, this.getCurBetXCurLine());
+        //當前下注額 x 線注
+        const curBetXCurLine = Utils.accMul(this.coinValue, this.getLineBet());
+        //總線數 x 當前下注額 x 線注
+        const betTotal = Utils.accMul(this.gameData.line_total, curBetXCurLine);
+        return betTotal;
+    }
+
+    /**
+    * 獲取當前下注額
+    * @returns 當前下注額
+    */
+    public getCoinValue(): number {
+        return this.coinValue;
+    }
+
+    /**
+     * 獲取線注
+     * @returns 線注
+     */
+    public getLineBet(): number {
+        return this.gameData.line_bet[this.lineIdx];
+    }
+
+    /**
+     * 獲取總線數
+     * @returns 
+     */
+    public getLineTotal(): number {
+        return this.gameData.line_total;
     }
 
     /**
@@ -165,21 +189,13 @@ export class BetData {
         return value / this.getBetTotal();
     }
 
-    /**
-     * @returns 下注值 x 線注
-     */
-    public getCurBetXCurLine(): number {
-        const lineBet = this.gameData.line_bet[this.lineIdx];
-        return Utils.accMul(this.coinValue, lineBet);
-    }
+    // /**
+    //  * @returns 下注值 x 線注
+    //  */
+    // public getCurBetXCurLine(): number {
+    //     return Utils.accMul(this.coinValue, this.getLineBet());
+    // }
 
-    /**
-     * 獲取總線數
-     * @returns 
-     */
-    public getLineTotal(): number {
-        return this.gameData.line_total;
-    }
     //================ 下注相關資料 ======================
 
     /**

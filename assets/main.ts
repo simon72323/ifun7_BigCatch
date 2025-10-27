@@ -14,6 +14,3 @@ if (isIOS && iosVersion && iosVersion < 14 && sys.hasFeature) {
         return feature === 'WEBP' ? false : oldHasFeature(feature);
     };
 }
-
-/** 初始化屏幕適配管理器 */
-ScreenAdapter.init();

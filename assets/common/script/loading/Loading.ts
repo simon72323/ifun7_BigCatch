@@ -7,7 +7,9 @@ import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { i18n } from '@common/script/utils/i18n';
+import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 import { Utils } from '@common/script/utils/Utils';
+
 
 
 const { ccclass, property, disallowMultiple } = _decorator;
@@ -30,7 +32,7 @@ export class Loading extends Component {
 
     protected onLoad() {
         // E2ETest.E2EStartLoading();
-
+        ScreenAdapter.setupResize();//初始化屏幕適配
         this.initUI();
         DataManager.getInstance().urlParam.initUrlParameters();//初始化URL參數
         i18n.init(DataManager.getInstance().urlParam.lang);//初始化語言

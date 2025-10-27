@@ -179,78 +179,94 @@ export class OrientationManager extends Component {
      * @param orientation 方向模式
      */
     private onChangeOrientation(orientation: OrientationtMode) {
+        console.log('執行直橫式切換', orientation);
         const isLandscape = orientation === OrientationtMode.Landscape;
 
+        console.log('this.orientationNode', this.orientationNode);
         //節點搬移
-        this.orientationNode.forEach((node, index) => {
-            const target = node.target;
-            target.parent = isLandscape ? node.landscapePos : node.portraitPos;
-        });
+        if (this.orientationNode) {
+            this.orientationNode.forEach((node, index) => {
+                const target = node.target;
+                target.parent = isLandscape ? node.landscapePos : node.portraitPos;
+            });
+        }
 
         //節點顯示/隱藏
-        this.orientationActive.forEach((active, index) => {
-            const target = active.target;
-            target.active = isLandscape ? active.landscapeActive : active.portraitActive;
-        });
+        if (this.orientationActive) {
+            this.orientationActive.forEach((active, index) => {
+                const target = active.target;
+                target.active = isLandscape ? active.landscapeActive : active.portraitActive;
+            });
+        }
 
         //節點縮放
-        this.orientationScale.forEach((scale, index) => {
-            const target = scale.target;
-            if (target) {
-                const scaleValue = isLandscape ? scale.landscapeScale : scale.portraitScale;
-                target.setScale(scaleValue);
-            }
-        });
+        if (this.orientationScale) {
+            this.orientationScale.forEach((scale, index) => {
+                const target = scale.target;
+                if (target) {
+                    const scaleValue = isLandscape ? scale.landscapeScale : scale.portraitScale;
+                    target.setScale(scaleValue);
+                }
+            });
+        }
 
         //節點位置
-        this.orientationPosition.forEach((position, index) => {
-            const target = position.target;
-            if (target) {
-                const positionValue = isLandscape ? position.landscapePosition : position.portraitPosition;
-                target.setPosition(positionValue);
-            }
-        });
+        if (this.orientationPosition) {
+            this.orientationPosition.forEach((position, index) => {
+                const target = position.target;
+                if (target) {
+                    const positionValue = isLandscape ? position.landscapePosition : position.portraitPosition;
+                    target.setPosition(positionValue);
+                }
+            });
+        }
 
         //節點尺寸
-        this.orientationSize.forEach((size, index) => {
-            const target = size.target;
-            if (target) {
-                const sizeValue = isLandscape ? size.landscapeSize : size.portraitSize;
-                target.getComponent(UITransform)?.setContentSize(sizeValue);
-            }
-        });
+        if (this.orientationSize) {
+            this.orientationSize.forEach((size, index) => {
+                const target = size.target;
+                if (target) {
+                    const sizeValue = isLandscape ? size.landscapeSize : size.portraitSize;
+                    target.getComponent(UITransform)?.setContentSize(sizeValue);
+                }
+            });
+        }
 
         //節點貼圖
-        this.orientationSpriteFrame.forEach((spriteFrame, index) => {
-            const target = spriteFrame.target;
-            if (target) {
-                const targetSprite = target.getComponent(Sprite);
-                if (targetSprite) {
-                    const spriteFrameValue = isLandscape ? spriteFrame.landscapeSpriteFrame : spriteFrame.portraitSpriteFrame;
-                    targetSprite.spriteFrame = spriteFrameValue;
+        if (this.orientationSpriteFrame) {
+            this.orientationSpriteFrame.forEach((spriteFrame, index) => {
+                const target = spriteFrame.target;
+                if (target) {
+                    const targetSprite = target.getComponent(Sprite);
+                    if (targetSprite) {
+                        const spriteFrameValue = isLandscape ? spriteFrame.landscapeSpriteFrame : spriteFrame.portraitSpriteFrame;
+                        targetSprite.spriteFrame = spriteFrameValue;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         //節點Layout
-        this.orientationLayoutPadding.forEach((layout, index) => {
-            const target = layout.target;
-            if (target) {
-                const targetLayout = target.getComponent(Layout);
-                if (targetLayout) {
-                    const padding = isLandscape ? layout.landscapePaddingLR : layout.portraitPaddingLR;
-                    const paddingTB = isLandscape ? layout.landscapePaddingTB : layout.portraitPaddingTB;
-                    const spacing = isLandscape ? layout.landscapeSpacing : layout.portraitSpacing;
+        if (this.orientationLayoutPadding) {
+            this.orientationLayoutPadding.forEach((layout, index) => {
+                const target = layout.target;
+                if (target) {
+                    const targetLayout = target.getComponent(Layout);
+                    if (targetLayout) {
+                        const padding = isLandscape ? layout.landscapePaddingLR : layout.portraitPaddingLR;
+                        const paddingTB = isLandscape ? layout.landscapePaddingTB : layout.portraitPaddingTB;
+                        const spacing = isLandscape ? layout.landscapeSpacing : layout.portraitSpacing;
 
-                    targetLayout.paddingLeft = padding.x;
-                    targetLayout.paddingRight = padding.y;
-                    targetLayout.paddingTop = paddingTB.x;
-                    targetLayout.paddingBottom = paddingTB.y;
-                    targetLayout.spacingX = spacing.x;
-                    targetLayout.spacingY = spacing.y;
-                    targetLayout.updateLayout();
+                        targetLayout.paddingLeft = padding.x;
+                        targetLayout.paddingRight = padding.y;
+                        targetLayout.paddingTop = paddingTB.x;
+                        targetLayout.paddingBottom = paddingTB.y;
+                        targetLayout.spacingX = spacing.x;
+                        targetLayout.spacingY = spacing.y;
+                        targetLayout.updateLayout();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { _decorator, Component, instantiate, Label, Node, Prefab, sp, Sprite, tween, Vec3 } from 'cc';
 
-import { XEvent, XEvent2, XEvent3, XEvent4 } from '@common/script/event/XEvent';
+import { XEvent, XEvent3, XEvent4 } from '@common/script/event/XEvent';
 import { Utils } from '@common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
@@ -78,6 +78,7 @@ export class FreeGameUI extends Component {
         tween(moveScore)
             .to(moveTime, { position: targetPos }, { easing: 'sineIn' })
             .call(() => {
+                this.creatLight(new Vec3(targetPos.x, targetPos.y - 57, 0), 'hitbubble');
                 moveScore.destroy();
             })
             .start();
@@ -91,13 +92,7 @@ export class FreeGameUI extends Component {
     private addProgress(id: number, startPos: Vec3, callback: () => void): void {
         const progress = this.progressList[id];
         const endPos = progress.position;
-        const light = instantiate(this.multiplyLight);
-        light.setParent(this.node);
-        light.setPosition(startPos);
-        light.getComponent(sp.Skeleton).setAnimation(0, 'light', false);
-        Utils.scheduleOnce(() => {
-            light.destroy();
-        }, 1, this);
+        this.creatLight(startPos, 'light');
 
         const angle = Utils.calculateAngle(startPos, endPos);
         console.log('angle', angle);
@@ -107,7 +102,7 @@ export class FreeGameUI extends Component {
         moveFly.angle = angle;
         moveFly.getComponent(sp.Skeleton).setAnimation(0, 'fly', true);
         tween(moveFly)
-            .to(0.5, { position: endPos }, { easing: 'sineOut' })
+            .to(0.4, { position: endPos }, { easing: 'sineOut' })
             .call(() => {
                 moveFly.destroy();
                 const aniMultiply = progress.getChildByName('ani_multiply').getComponent(sp.Skeleton);
@@ -119,14 +114,34 @@ export class FreeGameUI extends Component {
                 });
                 progress.getChildByName('image').getComponent(Sprite).grayscale = false;
                 tween(progress)
-                    .to(0.3, { scale: new Vec3(1.3, 1.3, 1) }, { easing: 'sineOut' })
-                    .to(0.3, { scale: new Vec3(1, 1, 1) })
+                    .to(0.2, { scale: new Vec3(1.3, 1.3, 1) }, { easing: 'sineOut' })
+                    .to(0.2, { scale: new Vec3(1, 1, 1) })
                     .call(() => {
                         callback();
                     })
                     .start();
             })
             .start();
+    }
+
+    /**
+     * 創建閃光特效
+     * @param pos 位置
+     * @param animName 動畫名稱
+     */
+    private creatLight(pos: Vec3, animName: string): void {
+        const light = instantiate(this.multiplyLight);
+        light.setParent(this.node);
+        light.setPosition(pos);
+        light.getComponent(sp.Skeleton).setAnimation(0, animName, false);
+        Utils.delay(0.4).then(() => {
+            Utils.fadeOut(light, 0.2, 255, 0, () => {
+                light.destroy();
+            });
+        });
+        // light.getComponent(sp.Skeleton).setCompleteListener(() => {
+        //     light.destroy();
+        // });
     }
 
     onDestroy() {

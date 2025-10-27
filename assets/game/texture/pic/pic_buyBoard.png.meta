@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "1c49df8f-d530-4ccf-95f6-7b7c1c4e3223",
+  "uuid": "03911e8b-9230-414a-b13a-f6182a54f3c2",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "1c49df8f-d530-4ccf-95f6-7b7c1c4e3223@6c48a",
-      "displayName": "pic_beliBoard",
+      "uuid": "03911e8b-9230-414a-b13a-f6182a54f3c2@6c48a",
+      "displayName": "pic_buyBoard",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "1c49df8f-d530-4ccf-95f6-7b7c1c4e3223",
+        "imageUuidOrDatabaseUri": "03911e8b-9230-414a-b13a-f6182a54f3c2",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,17 +34,17 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "1c49df8f-d530-4ccf-95f6-7b7c1c4e3223@f9941",
-      "displayName": "pic_beliBoard",
+      "uuid": "03911e8b-9230-414a-b13a-f6182a54f3c2@f9941",
+      "displayName": "pic_buyBoard",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
-        "offsetY": 0,
+        "offsetY": -1,
         "trimX": 0,
-        "trimY": 1,
+        "trimY": 2,
         "width": 160,
         "height": 120,
         "rawWidth": 160,
@@ -83,23 +83,23 @@
           ],
           "uv": [
             0,
-            121,
+            120,
             160,
-            121,
+            120,
             0,
-            1,
+            0,
             160,
-            1
+            0
           ],
           "nuv": [
             0,
-            0.00819672131147541,
-            1,
-            0.00819672131147541,
             0,
-            0.9918032786885246,
             1,
-            0.9918032786885246
+            0,
+            0,
+            0.9836065573770492,
+            1,
+            0.9836065573770492
           ],
           "minPos": [
             -80,
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "1c49df8f-d530-4ccf-95f6-7b7c1c4e3223@6c48a",
+        "imageUuidOrDatabaseUri": "03911e8b-9230-414a-b13a-f6182a54f3c2@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "1c49df8f-d530-4ccf-95f6-7b7c1c4e3223@6c48a"
+    "redirect": "03911e8b-9230-414a-b13a-f6182a54f3c2@6c48a"
   }
 }

@@ -36,8 +36,8 @@ export class SettingsController extends Component {
     public static updateFreeSpinCount: XEvent1<number> = new XEvent1();
     /**改變下注 */
     public static changeBetValue: XEvent1<number> = new XEvent1();
-    /**點擊Spin按鈕 */
-    public static onClickSpin: XEvent1<boolean> = new XEvent1();
+    /**處理點擊Spin按鈕 */
+    public static handleClickSpin: XEvent1<boolean> = new XEvent1();
     /**設定快速模式 */
     // public static setTurboBtnState: XEvent1<TurboMode> = new XEvent1();
 
@@ -188,7 +188,7 @@ export class SettingsController extends Component {
         SettingsController.updateAutoSpinCount.on(this.updateAutoSpinCount, this);
         SettingsController.updateFreeSpinCount.on(this.updateFreeSpinCount, this);
         SettingsController.changeBetValue.on(this.changeBetValue, this);
-        SettingsController.onClickSpin.on(this.onClickSpin, this);//點擊Spin按鈕
+        SettingsController.handleClickSpin.on(this.handleClickSpin, this);//點擊Spin按鈕
     }
 
     /**
@@ -310,7 +310,8 @@ export class SettingsController extends Component {
     /**
      * 按下Spin按鈕事件
      */
-    private async onClickSpin(isBuyFs: boolean = false) {
+    private async onClickSpin() {
+        this.handleClickSpin();
         // if (this.curSettingPage === 1) return;
 
         //如果是自動轉過程若點擊手動轉要停止自動
@@ -324,6 +325,26 @@ export class SettingsController extends Component {
         // if (DataManager.getInstance().superMode) return;
         // if (DataManager.getInstance().curGameState === GameState.Ready) {
 
+        // this.clickAnim(this.spinBtn);
+        // this.rotateAnim(this.spinBtn);
+        // this.setBtnInteractable(false);//禁用控制器按鈕
+        // //切換成停止按鈕
+        // Utils.fadeOut(this.spinBtn, 0.1, 255, 0, () => {
+        //     this.spinBtn.active = false;
+        //     this.stopSpinBtn.active = true;
+        //     this.stopSpinBtn.getComponent(Button).interactable = true;
+        //     this.stopSpinBtn.getComponent(Animation).play('stopSpinShow');
+        // });
+
+        // BaseEvent.clickSpin.emit(isBuyFs);
+        // console.log('發送Spin請求');
+    }
+
+    /**
+     * 處理點擊Spin按鈕
+     * @param isBuyFs 是否購買免費遊戲
+     */
+    private handleClickSpin(isBuyFs: boolean = false) {
         this.clickAnim(this.spinBtn);
         this.rotateAnim(this.spinBtn);
         this.setBtnInteractable(false);//禁用控制器按鈕

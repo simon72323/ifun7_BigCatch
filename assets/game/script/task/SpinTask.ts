@@ -22,10 +22,13 @@ export class SpinTask extends GameTask {
 
     protected name: string = 'BaseSpinTask';
 
+    public isBuyFs: boolean = false;
+    public betCredit: number = 0;
+
     async execute(): Promise<void> {
         console.log('==========================================新局開始==========================================');
 
-        const dataManager = DataManager.getInstance();
+        // const dataManager = DataManager.getInstance();
         AudioManager.getInstance().playSound(AudioKey.SpinLoop);
 
         //初始化遊戲
@@ -39,8 +42,8 @@ export class SpinTask extends GameTask {
 
 
         //購買免費遊戲強制取消Turbo, 但不跳通知
-        if (dataManager.isBuyFs) {
-            dataManager.curTurboMode = TurboMode.Normal;
+        if (this.isBuyFs) {
+            DataManager.getInstance().curTurboMode = TurboMode.Normal;
             // dataManager.tempTurboMode = TurboMode.Normal;
             BaseEvent.setTurboBtnState.emit(TurboMode.Normal);
 
@@ -49,8 +52,8 @@ export class SpinTask extends GameTask {
         }
 
         //取消自動轉
-        if (dataManager.isAutoMode && dataManager.autoSpinCount <= 0) {
-            dataManager.isAutoMode = false;
+        if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
+            DataManager.getInstance().isAutoMode = false;
         }
 
         // BannerUI.reset.emit();//還原跑馬燈狀態
@@ -59,7 +62,7 @@ export class SpinTask extends GameTask {
         //     // AudioManager.getInstance().playSound(GameAudioKey.in);
         // }, this);
 
-        const isBS = dataManager.isBS();
+        const isBS = DataManager.getInstance().isBS();
         // if (isBS) {
         //     //先轉型(免費遊戲直接給結果不轉動)
         //     // if (!DataManager.getInstance().isBuyFs) {
@@ -68,11 +71,12 @@ export class SpinTask extends GameTask {
         // }
 
         //判斷要傳送一般spin還是免費spin(檢查一下免費遊戲按下時是否有變更成FS模式)
-        let betCredit = isBS ? dataManager.bet.getBetTotal() : dataManager.bet.getBuyFeatureTotal();
-        let spinID = isBS ? 0 : 1;
+        // const isBuyFs = DataManager.getInstance().isBuyFs;
+        // let betCredit = this.isBuyFs ? DataManager.getInstance().bet.getBuyFeatureTotal() : DataManager.getInstance().bet.getBetTotal();
+        let spinID = this.isBuyFs ? 1 : 0;
 
         //發送spin請求
-        console.log('發送spin請求', betCredit, spinID);
+        console.log('發送spin請求', spinID);
 
         //跑假資料------------------------
         // const fakeSpinResult = { 'game_id': 5800, 'main_game': { 'pay_credit_total': 1.5, 'game_result': [[1, 17, 18], [19, 1, 1], [5, 6, 16], [18, 19, 6], [20, 17, 16]], 'pay_line': [{ 'pay_line': 6, 'symbol_id': 1, 'amount': 2, 'pay_credit': 1.5, 'multiplier': 1 }], 'scatter_info': { 'id': [20], 'position': [[4, 0]], 'amount': 1, 'multiplier': 0, 'pay_credit': 0, 'pay_rate': 0 }, 'wild_info': null, 'scatter_extra': null, 'extra': null }, 'get_sub_game': false, 'sub_game': { 'game_result': null, 'pay_credit_total': 0, 'over_win': false }, 'get_jackpot': false, 'jackpot': { 'jackpot_id': '', 'jackpot_credit': 0, 'symbol_id': null }, 'get_jackpot_increment': false, 'jackpot_increment': null, 'grand': 0, 'major': 0, 'minor': 0, 'mini': 0, 'user_credit': 499999995.5, 'bet_credit': 3, 'payout_credit': 1.5, 'change_credit': -1.5, 'effect_credit': 3, 'buy_spin': 0, 'buy_spin_multiplier': 1, 'extra': null };
@@ -529,35 +533,35 @@ export class SpinTask extends GameTask {
         //     'extra': null
         // };
         //多重連線
-        const fakeSpinResult = {'game_id':5800,'main_game':{'pay_credit_total':18,'game_result':[[1,19,2],[1,1,1],[1,17,15],[2,18,16],[18,16,1]],'pay_line':[{'pay_line':1,'symbol_id':1,'amount':3,'pay_credit':15,'multiplier':1},{'pay_line':6,'symbol_id':1,'amount':2,'pay_credit':1.5,'multiplier':1},{'pay_line':8,'symbol_id':1,'amount':2,'pay_credit':1.5,'multiplier':1}],'scatter_info':{'id':[20],'position':null,'amount':0,'multiplier':0,'pay_credit':0,'pay_rate':0},'wild_info':null,'scatter_extra':null,'extra':null},'get_sub_game':false,'sub_game':{'game_result':null,'pay_credit_total':0,'over_win':false},'get_jackpot':false,'jackpot':{'jackpot_id':'','jackpot_credit':0,'symbol_id':null},'get_jackpot_increment':false,'jackpot_increment':null,'grand':0,'major':0,'minor':0,'mini':0,'user_credit':500000000,'bet_credit':3,'payout_credit':18,'change_credit':15,'effect_credit':3,'buy_spin':0,'buy_spin_multiplier':1,'extra':null};
+        // const fakeSpinResult = {'game_id':5800,'main_game':{'pay_credit_total':18,'game_result':[[1,19,2],[1,1,1],[1,17,15],[2,18,16],[18,16,1]],'pay_line':[{'pay_line':1,'symbol_id':1,'amount':3,'pay_credit':15,'multiplier':1},{'pay_line':6,'symbol_id':1,'amount':2,'pay_credit':1.5,'multiplier':1},{'pay_line':8,'symbol_id':1,'amount':2,'pay_credit':1.5,'multiplier':1}],'scatter_info':{'id':[20],'position':null,'amount':0,'multiplier':0,'pay_credit':0,'pay_rate':0},'wild_info':null,'scatter_extra':null,'extra':null},'get_sub_game':false,'sub_game':{'game_result':null,'pay_credit_total':0,'over_win':false},'get_jackpot':false,'jackpot':{'jackpot_id':'','jackpot_credit':0,'symbol_id':null},'get_jackpot_increment':false,'jackpot_increment':null,'grand':0,'major':0,'minor':0,'mini':0,'user_credit':500000000,'bet_credit':3,'payout_credit':18,'change_credit':15,'effect_credit':3,'buy_spin':0,'buy_spin_multiplier':1,'extra':null};
 
 
-        BaseEvent.onSpinResult.emit(fakeSpinResult);
-        //更新玩家餘額(減去spin額度)
-        const newUserCredit = dataManager.userCredit - betCredit;
-        SettingsController.refreshCredit.emit(newUserCredit);
-        dataManager.userCredit = newUserCredit;
-        this.finish();
+        // BaseEvent.onSpinResult.emit(fakeSpinResult);
+        // //更新玩家餘額(減去spin額度)
+        // const newUserCredit = dataManager.userCredit - betCredit;
+        // SettingsController.refreshCredit.emit(newUserCredit);
+        // dataManager.userCredit = newUserCredit;
+        // this.finish();
         //跑假資料------------------------
 
         //真資料
-        // NetworkManager.getInstance().sendSpin(betCredit, spinID, (spinResult) => {
-        //     dataManager.isBuyFs = false;//還原免費遊戲
-        //     // DataManager.getInstance().featureBuyType = 0;
-        //     // AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
+        NetworkManager.getInstance().sendSpin(spinID, (spinResult) => {
+            DataManager.getInstance().isBuyFs = false;//還原免費遊戲
+            // DataManager.getInstance().featureBuyType = 0;
+            // AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
 
-        //     //判斷是否有spin成功回傳資料
-        //     if (spinResult) {
-        //         BaseEvent.onSpinResult.emit(spinResult);
-        //         //更新玩家餘額(減去spin額度)
-        //         const newUserCredit = dataManager.userCredit - betCredit;
-        //         SettingsController.refreshCredit.emit(newUserCredit);
-        //         dataManager.userCredit = newUserCredit;
-        //     } else if (isBS) {
-        //         TaskManager.getInstance().addTask(new IdleTask());//Spin失敗且是BS模式要回idle
-        //     }
-        //     this.finish();
-        // });
+            //判斷是否有spin成功回傳資料
+            if (spinResult) {
+                BaseEvent.onSpinResult.emit(spinResult);
+                //更新玩家餘額(減去總下注額度)
+                const newUserCredit = DataManager.getInstance().userCredit - this.betCredit;
+                SettingsController.refreshCredit.emit(newUserCredit);
+                DataManager.getInstance().userCredit = newUserCredit;
+            } else if (isBS) {
+                TaskManager.getInstance().addTask(new IdleTask());//Spin失敗且是BS模式要回idle
+            }
+            this.finish();
+        });
     }
 
     /**持續更新 */

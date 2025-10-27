@@ -1,7 +1,7 @@
-import { _decorator, Animation, Component, easing, Node, tween, Tween, Vec3 } from 'cc';
+import { _decorator, Animation, Component, easing, Node, tween, Tween, UIOpacity, Vec3 } from 'cc';
 
-import { FeatureBuyBtn } from '@game/components/featureBuy/FeatureBuyBtn';
-import { FeatureBuyPage } from '@game/components/featureBuy/FeatureBuyPage';
+import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
+import { FeatureBuyPage } from '@game/components/FeatureBuy/FeatureBuyPage';
 import { GameAnimationName, GameConst } from '@game/script/data/GameConst';
 import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
@@ -16,6 +16,8 @@ import { KeyboardManager } from '@common/script/manager/KeyboardManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
+import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
+import { Utils } from '@common/script/utils/Utils';
 
 
 const { ccclass, property } = _decorator;
@@ -26,6 +28,9 @@ export class GameStage extends Component {
     public static shake: XEvent = new XEvent();
     public static fsOpening: XEvent = new XEvent();
 
+    @property({ type: Node, tooltip: '初始遮黑' })
+    private topBlack: Node = null;
+
     @property({ type: Boolean, tooltip: '是否為假老虎機' })
     private isFake: boolean = false;
 
@@ -35,8 +40,12 @@ export class GameStage extends Component {
         //初始化盤面
         //初始化遊戲資料
 
+        //顯示初始化遮黑
+        this.topBlack.active = true;
+        this.topBlack.getComponent(UIOpacity).opacity = 255;
+
         //===================不確定cocos內做，且收到要做甚麼?===================
-        if (!this.isFake) {
+        if (this.isFake === false) {
             this.sendPromotionBrief()
                 .then(this.sendInGameMenuStatus)
                 // .then(this.sendInGameMenu)
@@ -53,7 +62,7 @@ export class GameStage extends Component {
             DataManager.getInstance().gameData = fakeData2;
             this.scheduleOnce(() => {
                 this.initGame();
-            }, 0.1);
+            }, 0);
         }
 
         //===================不確定cocos內做，且收到要做甚麼?===================
@@ -72,12 +81,10 @@ export class GameStage extends Component {
     }
 
     private async sendPromotionBrief() {
-        if (this.isFake) return;
         await NetworkManager.getInstance().sendPromotionBrief();
     }
 
     private async sendInGameMenuStatus() {
-        if (this.isFake) return;
         await NetworkManager.getInstance().sendInGameMenuStatus();
         // this.initGame();
     }
@@ -90,8 +97,14 @@ export class GameStage extends Component {
      * 遊戲初始化內容
      */
     private initGame() {
+        // ScreenAdapter.setupResize();//初始化屏幕適配
+        ScreenAdapter.handleResize();
+        //淡出初始遮黑
+        Utils.fadeOut(this.topBlack, 0.3, 255, 0, () => {
+            this.topBlack.active = false;
+        });
         console.log('遊戲初始化內容');
-        this.scaleNode = this.node.getChildByName('ScaleNode');
+        // this.scaleNode = this.node.getChildByName('ScaleNode');
         this.onChangeScene(ModuleID.BS);
         // AutoPage.setup.emit([10, 50, 100, 250, 1000]);
         //配置遊戲資料

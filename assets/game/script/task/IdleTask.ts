@@ -95,7 +95,7 @@ export class IdleTask extends GameTask {
 
         //購買功能
         BaseEvent.buyFeature.on(() => {
-            SettingsController.onClickSpin.emit(true);//透過點擊Spin按鈕(購買免費遊戲)
+            SettingsController.handleClickSpin.emit(true);//透過點擊Spin按鈕(購買免費遊戲)
         }, this);
 
         if (IdleTask.isFirstIdle) {
@@ -109,11 +109,11 @@ export class IdleTask extends GameTask {
      * @param buyFs 是否購買免費遊戲
      */
     private onSpin(buyFs: boolean = false): void {
-        let curBet = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()
+        let betCredit = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()
             : DataManager.getInstance().bet.getBetTotal();
         DataManager.getInstance().isBuyFs = buyFs;
 
-        // console.log('收到Spin請求', curBet);
+        console.log('Spin下注金額', betCredit);
         SettingsController.refreshWin.emit(0, 0);//刷新贏分=0
 
         //免費轉
@@ -147,7 +147,7 @@ export class IdleTask extends GameTask {
         //     this.idleState();
         // }
 
-        if (DataManager.getInstance().userCredit < curBet) {
+        if (DataManager.getInstance().userCredit < betCredit) {
             // 餘額不足
             SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);
             // DataManager.getInstance().isAutoMode = false;
@@ -156,18 +156,16 @@ export class IdleTask extends GameTask {
         }
         else {
             // 成功SPIN
-            this.sendSpin();
+            BaseEvent.clickSpin.off(this);
+            BaseEvent.buyFeature.off(this);
+
+            const spinTask = new SpinTask();
+            spinTask.isBuyFs = buyFs;
+            spinTask.betCredit = betCredit;
+            TaskManager.getInstance().addTask(spinTask);
+
+            this.finish();
         }
-    }
-
-    /**發送Spin */
-    private sendSpin(): void {
-        // TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_IDLE_MUTE.key);
-        BaseEvent.clickSpin.off(this);
-        BaseEvent.buyFeature.off(this);
-        this.finish();
-
-        TaskManager.getInstance().addTask(new SpinTask());
     }
 
     public update(_deltaTime: number): void {
