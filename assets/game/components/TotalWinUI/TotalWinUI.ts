@@ -3,7 +3,7 @@ import { _decorator, Button, Component, KeyCode, Label, Node, sp, tween, Tween }
 import { GameAudioKey } from '@game/script/data/GameConst';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent3 } from '@common/script/event/XEvent';
+import { XEvent4 } from '@common/script/event/XEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { RunNumber } from '@common/script/types/BaseType';
@@ -23,12 +23,13 @@ const { ccclass } = _decorator;
 @ccclass('TotalWinUI')
 export class TotalWinUI extends Component {
     /**顯示 */
-    public static show: XEvent3<number, () => void, () => void> = new XEvent3();
+    public static show: XEvent4<number, number, () => void, () => void> = new XEvent4();
     /**隱藏 */
     // public static hide: XEvent = new XEvent();
 
     private totalwin_ani: sp.Skeleton;
     private num_totalwin: Label;
+    private totalTimesLabel: Label;
     private showTime: Label;
     private sens: Node;
 
@@ -40,7 +41,7 @@ export class TotalWinUI extends Component {
     /**畫面自動關閉計時器 */
     private countdown = {
         curTime: 0,
-        finalTime: 10
+        finalTime: 5
     };
 
     // private cbCover: () => void;
@@ -49,6 +50,7 @@ export class TotalWinUI extends Component {
     onLoad() {
         this.totalwin_ani = this.node.getChildByName('totalwin_ani').getComponent(sp.Skeleton);
         this.num_totalwin = this.node.getChildByPath('totalwin_ani/Content/num_totalwin').getComponent(Label);
+        this.totalTimesLabel = this.node.getChildByPath('totalwin_ani/Content/totalTimes/Label').getComponent(Label);
         this.showTime = this.node.getChildByPath('totalwin_ani/Content/Layout/ShowTime').getComponent(Label);
         this.sens = this.node.getChildByName('Sens');
 
@@ -60,17 +62,13 @@ export class TotalWinUI extends Component {
     /**
      * 顯示結算
      * @param value 結算金額
+     * @param count 總免費遊戲次數
      * @param onCover 覆蓋事件
      * @param onComplete 完成事件
      */
-    private show(value: number, onCover: () => void, onComplete: () => void): void {
+    private async show(value: number, count: number, onCover: () => void, onComplete: () => void): Promise<void> {
         this.node.active = true;
-        this.sens.once(Button.EventType.CLICK, this.onComplete, this);
-        BaseEvent.keyDown.once((code: KeyCode) => {
-            if (code === KeyCode.SPACE) {
-                this.onComplete();
-            }
-        }, this);
+        this.totalTimesLabel.string = count.toString();
 
         // this.cbCover = onCover;
         this.cbComplete = onComplete;
@@ -80,25 +78,23 @@ export class TotalWinUI extends Component {
         this.totalwin_ani.setAnimation(0, TotalWinAnimation.totalWin_in, false);
         this.totalwin_ani.addAnimation(0, TotalWinAnimation.totalWin_loop, true);
 
-        this.runCountdown();//倒數計時器
-
-        //轉場全遮蔽
-        // tween(this.node)
-        //     .delay(1)
-        //     .call(() => {
-        //         this.cbCover?.();
-        //         this.cbCover = null;
-        //     })
-        //     .start();
-
-        AudioManager.getInstance().playSound(GameAudioKey.TW);
-        AudioManager.getInstance().playSound(AudioKey.WinRolling);
-
         //跑分動畫
         this.runNum.finalValue = value;
-        Utils.runNumber(2, this.num_totalwin, this.runNum, () => {
-            this.onComplete();
-        });
+        Utils.runNumber(3, this.num_totalwin, this.runNum);
+
+        this.runCountdown();//倒數計時器
+
+        await Utils.delay(1);
+        onCover?.();//轉場全遮蔽
+        this.sens.once(Button.EventType.CLICK, this.onComplete, this);
+        BaseEvent.keyDown.once((code: KeyCode) => {
+            if (code === KeyCode.SPACE) {
+                this.onComplete();
+            }
+        }, this);
+
+        // AudioManager.getInstance().playSound(GameAudioKey.TW);
+        // AudioManager.getInstance().playSound(AudioKey.WinRolling);
     }
 
     /**
@@ -106,6 +102,7 @@ export class TotalWinUI extends Component {
      */
     private runCountdown(): void {
         this.showTime.string = this.countdown.finalTime.toString();
+        this.countdown.curTime = this.countdown.finalTime;
         tween(this.countdown)
             .to(this.countdown.finalTime, { curTime: 0 }, {
                 onUpdate: () => {
@@ -133,9 +130,9 @@ export class TotalWinUI extends Component {
         // this.cbCover?.();
         // this.cbCover = null;
 
-        await Utils.delay(1);
-        Utils.fadeOut(this.node, 0.3, () => {
-            AudioManager.getInstance().stopSound(AudioKey.WinRolling);
+        await Utils.delay(0.5);
+        Utils.fadeOut(this.node, 0.3, 255, 0, () => {
+            // AudioManager.getInstance().stopSound(AudioKey.WinRolling);
             this.node.active = false;
             this.cbComplete?.();
         });

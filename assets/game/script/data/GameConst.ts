@@ -31,10 +31,12 @@ export class GameConst {
     public static REEL_COL: number = 5;
     /**縱軸列數 */
     public static REEL_ROW: number = 3;
-    /**自訂BigWin倍數 */
-    public static BIG_WIN_MULTIPLE: number[] = [10, 20, 40, 80, 120];
     /**scatter中獎次數 */
-    public static SCATTER_TIMES: number[] = [0, 0, 10, 15, 20];
+    public static SCATTER_MAPPING: { [key: number]: number } = {
+        3: 10,  // 索引1對應3個scatter，10次
+        4: 15,  // 索引2對應4個scatter，15次
+        5: 20   // 索引3對應5個scatter，20次
+    };
 
     /**BS初始盤面結果 */
     public static BS_INIT_RESULT: number[][] = [

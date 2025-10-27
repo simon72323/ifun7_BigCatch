@@ -45,26 +45,26 @@ export class BaseConst {
     /**遊戲轉動時間 */
     public static SLOT_TIME = {
         [TurboMode.Normal]: {
-            spinIntervalTime: 0.05,  // 轉動/停止間隔秒數
-            stopIntervalTime: 0.24,  // 停止間隔秒數
+            spinIntervalTime: 0.04,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0.2,  // 停止間隔秒數
             beginTime: 0.5,   // 啟動秒數
             loopTime: 0.25,   // 循環秒數
             stopTime: 0.5,  // 停止秒數
             spinTime: 1,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
-            showWinTime: 2,      // 中獎演示時間
-            waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
+            showWinTime: 1,      // 中獎演示時間
+            waitNextSpinTime: 0.1      // 下一輪轉動等待秒數
         },
         [TurboMode.Fast]: {
             spinIntervalTime: 0,  // 轉動/停止間隔秒數
-            stopIntervalTime: 0.12,  // 停止間隔秒數
+            stopIntervalTime: 0.1,  // 停止間隔秒數
             beginTime: 0.4,   // 啟動秒數
             loopTime: 0.2,   // 循環秒
             stopTime: 0.4,  // 停止秒數
             spinTime: 0.7,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
-            showWinTime: 2,      // 中獎演示時間
-            waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
+            showWinTime: 1,      // 中獎演示時間
+            waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
         },
         [TurboMode.Turbo]: {
             spinIntervalTime: 0,  // 轉動/停止間隔秒數
@@ -74,8 +74,8 @@ export class BaseConst {
             stopTime: 0.3,  // 停止秒數
             spinTime: 0.4,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
-            showWinTime: 2,      // 中獎演示時間
-            waitNextSpinTime: 0.5       // 下一輪轉動等待秒數
+            showWinTime: 1,      // 中獎演示時間
+            waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
         }
     };
 }

@@ -1,13 +1,14 @@
-import { _decorator, Button, Component, Label, sp, Sprite, UIOpacity } from 'cc';
+import { _decorator, Button, Component, EventTouch, Label, Node, sp, Sprite, tween, UIOpacity, Vec3 } from 'cc';
 
-import { GameAudioKey } from '@game/script/data/GameConst';
+import { SettingsController } from '@common/components/settingsController/SettingsController';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
+import { XEvent } from '@common/script/event/XEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
-import { Utils } from '@common/script/utils/Utils';
+import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
+
 
 enum BoxAni {
     start = 'start'
@@ -22,34 +23,44 @@ const { ccclass } = _decorator;
 export class FeatureBuyPage extends Component {
 
     /**顯示(免費遊戲花費) */
-    public static show: XEvent1<number> = new XEvent1();
+    public static show: XEvent = new XEvent();
 
     /**隱藏 */
     public static hide: XEvent = new XEvent();
 
     private isHiding: boolean = false;
 
-    /**底板動畫 */
-    private spine: sp.Skeleton;
-
+    /**底板 */
+    private buyUI: Node;
     /**花費 */
     private costLabel: Label;
+    /**購買按鈕 */
+    private buyBtn: Button;
+    /**增加按鈕 */
+    private addBtn: Button;
+    /**減少按鈕 */
+    private lessBtn: Button;
 
     onLoad() {
-        this.spine = this.node.getChildByPath('buyfeature_box_ani').getComponent(sp.Skeleton);
-        this.costLabel = this.node.getChildByPath('buyfeature_box_ani/num_totalwin').getComponent(Label);
+        this.buyUI = this.node.getChildByName('pic_buy');
+        this.costLabel = this.node.getChildByPath('pic_buy/num_totalwin').getComponent(Label);
 
-        const buyBtn = this.node.getChildByPath('buyfeature_box_ani/btn_buy/btn').getComponent(Button);
-        buyBtn.node.on(Button.EventType.CLICK, this.onClickBuy, this);
-
-        const cancelBtn = this.node.getChildByPath('buyfeature_box_ani/btn_cancel/btn').getComponent(Button);
+        const cancelBtn = this.node.getChildByPath('pic_buy/btn_cancel').getComponent(Button);
         cancelBtn.node.on(Button.EventType.CLICK, () => {
             // AudioManager.getInstance().play(AudioKey.BetClick);
-            this.onClickCancel();
+            this.hide();
         }, this);
 
+        this.buyBtn = this.node.getChildByPath('pic_buy/btn_buy').getComponent(Button);
+        this.addBtn = this.node.getChildByPath('pic_buy/btn_add').getComponent(Button);
+        this.lessBtn = this.node.getChildByPath('pic_buy/btn_less').getComponent(Button);
+        const scriptName = 'FeatureBuyPage';
+        addBtnClickEvent(this.node, scriptName, this.buyBtn, this.onClickBuy);
+        addBtnClickEvent(this.node, scriptName, this.addBtn, this.onClickChangeBet, '1');
+        addBtnClickEvent(this.node, scriptName, this.lessBtn, this.onClickChangeBet, '-1');
+
         //關閉
-        this.node.getChildByName('Block').on(Button.EventType.CLICK, this.onClickCancel, this);
+        this.node.getChildByName('Block').on(Button.EventType.CLICK, this.hide, this);
 
         FeatureBuyPage.show.on(this.show, this);
         FeatureBuyPage.hide.on(this.hide, this);
@@ -70,49 +81,32 @@ export class FeatureBuyPage extends Component {
         this.node.active = false;
     }
 
-    update(_deltaTime: number) {
-
-    }
-
     /**
      * 開啟FeatureBuy介面
      */
-    private show(value: number): void {
-
-        this.costLabel.string = Utils.numberFormat(value);
-
-        AudioManager.getInstance().playSound(AudioKey.Open);
-
-
-
+    private show(): void {
+        this.updateBuyInfo();//更新購買資訊
         this.node.active = true;
-        // XUtils.ClearSpine(this.spine);
-        this.spine.setAnimation(0, BoxAni.start, false);
-
-        //延遲一幀避免動畫閃爍, 先最大又突然縮小再放大
-        this.scheduleOnce(() => {
-            this.node.getComponent(UIOpacity).opacity = 255;
-        }, 0);
-
+        Utils.fadeIn(this.buyUI, 0.3, 0, 255);
+        this.buyUI.scale = new Vec3(0.8, 0.8, 1);
+        tween(this.buyUI)
+            .to(0.15, { scale: new Vec3(1.1, 1.1, 1) }, { easing: 'sineOut' })
+            .to(0.15, { scale: new Vec3(1, 1, 1) }, { easing: 'sineIn' })
+            .start();
     }
 
     /**
      * 關閉FeatureBuy介面
      */
     private hide(): void {
-
         if (this.isHiding) {
             return;
         }
         this.isHiding = true;
-
-        // XUtils.playAnimation(this.node, BaseAnimationName.fadeOutOpacity, 0.3, () => {
         this.forceHide();
-        // });
 
-        AudioManager.getInstance().playSound(AudioKey.Close);
-        AudioManager.getInstance().playSound(AudioKey.Trans);
-
+        // AudioManager.getInstance().playSound(AudioKey.Close);
+        // AudioManager.getInstance().playSound(AudioKey.Trans);
     }
 
     /**
@@ -122,23 +116,51 @@ export class FeatureBuyPage extends Component {
         if (this.isHiding) {
             return;
         }
-
-        AudioManager.getInstance().playSound(GameAudioKey.buy);
+        // AudioManager.getInstance().playSound(GameAudioKey.buy);
         this.forceHide();
         BaseEvent.buyFeature.emit();
     }
 
     /**
-     * 購買不能再淡出, 否則看不到遊戲轉動
+     * 點擊改變下注
+     * @param event 事件
+     * @param eventData 事件數據
      */
-    private forceHide(): void {
-        this.node.active = false;
-        this.isHiding = false;
-        DataManager.getInstance().isMenuOn = false;
+    private onClickChangeBet(event: EventTouch, eventData: string): void {
+        const changeValue = parseInt(eventData);
+        SettingsController.changeBetValue.emit(changeValue);
+        this.updateBuyInfo();
+        this.updateBetBtnInteractable();
     }
 
+    /**
+     * 更新購買資訊
+     */
+    private updateBuyInfo(): void {
+        const buyFeatureTotal = DataManager.getInstance().bet.getBuyFeatureTotal();
+        this.costLabel.string = Utils.numberFormat(buyFeatureTotal);
+        this.buyBtn.interactable = buyFeatureTotal !== -1;
+    }
 
-    private onClickCancel(): void {
-        this.hide();
+    /**
+     * 更新下注+-按鈕是否可用
+     */
+    private updateBetBtnInteractable() {
+        this.addBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getPlusEnabled();
+        this.lessBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
+    }
+
+    /**
+     * 購買退出
+     */
+    private forceHide(): void {
+        Utils.fadeOut(this.buyUI, 0.2, 255, 0, () => {
+            this.node.active = false;
+            this.isHiding = false;
+            // DataManager.getInstance().isMenuOn = false;
+        });
+        tween(this.buyUI)
+            .to(0.2, { scale: new Vec3(0.8, 0.8, 1) }, { easing: 'sineOut' })
+            .start();
     }
 }

@@ -34,7 +34,7 @@ export class GameInformationUI extends Component {
      * 顯示
      */
     private show() {
-        Utils.fadeIn(this.node, 0.15);
+        Utils.fadeIn(this.node, 0.15, 0, 255);
         Utils.tweenScaleTo(this.node, 0.15, 0.8, 1);
         this.content.setPosition(new Vec3(0, 0, 0));
         this.node.active = true;
@@ -47,7 +47,7 @@ export class GameInformationUI extends Component {
      */
     private hide() {
         Utils.tweenScaleTo(this.node, 0.1, 1, 0.9);
-        Utils.fadeOut(this.node, 0.1, () => {
+        Utils.fadeOut(this.node, 0.1, 255, 0, () => {
             this.node.active = false;
         });
         this.backMask.off(Button.EventType.CLICK, this.hide, this);

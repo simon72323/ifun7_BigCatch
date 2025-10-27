@@ -16,9 +16,11 @@ export class SlotData {
     public fsInitialize: boolean = false;
     /**老虎機資料 */
     public slotParser: SlotParser = new SlotParser();
+    /**紀錄免費遊戲 wild倍率 */
+    public fsWildMultiply: number = 0;
     /**金框資料 */
-    public stripBadgeDataList: number[][] = [];
-    private payloadKeyList: string[] = ['', 'H1', 'H2', 'H3', 'H4','F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'L1', 'L2', 'L3', 'L4', 'L5',''];
+    // public stripBadgeDataList: number[][] = [];
+    private payloadKeyList: string[] = ['', 'H1', 'H2', 'H3', 'H4', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'L1', 'L2', 'L3', 'L4', 'L5', ''];
 
     /**BS最後盤面 */
     public bsLastMap: BaseSymbolData[][] = [];
@@ -34,6 +36,20 @@ export class SlotData {
         return count === GameConst.SCATTER_WIN_COUNT - 1;
     }
 
+    /**
+     * 取得免費遊戲 wild倍率
+     * @returns 倍率
+     */
+    public getWildMultiply(): number {
+        if (this.fsWildMultiply > 4) {
+            return 2;
+        } else if (this.fsWildMultiply > 8) {
+            return 4;
+        } else {
+            return 1;
+        }
+    }
+
     private payloadTemplate = {
         symbolPoints: {
             H1: [
@@ -45,16 +61,16 @@ export class SlotData {
             H2: [
                 { count: 5, point: 100 },
                 { count: 4, point: 15 },
-                { count: 3, point: 3}
+                { count: 3, point: 3 }
             ],
             H3: [
                 { count: 5, point: 50 },
-                { count: 4, point: 10},
+                { count: 4, point: 10 },
                 { count: 3, point: 2 }
             ],
             H4: [
                 { count: 5, point: 50 },
-                { count: 4, point: 10},
+                { count: 4, point: 10 },
                 { count: 3, point: 2 }
             ],
             F1: [

@@ -86,18 +86,16 @@ export class IdleTask extends GameTask {
      */
     private idleState(): void {
         BaseEvent.resetSpin.emit();//重置Spin按鈕
+        BaseEvent.buyFeatureEnabled.emit(true);//啟用購買功能
         // SettingsController.setEnabled.emit(true);//設定可用狀態
         SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());//刷新下注
 
         console.log('待機狀態監聽按下');
-        BaseEvent.clickSpin.on(() => {
-            this.onSpin();
-        }, this);
+        BaseEvent.clickSpin.on(this.onSpin, this);
 
         //購買功能
         BaseEvent.buyFeature.on(() => {
-            DataManager.getInstance().isMenuOn = false;
-            this.onSpin(true);
+            SettingsController.onClickSpin.emit(true);//透過點擊Spin按鈕(購買免費遊戲)
         }, this);
 
         if (IdleTask.isFirstIdle) {
@@ -115,8 +113,8 @@ export class IdleTask extends GameTask {
             : DataManager.getInstance().bet.getBetTotal();
         DataManager.getInstance().isBuyFs = buyFs;
 
-        console.log('收到Spin請求', curBet);
-        SettingsController.refreshWin.emit(0);//刷新贏分=0
+        // console.log('收到Spin請求', curBet);
+        SettingsController.refreshWin.emit(0, 0);//刷新贏分=0
 
         //免費轉
         // if (PromoManager.getInstance().isFreeSpin() === true) {

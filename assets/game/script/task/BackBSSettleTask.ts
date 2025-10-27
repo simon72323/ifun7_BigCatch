@@ -1,4 +1,7 @@
 
+import { SettingsController } from '@common/components/settingsController/SettingsController';
+import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { DataManager } from '@common/script/data/DataManager';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
@@ -12,7 +15,7 @@ export class BackBSSettleTask extends GameTask {
     protected name: string = 'BackBSSettleTask';
 
     /**目前累計獲得金額(右下角Win) */
-    // public sumWin: number;
+    public userCredit: number;
 
     /**剩餘額度 */
     // public playerCent: number;
@@ -22,7 +25,12 @@ export class BackBSSettleTask extends GameTask {
         // AudioManager.getInstance().stopMusic(AudioKey.FsMusic);
         AudioManager.getInstance().playMusic(AudioKey.BsMusic);
 
+        //更新玩家餘額
+        SettingsController.refreshCredit.emit(this.userCredit);
+        DataManager.getInstance().userCredit = this.userCredit;
+
         //回復盤面
+        // SlotReelMachine.backBSParser.emit(this.backBSParser);
         // SlotMachine.change.emit(SlotMachineID.BS, DataManager.getInstance().gameData.bsLastMap);
         // UIController
         // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
@@ -45,7 +53,7 @@ export class BackBSSettleTask extends GameTask {
         // }
 
         //要多等一秒
-        await Utils.delay(1);
+        // await Utils.delay(1);
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);

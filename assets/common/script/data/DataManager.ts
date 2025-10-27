@@ -65,8 +65,6 @@ export class DataManager {
     public curTurboMode: TurboMode = TurboMode.Fast;
     /** 當前遊戲狀態 */
     // public curGameState: GameState = GameState.Ready;
-    /** 大贏跑分倍率 */
-    // public bigWinMultiple: number[] = [10, 20, 50];
 
     /** 玩家餘額 */
     public userCredit: number = 0;
@@ -195,9 +193,12 @@ export class DataManager {
     public set gameData(gameData: IGameData) {
         console.log('設置遊戲資料', gameData);
         this._gameData = gameData;
-        this.bigWinMultiple.push(gameData.big_win);
-        this.bigWinMultiple.push(gameData.super_win);
-        this.bigWinMultiple.push(gameData.mega_win);
+        // this.bigWinMultiple.push(gameData.big_win);
+        // this.bigWinMultiple.push(gameData.super_win);
+        // this.bigWinMultiple.push(gameData.mega_win);
+        this.bigWinMultiple.push(2);
+        this.bigWinMultiple.push(4);
+        this.bigWinMultiple.push(8);
 
         // 初始化 BetData 的數據依賴
         this.bet.setGameData(gameData);
@@ -286,13 +287,34 @@ export class DataManager {
         }
 
         let bigWinLevel: BigWinType = BigWinType.non;
+        //取得贏錢倍數
         const multiple: number = this.bet.getWinMultipleByValue(value);
+        console.log('大獎倍率', multiple);
+        console.log('大獎倍率列表', this.bigWinMultiple);
         for (let i = 0; i < this.bigWinMultiple.length; i++) {
             if (multiple >= this.bigWinMultiple[i]) {
                 bigWinLevel = i;
             }
         }
         return bigWinLevel;
+    }
+
+    /**
+     * 取得免費遊戲購買金額
+     * @returns 
+     */
+    public getBuySpinValue(): number {
+        if (!this.gameData.buy_spin) {
+            return -1;//代表沒有購買功能
+        }
+        const multiple = this.gameData.buy_spin.multiplier;
+        const limit_total = this.gameData.buy_spin.limit_total;
+        //總購買金額
+        const totalBuy = multiple * this.bet.getBetTotal();
+        if (totalBuy > limit_total) {
+            return -1;//代表超過限額
+        }
+        return totalBuy;
     }
 
 

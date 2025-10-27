@@ -36,12 +36,6 @@ export class GameStage extends Component {
         //初始化遊戲資料
 
         //===================不確定cocos內做，且收到要做甚麼?===================
-        //獲取促銷簡介、遊戲內選單狀態、遊戲內選單
-        const fakeData1 = { 'name': '', 'account': 'token5800', 'agent_account': 'CS8901', 'credit': 500000000, 'currency': 'IDR', 'free_spin_data': [{ 'free_spin_id': '', 'bet': 0, 'end_date': '', 'rounds_left': 0 }], 'is_anchor': false, 'simulator_data': {} };
-        DataManager.getInstance().userData = fakeData1;
-        const fakeData2 = { 'game_id': 5800, 'line_bet': [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], 'coin_value': [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34], 'bet_available_idx': 0, 'line_total': 30, 'line_available': [30], 'line_bet_default_index': 0, 'coin_value_default_index': 0, 'win': 1, 'big_win': 20, 'super_win': 50, 'mega_win': 100, 'spin_mode': 1, 'buy_spin': { 'allow_buy': 1, 'multiplier': 50, 'limit_total': 6000000 } };
-        DataManager.getInstance().gameData = fakeData2;
-
         if (!this.isFake) {
             this.sendPromotionBrief()
                 .then(this.sendInGameMenuStatus)
@@ -52,6 +46,11 @@ export class GameStage extends Component {
                     // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
                 });
         } else {
+            //獲取促銷簡介、遊戲內選單狀態、遊戲內選單
+            const fakeData1 = { 'name': '', 'account': 'token5800', 'agent_account': 'CS8901', 'credit': 500000000, 'currency': 'IDR', 'free_spin_data': [{ 'free_spin_id': '', 'bet': 0, 'end_date': '', 'rounds_left': 0 }], 'is_anchor': false, 'simulator_data': {} };
+            DataManager.getInstance().userData = fakeData1;
+            const fakeData2 = { 'game_id': 5800, 'line_bet': [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], 'coin_value': [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34], 'bet_available_idx': 0, 'line_total': 30, 'line_available': [30], 'line_bet_default_index': 0, 'coin_value_default_index': 0, 'win': 1, 'big_win': 20, 'super_win': 50, 'mega_win': 100, 'spin_mode': 1, 'buy_spin': { 'allow_buy': 1, 'multiplier': 50, 'limit_total': 6000000 } };
+            DataManager.getInstance().gameData = fakeData2;
             this.scheduleOnce(() => {
                 this.initGame();
             }, 0.1);
@@ -68,8 +67,8 @@ export class GameStage extends Component {
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
         // SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
 
-        SlotReelMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
-        SlotReelMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
+        // SlotReelMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
+        // SlotReelMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
     }
 
     private async sendPromotionBrief() {
@@ -105,9 +104,16 @@ export class GameStage extends Component {
         SlotReelMachine.initResultParser.emit(GameConst.BS_INIT_RESULT);
 
         //更新玩家資料
+        console.log('更新玩家資料', DataManager.getInstance().userCredit, DataManager.getInstance().bet.getBetTotal());
         SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);
         SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());
-        SettingsController.refreshWin.emit(0);
+        SettingsController.refreshWin.emit(0, 0);//刷新贏分=0
+
+        //設置購買功能是否可見、啟用
+        const buyFeatureVisible = DataManager.getInstance().gameData.buy_spin.allow_buy === 1;
+        BaseEvent.buyFeatureVisible.emit(buyFeatureVisible);//設置購買功能是否可見
+        const buyFeatureEnabled = DataManager.getInstance().bet.getBuyFeatureTotal() !== -1;
+        BaseEvent.buyFeatureEnabled.emit(buyFeatureEnabled);//設置購買功能是否啟用
 
         KeyboardManager.getInstance().initialize();
         MessageHandler.getInstance().initialize();//初始化消息處理
@@ -126,28 +132,28 @@ export class GameStage extends Component {
     }
 
     /**開始咪牌 */
-    private startMi(): void {
-        if (this.isMi) return;
-        this.isMi = true;
-        tween(this.scaleNode)
-            .to(3, { scale: new Vec3(0.95, 0.95, 1) }, { easing: easing.circOut })
-            .start();
-    }
+    // private startMi(): void {
+    //     if (this.isMi) return;
+    //     this.isMi = true;
+    //     tween(this.scaleNode)
+    //         .to(3, { scale: new Vec3(0.95, 0.95, 1) }, { easing: easing.circOut })
+    //         .start();
+    // }
 
-    /**停止咪牌 */
-    private stopMi(): void {
-        if (!this.isMi) return;
-        this.isMi = false;
-        Tween.stopAllByTarget(this.scaleNode);
-        tween(this.scaleNode)
-            .to(1.5, { scale: new Vec3(1, 1, 1) })
-            .start();
-    }
+    // /**停止咪牌 */
+    // private stopMi(): void {
+    //     if (!this.isMi) return;
+    //     this.isMi = false;
+    //     Tween.stopAllByTarget(this.scaleNode);
+    //     tween(this.scaleNode)
+    //         .to(1.5, { scale: new Vec3(1, 1, 1) })
+    //         .start();
+    // }
 
     /**點擊免費遊戲 */
     private clickFeatureBuyBtn(): void {
-        DataManager.getInstance().isMenuOn = true;
-        FeatureBuyPage.show.emit(DataManager.getInstance().bet.getBuyFeatureTotal());
+        // DataManager.getInstance().isMenuOn = true;
+        FeatureBuyPage.show.emit();
     }
 
     /**網路準備完成(loading時已經獲取完玩家與遊戲資料) */

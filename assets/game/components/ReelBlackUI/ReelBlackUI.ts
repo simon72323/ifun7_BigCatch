@@ -16,12 +16,14 @@ export class ReelBlackUI extends Component {
     }
 
     private show(): void {
+        if (this.node.active) return;
         this.node.active = true;
-        Utils.fadeIn(this.node, 0.2);
+        Utils.fadeIn(this.node, 0.1, 0, 255);
     }
 
     private hide(): void {
-        Utils.fadeOut(this.node, 0.2, () => {
+        if (!this.node.active) return;
+        Utils.fadeOut(this.node, 0.1, 255, 0, () => {
             this.node.active = false;
         });
     }

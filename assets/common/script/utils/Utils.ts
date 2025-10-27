@@ -1,9 +1,10 @@
 import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle, sp, Label } from 'cc';
 import { PREVIEW, EDITOR } from 'cc/env';
 
+import { GameConst } from '@game/script/data/GameConst';
+
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { Grid, RunNumber } from '@common/script/types/BaseType';
-
 
 // declare const gtag: (command: string, event: string, data?: any) => void;
 
@@ -38,6 +39,8 @@ const { ccclass, property } = _decorator;
 
 export class Utils {
     //================= 用到的 Utils =================
+
+    //================================== 數字相關 =====================================
     /**
      * 數字格式化，添加千分位逗號
      * @param value 要格式化的數字
@@ -47,6 +50,57 @@ export class Utils {
         let decimalPoint = BaseConfig.DecimalPlaces;
         const preciseValue = Utils.accMul(value, 1);
         return preciseValue.toLocaleString('en', { minimumFractionDigits: decimalPoint, maximumFractionDigits: decimalPoint });
+    }
+
+    /**
+     * 數字格式化，添加幣別符號
+     * @param value 要格式化的數字
+     * @returns 格式化後的字符串
+     */
+    public static numberFormatCurrency(value: number): string {
+        return BaseConfig.CurrencySymbol + ' ' + Utils.numberFormat(value);
+    }
+
+    /**
+     * 跑分動畫
+     * @param time 動畫時間
+     * @param nodeLabel 顯示label
+     * @param runNum 跑分數據(curValue: 起點值, finalValue: 最終值)
+     * @param callback 
+     */
+    public static runNumber(time: number, nodeLabel: Label, runNum: RunNumber, callback?: () => void) {
+        tween(runNum)
+            .to(time, { curValue: runNum.finalValue }, {
+                onUpdate: () => {
+                    nodeLabel.string = Utils.numberFormat(runNum.curValue);
+                },
+                easing: Utils.noisyEasing
+            })
+            .call(() => {
+                callback?.();
+            })
+            .start();
+    }
+
+    /**
+     * 跑分動畫(帶幣別，無return)
+     * @param time 動畫時間
+     * @param nodeLabel 顯示label
+     * @param runNum 跑分數據(curValue: 起點值, finalValue: 最終值)
+     */
+    public static runNumberCurrency(time: number, nodeLabel: Label, runNum: RunNumber) {
+        tween(runNum)
+            .to(time, { curValue: runNum.finalValue }, {
+                onUpdate: () => {
+                    nodeLabel.string = Utils.numberFormatCurrency(runNum.curValue);
+                },
+                easing: Utils.noisyEasing
+            })
+            .call(() => {
+                nodeLabel.string = Utils.numberFormatCurrency(runNum.curValue);
+                // callback?.();
+            })
+            .start();
     }
 
     /**
@@ -144,6 +198,8 @@ export class Utils {
         return (Utils.accMul(arg1, m) + Utils.accMul(arg2, m)) / m;
     }
 
+    //================================== 數字相關 =====================================
+
     /**
      * 延遲執行
      * @param callback 要執行的回調函數
@@ -215,6 +271,16 @@ export class Utils {
     }
 
     /**
+     * 將欄列轉換為位置
+     * @param col 欄
+     * @param row 列
+     * @returns 位置
+     */
+    public static gridToPos(col: number, row: number): number {
+        return col * GameConst.REEL_ROW + row;
+    }
+
+    /**
      * 排除陣列重複資料
      * @param list 
      * @returns 
@@ -231,48 +297,6 @@ export class Utils {
         obj.clearTracks();
         obj.setToSetupPose();
         obj.setCompleteListener(null);
-    }
-
-    /**
-     * 跑分動畫
-     * @param time 動畫時間
-     * @param nodeLabel 顯示label
-     * @param runNum 跑分數據(curValue: 起點值, finalValue: 最終值)
-     * @param callback 
-     */
-    public static runNumber(time: number, nodeLabel: Label, runNum: RunNumber, callback?: () => void) {
-        tween(runNum)
-            .to(time, { curValue: runNum.finalValue }, {
-                onUpdate: () => {
-                    nodeLabel.string = Utils.numberFormat(runNum.curValue);
-                },
-                easing: Utils.noisyEasing
-            })
-            .call(() => {
-                callback?.();
-            })
-            .start();
-    }
-
-    /**
-     * 跑分動畫(帶幣別，無return)
-     * @param time 動畫時間
-     * @param nodeLabel 顯示label
-     * @param runNum 跑分數據(curValue: 起點值, finalValue: 最終值)
-     */
-    public static runNumberCurrency(time: number, nodeLabel: Label, runNum: RunNumber) {
-        tween(runNum)
-            .to(time, { curValue: runNum.finalValue }, {
-                onUpdate: () => {
-                    nodeLabel.string = BaseConfig.CurrencySymbol + Utils.numberFormat(runNum.curValue);
-                },
-                easing: Utils.noisyEasing
-            })
-            .call(() => {
-                nodeLabel.string = BaseConfig.CurrencySymbol + Utils.numberFormat(runNum.curValue);
-                // callback?.();
-            })
-            .start();
     }
 
     /**
@@ -311,6 +335,28 @@ export class Utils {
             Utils.scheduleOnce(() => resolve(), 0, this);
         });
     }
+
+    /**
+     * 計算角度
+     * @param startPos 起始位置
+     * @param endPos 結束位置
+     * @returns 角度
+     */
+    public static calculateAngle(startPos: Vec3, endPos: Vec3): number {
+        const direction = endPos.clone().subtract(startPos);
+        return Math.atan2(direction.y, direction.x) * 180 / Math.PI;
+    }
+
+    /**
+     * 獲取隨機數
+     * @param min 最小值
+     * @param max 最大值
+     * @returns 隨機數
+     */
+    public static Random(min: number = 0, max: number): number {
+        return Utils.seededRandom(min, max);
+    }
+
     //================= 用到的 Utils =================
 
 
@@ -319,15 +365,17 @@ export class Utils {
      * 淡入
      * @param node 
      * @param time 
+     * @param startOpacity 起始透明度
+     * @param endOpacity 結束透明度
      * @param callback 
      */
-    public static fadeIn(node: Node, time: number, callback?: () => void) {
+    public static fadeIn(node: Node, time: number, startOpacity: number, endOpacity: number, callback?: () => void) {
         if (node.getComponent(UIOpacity) == null) {
             node.addComponent(UIOpacity);
         }
-        node.getComponent(UIOpacity).opacity = 0;
+        node.getComponent(UIOpacity).opacity = startOpacity;
         tween(node.getComponent(UIOpacity))
-            .to(time, { opacity: 255 })
+            .to(time, { opacity: endOpacity })
             .call(() => {
                 if (callback) callback();
             })
@@ -338,15 +386,17 @@ export class Utils {
      * 淡出
      * @param node 
      * @param time 
+     * @param startOpacity 起始透明度
+     * @param endOpacity 結束透明度
      * @param callback 
      */
-    public static fadeOut(node: Node, time: number, callback?: () => void) {
+    public static fadeOut(node: Node, time: number, startOpacity: number, endOpacity: number, callback?: () => void) {
         if (node.getComponent(UIOpacity) == null) {
             node.addComponent(UIOpacity);
         }
-        node.getComponent(UIOpacity).opacity = 255;
+        node.getComponent(UIOpacity).opacity = startOpacity;
         tween(node.getComponent(UIOpacity))
-            .to(time, { opacity: 0 })
+            .to(time, { opacity: endOpacity })
             .call(() => {
                 if (callback) callback();
             })
@@ -522,17 +572,6 @@ export class Utils {
         const rnd = Utils.seed / 233280;
         return Math.floor(min + rnd * (max - min));
     }
-
-    /**
-     * 獲取隨機數
-     * @param min 最小值
-     * @param max 最大值
-     * @returns 隨機數
-     */
-    public static Random(min: number = 0, max: number): number {
-        return Utils.seededRandom(min, max);
-    }
-
 
     /**
      * 加法

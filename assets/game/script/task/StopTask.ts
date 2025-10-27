@@ -1,3 +1,4 @@
+import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
@@ -5,6 +6,7 @@ import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine'
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@common/script/tasks/GameTask';
+
 
 
 /**
@@ -16,6 +18,9 @@ export class StopTask extends GameTask {
 
     /**盤面停止符號(二維陣列) */
     public resultPattern: number[][];
+
+    /**免費遊戲次數 */
+    public freeSpinTimes: number;
     /**輪帶索引 */
     // public rngList: number[];
 
@@ -42,6 +47,7 @@ export class StopTask extends GameTask {
         // let slotParser = DataManager.getInstance().slotData.slotParser;
         // slotParser.slotPattern = this.resultPattern;
 
+        ReelBlackUI.hide.emit();//隱藏壓黑
         BaseEvent.stopLineLoop.emit();//停止中獎線輪播
 
         const mipieList = this.getMipieList();//獲取該次咪牌狀態

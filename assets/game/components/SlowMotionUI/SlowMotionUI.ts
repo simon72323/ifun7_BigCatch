@@ -57,7 +57,7 @@ export class SlowMotionUI extends Component {
     private setCurrentIndex(target: number) {
         this.miList.forEach((v, idx) => {
             if (idx == this.curIdx) {
-                Utils.fadeOut(v.node, 0.3, () => {
+                Utils.fadeOut(v.node, 0.3, 255, 0, () => {
                     v.node.active = false;
                 });
             }

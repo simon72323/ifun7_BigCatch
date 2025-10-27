@@ -3,7 +3,7 @@ import { _decorator, Button, Component, KeyCode, Label, Node, sp, Tween, tween }
 import { GameAudioKey } from '@game/script/data/GameConst';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent3 } from '@common/script/event/XEvent';
+import { XEvent, XEvent3 } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
 
@@ -21,6 +21,8 @@ const { ccclass, property } = _decorator;
 export class TransUI extends Component {
     /**轉場淡入(times:次數) */
     public static show: XEvent3<number, () => void, () => void> = new XEvent3();
+
+    public static click: XEvent = new XEvent();
 
     /**面板動畫 */
     private cutscene_ani: sp.Skeleton;
@@ -44,7 +46,7 @@ export class TransUI extends Component {
     onLoad() {
         this.cutscene_ani = this.node.getChildByName('cutscene_ani').getComponent(sp.Skeleton);
         this.num_freeSpin = this.node.getChildByPath('cutscene_ani/Content/num_freeSpin').getComponent(Label);
-        this.showTime = this.node.getChildByPath('totalwin_ani/Content/Layout/ShowTime').getComponent(Label);
+        this.showTime = this.node.getChildByPath('cutscene_ani/Content/Layout/ShowTime').getComponent(Label);
         this.sens = this.node.getChildByName('Sens');
         TransUI.show.on(this.show, this);//轉場淡入
         this.node.active = false;
@@ -61,7 +63,7 @@ export class TransUI extends Component {
         AudioManager.getInstance().playSound(GameAudioKey.FgTran);
         this.cbComplete = onComplete;
 
-        Utils.fadeIn(this.node, 0.3);
+        Utils.fadeIn(this.node, 0.3, 0, 255);
 
         this.cutscene_ani.setAnimation(0, CutsceneAni.fg_in, false);
         this.cutscene_ani.addAnimation(0, CutsceneAni.fg_loop, true);
@@ -71,6 +73,7 @@ export class TransUI extends Component {
 
         //1秒後才可以跳過
         await Utils.delay(1);
+        onCover?.();//全遮蔽被覆蓋，可執行轉場
         this.sens.once(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.once((code: KeyCode) => {
             if (code == KeyCode.SPACE) {
@@ -84,6 +87,7 @@ export class TransUI extends Component {
      */
     private runCountdown(): void {
         this.showTime.string = this.countdown.finalTime.toString();
+        this.countdown.curTime = this.countdown.finalTime;
         tween(this.countdown)
             .to(this.countdown.finalTime, { curTime: 0 }, {
                 onUpdate: () => {
@@ -108,8 +112,8 @@ export class TransUI extends Component {
         Tween.stopAllByTarget(this.countdown);
         this.showTime.string = '0';
 
-        await Utils.delay(1);
-        Utils.fadeOut(this.node, 0.3, () => {
+        // await Utils.delay(1);
+        Utils.fadeOut(this.node, 0.3, 255, 0, () => {
             this.node.active = false;
             this.cbComplete?.();
         });

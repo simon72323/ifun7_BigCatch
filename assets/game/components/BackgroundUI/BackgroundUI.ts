@@ -2,6 +2,7 @@ import { _decorator, Component, Node } from 'cc';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { ModuleID } from '@common/script/types/BaseType';
+import { Utils } from '@common/script/utils/Utils';
 const { ccclass } = _decorator;
 
 /**
@@ -27,8 +28,20 @@ export class BackgroundUI extends Component {
      * @param id 
      */
     private onChangeScene(id: ModuleID) {
-        this.bg_mg.active = id === ModuleID.BS;
-        this.bg_fg.active = id === ModuleID.FG;
+        if (id === ModuleID.BS) {
+            if (this.bg_fg.active) {
+                Utils.fadeOut(this.bg_fg, 0.5, 255, 0, () => {
+                    this.bg_fg.active = false;
+                });
+            }
+        } else {
+            if (!this.bg_fg.active) {
+                this.bg_fg.active = true;
+                Utils.fadeIn(this.bg_fg, 0.5, 0, 255);
+            }
+        }
+        // this.bg_mg.active = id === ModuleID.BS;
+        // this.bg_fg.active = id === ModuleID.FG;
     }
 }
 

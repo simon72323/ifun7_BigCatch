@@ -1,4 +1,4 @@
-import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity } from 'cc';
+import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity, tween, Vec3, instantiate, Tween } from 'cc';
 
 import { FISH_ODDS, SymbolID } from '@game/script/data/GameConst';
 
@@ -80,18 +80,16 @@ export class Symbol extends BaseSymbol {
     /**清晰圖 */
     private normal: Sprite;
     /**Wild動畫 */
-    private wild: sp.Skeleton;
+    // private wild: sp.Skeleton;
     /**動畫 */
     private spine: sp.Skeleton;
 
     /**分數*/
     private score: Node;
     /**wild特效動畫 */
-    private ani_multiply: sp.Skeleton;
+    // private ani_multiply: sp.Skeleton;
     /**倍數 */
     private multiply: Node;
-    /**移動倍數 */
-    private moveMultiply: Node;
 
     /**一般圖示 */
     private normalSymbolID: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19];
@@ -99,6 +97,9 @@ export class Symbol extends BaseSymbol {
     private specialSymbolID: number[] = [0, 16];
     /**特殊圖示機率 */
     private specialRate: number = 0.1;
+
+    /**wild分數 */
+    private wildScore: number = 0;
 
     /**瞇牌狀態要把scatter放到更高層級 */
     // private isMi: boolean = false;
@@ -112,12 +113,11 @@ export class Symbol extends BaseSymbol {
         this.symIDLabel = this.node.getChildByName('symIDLabel').getComponent(Label);
         this.posIDLabel = this.node.getChildByName('posIDLabel').getComponent(Label);
         this.spine = this.node.getChildByName('Spine').getComponent(sp.Skeleton);
-        this.wild = this.node.getChildByName('Wild').getComponent(sp.Skeleton);
+        // this.wild = this.node.getChildByName('Wild').getComponent(sp.Skeleton);
 
         this.score = this.node.getChildByName('Score');
-        this.ani_multiply = this.node.getChildByName('ani_multiply').getComponent(sp.Skeleton);
+        // this.ani_multiply = this.node.getChildByName('ani_multiply').getComponent(sp.Skeleton);
         this.multiply = this.node.getChildByName('Multiply');
-        this.moveMultiply = this.node.getChildByName('MoveMultiply');
 
         // this.parentNode = this.node.parent;
 
@@ -130,6 +130,7 @@ export class Symbol extends BaseSymbol {
 
         SlotReelMachine.stopMi.on(() => {
             if (this.isScatter()) {
+                Tween.stopAllByTarget(this.node);
                 this.reset();
             }
         }, this);
@@ -171,7 +172,20 @@ export class Symbol extends BaseSymbol {
         else {
             this.node.parent = this.parentNode;
         }
-        this.setFishState();//設置魚的金額與狀態
+
+        //先隱藏倍率
+        this.multiply.active = false;
+        //設定wild倍率是否顯示
+        if (this.isWild()) {
+            const wildMultiply = DataManager.getInstance().slotData.getWildMultiply();
+            if (wildMultiply > 1) {
+                this.multiply.getChildByName('Label').getComponent(Label).string = `x${wildMultiply}`;
+                this.multiply.active = true;
+            }
+            this.wildScore = 0;
+            this.score.active = false;
+        }
+        this.setScoreState();//設置分數的狀態
     }
 
     /**
@@ -186,6 +200,12 @@ export class Symbol extends BaseSymbol {
      * symbol停下時
      */
     public onStop(): void {
+        if (this.isScatter()) {
+            tween(this.node)
+                .to(0.2, { scale: new Vec3(1.3, 1.3, 1) }, { easing: 'sineOut' })
+                .to(0.5, { scale: new Vec3(1, 1, 1) }, { easing: 'bounceOut' })
+                .start();
+        }
         this.isStop = true;
     }
 
@@ -193,8 +213,10 @@ export class Symbol extends BaseSymbol {
      * 模糊貼圖顯示
      */
     public blurShow(): void {
-        Utils.fadeIn(this.blur.node, 0.3);
+        if (this.blur.node.active) return;
+        Utils.fadeIn(this.blur.node, 0.05, 0, 255);
         this.blur.node.active = true;
+        Utils.fadeOut(this.normal.node, 0.05, 255, 150);
         // Utils.fadeOut(this.normal.node, 0.05);
     }
 
@@ -202,21 +224,87 @@ export class Symbol extends BaseSymbol {
      * 模糊貼圖隱藏
      */
     public blurHide(): void {
-        // Utils.fadeIn(this.normal.node, 0.05);
-        Utils.fadeOut(this.blur.node, 0.3, () => {
+        if (!this.blur.node.active) return;
+        Utils.fadeIn(this.normal.node, 0.05, 150, 255);
+        Utils.fadeOut(this.blur.node, 0.2, 255, 0, () => {
             this.blur.node.active = false;
         });
     }
 
     /**
      * 中獎演示
+     * @param timeScale 時間比例(預設2倍)
      */
     public symbolWin(): void {
         this.spine.node.active = true;
         this.normal.node.active = false;
         this.node.parent = this.winLayer.children[this.posID];//移動到勝利層
         const animName = symbolAniNameMap.get(this.symbolID);
+        //wild與scatter表演時間比例為1倍，其他為2倍
+        this.spine.timeScale = (this.isWild() || this.isScatter()) ? 1 : 2;
         this.spine.setAnimation(0, animName, true);
+    }
+
+    /**
+     * 顯示分數
+     * @param score 分數
+     */
+    public showWildScore(score: number): void {
+        if (!this.score.active) {
+            this.score.active = true;
+            this.score.getComponent(UIOpacity).opacity = 255;
+        }
+        //更新分數
+        this.score.getChildByName('Label').getComponent(Label).string = Utils.numberFormat(score);
+        //縮放動畫
+        tween(this.score)
+            .to(0.1, { scale: new Vec3(1.4, 1.4, 1) })
+            .to(0.2, { scale: new Vec3(1, 1, 1) })
+            .start();
+    }
+
+    /**
+     * wild分數設置完成(判斷是否有倍率表演)
+     * @param totalScore 總分數
+     */
+    public async wildScoreFinish(totalScore: number): Promise<void> {
+        return new Promise((resolve) => {
+            if (this.multiply.active) {
+                const instMultiply = instantiate(this.multiply);
+                instMultiply.setParent(this.node);
+                const aniMultiply = instMultiply.getChildByName('ani_multiply').getComponent(sp.Skeleton);
+                aniMultiply.node.active = true;
+                aniMultiply.setAnimation(0, 'hitbubble', false);
+                const endPos = this.score.position;
+                tween(instMultiply)
+                    .to(0.6, { position: endPos }, { easing: 'sineIn' })
+                    // .to(0.2, { scale: new Vec3(1.2, 1.2, 1) })
+                    // .to(0.2, { scale: new Vec3(0.5, 0.5, 1) })
+                    .call(() => {
+                        aniMultiply.setAnimation(0, 'light', false);
+                    })
+                    .to(0.2, { scale: new Vec3(1.2, 1.2, 1) })
+                    .call(() => {
+                        Utils.fadeOut(instMultiply, 0.3, 255, 0, () => {
+                            instMultiply.destroy();
+                        });
+                        // const uiOpacity = instMultiply.getComponent(UIOpacity);
+                        // tween(uiOpacity).to(0.3, { opacity: 0 })
+                        //     .call(() => {
+                        //         instMultiply.destroy();
+                        //     })
+                        //     .start();
+                        const wildMultiply = DataManager.getInstance().slotData.getWildMultiply();
+                        const multiplyScore = totalScore * wildMultiply;
+                        this.showWildScore(multiplyScore);
+                        resolve();
+                    })
+                    .start();
+            } else {
+                this.showWildScore(totalScore);
+                resolve();
+            }
+        });
     }
 
     /**
@@ -230,12 +318,13 @@ export class Symbol extends BaseSymbol {
      * 回歸原始狀態
      */
     private reset(): void {
+        this.node.setScale(1, 1, 1);
         this.node.parent = this.parentNode;//回歸原始父節點
         this.normal.node.active = true;
         this.spine.node.active = false;
-        this.wild.node.active = false;
+        // this.wild.node.active = false;
         this.blur.node.active = false;
-        this.setFishState();//設置魚的金額與狀態
+        // this.setScoreState();//設置分數的狀態
     }
 
     /**
@@ -262,9 +351,9 @@ export class Symbol extends BaseSymbol {
     }
 
     /**
-     * 設定魚的狀態
+     * 設定分數的狀態
      */
-    private setFishState() {
+    private setScoreState() {
         if (this.symbolID >= SymbolID.F1 && this.symbolID <= SymbolID.F6) {
             this.score.active = true;
             const isBS = DataManager.getInstance().isBS();

@@ -71,7 +71,7 @@ export class BaseEvent {
     /**購買功能 */
     public static buyFeature: XEvent = new XEvent();
     /**廣播是否可看見購買功能 */
-    // public static buyFeatureVisible: XEvent1<boolean> = new XEvent1();
+    public static buyFeatureVisible: XEvent1<boolean> = new XEvent1();
     /**廣播是否可點擊購買功能 */
     public static buyFeatureEnabled: XEvent1<boolean> = new XEvent1();
 

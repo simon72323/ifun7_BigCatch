@@ -83,7 +83,7 @@ export class AutoSpin extends Component {
      * 開啟自動選單
      */
     private onShow() {
-        Utils.fadeIn(this.node, 0.15);
+        Utils.fadeIn(this.node, 0.15, 0, 255);
         Utils.tweenScaleTo(this.node, 0.15, 0.8, 1);
         this.node.active = true;
 
@@ -108,7 +108,7 @@ export class AutoSpin extends Component {
      */
     private onClose() {
         Utils.tweenScaleTo(this.node, 0.1, 1, 0.9);
-        Utils.fadeOut(this.node, 0.1, () => {
+        Utils.fadeOut(this.node, 0.1, 255, 0, () => {
             this.node.active = false;
         });
         this.onCloseDrop();

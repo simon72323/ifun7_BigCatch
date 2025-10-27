@@ -1,7 +1,12 @@
 // import { BannerUI } from '@game/components/BannerUI/BannerUI';
 // import { FSUI } from '@game/components/FSUI/FSUI';
+import { tween } from 'cc';
+
+import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
 import { TransUI } from '@game/components/TransUI/TransUI';
 import { GameAudioKey } from '@game/script/data/GameConst';
+
+import { SettingsController } from '@common/components/settingsController/SettingsController';
 
 import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
@@ -23,16 +28,27 @@ export class TransTask extends GameTask {
     /**轉場目標 */
     public toModuleID: ModuleID;
 
-    /**次數 */
-    public times: number;
+    /**免費遊戲次數 */
+    public freeSpinTimes: number = 0;
+
+    /**是否第一次轉場 */
+    public isFirstTrans: boolean = true;
+
+    private timer = {
+        curTime: 0,
+        finalTime: 10
+    };
 
     execute(): void {
-
-        DataManager.getInstance().moduleID = this.toModuleID;
-
-        //中免費轉停止
-        if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
-            DataManager.getInstance().isAutoMode = false;
+        //第一次進入轉場
+        if (this.isFirstTrans) {
+            DataManager.getInstance().moduleID = this.toModuleID;
+            //中免費轉停止Auto模式
+            if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
+                DataManager.getInstance().isAutoMode = false;
+            }
+            // AudioManager.getInstance().stopMusic(AudioKey.BsMusic);
+            // AudioManager.getInstance().playMusic(AudioKey.FsMusic);
         }
 
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
@@ -42,53 +58,32 @@ export class TransTask extends GameTask {
         //設定初始次數
         // FeatureGameUI.refreshRemainTimes.emit(this.times);
 
-        AudioManager.getInstance().stopMusic(AudioKey.BsMusic);
-
         //轉場開始
-        TransUI.fadeIn.emit(this.times,
+        SettingsController.updateFreeSpinCount.emit(this.freeSpinTimes);
+        TransUI.show.emit(this.freeSpinTimes,
             () => {
                 //轉場全遮(更換場景資源)
-                BaseEvent.changeScene.emit(ModuleID.FG);
-
-                //還原廣告狀態
-                // BannerUI.reset.emit();
-
-                // FSUI.refreshRemainTimes.emit(this.times);
-                // RevolverUI.setMultiplier.emit(GameConst.FS_INIT_MULTIPLIER);
-
-
-                //初始化盤面
-                // let gameData = DataManager.getInstance().gameData;
-                // gameData.slotParser.setStripTable(DataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
-                // SlotMachine.setup.emit(0, gameData.slotParser);
-
+                if (this.isFirstTrans) {
+                    BaseEvent.changeScene.emit(ModuleID.FG);
+                    FreeGameUI.show.emit();//顯示免費遊戲UI
+                }
             },
             () => {
-                //點擊轉場按鈕
-                TransUI.click.once(() => {
-                    this.onTransEnd();
-                }, this);
-                //10秒自動進入
-                TimeoutManager.getInstance().register(BaseConst.TIMEOUT_FEATURE_WAIT_START.key, BaseConst.TIMEOUT_FEATURE_WAIT_START.seconds, () => {
-                    this.onTransEnd();
-                });
+                this.finish();
             });
+        //10秒自動進入
+        // TimeoutManager.getInstance().register(BaseConst.TIMEOUT_FEATURE_WAIT_START.key, BaseConst.TIMEOUT_FEATURE_WAIT_START.seconds, () => {
+        //     this.onTransEnd();
+        // });
     }
 
     /**
-     * 
+     * 轉場結束
      */
-    private onTransEnd(): void {
-        AudioManager.getInstance().playSound(GameAudioKey.FgStart);
-        AudioManager.getInstance().playMusic(AudioKey.FsMusic);
-
-        TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_FEATURE_WAIT_START.key);
-        TransUI.click.off(this);
-        //轉場結束
-        TransUI.fadeOut.emit(() => {
-            this.finish();
-        });
-    }
+    // private onTransEnd(): void {
+    //     // TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_FEATURE_WAIT_START.key);
+    //     this.finish();
+    // }
 
     update(deltaTime: number): void {
         // throw new Error('Method not implemented.');
