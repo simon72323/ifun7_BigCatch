@@ -1,14 +1,17 @@
 import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
+import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { TotalWinUI } from '@game/components/TotalWinUI/TotalWinUI';
+
 
 import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
 
+import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { ModuleID } from '@common/script/types/BaseType';
-
+import { Utils } from '@common/script/utils/Utils';
 
 
 
@@ -35,9 +38,12 @@ export class FSSettleTask extends GameTask {
             //轉場全遮蔽
             () => {
                 //回復BS盤面
-                SlotReelMachine.backBSParser.emit(this.backBSParser);
+                BaseEvent.stopLineLoop.emit();//停止中獎線輪播
+                ReelBlackUI.hide.emit();//隱藏遮黑
                 BaseEvent.changeScene.emit(ModuleID.BS);
                 FreeGameUI.hide.emit();
+                DataManager.getInstance().slotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
+                SlotReelMachine.backBSParser.emit(this.backBSParser);//回復BS盤面
             },
             //演示完畢
             () => {

@@ -95,7 +95,6 @@ export class FreeGameUI extends Component {
         this.creatLight(startPos, 'light');
 
         const angle = Utils.calculateAngle(startPos, endPos);
-        console.log('angle', angle);
         const moveFly = instantiate(this.multiplyFly);
         moveFly.setParent(this.node);
         moveFly.setPosition(startPos);

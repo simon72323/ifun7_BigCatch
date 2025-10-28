@@ -31,9 +31,9 @@ export class WinScoreUI extends Component {
         Utils.fadeIn(this.node, 0.1, 0, 255);
         this.node.scale = new Vec3(0.5, 0.5, 1);
         tween(this.node)
-            .to(0.2, { scale: new Vec3(1.2, 1.2, 1) })
-            .to(0.2, { scale: new Vec3(1, 1, 1) })
-            .delay(0.9)
+            .to(0.15, { scale: new Vec3(1.2, 1.2, 1) })
+            .to(0.15, { scale: new Vec3(1, 1, 1) })
+            .delay(0.7)
             .call(() => {
                 Utils.fadeOut(this.node, 0.2, 255, 0, () => {
                     this.node.active = false;

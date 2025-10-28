@@ -149,7 +149,6 @@ export class SlotReelMachine extends Component {
      * @param initParset 初始化盤面符號
      */
     private initResultParser(initParser: number[][]) {
-        console.log('初始化盤面符號', initParser);
         for (let i = 0; i < this.reelList.length; i++) {
             const reelNode = this.reelList[i];
             const row1x = this.reelRow[i];//row1倍數量
@@ -217,10 +216,10 @@ export class SlotReelMachine extends Component {
      * @param backBSParser 返回BS盤面
      */
     private onBackBSParser(backBSParser: number[][]) {
-        for(let i = 0; i < backBSParser.length; i++) {
-            for(let j = 0; j < backBSParser[i].length; j++) {
-                const symbol = this.reelSymbols[i][j];
-                symbol.setSymbolID(backBSParser[i][j]);
+        for (let i = 0; i < backBSParser.length; i++) {
+            for (let j = 0; j < backBSParser[i].length; j++) {
+                const symbol = this.reelMainSymbol[i][j];
+                symbol.backBS(backBSParser[i][j]);
             }
         }
     }
@@ -271,7 +270,8 @@ export class SlotReelMachine extends Component {
      */
     private async onSlotStop() {
         for (let i = 0; i < this.reelList.length; i++) {
-            await this.stopSlotRun(i);
+            const { runTime, backTime } = this.handleMi(i);//判斷是否執行咪牌與回傳停止時間
+            await this.stopSlotRun(i, runTime, backTime);
         }
     }
 
@@ -280,6 +280,7 @@ export class SlotReelMachine extends Component {
      * @param reelIndex 哪行slot
      */
     private startSlotRun(reelIndex: number) {
+        if (this.reelStopState[reelIndex]) return;//如果已停止就不再執行
         const beginTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].beginTime;//啟動時間
         const loopTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].loopTime;//循環時間
         const reelNode = this.reelList[reelIndex];//該行slotRun
@@ -328,7 +329,7 @@ export class SlotReelMachine extends Component {
      * @param reelIndex 哪行reel
      * @param runTime 轉動時間e
      */
-    private async stopSlotRun(reelIndex: number): Promise<void> {
+    private async stopSlotRun(reelIndex: number, runTime: number, backTime: number): Promise<void> {
         return new Promise(async resolve => {
             //如果已停止就不再執行
             if (this.reelStopState[reelIndex]) {
@@ -336,7 +337,6 @@ export class SlotReelMachine extends Component {
                 return;
             }
             this.reelStopState[reelIndex] = true;//設定該行已執行停止轉動
-            const { runTime, backTime } = this.handleMi(reelIndex);//判斷是否執行咪牌與回傳停止時間
             let isResolve = false;
 
             //重置reel到最上面，並回傳最下層symbol陣列
@@ -501,19 +501,27 @@ export class SlotReelMachine extends Component {
         // if (this.isRunMi) return;//瞇牌不能skip
         Tween.stopAllByTarget(this.node);
         this.skipUI.off(Node.EventType.TOUCH_END, this.onSlotSkip, this);
+        const skipStopTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].skipStopTime;
+        const runTime = skipStopTime * 0.8;
+        const backTime = skipStopTime * 0.2;
 
         for (let i = 0; i < this.reelStopState.length; i++) {
             //未停止的slot
             if (!this.reelStopState[i]) {
                 Tween.stopAllByTarget(this.reelList[i]);//停止該行動畫
-                this.stopSlotRun(i);//執行停止slot轉動
+
+                //瞇牌中的slot要停止並重跑停止方式
+                if (this.mipieStopList[i]) {
+                    this.mipieList[i] = false;
+                    // Tween.stopAllByTarget(this.reelList[i]);//停止該行動畫
+                    this.tweenSlotStop(i, runTime, backTime);
+                    // this.stopMipieSlotRun(i, runTime, backTime);
+                } else {
+                    this.stopSlotRun(i, runTime, backTime);//執行停止slot轉動
+                }
             }
-            //瞇牌中的slot要停止並重跑停止方式
-            if (this.mipieStopList[i]) {
-                this.mipieStopList[i] = false;
-                Tween.stopAllByTarget(this.reelList[i]);//停止該行動畫
-                this.stopMipieSlotRun(i);
-            }
+            // this.reelStopState[i] = true;//該行停止轉動
+
             this.mipieList[i] = false;
         }
     }
@@ -522,12 +530,10 @@ export class SlotReelMachine extends Component {
      * skip時，瞇牌中的slot重跑停止方式
      * @param reelIndex 
      */
-    private stopMipieSlotRun(reelIndex: number) {
-        const stopTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].stopTime;
-        const runTime = stopTime * 0.8;
-        const backTime = stopTime * 0.2;
-        this.tweenSlotStop(reelIndex, runTime, backTime);
-    }
+    // private stopMipieSlotRun(reelIndex: number) {
+
+
+    // }
     //====================================== slot轉動流程 ======================================
 
     /**
@@ -587,7 +593,6 @@ export class SlotReelMachine extends Component {
         // const winPos = Utils.uniq(winLineData.flatMap((data) => data.winPos)); //全部中獎位置(不重複)
         const losePos = Array.from({ length: this.allMainSymbols.length }, (_, i) => i)
             .filter(pos => !winPos.includes(pos));
-        // console.log('losePos', losePos);
         for (let i = 0; i < winPos.length; i++) {
             const winSymbol = this.allMainSymbols[winPos[i]];
             winSymbol.getComponent(BaseSymbol).symbolWin();

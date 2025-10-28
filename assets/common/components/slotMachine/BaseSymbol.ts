@@ -94,6 +94,14 @@ export class BaseSymbol extends Component {
         //override
     }
 
+    /**
+     * 回復BS盤面symbol
+     * @param symbolID 圖示ID
+     */
+    public backBS(symbolID: number): void {
+        //override
+    }
+
     /**設定是否可見 */
     // public setVisible(_visible: boolean): void {
     //     //override

@@ -87,7 +87,7 @@ export class TransUI extends Component {
      */
     private runCountdown(): void {
         this.showTime.string = this.countdown.finalTime.toString();
-        this.countdown.curTime = this.countdown.finalTime;
+        this.countdown.curTime = this.countdown.finalTime;//重置倒數計時器
         tween(this.countdown)
             .to(this.countdown.finalTime, { curTime: 0 }, {
                 onUpdate: () => {

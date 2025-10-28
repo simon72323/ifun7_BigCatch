@@ -3,7 +3,6 @@ import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { BootCatchTask } from '@game/script/task/BootCatchTask';
 import { EndGameTask } from '@game/script/task/EndGameTask';
-import { FSOpeningTask } from '@game/script/task/FSOpeningTask';
 import { FSSettleTask } from '@game/script/task/FSSettleTask';
 import { IdleTask } from '@game/script/task/IdleTask';
 import { SpinTask } from '@game/script/task/SpinTask';
@@ -43,6 +42,7 @@ export class MessageHandler {
     private fgBonus2: boolean = false;//是否啟用額外免費遊戲2
     private wildMultiplier: number = 1;//wild倍率
     private fsTotalWin: number = 0;//免費遊戲總贏分
+    private freeSpinTimes: number = 0;//免費遊戲次數
 
     /**
      * 初始化
@@ -59,20 +59,18 @@ export class MessageHandler {
     private parseBSResult(slotResult: ISpinData): void {
         console.log('接收Spin結果', slotResult);
 
-        //更新玩家餘額(減去spin額度)
-        const dataManager = DataManager.getInstance();
-
         //執行主遊戲結果
         const mainGame = slotResult.main_game;
+        console.log('======執行主遊戲結果======');
         this.handleGameResult(mainGame, false);
-        console.log('執行主遊戲結果完成');
         this.fsTotalWin = 0;//重置免費遊戲總贏分
+        this.freeSpinTimes = 0;//重置免費遊戲次數
+
 
         //如果有子遊戲，則執行子遊戲(免費遊戲)結果
         if (slotResult.get_sub_game) {
             this.fgBonus1 = false;//重置bonus狀態
             this.fgBonus2 = false;//重置bonus狀態
-            this.wildMultiplier = 1;//重置wild倍率
 
             //執行scatter表演
             const winScatterPos = slotResult.main_game.scatter_info.position.map((pos) => Utils.gridToPos(pos[0], pos[1]));
@@ -81,25 +79,26 @@ export class MessageHandler {
             TaskManager.getInstance().addTask(winScatterTask);
 
             //獲得免費遊戲次數
-            dataManager.freeSpinTimes = GameConst.SCATTER_MAPPING[slotResult.main_game.scatter_info.amount];
+            this.freeSpinTimes = GameConst.SCATTER_MAPPING[slotResult.main_game.scatter_info.amount];
 
             //執行轉場
             const transTask = new TransTask();
             transTask.toModuleID = ModuleID.FG;
-            transTask.freeSpinTimes = dataManager.freeSpinTimes;
+            transTask.freeSpinTimes = this.freeSpinTimes;
             transTask.isFirstTrans = true;
             TaskManager.getInstance().addTask(transTask);
 
             //執行子遊戲(免費遊戲)結果
             slotResult.sub_game.game_result.forEach((subGame, index) => {
-                dataManager.freeSpinTimes--;  // 免費遊戲次數-1
+                this.freeSpinTimes--;  // 免費遊戲次數-1
                 const updateFreeTimesTask = new UpdateFreeTimesTask();
-                updateFreeTimesTask.freeSpinTimes = dataManager.freeSpinTimes;
+                updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
                 TaskManager.getInstance().addTask(updateFreeTimesTask);
 
+                console.log('======執行子遊戲結果======');
                 this.handleGameResult(subGame, true);
                 //如果剩餘免費遊戲次數為0，則判斷是否表演retrigger
-                if (DataManager.getInstance().freeSpinTimes === 0) {
+                if (this.freeSpinTimes === 0) {
                     this.handleRetrigger(subGame);
                 }
             });
@@ -116,7 +115,7 @@ export class MessageHandler {
             backBSSettleTask.userCredit = slotResult.user_credit;
             TaskManager.getInstance().addTask(backBSSettleTask);
         }
-        console.log('回到待機');
+        console.log('======回到待機======');
         TaskManager.getInstance().addTask(new AutoSpinDelayTask());
         TaskManager.getInstance().addTask(new IdleTask());
     }
@@ -138,9 +137,9 @@ export class MessageHandler {
             TaskManager.getInstance().addTask(bootCatchTask);
 
             //更新免費遊戲次數
-            DataManager.getInstance().freeSpinTimes += 1;// 免費遊戲次數+1
+            this.freeSpinTimes += 1;// 免費遊戲次數+1
             const updateFreeTimesTask = new UpdateFreeTimesTask();
-            updateFreeTimesTask.freeSpinTimes = DataManager.getInstance().freeSpinTimes;
+            updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
             TaskManager.getInstance().addTask(updateFreeTimesTask);
         }
 
@@ -181,6 +180,7 @@ export class MessageHandler {
         }
 
         //表演中獎流程
+        console.log('======表演中獎流程======');
         const winTask = new WinSymbolTask();
         winTask.winLineData = winLineData;
         winTask.winFishData = winFishData;
@@ -201,34 +201,34 @@ export class MessageHandler {
      */
     private handleRetrigger(subGame: IGameResult): void {
         //如果wild次數大於等於4，且未啟用第一個bouns，則表演額外加10次，倍率變2倍
-        if (subGame.extra.total_wild_count >= 4 && this.fgBonus1 === false) {
+        if (subGame.extra.total_wild_count >= 5 && this.fgBonus1 === false) {
             //執行轉場
             const transTask = new TransTask();
             transTask.freeSpinTimes = 10;
             transTask.isFirstTrans = false;
             TaskManager.getInstance().addTask(transTask);
             this.fgBonus1 = true;//已啟用第一個bouns
-            this.wildMultiplier = 2;//wild倍率變2倍
 
             //更新免費遊戲次數
-            DataManager.getInstance().freeSpinTimes += 10;// 免費遊戲次數+10
+            this.freeSpinTimes += 10;// 免費遊戲次數+10
             const updateFreeTimesTask = new UpdateFreeTimesTask();
-            updateFreeTimesTask.freeSpinTimes = DataManager.getInstance().freeSpinTimes;
+            updateFreeTimesTask.wildMultiplier = 2;
+            updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
             TaskManager.getInstance().addTask(updateFreeTimesTask);
 
-        } else if (subGame.extra.total_wild_count >= 8 && this.fgBonus2 === false) {
+        } else if (subGame.extra.total_wild_count >= 10 && this.fgBonus2 === false) {
             //執行轉場
             const transTask = new TransTask();
             transTask.freeSpinTimes = 10;
             transTask.isFirstTrans = false;
             TaskManager.getInstance().addTask(transTask);
             this.fgBonus2 = true;//已啟用第二個bouns
-            this.wildMultiplier = 4;//wild倍率變4倍
 
             //更新免費遊戲次數
-            DataManager.getInstance().freeSpinTimes += 10;// 免費遊戲次數+10
+            this.freeSpinTimes += 10;// 免費遊戲次數+10
             const updateFreeTimesTask = new UpdateFreeTimesTask();
-            updateFreeTimesTask.freeSpinTimes = DataManager.getInstance().freeSpinTimes;
+            updateFreeTimesTask.wildMultiplier = 4;
+            updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
             TaskManager.getInstance().addTask(updateFreeTimesTask);
         }
     }

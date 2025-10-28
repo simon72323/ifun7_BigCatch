@@ -50,6 +50,7 @@ export class BaseConst {
             beginTime: 0.5,   // 啟動秒數
             loopTime: 0.25,   // 循環秒數
             stopTime: 0.5,  // 停止秒數
+            skipStopTime: 0.3,  // 急停秒數
             spinTime: 1,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
             showWinTime: 1,      // 中獎演示時間
@@ -61,6 +62,7 @@ export class BaseConst {
             beginTime: 0.4,   // 啟動秒數
             loopTime: 0.2,   // 循環秒
             stopTime: 0.4,  // 停止秒數
+            skipStopTime: 0.3,  // 急停秒數
             spinTime: 0.7,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
             showWinTime: 1,      // 中獎演示時間
@@ -72,6 +74,7 @@ export class BaseConst {
             beginTime: 0.3,   // 啟動秒數
             loopTime: 0.15,   // 循環秒數
             stopTime: 0.3,  // 停止秒數
+            skipStopTime: 0.3,  // 急停秒數
             spinTime: 0.4,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
             showWinTime: 1,      // 中獎演示時間

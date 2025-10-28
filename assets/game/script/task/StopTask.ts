@@ -37,7 +37,6 @@ export class StopTask extends GameTask {
 
 
     execute(): void {
-        console.log('StopTask execute', this.resultPattern);
         // DataManager.getInstance().hasSkip = false;
 
         //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
@@ -55,7 +54,6 @@ export class StopTask extends GameTask {
 
         SettingsController.setEnabled.emit(false);//公版規定, 停盤後Spin按鈕禁用
 
-        console.log('開始監聽轉動結束');
         //監聽轉動結束
         SlotReelMachine.slotRunFinish.once(() => {
             // BaseEvent.clickSkip.off(this);
@@ -77,10 +75,10 @@ export class StopTask extends GameTask {
     public getMipieList(): boolean[] {
         let mipieList: boolean[] = [];
         let scatterCount: number = 0;
-        for (let col: number = 0; col < GameConst.REEL_COL; ++col) {
+        for (let col: number = 0; col < GameConst.REEL_COL; col++) {
             mipieList.push(scatterCount >= GameConst.SCATTER_WIN_COUNT - 1);
-            for (let row: number = 0; row < GameConst.REEL_ROW; ++row) {
-                let symbolID = this.resultPattern[row][col];
+            for (let row: number = 0; row < GameConst.REEL_ROW; row++) {
+                let symbolID = this.resultPattern[col][row];
                 if (symbolID === SymbolID.Scatter) {
                     scatterCount++;
                 }

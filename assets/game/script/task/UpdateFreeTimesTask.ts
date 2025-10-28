@@ -14,9 +14,12 @@ import { Utils } from '@common/script/utils/Utils';
 export class UpdateFreeTimesTask extends GameTask {
     protected name: string = 'UpdateFreeTimesTask';
 
+    public wildMultiplier: number;
+
     public freeSpinTimes: number;
 
     async execute(): Promise<void> {
+        DataManager.getInstance().slotData.fsWildMultiply = this.wildMultiplier;//變更免費遊戲 wild倍率
         SettingsController.updateFreeSpinCount.emit(this.freeSpinTimes);
         this.finish();
     }

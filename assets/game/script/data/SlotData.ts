@@ -40,15 +40,15 @@ export class SlotData {
      * 取得免費遊戲 wild倍率
      * @returns 倍率
      */
-    public getWildMultiply(): number {
-        if (this.fsWildMultiply > 4) {
-            return 2;
-        } else if (this.fsWildMultiply > 8) {
-            return 4;
-        } else {
-            return 1;
-        }
-    }
+    // public getWildMultiply(): number {
+    //     if (this.fsWildMultiply > 4) {
+    //         return 2;
+    //     } else if (this.fsWildMultiply > 8) {
+    //         return 4;
+    //     } else {
+    //         return 1;
+    //     }
+    // }
 
     private payloadTemplate = {
         symbolPoints: {

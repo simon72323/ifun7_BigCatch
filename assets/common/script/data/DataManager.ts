@@ -50,7 +50,7 @@ export class DataManager {
     /** 停止直到免費轉 */
     public isStopUntilFeature: boolean = false;
     /** 剩餘免費旋轉次數 */
-    public freeSpinTimes: number = 0;
+    // public freeSpinTimes: number = 0;
 
 
     /** 是否購買免費遊戲 */
@@ -289,8 +289,6 @@ export class DataManager {
         let bigWinLevel: BigWinType = BigWinType.non;
         //取得贏錢倍數
         const multiple: number = this.bet.getWinMultipleByValue(value);
-        console.log('大獎倍率', multiple);
-        console.log('大獎倍率列表', this.bigWinMultiple);
         for (let i = 0; i < this.bigWinMultiple.length; i++) {
             if (multiple >= this.bigWinMultiple[i]) {
                 bigWinLevel = i;

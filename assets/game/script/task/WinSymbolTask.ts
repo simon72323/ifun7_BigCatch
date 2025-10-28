@@ -22,7 +22,6 @@ import { BigWinType } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
 
-
 /**
  * 顯示贏分
  */
@@ -41,6 +40,7 @@ export class WinSymbolTask extends GameTask {
 
     private moveTime: number = 0.4;//移動時間
     private moveIntervalTime: number = 0.3;//移動間隔時間
+    private wildWaitTime: number = 0.4;//漁夫表演等待時間
 
     private loopData: {} = {};
 
@@ -57,11 +57,9 @@ export class WinSymbolTask extends GameTask {
         }
 
         CharacterUI.win.emit();//表演角色贏分動態
-        const dataManager = DataManager.getInstance();
 
         //處裡中獎線
         if (this.winLineData.length > 0) {
-            console.log('開始表演全部中線');
             ReelBlackUI.show.emit(); //壓黑
             const allWinPos = Utils.uniq(this.winLineData.flatMap((data) => data.winPos)); //全部中獎位置(不重複)
             this.showWinLine(allWinPos);//表演全部中線
@@ -69,7 +67,7 @@ export class WinSymbolTask extends GameTask {
             WinScoreUI.showWin.emit(this.payCreditTotal);
         }
 
-        await Utils.delay(BaseConst.SLOT_TIME[dataManager.curTurboMode].showWinTime);
+        await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
 
         if (this.isSubGame) {
             const finalFsTotalWin = this.curFsTotalWin + this.payCreditTotal;
@@ -77,14 +75,13 @@ export class WinSymbolTask extends GameTask {
         } else {
             SettingsController.refreshWin.emit(0, this.payCreditTotal);//更新公版分數
             //非子遊戲資料才更新玩家餘額
-            const finalCredit = dataManager.userCredit + this.payCreditTotal;
+            const finalCredit = DataManager.getInstance().userCredit + this.payCreditTotal;
             SettingsController.refreshCredit.emit(finalCredit);
-            dataManager.userCredit = finalCredit;
+            DataManager.getInstance().userCredit = finalCredit;
         }
 
         //判斷bigWin額外演示
-        if (dataManager.getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
-            // console.log('waitForBigWinComplete');
+        if (DataManager.getInstance().getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
             await this.waitForBigWinComplete();
         }
 
@@ -93,6 +90,7 @@ export class WinSymbolTask extends GameTask {
         //監聽停止中獎線輪播(StopTask會觸發此事件)
         BaseEvent.stopLineLoop.once(() => {
             CharacterUI.idle.emit();//表演角色idle動態
+            WinScoreUI.hideWin.emit();//立即隱藏贏得分數
             Tween.stopAllByTarget(this.loopData);
         }, this);
         this.complete();
@@ -112,18 +110,15 @@ export class WinSymbolTask extends GameTask {
      * 漁夫與魚的表演
      */
     private async showWinFish(): Promise<void> {
-        const { allWildPos, totalWildCount } = this.winFishData;
+        const { allWildPos } = this.winFishData;
         let promiseList: Promise<void>[] = [];
         //TODO:表演漁夫蒐集魚
         for (let i = 0; i < allWildPos.length; i++) {
             promiseList.push(this.wildScoreMove(i));
             //漁夫表演間隔時間
-            await Utils.delay(0.1);
+            await Utils.delay(this.wildWaitTime);
         }
         await Promise.all(promiseList);
-        //更新免費遊戲 wild倍率
-        DataManager.getInstance().slotData.fsWildMultiply = totalWildCount;
-        console.log('漁夫與魚的表演 complete');
     }
 
     /**
@@ -180,6 +175,8 @@ export class WinSymbolTask extends GameTask {
      * @param allWinPos 
      */
     private showWinLine(allWinPos: number[]): void {
+        Tween.stopAllByTarget(this.loopData);
+
         let winPosResult: number[][] = [allWinPos, ...this.winLineData.map((data) => data.winPos)];
         let chainTween = tween();
         for (let i = 0; i < winPosResult.length; i++) {

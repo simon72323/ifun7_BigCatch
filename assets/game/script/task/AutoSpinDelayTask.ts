@@ -7,11 +7,11 @@ import { GameTask } from '@common/script/tasks/GameTask';
 import { Utils } from '@common/script/utils/Utils';
 
 
-
 /**
  * 自動轉等待時間
  */
 export class AutoSpinDelayTask extends GameTask {
+    protected name: string = 'AutoSpinDelayTask';
 
     async execute(): Promise<void> {
         const dataManager = DataManager.getInstance();

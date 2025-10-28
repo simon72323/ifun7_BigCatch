@@ -177,7 +177,7 @@ export class Symbol extends BaseSymbol {
         this.multiply.active = false;
         //設定wild倍率是否顯示
         if (this.isWild()) {
-            const wildMultiply = DataManager.getInstance().slotData.getWildMultiply();
+            const wildMultiply = DataManager.getInstance().slotData.fsWildMultiply;
             if (wildMultiply > 1) {
                 this.multiply.getChildByName('Label').getComponent(Label).string = `x${wildMultiply}`;
                 this.multiply.active = true;
@@ -294,7 +294,7 @@ export class Symbol extends BaseSymbol {
                         //         instMultiply.destroy();
                         //     })
                         //     .start();
-                        const wildMultiply = DataManager.getInstance().slotData.getWildMultiply();
+                        const wildMultiply = DataManager.getInstance().slotData.fsWildMultiply;
                         const multiplyScore = totalScore * wildMultiply;
                         this.showWildScore(multiplyScore);
                         resolve();
@@ -325,6 +325,15 @@ export class Symbol extends BaseSymbol {
         // this.wild.node.active = false;
         this.blur.node.active = false;
         // this.setScoreState();//設置分數的狀態
+    }
+
+    /**
+     * 回復BS盤面symbol
+     * @param symbolID 圖示ID
+     */
+    public backBS(symbolID: number): void {
+        this.reset();
+        this.setSymbolID(symbolID);
     }
 
     /**

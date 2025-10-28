@@ -41,7 +41,7 @@ export class TotalWinUI extends Component {
     /**畫面自動關閉計時器 */
     private countdown = {
         curTime: 0,
-        finalTime: 5
+        finalTime: 10
     };
 
     // private cbCover: () => void;
@@ -68,6 +68,7 @@ export class TotalWinUI extends Component {
      */
     private async show(value: number, count: number, onCover: () => void, onComplete: () => void): Promise<void> {
         this.node.active = true;
+        Utils.fadeIn(this.node, 0.3, 0, 255);
         this.totalTimesLabel.string = count.toString();
 
         // this.cbCover = onCover;
@@ -80,12 +81,13 @@ export class TotalWinUI extends Component {
 
         //跑分動畫
         this.runNum.finalValue = value;
-        Utils.runNumber(3, this.num_totalwin, this.runNum);
+        Utils.runNumber(5, this.num_totalwin, this.runNum);
 
         this.runCountdown();//倒數計時器
 
         await Utils.delay(1);
         onCover?.();//轉場全遮蔽
+        console.log('監聽sens click');
         this.sens.once(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.once((code: KeyCode) => {
             if (code === KeyCode.SPACE) {
@@ -102,7 +104,7 @@ export class TotalWinUI extends Component {
      */
     private runCountdown(): void {
         this.showTime.string = this.countdown.finalTime.toString();
-        this.countdown.curTime = this.countdown.finalTime;
+        this.countdown.curTime = this.countdown.finalTime;//重置倒數計時器
         tween(this.countdown)
             .to(this.countdown.finalTime, { curTime: 0 }, {
                 onUpdate: () => {
@@ -119,16 +121,13 @@ export class TotalWinUI extends Component {
      * 完成
      */
     private async onComplete(): Promise<void> {
+        console.log('取消監聽sens click');
         this.sens.off(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.off(this);
 
-        // this.sens.active = false;
         Tween.stopAllByTarget(this.runNum);
         Tween.stopAllByTarget(this.countdown);
         this.num_totalwin.getComponent(Label).string = Utils.numberFormat(this.runNum.finalValue);
-
-        // this.cbCover?.();
-        // this.cbCover = null;
 
         await Utils.delay(0.5);
         Utils.fadeOut(this.node, 0.3, 255, 0, () => {
