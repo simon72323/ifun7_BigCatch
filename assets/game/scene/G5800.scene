@@ -6114,7 +6114,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 660,
+      "width": 690,
       "height": 800
     },
     "_anchorPoint": {
@@ -8238,7 +8238,7 @@
     "propertyPath": [
       "_active"
     ],
-    "value": false
+    "value": true
   },
   {
     "__type__": "cc.Node",
