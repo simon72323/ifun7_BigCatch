@@ -3,7 +3,7 @@ import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { TotalWinUI } from '@game/components/TotalWinUI/TotalWinUI';
 
 
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -43,7 +43,7 @@ export class FSSettleTask extends GameTask {
                 BaseEvent.changeScene.emit(ModuleID.BS);
                 FreeGameUI.hide.emit();
                 DataManager.getInstance().slotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
-                SlotReelMachine.backBSParser.emit(this.backBSParser);//回復BS盤面
+                SlotMachine.backBSParser.emit(this.backBSParser);//回復BS盤面
             },
             //演示完畢
             () => {

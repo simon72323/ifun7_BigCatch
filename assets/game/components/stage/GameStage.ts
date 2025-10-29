@@ -7,7 +7,7 @@ import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -76,8 +76,8 @@ export class GameStage extends Component {
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
         // SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
 
-        // SlotReelMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
-        // SlotReelMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
+        // SlotMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
+        // SlotMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
     }
 
     private async sendPromotionBrief() {
@@ -114,7 +114,7 @@ export class GameStage extends Component {
         //註冊聲音
 
         //初始化盤面
-        SlotReelMachine.initResultParser.emit(GameConst.BS_INIT_RESULT);
+        SlotMachine.initResultParser.emit(GameConst.BS_INIT_RESULT);
 
         //更新玩家資料
         console.log('更新玩家資料', DataManager.getInstance().userCredit, DataManager.getInstance().bet.getBetTotal());

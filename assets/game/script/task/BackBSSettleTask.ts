@@ -1,6 +1,6 @@
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
@@ -30,7 +30,7 @@ export class BackBSSettleTask extends GameTask {
         DataManager.getInstance().userCredit = this.userCredit;
 
         //回復盤面
-        // SlotReelMachine.backBSParser.emit(this.backBSParser);
+        // SlotMachine.backBSParser.emit(this.backBSParser);
         // SlotMachine.change.emit(SlotMachineID.BS, DataManager.getInstance().gameData.bsLastMap);
         // UIController
         // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);

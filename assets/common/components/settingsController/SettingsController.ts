@@ -402,7 +402,7 @@ export class SettingsController extends Component {
         this.clickAnim(this.stopSpinBtn);
         this.stopSpinBtn.getComponent(Button).interactable = false;
         BaseEvent.clickStop.emit();
-        // SlotReelMachine.slotSkip.
+        // SlotMachine.slotSkip.
     }
 
     /**

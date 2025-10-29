@@ -3,7 +3,7 @@ import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity, tween, Vec
 import { FISH_ODDS, SymbolID } from '@game/script/data/GameConst';
 
 import { BaseSymbol } from '@common/components/slotMachine/BaseSymbol';
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { Utils } from '@common/script/utils/Utils';
@@ -121,14 +121,14 @@ export class Symbol extends BaseSymbol {
 
         // this.parentNode = this.node.parent;
 
-        SlotReelMachine.startMi.on((column) => {
+        SlotMachine.startMi.on((column) => {
             if (this.isScatter() && this.isStop) {
                 this.node.parent = this.scatterLayer.children[this.posID];
                 this.spine.setAnimation(0, symbolAniNameMap.get(this.symbolID), true);
             }
         }, this);
 
-        SlotReelMachine.stopMi.on(() => {
+        SlotMachine.stopMi.on(() => {
             if (this.isScatter()) {
                 Tween.stopAllByTarget(this.node);
                 this.reset();

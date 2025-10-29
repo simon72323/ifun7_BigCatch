@@ -2,7 +2,7 @@ import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { GameTask } from '@common/script/tasks/GameTask';
@@ -50,12 +50,12 @@ export class StopTask extends GameTask {
         BaseEvent.stopLineLoop.emit();//停止中獎線輪播
 
         const mipieList = this.getMipieList();//獲取該次咪牌狀態
-        SlotReelMachine.slotRun.emit(this.resultPattern, mipieList);//開始轉動盤面
+        SlotMachine.slotRun.emit(this.resultPattern, mipieList);//開始轉動盤面
 
         SettingsController.setEnabled.emit(false);//公版規定, 停盤後Spin按鈕禁用
 
         //監聽轉動結束
-        SlotReelMachine.slotRunFinish.once(() => {
+        SlotMachine.slotRunFinish.once(() => {
             // BaseEvent.clickSkip.off(this);
             this.finish();
         }, this);
@@ -64,7 +64,7 @@ export class StopTask extends GameTask {
         // BaseEvent.clickSkip.once(() => {
         //     // DataManager.getInstance().hasSkip = true;
         //     BaseEvent.clickSkip.off(this);
-        //     // SlotReelMachine.slotSkip.emit();
+        //     // SlotMachine.slotSkip.emit();
         // }, this);
     }
 

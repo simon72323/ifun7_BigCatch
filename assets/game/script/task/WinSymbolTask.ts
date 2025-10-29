@@ -10,7 +10,7 @@ import { WinScoreUI } from '@game/components/WinScoreUI/WinScoreUI';
 import { FISH_ODDS } from '@game/script/data/GameConst';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotReelMachine } from '@common/components/slotMachine/SlotReelMachine';
+import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { IWinFishData, IWinLineData } from '@common/components/slotMachine/SlotType';
 
 import { BaseConst } from '@common/script/data/BaseConst';
@@ -130,14 +130,14 @@ export class WinSymbolTask extends GameTask {
             let promiseList: Promise<void>[] = [];
             let wildScore = 0;//紀錄wild分數變化
             const { allWildPos, allFishPos, fishSymbolIDs, totalWildCount } = this.winFishData;
-            const wildSymbolNode = SlotReelMachine.getSymbolList()[allWildPos[wildIndex]];
-            const wildPos: Vec3 = SlotReelMachine.getSymbolPosList()[allWildPos[wildIndex]];
+            const wildSymbolNode = SlotMachine.getSymbolList()[allWildPos[wildIndex]];
+            const wildPos: Vec3 = SlotMachine.getSymbolPosList()[allWildPos[wildIndex]];
             const wildSymbol = wildSymbolNode.getComponent('Symbol') as Symbol;
             wildSymbol.symbolWin();
             for (let i = 0; i < allFishPos.length; i++) {
                 const betCredit = DataManager.getInstance().bet.getBetTotal();
                 const fishScore = FISH_ODDS[fishSymbolIDs[i]] * betCredit;
-                const fishPos: Vec3 = SlotReelMachine.getSymbolPosList()[allFishPos[i]];
+                const fishPos: Vec3 = SlotMachine.getSymbolPosList()[allFishPos[i]];
                 wildScore += fishScore;
                 promiseList.push(this.moveScore(fishScore, fishPos, wildPos, wildSymbol, wildScore));
                 await Utils.delay(this.moveIntervalTime);
@@ -185,7 +185,7 @@ export class WinSymbolTask extends GameTask {
                     if (i === 0) {
                         WinScoreUI.showWin.emit(this.payCreditTotal);
                     }
-                    SlotReelMachine.showSymbolWin.emit(winPosResult[i]);
+                    SlotMachine.showSymbolWin.emit(winPosResult[i]);
                 })
                 .delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
         }

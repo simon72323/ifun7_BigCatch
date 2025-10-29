@@ -1,5 +1,5 @@
 
-import { SlotParser } from '@game/components/slotMachine/SlotParser';
+// import { SlotParser } from '@game/components/slotMachine/SlotParser';
 import { GameConst } from '@game/script/data/GameConst';
 
 import { BaseSymbolData } from '@common/components/slotMachine/BaseSymbolData';
@@ -15,7 +15,7 @@ export class SlotData {
     /**是否剛進入FS */
     public fsInitialize: boolean = false;
     /**老虎機資料 */
-    public slotParser: SlotParser = new SlotParser();
+    // public slotParser: SlotParser = new SlotParser();
     /**紀錄免費遊戲 wild倍率 */
     public fsWildMultiply: number = 0;
     /**金框資料 */
