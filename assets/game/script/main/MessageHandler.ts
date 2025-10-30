@@ -2,9 +2,9 @@ import { GameConst, SymbolID } from '@game/script/data/GameConst';
 import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { BootCatchTask } from '@game/script/task/BootCatchTask';
-import { EndGameTask } from '@game/script/task/EndGameTask';
+// import { EndGameTask } from '@game/script/task/EndGameTask';
 import { IdleTask } from '@game/script/task/IdleTask';
-import { SpinTask } from '@game/script/task/SpinTask';
+// import { SpinTask } from '@game/script/task/SpinTask';
 import { StopTask } from '@game/script/task/StopTask';
 import { TotalWinTask } from '@game/script/task/TotalWinTask';
 import { TransTask } from '@game/script/task/TransTask';
@@ -12,10 +12,10 @@ import { UpdateFreeTimesTask } from '@game/script/task/UpdateFreeTimesTask';
 import { WinScatterTask } from '@game/script/task/WinScatterTask';
 import { WinSymbolTask } from '@game/script/task/WinSymbolTask';
 
-import { SettingsController } from '@common/components/settingsController/SettingsController';
+// import { SettingsController } from '@common/components/settingsController/SettingsController';
 import { IWinFishData, IWinLineData } from '@common/components/slotMachine/SlotType';
 
-import { DataManager } from '@common/script/data/DataManager';
+// import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { IGameResult, ISpinData } from '@common/script/network/NetworkApi';
 // import { DelayTask } from '@common/script/tasks/DelayTask';
@@ -60,7 +60,7 @@ export class MessageHandler {
 
         //執行主遊戲結果
         const mainGame = slotResult.main_game;
-        console.log('======執行主遊戲結果======');
+        // console.log('======執行主遊戲結果======');
         this.handleGameResult(mainGame, false);
         this.fsTotalWin = 0;//重置免費遊戲總贏分
         this.freeSpinTimes = 0;//重置免費遊戲次數
@@ -94,7 +94,7 @@ export class MessageHandler {
                 updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
                 TaskManager.getInstance().addTask(updateFreeTimesTask);
 
-                console.log('======執行子遊戲結果======');
+                // console.log('======執行子遊戲結果======');
                 this.handleGameResult(subGame, true);
                 //如果剩餘免費遊戲次數為0，則判斷是否表演retrigger
                 if (this.freeSpinTimes === 0) {
@@ -114,7 +114,7 @@ export class MessageHandler {
             backBSSettleTask.userCredit = slotResult.user_credit;
             TaskManager.getInstance().addTask(backBSSettleTask);
         }
-        console.log('======回到待機======');
+        // console.log('======回到待機======');
         TaskManager.getInstance().addTask(new AutoSpinDelayTask());
         TaskManager.getInstance().addTask(new IdleTask());
     }
@@ -179,7 +179,7 @@ export class MessageHandler {
         }
 
         //表演中獎流程
-        console.log('======表演中獎流程======');
+        // console.log('======表演中獎流程======');
         const winTask = new WinSymbolTask();
         winTask.winLineData = winLineData;
         winTask.winFishData = winFishData;

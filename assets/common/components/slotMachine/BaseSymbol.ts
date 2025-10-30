@@ -1,10 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 
-// import { Grid } from '@base/script/types/BaseType';
-
 import { BaseSymbolData } from '@common/components/slotMachine/BaseSymbolData';
-import { SymbolState } from '@common/components/slotMachine/SlotType';
-
 import { Grid } from '@common/script/types/BaseType';
 
 const { ccclass } = _decorator;
@@ -14,28 +10,20 @@ const { ccclass } = _decorator;
  */
 @ccclass('BaseSymbol')
 export class BaseSymbol extends Component {
-
     /**圖示編號 */
     public symbolID: number = -1;
-
     /**對應pos節點索引 */
     public posID: number = -1;
-
     /**原父節點 */
     public parentNode: Node = null;
-
     /**scatter層 */
     public scatterLayer: Node = null;
-
     /**win層 */
     public winLayer: Node = null;
-
     /**盤面欄列位置 */
     public grid: Grid = { col: 0, row: 0 };
-
     /**是否為空圖示 */
     // private empty: boolean = false;
-
     /**是否停止 */
     public isStop: boolean = true;
 
@@ -65,19 +53,20 @@ export class BaseSymbol extends Component {
         //override
     }
 
-
+    /**中獎 */
     public symbolWin(): void {
         //override
     }
 
+    /**未中獎 */
     public symbolLose(): void {
         //override
     }
 
+    /**設定隨機圖示ID */
     public setRandomSymbolID(): void {
         //override
     }
-
 
     /**Spin時(所有symbol) */
     public onSpin(): void {
@@ -107,5 +96,3 @@ export class BaseSymbol extends Component {
     //     //override
     // }
 }
-
-

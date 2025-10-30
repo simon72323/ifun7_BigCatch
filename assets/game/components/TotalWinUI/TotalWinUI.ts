@@ -80,6 +80,7 @@ export class TotalWinUI extends Component {
         this.totalwin_ani.addAnimation(0, TotalWinAnimation.totalWin_loop, true);
 
         //跑分動畫
+        this.runNum.curValue = 0;//初始化跑分數據
         this.runNum.finalValue = value;
         Utils.runNumber(5, this.num_totalwin, this.runNum);
 
@@ -87,7 +88,7 @@ export class TotalWinUI extends Component {
 
         await Utils.delay(1);
         onCover?.();//轉場全遮蔽
-        console.log('監聽sens click');
+        // console.log('監聽sens click');
         this.sens.once(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.once((code: KeyCode) => {
             if (code === KeyCode.SPACE) {
@@ -121,7 +122,7 @@ export class TotalWinUI extends Component {
      * 完成
      */
     private async onComplete(): Promise<void> {
-        console.log('取消監聽sens click');
+        // console.log('取消監聽sens click');
         this.sens.off(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.off(this);
 

@@ -45,7 +45,7 @@ export class WinScoreUI extends Component {
             })
             .start();
         //跑分動畫
-        this.runNum.curValue = 0;
+        this.runNum.curValue = 0;//初始化跑分數據
         this.runNum.finalValue = value;
         Utils.runNumber(0.5, this.winLabel, this.runNum);
     }

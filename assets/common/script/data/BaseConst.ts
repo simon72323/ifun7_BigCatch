@@ -1,46 +1,26 @@
-import { Timeout, TurboMode } from '@common/script/types/BaseType';
-
-// export enum BaseFont {
-//     /**一般數字 ['0123456789|2', '.,|1'] */
-//     number = 'number',
-// }
-
-// export enum OperatorName {
-//     BP = 'bp',
-// }
+import { TurboMode } from '@common/script/types/BaseType';
 
 /**
- * 公版全域常數(絕對不會改的資料放這, 若放BaseDataManager容易出現循環引用問題)
+ * 公版全域常數
  */
 export class BaseConst {
     /**自動轉次數選項 */
     // public static AUTO_OPTIONS: number[] = [10, 25, 50, 75, 100, 250, 500, 750, 1000, -1];
-    /**BIGWIN表演時間 */
-    public static BIG_WIN_LEVEL_TIME: number = 5;
-    /**TOTALWIN表演時間 */
-    public static TOTAL_WIN_SCROLL_TIME: number = 1;
-    /**BigWin/totalWin播放完畢後等待時間 */
-    public static WIN_END_DELAY: number = 2;
 
-    /**讀取畫面逾時設定(2分鐘) */
-    public static TIMEOUT_LOADING: Timeout = { key: 'Loading', seconds: 120 };
-    /**待機5秒後靜音 */
-    public static TIMEOUT_IDLE_MUTE: Timeout = { key: 'IdleMute', seconds: 5 };
-    /**FreeGame 倒數10秒後自動進入 */
-    public static TIMEOUT_FEATURE_WAIT_START: Timeout = { key: 'FeatureWaitStart', seconds: 10 };
-    /**spin30秒內需回應 */
-    public static TIMEOUT_RESULT_RECALL: Timeout = { key: 'ResultRecall', seconds: 30 };
+    /**逾時時間 */
+    public static TIMEOUT_TIME = {
+        loading: 120,  // 讀取畫面逾時設定(2分鐘)
+        idleMute: 5,  // 待機5秒後靜音
+        featureWaitStart: 10,  // FreeGame 倒數10秒後自動進入
+        resultRecall: 30  // spin30秒內需回應
+    };
 
-    //============================= bundle資料夾名稱 =============================
-    /**bundle公版語系資料夾名稱 */
-    public static BUNDLE_BASE_LANGUAGE: string = 'baseLanguage';
-    /**bundle公版幣別資料夾名稱 */
-    public static BUNDLE_BASE_CURRENCY: string = 'currency';
-    /**bundle遊戲語系資料夾名稱 */
-    public static BUNDLE_LANGUAGE: string = 'language';
-    /**bundle遊戲載入頁資料夾名稱 */
-    public static DIR_LOADING: string = 'loading';
-    //============================= bundle資料夾名稱 =============================
+    /**遊戲時間 */
+    public static GAME_TIME = {
+        bigWinLevelTime: 5,  // BIGWIN表演時間
+        totalWinScrollTime: 1,  // TOTALWIN表演時間
+        winEndDelay: 2  // BigWin/totalWin播放完畢後等待時間
+    };
 
     /**遊戲轉動時間 */
     public static SLOT_TIME = {

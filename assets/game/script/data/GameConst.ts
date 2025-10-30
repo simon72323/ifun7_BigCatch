@@ -1,19 +1,12 @@
 import { BaseConst } from '@common/script/data/BaseConst';
+import { TurboMode } from '@common/script/types/BaseType';
 
 /**
  * 遊戲常數
  */
-export class GameConst {
+export class GameConst extends BaseConst {
     /**Scatter中獎數量 */
     public static SCATTER_WIN_COUNT: number = 3;
-    /**消去演示時間 */
-    public static EXPLODE_TIME: number = 1;
-    /**圖示權重(越大越上層) */
-    // public static symbolWeight: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 99];
-    /**圖示ID數量 */
-    // public static symbolCount: number = 16;
-    /**倍數清單 */
-    // public static multiplierList: number[] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
 
     /** 中獎線路配置 (3x5盤面) */
     public static payLineData: number[][] = [
@@ -21,16 +14,12 @@ export class GameConst {
         [2, 1, 0, 1, 2], [0, 1, 2, 1, 0], [2, 2, 1, 0, 0], [0, 0, 1, 2, 2], [2, 1, 1, 1, 0]
     ];
 
-    /**FS獲得次數累加毫秒 */
-    public static BONUS_TIME_ADD_INTERVAL = 0.2;
-    /**BigWin End 播放完畢後等待時間 */
-    public static BIG_WIN_END_DELAY: number = 1;
-    /**金框隨機值 */
-    public static RANDOM_GOLDEN: number = 0.2;
     /**橫軸列數 */
     public static REEL_COL: number = 5;
+
     /**縱軸列數 */
     public static REEL_ROW: number = 3;
+
     /**scatter中獎次數 */
     public static SCATTER_MAPPING: { [key: number]: number } = {
         3: 10,  // 索引1對應3個scatter，10次
@@ -47,34 +36,71 @@ export class GameConst {
         [18, 19, 20]
     ];
 
-    /**遊戲表演時間 */
-    // public static COMMON_TIME = {
-    //     autoSpinTime: 0.5,        // 自動轉停止後，等待一段時間再開始下一輪
-    //     bigWinEndDelay: 0.5,       // BigWin結束延遲
-    //     bonusTimeAddInterval: 0.2  // 獎勵時間累加間隔
-    // };
+    /**遊戲轉動時間(遊戲可覆寫BaseConst的SLOT_TIME) */
+    public static SLOT_TIME = {
+        [TurboMode.Normal]: {
+            spinIntervalTime: 0.04,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0.2,  // 停止間隔秒數
+            beginTime: 0.5,   // 啟動秒數
+            loopTime: 0.25,   // 循環秒數
+            stopTime: 0.5,  // 停止秒數
+            skipStopTime: 0.3,  // 急停秒數
+            spinTime: 1,  // 至少滾動N秒
+            mipieTime: 2,   // 瞇牌秒數
+            showWinTime: 2,      // 中獎演示時間
+            waitNextSpinTime: 0.1      // 下一輪轉動等待秒數
+        },
+        [TurboMode.Fast]: {
+            spinIntervalTime: 0,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0.1,  // 停止間隔秒數
+            beginTime: 0.4,   // 啟動秒數
+            loopTime: 0.2,   // 循環秒
+            stopTime: 0.4,  // 停止秒數
+            skipStopTime: 0.3,  // 急停秒數
+            spinTime: 0.7,  // 至少滾動N秒
+            mipieTime: 2,   // 瞇牌秒數
+            showWinTime: 2,      // 中獎演示時間
+            waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
+        },
+        [TurboMode.Turbo]: {
+            spinIntervalTime: 0,  // 轉動/停止間隔秒數
+            stopIntervalTime: 0,  // 停止間隔秒數
+            beginTime: 0.3,   // 啟動秒數
+            loopTime: 0.15,   // 循環秒數
+            stopTime: 0.3,  // 停止秒數
+            skipStopTime: 0.3,  // 急停秒數
+            spinTime: 0.4,  // 至少滾動N秒
+            mipieTime: 2,   // 瞇牌秒數
+            showWinTime: 2,      // 中獎演示時間
+            waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
+        }
+    };
+
 }
+
+/**覆蓋BaseConst的SLOT_TIME */
+BaseConst.SLOT_TIME = GameConst.SLOT_TIME;
 
 /**符號ID */
 export enum SymbolID {
     Wild = 0,
     H1 = 1,
-    H2 = 2,
-    H3 = 3,
-    H4 = 4,
+    H2,
+    H3,
+    H4,
     F1 = 5,
-    F2 = 6,
-    F3 = 7,
-    F4 = 8,
-    F5 = 9,
-    F6 = 10,
-    F7 = 11,
-    F8 = 12,
+    F2,
+    F3,
+    F4,
+    F5,
+    F6,
+    F7,
+    F8,
     LA = 15,
-    LK = 16,
-    LQ = 17,
-    LJ = 18,
-    LT = 19,
+    LK,
+    LQ,
+    LJ,
+    LT,
     Scatter = 20,
 }
 
@@ -89,27 +115,6 @@ export const FISH_ODDS = {
     [SymbolID.F7]: 50,
     [SymbolID.F8]: 2000
 } as const;
-
-/**語系資源目錄 */
-// export enum LangBundleDir {
-//     banner = 'banner',
-//     bigwin = 'bigwin',
-//     board = 'board',
-//     featureBuy = 'featureBuy',
-//     fs = 'fs',
-//     paytable = 'paytable',
-// }
-
-export enum GameAnimationName {
-    /**scale:0(0s)->scale:1.2(in 0.2s)->scale:1(in 0.1s) */
-    scaleTxt = 'scaleTxt',
-    ScaleJumpWinTxt = 'ScaleJumpWinTxt',
-    ScaleJumpMultipleTxt = 'ScaleJumpMultTxt',
-    gameShakeUp = 'gameShakeUp',
-    gameShakeLeft = 'gameShakeLeft',
-    fadeInSpine = 'fadeInSpine',
-    fadeOutSpine = 'fadeOutSpine',
-}
 
 /**
  * 共用音樂音效Key
@@ -198,19 +203,12 @@ export enum GameAudioKey {
     in = 'in',
 }
 
-/**壓黑Key */
-export enum BlackKey {
-    DiceBlack = 'DiceBlack',
-    UIBlack = 'UIBlack',
-
-}
-
 /**遊戲Layer */
-export enum GameLayer {
-    Reel = 0,
-    Reel2 = 1,
-    Scatter = 2
-}
+// export enum GameLayer {
+//     Reel = 0,
+//     Reel2 = 1,
+//     Scatter = 2
+// }
 
 /**老虎機ID */
 export enum SlotMachineID {

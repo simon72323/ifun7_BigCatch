@@ -2,7 +2,7 @@ import { _decorator, Animation, Component, easing, Node, tween, Tween, UIOpacity
 
 import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/FeatureBuy/FeatureBuyPage';
-import { GameAnimationName, GameConst } from '@game/script/data/GameConst';
+import { GameConst } from '@game/script/data/GameConst';
 import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
 
@@ -70,7 +70,7 @@ export class GameStage extends Component {
         // BaseEvent.initMessageComplete.once(this.netReady, this);//監聽網路準備完成事件(一次)
         BaseEvent.changeScene.on(this.onChangeScene, this);//監聽切換場景事件
 
-        GameStage.shake.on(this.shake, this);//監聽震動事件
+        // GameStage.shake.on(this.shake, this);//監聽震動事件
         // GameStage.fsOpening.on(this.fsOpening, this);//監聽FS開場事件
 
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
@@ -140,9 +140,9 @@ export class GameStage extends Component {
     }
 
     /**震動 */
-    private shake(): void {
-        this.node.getComponent(Animation).play(GameAnimationName.gameShakeLeft);
-    }
+    // private shake(): void {
+    //     this.node.getComponent(Animation).play(GameAnimationName.gameShakeLeft);
+    // }
 
     /**開始咪牌 */
     // private startMi(): void {

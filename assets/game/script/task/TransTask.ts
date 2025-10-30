@@ -13,7 +13,7 @@ import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
-import { TimeoutManager } from '@common/script/manager/TimeoutManager';
+// import { TimeoutManager } from '@common/script/manager/TimeoutManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { ModuleID } from '@common/script/types/BaseType';
 
@@ -42,7 +42,7 @@ export class TransTask extends GameTask {
     execute(): void {
         //第一次進入轉場
         if (this.isFirstTrans) {
-            DataManager.getInstance().moduleID = this.toModuleID;
+            DataManager.getInstance().curModuleID = this.toModuleID;
             //中免費轉停止Auto模式
             if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
                 DataManager.getInstance().isAutoMode = false;

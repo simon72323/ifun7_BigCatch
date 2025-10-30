@@ -16,7 +16,8 @@ export class AutoSpinDelayTask extends GameTask {
     async execute(): Promise<void> {
         const dataManager = DataManager.getInstance();
         //自動轉 & 沒有skip 才延遲0.3秒
-        if (dataManager.isAutoMode && !dataManager.slotData.hasSkip) {
+        // if (dataManager.isAutoMode && !dataManager.slotData.hasSkip) {
+        if (dataManager.isAutoMode) {
             //延遲時間依照速度模式
             await Utils.delay(BaseConst.SLOT_TIME[dataManager.curTurboMode].waitNextSpinTime);
             this.finish();

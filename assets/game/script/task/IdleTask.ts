@@ -42,7 +42,7 @@ export class IdleTask extends GameTask {
 
     execute(): void {
         console.log('待機狀態');
-        DataManager.getInstance().moduleID = ModuleID.BS;
+        DataManager.getInstance().curModuleID = ModuleID.BS;
 
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
 
@@ -111,7 +111,7 @@ export class IdleTask extends GameTask {
     private onSpin(buyFs: boolean = false): void {
         let betCredit = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()
             : DataManager.getInstance().bet.getBetTotal();
-        DataManager.getInstance().isBuyFs = buyFs;
+        // DataManager.getInstance().isBuyFs = buyFs;
 
         console.log('Spin下注金額', betCredit);
         SettingsController.refreshWin.emit(0, 0);//刷新贏分=0

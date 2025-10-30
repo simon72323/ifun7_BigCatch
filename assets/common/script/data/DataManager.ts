@@ -1,13 +1,12 @@
-import { GameConst } from '@game/script/data/GameConst';
+
 import { SlotData } from '@game/script/data/SlotData';
 
 import { BetData } from '@common/script/data/BetData';
 import { UrlParam } from '@common/script/data/UrlParam';
 import { IGameData, IPromotionBrief, ISpinData, IUserData } from '@common/script/network/NetworkApi';
-import { BigWinType, CheatCodeData, CreditMode, DigitMode, ModuleID, StripTable, TurboMode } from '@common/script/types/BaseType';
+import { BigWinType, ModuleID,  TurboMode } from '@common/script/types/BaseType';
 
-
-
+/** 遊戲內選單資料 */
 type InGameMenuStore = {
     imageURL: string,
     isAvailable: boolean,
@@ -29,54 +28,27 @@ export class DataManager {
         return DataManager.instance;
     }
 
-    /** 當前SPIN模式 */
-    // public curSpinMode: SpinMode = SpinMode.Normal;
+    /** 玩家餘額 */
+    public userCredit: number = 0;
 
-    /** 超級模式 */
-    // public isSuperMode: boolean = false;
-
-    /** 音效狀態 */
-    public isSoundEnabled: boolean = true;
-    /** 音樂狀態 */
-    public isMusicEnabled: boolean = true;
     /** 是否自動旋轉模式 */
     public isAutoMode: boolean = false;
     /** 剩餘自動旋轉次數 */
     public autoSpinCount: number = 0;
     /** 是否選擇自動旋轉次數 */
     public isAutoTimes: boolean = false;
-    /** 紀錄選擇的自動旋轉次數索引 */
-    // public autoTimesIndex: number = 0;
     /** 停止直到免費轉 */
     public isStopUntilFeature: boolean = false;
-    /** 剩餘免費旋轉次數 */
-    // public freeSpinTimes: number = 0;
 
-
-    /** 是否購買免費遊戲 */
-    public isBuyFs: boolean = false;
-    /** 當前方向模式 */
-    // public orientationMode: OrientationtMode = OrientationtMode.Portrait;
     /** 當前模式 */
-    public moduleID: ModuleID = ModuleID.BS;
-    /** 下一模式 */
-    public nextModuleID: ModuleID = ModuleID.BS;
+    public curModuleID: ModuleID = ModuleID.BS;
     /** 當前加速模式(免費遊戲會強制設為Normal) */
     public curTurboMode: TurboMode = TurboMode.Fast;
-    /** 當前遊戲狀態 */
-    // public curGameState: GameState = GameState.Ready;
 
-    /** 玩家餘額 */
-    public userCredit: number = 0;
-    /** 是否跳過 */
-    public hasSkip: boolean = false;
-
-
-    /**是否要走API版本 */
-    public useAPI: boolean = false;
-
-    /**網址參數 */
-    // private urlParamMap: Map<string, string> = new Map();
+    /** 音效狀態 */
+    public isSoundEnabled: boolean = true;
+    /** 音樂狀態 */
+    public isMusicEnabled: boolean = true;
 
     //=================================== 資料 ======================================
     /** 獲取slot資料 */
@@ -86,90 +58,6 @@ export class DataManager {
     /**下注相關資料 */
     public bet: BetData = new BetData();
     //=================================== 資料 ======================================
-
-    /**轉動過程設定的新模式,待機時帶入 */
-    // public tempTurboMode: TurboMode = TurboMode.Normal;
-
-    /**目前狀態 */
-    // public curState: s5g.game.proto.ESTATEID;
-
-    /**剩餘額度顯示模式 */
-    public creditMode: CreditMode = CreditMode.Cent;
-
-    /** 小數點顯示模式 */
-    public digitMode: DigitMode = DigitMode.DOT;
-
-    /**遊戲ID */
-    // public gameID: string;
-
-    /**預設socket網址(但API優先) */
-    // public defaultSocketUrl: string;
-
-    /**購買功能限制倍率(超過倍率不允許使用) */
-    public luckyStrikeBlockRate: number = 0;
-
-    /**是否開啟webview */
-    public webViewVisible: boolean = false;
-
-    /**是否已呼叫過init */
-    private initialize: boolean = false;
-
-    /**免費遊戲購買類型(一般狀況為0) */
-    // public featureBuyType = 0;
-
-    /**遊戲總贏分(BS表示一轉總得分, FS表示N轉總得分) */
-    public winTotal: number = 0;
-
-    /**輪帶資料 */
-    public stripTables: StripTable[] = [];
-
-    /**盤面圖示賠率 */
-    public payOfPos = [];
-
-    /**免費遊戲購買倍率清單(免費遊戲允許N個Bet) */
-    // public featureBuyMultipleList: number[] = [];
-
-    /**最低下注額(目前僅用於印尼版) */
-    public lawMinBet: number = 0;
-
-    /**自動轉資料 */
-    // public auto: Auto = new Auto();
-
-    //TODO:不明
-    public isMenuOn = false;
-    //TODO:不明
-    public isPayTable = false;
-
-    /**狀態回復資料 */
-    // public recoverData: s5g.game.proto.IRecoverData = null;
-
-    /**8x12初始盤面 */
-    public initFullSymbolPattern: number[] = [];
-
-    /**輪帶索引 */
-    public rng: number[] = [];
-
-    /**登入帳號 */
-    public account: string;
-    /**登入密碼 */
-    public password: string;
-
-    /**密技內容 */
-    public cheatCodeData: CheatCodeData = null;
-
-    /**會員ID */
-    public memberID: string;
-    /**營運商ID */
-    public operatorID: string;
-    /**Token */
-    // public token: string;
-
-    /** 當前下注索引 */
-    // private betIndex: number = 0;
-
-    //============================= 網址參數 ======================================
-
-    //============================= 網址參數 ======================================
 
     //============================= server資料 =====================================
     /** 用戶資料 */
@@ -244,20 +132,20 @@ export class DataManager {
      * 初始化資料
      * @param config 
      */
-    public init(config: any): void {
+    // public init(config: any): void {
 
-        // if (this.initialize) {
-        //     return;//已經初始化過
-        // }
-        // this.initialize = true;
+    // if (this.initialize) {
+    //     return;//已經初始化過
+    // }
+    // this.initialize = true;
 
-        // 根據信用模式設定貨幣單位
-        // let currency = this.creditMode == CreditMode.Dollar ? 'USD' : 'EUR';
-        // 根據數字模式設定地區格式
-        // let locale = this.digitMode == DigitMode.COMMA ? 'vi-VN' : 'en-US';
-        // 初始化數字格式
-        // XUtils.initFormat(currency, locale);
-    }
+    // 根據信用模式設定貨幣單位
+    // let currency = this.creditMode == CreditMode.Dollar ? 'USD' : 'EUR';
+    // 根據數字模式設定地區格式
+    // let locale = this.digitMode == DigitMode.COMMA ? 'vi-VN' : 'en-US';
+    // 初始化數字格式
+    // XUtils.initFormat(currency, locale);
+    // }
 
     /**
      * 取得完整下注紀錄網址
@@ -273,7 +161,7 @@ export class DataManager {
      * @returns 
      */
     public isBS(): boolean {
-        return this.moduleID === ModuleID.BS;
+        return this.curModuleID === ModuleID.BS;
     }
 
     /**
@@ -317,14 +205,14 @@ export class DataManager {
 
 
     //=============================以上確定使用======================================
-    public isIdle(): boolean {
-        return false;
-        // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
-    }
+    // public isIdle(): boolean {
+    //     return false;
+    //     // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
+    // }
 
-    public isBlockKeyboard(): boolean {
-        return this.webViewVisible || this.isPayTable;
-    }
+    // public isBlockKeyboard(): boolean {
+    //     return this.webViewVisible || this.isPayTable;
+    // }
 
     // public setState(state: s5g.game.proto.ESTATEID): void {
     //     this.curState = state;
