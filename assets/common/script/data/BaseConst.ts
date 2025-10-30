@@ -53,7 +53,7 @@ export class BaseConst {
             skipStopTime: 0.3,  // 急停秒數
             spinTime: 1,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
-            showWinTime: 1,      // 中獎演示時間
+            showWinTime: 2,      // 中獎演示時間
             waitNextSpinTime: 0.1      // 下一輪轉動等待秒數
         },
         [TurboMode.Fast]: {
@@ -65,7 +65,7 @@ export class BaseConst {
             skipStopTime: 0.3,  // 急停秒數
             spinTime: 0.7,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
-            showWinTime: 1,      // 中獎演示時間
+            showWinTime: 2,      // 中獎演示時間
             waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
         },
         [TurboMode.Turbo]: {
@@ -77,7 +77,7 @@ export class BaseConst {
             skipStopTime: 0.3,  // 急停秒數
             spinTime: 0.4,  // 至少滾動N秒
             mipieTime: 2,   // 瞇牌秒數
-            showWinTime: 1,      // 中獎演示時間
+            showWinTime: 2,      // 中獎演示時間
             waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
         }
     };

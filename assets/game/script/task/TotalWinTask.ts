@@ -2,7 +2,6 @@ import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
 import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { TotalWinUI } from '@game/components/TotalWinUI/TotalWinUI';
 
-
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
@@ -11,16 +10,14 @@ import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { ModuleID } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
-
 
 
 /**
  * FS總結算
  */
-export class FSSettleTask extends GameTask {
+export class TotalWinTask extends GameTask {
 
-    protected name: string = 'FSSettleTask';
+    protected name: string = 'TotalWinTask';
 
     /**目前累計獲得金額 */
     public totalWin: number;

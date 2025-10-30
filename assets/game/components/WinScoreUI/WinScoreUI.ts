@@ -1,8 +1,11 @@
 import { _decorator, Component, Label, Tween, tween, Vec3 } from 'cc';
 
+import { BaseConst } from '@common/script/data/BaseConst';
+import { DataManager } from '@common/script/data/DataManager';
 import { XEvent, XEvent1 } from '@common/script/event/XEvent';
 import { RunNumber } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
+
 
 const { ccclass } = _decorator;
 @ccclass('WinScoreUI')
@@ -27,13 +30,14 @@ export class WinScoreUI extends Component {
      * @param value 贏得分數
      */
     private showWin(value: number): void {
+        const time = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime;
         this.node.active = true;
         Utils.fadeIn(this.node, 0.1, 0, 255);
         this.node.scale = new Vec3(0.5, 0.5, 1);
         tween(this.node)
-            .to(0.15, { scale: new Vec3(1.2, 1.2, 1) })
-            .to(0.15, { scale: new Vec3(1, 1, 1) })
-            .delay(0.7)
+            .to(time * 0.1, { scale: new Vec3(1.2, 1.2, 1) })
+            .to(time * 0.1, { scale: new Vec3(1, 1, 1) })
+            .delay(time * 0.6)
             .call(() => {
                 Utils.fadeOut(this.node, 0.2, 255, 0, () => {
                     this.node.active = false;

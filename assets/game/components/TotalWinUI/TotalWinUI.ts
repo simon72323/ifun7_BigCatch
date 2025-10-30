@@ -129,7 +129,7 @@ export class TotalWinUI extends Component {
         Tween.stopAllByTarget(this.countdown);
         this.num_totalwin.getComponent(Label).string = Utils.numberFormat(this.runNum.finalValue);
 
-        await Utils.delay(0.5);
+        await Utils.delay(1);
         Utils.fadeOut(this.node, 0.3, 255, 0, () => {
             // AudioManager.getInstance().stopSound(AudioKey.WinRolling);
             this.node.active = false;

@@ -1,6 +1,6 @@
 import { AudioSource, Node, tween, Tween } from 'cc';
 
-import { logger } from '@base/script/utils/XUtils';
+import { Logger } from '@common/script/utils/Logger';
 
 /**
  * 遊戲音樂音效管理
@@ -41,11 +41,11 @@ export class AudioManager {
     public register(key: string, path: string): void {
         let node = this.audioNode.getChildByPath(path);
         if (!node) {
-            logger(`AudioManager找不到對應的節點 = ${path}`);
+            Logger.error(`AudioManager找不到對應的節點 = ${path}`);
         }
         let source = node.getComponent(AudioSource);
         if (this.soundMap.has(key)) {
-            logger(`AudioManager已經有對應的key = ${key}`);
+            Logger.error(`AudioManager已經有對應的key = ${key}`);
         }
         this.soundMap.set(key, source);
     }
@@ -76,7 +76,7 @@ export class AudioManager {
             }
         }
         else {
-            logger(`AudioManager找不到對應的key = ${key}`);
+            Logger.error(`AudioManager找不到對應的key = ${key}`);
         }
     }
 
@@ -92,7 +92,7 @@ export class AudioManager {
             source.playOneShot(target.clip, volume * this.systemVolume);
         }
         else {
-            logger(`AudioManager找不到對應的key = ${key}`);
+            Logger.error(`AudioManager找不到對應的key = ${key}`);
         }
     }
 
@@ -190,7 +190,7 @@ export class AudioManager {
             return source;
         }
         else {
-            logger(`AudioManager找不到對應的key = ${key}`);
+            Logger.error(`AudioManager找不到對應的key = ${key}`);
         }
         return null;
     }

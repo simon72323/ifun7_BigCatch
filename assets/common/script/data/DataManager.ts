@@ -193,12 +193,12 @@ export class DataManager {
     public set gameData(gameData: IGameData) {
         console.log('設置遊戲資料', gameData);
         this._gameData = gameData;
-        this.bigWinMultiple.push(gameData.big_win);
-        this.bigWinMultiple.push(gameData.super_win);
-        this.bigWinMultiple.push(gameData.mega_win);
-        // this.bigWinMultiple.push(5);
-        // this.bigWinMultiple.push(10);
-        // this.bigWinMultiple.push(20);
+        // this.bigWinMultiple.push(gameData.big_win);
+        // this.bigWinMultiple.push(gameData.super_win);
+        // this.bigWinMultiple.push(gameData.mega_win);
+        this.bigWinMultiple.push(5);
+        this.bigWinMultiple.push(10);
+        this.bigWinMultiple.push(15);
 
         // 初始化 BetData 的數據依賴
         this.bet.setGameData(gameData);

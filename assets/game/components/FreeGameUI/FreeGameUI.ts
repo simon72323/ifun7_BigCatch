@@ -22,6 +22,8 @@ export class FreeGameUI extends Component {
 
     // 進度列表
     private progressList: Node[] = [];
+    // 等級列表
+    private levelList: Node[] = [];
 
     onLoad() {
         FreeGameUI.show.on(this.show, this);
@@ -30,10 +32,15 @@ export class FreeGameUI extends Component {
         FreeGameUI.addProgress.on(this.addProgress, this);
         this.node.active = false;
 
-        // 初始化進度列表
-        for (let i = 0; i < 10; i++) {
+        // 初始化進度列表(8顆)
+        for (let i = 0; i < 8; i++) {
             const progress = this.node.getChildByName(`FgProgress_${i}`);
             this.progressList.push(progress);
+        }
+        // 初始化等級列表(2顆)
+        for (let i = 0; i < 2; i++) {
+            const level = this.node.getChildByPath(`Level/Level_${i}`);
+            this.levelList.push(level);
         }
     }
 
@@ -90,6 +97,7 @@ export class FreeGameUI extends Component {
      * @param startPos 起始位置
      */
     private addProgress(id: number, startPos: Vec3, callback: () => void): void {
+        if (id >= this.progressList.length) return;
         const progress = this.progressList[id];
         const endPos = progress.position;
         this.creatLight(startPos, 'light');
@@ -104,21 +112,37 @@ export class FreeGameUI extends Component {
             .to(0.4, { position: endPos }, { easing: 'sineOut' })
             .call(() => {
                 moveFly.destroy();
-                const aniMultiply = progress.getChildByName('ani_multiply').getComponent(sp.Skeleton);
-                aniMultiply.node.active = true;
-                aniMultiply.setAnimation(0, 'light', false);
-                aniMultiply.setCompleteListener(() => {
-                    aniMultiply.setCompleteListener(null);
-                    aniMultiply.node.active = false;
+                this.showNodeFx(progress, () => {
+                    callback();
                 });
-                progress.getChildByName('image').getComponent(Sprite).grayscale = false;
-                tween(progress)
-                    .to(0.2, { scale: new Vec3(1.3, 1.3, 1) }, { easing: 'sineOut' })
-                    .to(0.2, { scale: new Vec3(1, 1, 1) })
-                    .call(() => {
-                        callback();
-                    })
-                    .start();
+                //判斷等級球是否顯示
+                if (id === 3) {
+                    this.showNodeFx(this.levelList[0]);
+                } else if (id === 7) {
+                    this.showNodeFx(this.levelList[1]);
+                }
+            })
+            .start();
+    }
+
+    /**
+     * 顯示節點特效
+     * @param node 節點
+     */
+    private showNodeFx(node: Node, callback?: () => void): void {
+        const aniMultiply = node.getChildByName('ani_multiply').getComponent(sp.Skeleton);
+        aniMultiply.node.active = true;
+        aniMultiply.setAnimation(0, 'light', false);
+        aniMultiply.setCompleteListener(() => {
+            aniMultiply.setCompleteListener(null);
+            aniMultiply.node.active = false;
+        });
+        node.getChildByName('image').getComponent(Sprite).grayscale = false;
+        tween(node)
+            .to(0.2, { scale: new Vec3(1.3, 1.3, 1) }, { easing: 'sineOut' })
+            .to(0.2, { scale: new Vec3(1, 1, 1) })
+            .call(() => {
+                callback?.();
             })
             .start();
     }

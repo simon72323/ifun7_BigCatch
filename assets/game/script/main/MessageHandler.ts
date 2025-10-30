@@ -3,10 +3,10 @@ import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { BootCatchTask } from '@game/script/task/BootCatchTask';
 import { EndGameTask } from '@game/script/task/EndGameTask';
-import { FSSettleTask } from '@game/script/task/FSSettleTask';
 import { IdleTask } from '@game/script/task/IdleTask';
 import { SpinTask } from '@game/script/task/SpinTask';
 import { StopTask } from '@game/script/task/StopTask';
+import { TotalWinTask } from '@game/script/task/TotalWinTask';
 import { TransTask } from '@game/script/task/TransTask';
 import { UpdateFreeTimesTask } from '@game/script/task/UpdateFreeTimesTask';
 import { WinScatterTask } from '@game/script/task/WinScatterTask';
@@ -40,7 +40,6 @@ export class MessageHandler {
 
     private fgBonus1: boolean = false;//是否啟用額外免費遊戲1
     private fgBonus2: boolean = false;//是否啟用額外免費遊戲2
-    private wildMultiplier: number = 1;//wild倍率
     private fsTotalWin: number = 0;//免費遊戲總贏分
     private freeSpinTimes: number = 0;//免費遊戲次數
 
@@ -104,11 +103,11 @@ export class MessageHandler {
             });
 
             //FG結算
-            const settleTask = new FSSettleTask();
-            settleTask.totalWin = slotResult.sub_game.pay_credit_total;//FG中獎總金額
-            settleTask.backBSParser = slotResult.main_game.game_result;
-            settleTask.totalFreeSpinTimes = slotResult.sub_game.game_result.length;
-            TaskManager.getInstance().addTask(settleTask);
+            const totalWinTask = new TotalWinTask();
+            totalWinTask.totalWin = slotResult.sub_game.pay_credit_total;//FG中獎總金額
+            totalWinTask.backBSParser = slotResult.main_game.game_result;
+            totalWinTask.totalFreeSpinTimes = slotResult.sub_game.game_result.length;
+            TaskManager.getInstance().addTask(totalWinTask);
 
             //返回BS
             const backBSSettleTask = new BackBSSettleTask();

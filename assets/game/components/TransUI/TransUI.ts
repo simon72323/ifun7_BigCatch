@@ -1,11 +1,14 @@
-import { _decorator, Button, Component, KeyCode, Label, Node, sp, Tween, tween } from 'cc';
+import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Tween, tween } from 'cc';
 
 import { GameAudioKey } from '@game/script/data/GameConst';
 
+import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent, XEvent3 } from '@common/script/event/XEvent';
+import { BundleLoader } from '@common/script/loading/BundleLoader';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
+
 
 enum CutsceneAni {
     fg_loop = 'fg_loop',
@@ -44,12 +47,24 @@ export class TransUI extends Component {
     private cbComplete: () => void;
 
     onLoad() {
+        this.setLanguage();
         this.cutscene_ani = this.node.getChildByName('cutscene_ani').getComponent(sp.Skeleton);
         this.num_freeSpin = this.node.getChildByPath('cutscene_ani/Content/num_freeSpin').getComponent(Label);
         this.showTime = this.node.getChildByPath('cutscene_ani/Content/Layout/ShowTime').getComponent(Label);
         this.sens = this.node.getChildByName('Sens');
         TransUI.show.on(this.show, this);//轉場淡入
         this.node.active = false;
+    }
+
+    /**
+     * 設定語言
+     */
+    private setLanguage(): void {
+        let lang: string = DataManager.getInstance().urlParam.lang;
+        BundleLoader.onLoaded('language', `${lang}/texture`, (langRes: any) => {
+            this.node.getChildByPath('cutscene_ani/ribbon/tx_get').getComponent(Sprite).spriteFrame = langRes['tx_get'];
+            this.node.getChildByPath('cutscene_ani/Content/tx_getFree').getComponent(Sprite).spriteFrame = langRes['tx_getFree'];
+        });
     }
 
     /**

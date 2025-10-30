@@ -277,23 +277,15 @@ export class Symbol extends BaseSymbol {
                 aniMultiply.setAnimation(0, 'hitbubble', false);
                 const endPos = this.score.position;
                 tween(instMultiply)
-                    .to(0.6, { position: endPos }, { easing: 'sineIn' })
-                    // .to(0.2, { scale: new Vec3(1.2, 1.2, 1) })
-                    // .to(0.2, { scale: new Vec3(0.5, 0.5, 1) })
+                    .to(0.4, { position: endPos }, { easing: 'sineIn' })
                     .call(() => {
                         aniMultiply.setAnimation(0, 'light', false);
                     })
-                    .to(0.2, { scale: new Vec3(1.2, 1.2, 1) })
+                    .to(0.1, { scale: new Vec3(1.2, 1.2, 1) })
                     .call(() => {
-                        Utils.fadeOut(instMultiply, 0.3, 255, 0, () => {
+                        Utils.fadeOut(instMultiply, 0.2, 255, 0, () => {
                             instMultiply.destroy();
                         });
-                        // const uiOpacity = instMultiply.getComponent(UIOpacity);
-                        // tween(uiOpacity).to(0.3, { opacity: 0 })
-                        //     .call(() => {
-                        //         instMultiply.destroy();
-                        //     })
-                        //     .start();
                         const wildMultiply = DataManager.getInstance().slotData.fsWildMultiply;
                         const multiplyScore = totalScore * wildMultiply;
                         this.showWildScore(multiplyScore);

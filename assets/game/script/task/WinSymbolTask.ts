@@ -148,11 +148,15 @@ export class WinSymbolTask extends GameTask {
                 await Utils.delay(0.4);
             }
             const progressID = totalWildCount - allWildPos.length + wildIndex;
-            //表演特效開啟fs進度
-            FreeGameUI.addProgress.emit(progressID, wildPos, () => {
-                // wildSymbol.wildScoreFinish(wildScore);
+            if (progressID >= 8) {
                 resolve();
-            });
+            } else {
+                //表演特效開啟fs進度
+                FreeGameUI.addProgress.emit(progressID, wildPos, () => {
+                    // wildSymbol.wildScoreFinish(wildScore);
+                    resolve();
+                });
+            }
         });
     }
 
