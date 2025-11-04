@@ -6,40 +6,8 @@
  *    - 音效：audio/sound/
  *    - 音樂：audio/music/
  * 
- * 基本用法：
- * 1. 先實例化AudioManager，再加載音效資源才能播放音效
- *    const audioManager = AudioManager().getInstance();
- *    await audioManager.loadBundleAudios('bundleName');
- * 
- * 2. 音效控制：
- *    // 播放一般音效（可選擇是否循環）
- *    audioManager.playSound('soundName', false);
- * 
- *    // 播放可重疊的短音效（建議音效長度 < 1秒）
- *    audioManager.playOnceSound('soundName');
- * 
- *    // 播放背景音樂（自動循環）
- *    audioManager.playMusic('musicName');
- * 
- *    // 靜音音樂
- *    audioManager.setMusictMute();
- * 
- * 
- * 3. 停止控制：
- *    // 停止特定音效
- *    audioManager.stopSound('soundName');
- *    
- *    // 停止特定音樂(此腳本已有做自動切換背景音樂控制，需要時才用)
- *    audioManager.stopMusic('musicName');
- * 
- *    // 停止所有音效和音樂
- *    audioManager.stopAllAudio();
- * 
- *    // 降低背景音樂音量
- *    audioManager.lowerMusic();
- *    
- *    // 恢復背景音樂音量
- *    audioManager.restoreMusic();
+ * 基本用法：先加載音效資源才能播放音效
+ *    await AudioManager.getInstance().loadBundleAudios('audio');
  */
 
 import { _decorator, AudioSource, game, Game, tween, Component, assetManager, AudioClip, AssetManager, Tween, Node, director } from 'cc';
@@ -65,7 +33,7 @@ export class AudioManager extends Component {
     private isSoundMuted: boolean = false;//音效靜音設置
     private isMusicMuted: boolean = false;//音樂靜音設置
     private isInBackground: boolean = false;//是否處於背景
-    private isLowerMusic: boolean = false;//是否降低背景音樂
+    private setMusicVolume: number = 1;//音樂音量設置
 
     /**
      * 監聽遊戲隱藏和顯示
@@ -124,9 +92,9 @@ export class AudioManager extends Component {
 
     /**
      * 加載 bundle 內的音效
-     * @param bundleName bundle名稱
+     * @param bundleName bundle名稱(預設為audio)
      */
-    public async loadBundleAudios(bundleName: string): Promise<void> {
+    public async loadBundleAudios(bundleName: string = 'audio'): Promise<void> {
         const existingBundle = assetManager.getBundle(bundleName);
         if (existingBundle) {
             await this.loadAudio(existingBundle);
@@ -166,7 +134,7 @@ export class AudioManager extends Component {
                 loadedCount++;
                 if (loadedCount === 2) resolve();
             };
-            bundle?.loadDir('audio/music', AudioClip, (err, audioClips: AudioClip[]) => {
+            bundle?.loadDir('music', AudioClip, (err, audioClips: AudioClip[]) => {
                 if (err) {
                     Logger.error('加載音樂失敗:', err);
                     return;
@@ -190,7 +158,7 @@ export class AudioManager extends Component {
                 checkComplete();
 
             });
-            bundle?.loadDir('audio/sound', AudioClip, (err, audioClips: AudioClip[]) => {
+            bundle?.loadDir('sound', AudioClip, (err, audioClips: AudioClip[]) => {
                 if (err) {
                     Logger.error('加載音效失敗:', err);
                     return;
@@ -307,7 +275,7 @@ export class AudioManager extends Component {
      */
     public async playMusic(audioName: string) {
         //如果背景音樂變小，則先恢復音樂
-        if (this.isLowerMusic) this.restoreMusic();
+        if (this.setMusicVolume < 1) this.editMusicVolume(1);
 
         //判斷music的Map哪個聲音在播放
         for (const audioInfo of this.musicMap.values()) {
@@ -330,26 +298,15 @@ export class AudioManager extends Component {
     }
 
     /**
-     * 音樂變小
+     * 音樂音量調整
+     * @param volume 音量
      */
-    public async lowerMusic() {
-        this.isLowerMusic = true;//觸發降低背景音
+    public async editMusicVolume(volume: number) {
+        this.setMusicVolume = volume;//紀錄背景音量
         if (!(await this.onUserInteraction()) || this.isMusicMuted || this.isInBackground) return;
         for (const audioInfo of this.musicMap.values()) {
             if (!audioInfo) continue;
-            this.audioTween(audioInfo.audioSource).to(0.3, { volume: 0.2 }).start();
-        }
-    }
-
-    /**
-     * 音樂恢復
-     */
-    public async restoreMusic() {
-        this.isLowerMusic = false;//觸發恢復背景音
-        if (!(await this.onUserInteraction()) || this.isMusicMuted || this.isInBackground) return;
-        for (const audioInfo of this.musicMap.values()) {
-            if (!audioInfo) continue;
-            this.audioTween(audioInfo.audioSource).to(0.3, { volume: 1 }).start();
+            this.audioTween(audioInfo.audioSource).to(0.3, { volume }).start();
         }
     }
 
@@ -424,7 +381,6 @@ export class AudioManager extends Component {
                 this.audioTween(audioInfo.audioSource).to(0.2, { volume: 1 }).start();//聲音淡入
             }
         }
-
     }
 
     /**
@@ -440,13 +396,9 @@ export class AudioManager extends Component {
      * 恢復音樂(恢復靜音)
      */
     private onMusic() {
-        // this.isMusicMuted = false;
-        // const currentTime = Date.now();
-        //音樂聲音恢復
-        const musicVolume = this.isLowerMusic ? 0.2 : 1;
         for (const audioInfo of this.musicMap.values()) {
             if (audioInfo.musicPlaying) {
-                this.audioTween(audioInfo.audioSource).to(0.2, { volume: musicVolume }).start();//聲音淡入
+                this.audioTween(audioInfo.audioSource).to(0.2, { volume: this.setMusicVolume }).start();//聲音淡入
             }
         }
     }
@@ -475,5 +427,3 @@ export class AudioManager extends Component {
         return tween(target).tag('audio' as any);
     }
 }
-
-// export const getAudioManager = () => AudioManager.getInstance();

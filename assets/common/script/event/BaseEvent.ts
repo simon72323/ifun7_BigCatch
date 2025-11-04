@@ -38,6 +38,8 @@ export class BaseEvent {
     public static setTurboBtnState: XEvent1<TurboMode> = new XEvent1();
     /**執行自動遊戲 */
     public static runAutoSpin: XEvent = new XEvent();
+    /**停止自動遊戲 */
+    public static stopAutoSpin: XEvent = new XEvent();
     /**設定自動模式按鈕狀態 */
     // public static setAutoBtnState: XEvent1<boolean> = new XEvent1();
     //=========================== settingsController事件 =========================

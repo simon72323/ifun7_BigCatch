@@ -1,10 +1,11 @@
 import { _decorator, Button, Component, Node } from 'cc';
 
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
-import { Utils } from '@common/script/utils/Utils';
+
 
 const { ccclass } = _decorator;
 
@@ -13,9 +14,10 @@ const { ccclass } = _decorator;
  */
 @ccclass('FeatureBuyBtn')
 export class FeatureBuyBtn extends Component {
-
     /**點擊免費遊戲 */
     public static click: XEvent = new XEvent();
+    public static show: XEvent = new XEvent();
+    public static hide: XEvent = new XEvent();
 
     /**購買功能按鈕 */
     private FeatureBuyButton: Node = null;
@@ -27,9 +29,12 @@ export class FeatureBuyBtn extends Component {
         //點擊免費遊戲
         this.FeatureBuyButton = this.node.getChildByName('btn');
         this.FeatureBuyButton.on(Button.EventType.CLICK, () => {
-            // AudioManager.getInstance().playSound(GameAudioKey.FeatureBuy);
+            AudioManager.getInstance().playSound(AudioKey.btnBuyClick);
             FeatureBuyBtn.click.emit();
         }, this);
+
+        FeatureBuyBtn.show.on(this.show, this);
+        FeatureBuyBtn.hide.on(this.hide, this);
 
         //設定是否可見(後台設定)
         BaseEvent.buyFeatureVisible.on((visible) => {
@@ -42,24 +47,14 @@ export class FeatureBuyBtn extends Component {
             this.isEnabled = enabled;
             this.refresh();
         }, this);
+    }
 
-        //淡入
-        // BaseEvent.fadeInFeatureBuy.on(() => {
-        //     if (!this.FeatureBuyButton.isValid) {
-        //         return;
-        //     }
-        //     this.FeatureBuyButton.getComponent(Button).enabled = true;
-        //     Utils.fadeIn(this.node, 0.4, 0, 255);
-        // }, this);
+    private show(): void {
+        this.node.active = true;
+    }
 
-        // //淡出
-        // BaseEvent.fadeOutFeatureBuy.on(() => {
-        //     if (!this.FeatureBuyButton.isValid) {
-        //         return;
-        //     }
-        //     this.FeatureBuyButton.getComponent(Button).enabled = false;
-        //     Utils.fadeOut(this.node, 0.4, 255, 0);
-        // }, this);
+    private hide(): void {
+        this.node.active = false;
     }
 
     /**刷新 */

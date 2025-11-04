@@ -1,17 +1,19 @@
 
 import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { WinScoreUI } from '@game/components/WinScoreUI/WinScoreUI';
+
+import { AudioKey } from '@game/script/data/AudioKey';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { TurboMode } from '@common/script/types/BaseType';
+
 
 
 
@@ -30,7 +32,7 @@ export class SpinTask extends GameTask {
         console.log('==========================================新局開始==========================================');
 
         // const dataManager = DataManager.getInstance();
-        AudioManager.getInstance().playSound(AudioKey.SpinLoop);
+        AudioManager.getInstance().playSound(AudioKey.spinClick);
 
         //初始化遊戲
         BaseEvent.buyFeatureEnabled.emit(false);//禁用購買功能
@@ -53,7 +55,7 @@ export class SpinTask extends GameTask {
         }
 
         //取消自動轉
-        if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
+        if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount === 0) {
             DataManager.getInstance().isAutoMode = false;
         }
 
@@ -556,10 +558,6 @@ export class SpinTask extends GameTask {
 
         //真資料
         NetworkManager.getInstance().sendSpin(spinID, (spinResult) => {
-            // DataManager.getInstance().isBuyFs = false;//還原免費遊戲
-            // DataManager.getInstance().featureBuyType = 0;
-            // AudioManager.getInstance().stopSound(AudioKey.SpinLoop);//收到結果就停止loop音效
-
             //判斷是否有spin成功回傳資料
             if (spinResult) {
                 console.log('【spin結果】:', spinResult);

@@ -7,6 +7,7 @@ import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
 import { Symbol } from '@game/components/slotMachine/Symbol';
 import { WinScoreUI } from '@game/components/WinScoreUI/WinScoreUI';
 
+import { AudioKey } from '@game/script/data/AudioKey';
 import { FISH_ODDS } from '@game/script/data/GameConst';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
@@ -40,7 +41,6 @@ export class WinSymbolTask extends GameTask {
 
     private moveTime: number = 0.4;//移動時間
     private moveIntervalTime: number = 0.3;//移動間隔時間
-    private wildWaitTime: number = 0.4;//漁夫表演等待時間
 
     private loopData: {} = {};
 
@@ -57,17 +57,24 @@ export class WinSymbolTask extends GameTask {
         }
 
         CharacterUI.win.emit();//表演角色贏分動態
+        AudioManager.getInstance().playSound(AudioKey.win);//播放獲得分數音效
 
         //處裡中獎線
         if (this.winLineData.length > 0) {
             ReelBlackUI.show.emit(); //壓黑
             const allWinPos = Utils.uniq(this.winLineData.flatMap((data) => data.winPos)); //全部中獎位置(不重複)
             this.showWinLine(allWinPos);//表演全部中線
+
+            //監聽停止中獎線輪播(StopTask會觸發此事件)
+            BaseEvent.stopLineLoop.once(() => {
+                CharacterUI.idle.emit();//表演角色idle動態
+                WinScoreUI.hideWin.emit();//立即隱藏贏得分數
+                Tween.stopAllByTarget(this.loopData);
+            }, this);
+
         } else {
             WinScoreUI.showWin.emit(this.payCreditTotal);
         }
-
-        await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
 
         if (this.isSubGame) {
             const finalFsTotalWin = this.curFsTotalWin + this.payCreditTotal;
@@ -80,19 +87,14 @@ export class WinSymbolTask extends GameTask {
             DataManager.getInstance().userCredit = finalCredit;
         }
 
+        await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
+
         //判斷bigWin額外演示
         if (DataManager.getInstance().getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
             await this.waitForBigWinComplete();
         }
 
         // await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
-
-        //監聽停止中獎線輪播(StopTask會觸發此事件)
-        BaseEvent.stopLineLoop.once(() => {
-            CharacterUI.idle.emit();//表演角色idle動態
-            WinScoreUI.hideWin.emit();//立即隱藏贏得分數
-            Tween.stopAllByTarget(this.loopData);
-        }, this);
         this.complete();
     }
 
@@ -111,14 +113,20 @@ export class WinSymbolTask extends GameTask {
      */
     private async showWinFish(): Promise<void> {
         const { allWildPos } = this.winFishData;
-        let promiseList: Promise<void>[] = [];
-        //TODO:表演漁夫蒐集魚
+
+        //==========表演間隔時間模式
+        // const wildWaitTime: number = 0.4;//漁夫表演等待時間
+        // let promiseList: Promise<void>[] = [];
+        // for (let i = 0; i < allWildPos.length; i++) {
+        //     promiseList.push(this.wildScoreMove(i));
+        //     await Utils.delay(wildWaitTime);//漁夫表演間隔時間
+        // }
+        // await Promise.all(promiseList);
+
+        //=======漁夫個別表演模式
         for (let i = 0; i < allWildPos.length; i++) {
-            promiseList.push(this.wildScoreMove(i));
-            //漁夫表演間隔時間
-            await Utils.delay(this.wildWaitTime);
+            await this.wildScoreMove(i);
         }
-        await Promise.all(promiseList);
     }
 
     /**
@@ -153,7 +161,6 @@ export class WinSymbolTask extends GameTask {
             } else {
                 //表演特效開啟fs進度
                 FreeGameUI.addProgress.emit(progressID, wildPos, () => {
-                    // wildSymbol.wildScoreFinish(wildScore);
                     resolve();
                 });
             }
@@ -186,10 +193,10 @@ export class WinSymbolTask extends GameTask {
         for (let i = 0; i < winPosResult.length; i++) {
             chainTween = chainTween
                 .call(() => {
+                    SlotMachine.showSymbolWin.emit(winPosResult[i]);
                     if (i === 0) {
                         WinScoreUI.showWin.emit(this.payCreditTotal);
                     }
-                    SlotMachine.showSymbolWin.emit(winPosResult[i]);
                 })
                 .delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
         }
@@ -200,7 +207,10 @@ export class WinSymbolTask extends GameTask {
 
     /**完成 */
     async complete(): Promise<void> {
-        await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].waitNextSpinTime);
+        //如果沒有中獎線，則等待一下時間
+        if (this.winLineData.length === 0) {
+            await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].waitNextSpinTime);
+        }
         this.finish();
     }
 

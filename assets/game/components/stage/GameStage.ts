@@ -1,23 +1,26 @@
-import { _decorator, Animation, Component, easing, Node, tween, Tween, UIOpacity, Vec3 } from 'cc';
+import { _decorator, Component, Node, UIOpacity } from 'cc';
 
 import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
 import { FeatureBuyPage } from '@game/components/FeatureBuy/FeatureBuyPage';
+
+import { AudioKey } from '@game/script/data/AudioKey';
 import { GameConst } from '@game/script/data/GameConst';
 import { MessageHandler } from '@game/script/main/MessageHandler';
 import { IdleTask } from '@game/script/task/IdleTask';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { slotAudioKey, SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent } from '@common/script/event/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { KeyboardManager } from '@common/script/manager/KeyboardManager';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { TaskManager } from '@common/script/tasks/TaskManager';
-import { ModuleID } from '@common/script/types/BaseType';
 import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 import { Utils } from '@common/script/utils/Utils';
+
 
 
 const { ccclass, property } = _decorator;
@@ -31,14 +34,17 @@ export class GameStage extends Component {
     @property({ type: Node, tooltip: '初始遮黑' })
     private topBlack: Node = null;
 
-    @property({ type: Boolean, tooltip: '是否為假老虎機' })
+    @property({ tooltip: '是否為假老虎機' })
     private isFake: boolean = false;
 
     private isMi: boolean = false;
     private scaleNode: Node;
-    onLoad() {
+    async onLoad() {
         //初始化盤面
         //初始化遊戲資料
+
+        await AudioManager.getInstance().loadBundleAudios();
+        slotAudioKey.reelStop = AudioKey.reelStop;//指定公版輪軸停止音效名稱
 
         //顯示初始化遮黑
         this.topBlack.active = true;
@@ -68,7 +74,7 @@ export class GameStage extends Component {
         //===================不確定cocos內做，且收到要做甚麼?===================
 
         // BaseEvent.initMessageComplete.once(this.netReady, this);//監聽網路準備完成事件(一次)
-        BaseEvent.changeScene.on(this.onChangeScene, this);//監聽切換場景事件
+        // BaseEvent.changeScene.on(this.onChangeScene, this);//監聽切換場景事件
 
         // GameStage.shake.on(this.shake, this);//監聽震動事件
         // GameStage.fsOpening.on(this.fsOpening, this);//監聽FS開場事件
@@ -78,6 +84,21 @@ export class GameStage extends Component {
 
         // SlotMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
         // SlotMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
+
+        SlotMachine.startMi.on((column: number) => {
+            AudioManager.getInstance().playSound(AudioKey.teasing);
+            AudioManager.getInstance().editMusicVolume(0.1);
+            // this.isMi = true;
+        }, this);
+
+        SlotMachine.stopMi.on(() => {
+            // if (!this.isMi) {
+            //     return;
+            // }
+            AudioManager.getInstance().stopSound(AudioKey.teasing);
+            AudioManager.getInstance().editMusicVolume(1);
+            // this.isMi = false;
+        }, this);
     }
 
     private async sendPromotionBrief() {
@@ -103,15 +124,6 @@ export class GameStage extends Component {
         Utils.fadeOut(this.topBlack, 0.3, 255, 0, () => {
             this.topBlack.active = false;
         });
-        console.log('遊戲初始化內容');
-        // this.scaleNode = this.node.getChildByName('ScaleNode');
-        this.onChangeScene(ModuleID.BS);
-        // AutoPage.setup.emit([10, 50, 100, 250, 1000]);
-        //配置遊戲資料
-        // DataManager.getInstance().setData(new GameData());
-
-        //註冊語系資源(註冊完畢後GameMain會呼叫startLoadLanguage)
-        //註冊聲音
 
         //初始化盤面
         SlotMachine.initResultParser.emit(GameConst.BS_INIT_RESULT);
@@ -137,6 +149,7 @@ export class GameStage extends Component {
         //開始遊戲--------------------------------------------------------
         console.log('開始遊戲');
         TaskManager.getInstance().addTask(new IdleTask());
+        AudioManager.getInstance().playMusic(AudioKey.bgmMg);//播放背景音樂
     }
 
     /**震動 */
@@ -194,16 +207,16 @@ export class GameStage extends Component {
      * 切換場景動畫
      * @param id 
      */
-    private onChangeScene(id: ModuleID) {
-        // this.node.getChildByPath('ScaleNode/BSUI1').active = id === ModuleID.BS;
-        // this.node.getChildByPath('ScaleNode/BSUI2').active = id === ModuleID.BS;
-        // this.node.getChildByPath('ScaleNode/FSUI').active = id !== ModuleID.BS;
+    // private onChangeScene(id: ModuleID) {
+    //     // this.node.getChildByPath('ScaleNode/BSUI1').active = id === ModuleID.BS;
+    //     // this.node.getChildByPath('ScaleNode/BSUI2').active = id === ModuleID.BS;
+    //     // this.node.getChildByPath('ScaleNode/FSUI').active = id !== ModuleID.BS;
 
-        // if (id === ModuleID.BS) {
-        //     XUtils.ClearSpine(this.roller_ani);
-        //     this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
-        // }
-    }
+    //     // if (id === ModuleID.BS) {
+    //     //     XUtils.ClearSpine(this.roller_ani);
+    //     //     this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
+    //     // }
+    // }
 
     /**持續更新任務 */
     update(deltaTime: number) {

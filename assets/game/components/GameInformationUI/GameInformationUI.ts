@@ -1,5 +1,6 @@
 import { _decorator, Button, Component, Node, Vec3 } from 'cc';
 
+import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent } from '@common/script/event/XEvent';
 import { Utils } from '@common/script/utils/Utils';
@@ -34,6 +35,7 @@ export class GameInformationUI extends Component {
      * 顯示
      */
     private show() {
+        DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
         Utils.fadeIn(this.node, 0.15, 0, 255);
         Utils.tweenScaleTo(this.node, 0.15, 0.8, 1);
         this.content.setPosition(new Vec3(0, 0, 0));
@@ -46,6 +48,7 @@ export class GameInformationUI extends Component {
      * 隱藏
      */
     private hide() {
+        DataManager.getInstance().lockKeyboard = false;//解除鎖定鍵盤功能
         Utils.tweenScaleTo(this.node, 0.1, 1, 0.9);
         Utils.fadeOut(this.node, 0.1, 255, 0, () => {
             this.node.active = false;

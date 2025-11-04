@@ -4,7 +4,7 @@ import { SlotData } from '@game/script/data/SlotData';
 import { BetData } from '@common/script/data/BetData';
 import { UrlParam } from '@common/script/data/UrlParam';
 import { IGameData, IPromotionBrief, ISpinData, IUserData } from '@common/script/network/NetworkApi';
-import { BigWinType, ModuleID,  TurboMode } from '@common/script/types/BaseType';
+import { BigWinType, ModuleID, TurboMode } from '@common/script/types/BaseType';
 
 /** 遊戲內選單資料 */
 type InGameMenuStore = {
@@ -49,6 +49,9 @@ export class DataManager {
     public isSoundEnabled: boolean = true;
     /** 音樂狀態 */
     public isMusicEnabled: boolean = true;
+
+    /** 是否鎖定鍵盤 */
+    public lockKeyboard: boolean = false;
 
     //=================================== 資料 ======================================
     /** 獲取slot資料 */
@@ -203,15 +206,19 @@ export class DataManager {
         return totalBuy;
     }
 
+    /**
+     * 是否鎖定鍵盤
+     * @returns 
+     */
+    public isBlockKeyboard(): boolean {
+        return this.lockKeyboard;
+    }
+
 
     //=============================以上確定使用======================================
     // public isIdle(): boolean {
     //     return false;
     //     // return this.curState === s5g.game.proto.ESTATEID.K_IDLE;
-    // }
-
-    // public isBlockKeyboard(): boolean {
-    //     return this.webViewVisible || this.isPayTable;
     // }
 
     // public setState(state: s5g.game.proto.ESTATEID): void {

@@ -82,7 +82,6 @@ export class MessageHandler {
 
             //執行轉場
             const transTask = new TransTask();
-            transTask.toModuleID = ModuleID.FG;
             transTask.freeSpinTimes = this.freeSpinTimes;
             transTask.isFirstTrans = true;
             TaskManager.getInstance().addTask(transTask);
@@ -179,7 +178,6 @@ export class MessageHandler {
         }
 
         //表演中獎流程
-        // console.log('======表演中獎流程======');
         const winTask = new WinSymbolTask();
         winTask.winLineData = winLineData;
         winTask.winFishData = winFishData;
@@ -188,10 +186,6 @@ export class MessageHandler {
         winTask.payCreditTotal = gameResult.pay_credit_total;
         TaskManager.getInstance().addTask(winTask);
         this.fsTotalWin += gameResult.pay_credit_total;//累計免費遊戲總贏分
-
-        // const delayTask = new DelayTask(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].waitNextSpinTime);
-        // delayTask.delayTime = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].waitNextSpinTime;
-        // TaskManager.getInstance().addTask(delayTask);
     }
 
     /**
@@ -200,7 +194,7 @@ export class MessageHandler {
      */
     private handleRetrigger(subGame: IGameResult): void {
         //如果wild次數大於等於4，且未啟用第一個bouns，則表演額外加10次，倍率變2倍
-        if (subGame.extra.total_wild_count >= 5 && this.fgBonus1 === false) {
+        if (subGame.extra.total_wild_count >= 4 && this.fgBonus1 === false) {
             //執行轉場
             const transTask = new TransTask();
             transTask.freeSpinTimes = 10;
@@ -215,7 +209,7 @@ export class MessageHandler {
             updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
             TaskManager.getInstance().addTask(updateFreeTimesTask);
 
-        } else if (subGame.extra.total_wild_count >= 10 && this.fgBonus2 === false) {
+        } else if (subGame.extra.total_wild_count >= 8 && this.fgBonus2 === false) {
             //執行轉場
             const transTask = new TransTask();
             transTask.freeSpinTimes = 10;

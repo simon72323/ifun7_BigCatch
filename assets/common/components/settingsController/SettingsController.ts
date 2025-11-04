@@ -1,15 +1,12 @@
 import { _decorator, Animation, Button, Component, EventTouch, KeyCode, Label, Node, screen, Tween, tween, Vec3 } from 'cc';
 
 import { Notice } from '@common/components/notice/Notice';
-// import { AutoSpin } from '@common/components/settingsController/AutoSpin';
 
-import { BaseConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
-import { ISpinData } from '@common/script/network/NetworkApi';
-import { AudioMode, GameState, ModuleID, TurboMode } from '@common/script/types/BaseType';
+import { AudioMode, ModuleID, TurboMode } from '@common/script/types/BaseType';
 import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
@@ -37,9 +34,7 @@ export class SettingsController extends Component {
     /**改變下注 */
     public static changeBetValue: XEvent1<number> = new XEvent1();
     /**處理點擊Spin按鈕 */
-    public static handleClickSpin: XEvent1<boolean> = new XEvent1();
-    /**設定快速模式 */
-    // public static setTurboBtnState: XEvent1<TurboMode> = new XEvent1();
+    public static clickSpin: XEvent1<boolean> = new XEvent1();
 
     /**執行自動遊戲 */
     public static runAutoSpin: XEvent = new XEvent();
@@ -50,8 +45,6 @@ export class SettingsController extends Component {
     @property({ type: Node, tooltip: 'SPIN節點' })
     private spinNode: Node = null;
 
-    // @property({ type: Node, tooltip: '重複下注按鈕' })
-    // private repeatAutoBtn: Node = null;
 
     @property({ type: Node, tooltip: '自動按鈕' })
     private autoBtn: Node = null;
@@ -85,12 +78,6 @@ export class SettingsController extends Component {
 
     @property({ type: Node, tooltip: '減少下注按鈕' })
     private minusBetBtn: Node = null;
-
-    // private superSpin: Node = null;//超級SPIN節點
-    // private content: Node = null;//超級SPIN內容
-    // private preMessage: Node = null;//超級SPIN預先訊息
-    // private BsBg: Node = null;//超級SPIN BS背景
-    // private FsBg: Node = null;//超級SPIN FS背景
 
     private porControllerBtns: Node = null;//直式控制器
     private porOptionMenu: Node = null;//直式選單
@@ -129,12 +116,6 @@ export class SettingsController extends Component {
      * 設定節點
      */
     private setNode() {
-        // this.superSpin = this.node.getChildByName('SuperSpin');
-        // this.content = this.superSpin.getChildByName('Content');
-        // this.preMessage = this.superSpin.getChildByName('PreMessage');
-        // this.BsBg = this.superSpin.getChildByName('BsBg');
-        // this.FsBg = this.superSpin.getChildByName('FsBg');
-
         this.porControllerBtns = this.node.getChildByName('Por_ControllerBtns');
         this.porOptionMenu = this.node.getChildByName('Por_OptionMenu');
         this.landOptionMenu = this.node.getChildByName('Land_OptionMenu');
@@ -166,7 +147,7 @@ export class SettingsController extends Component {
         addBtnClickEvent(this.node, scriptName, this.informationBtn.getComponent(Button), this.onClickInformation);
 
         addBtnClickEvent(this.node, scriptName, this.backBtn.getComponent(Button), this.onClickOption);
-        addBtnClickEvent(this.node, scriptName, this.stopAutoSpinBtn.getComponent(Button), this.onClickStopAutoSpin);
+        addBtnClickEvent(this.node, scriptName, this.stopAutoSpinBtn.getComponent(Button), this.onStopAutoSpin);
         addBtnClickEvent(this.node, scriptName, this.addBetBtn.getComponent(Button), this.changeBet, '1');
         addBtnClickEvent(this.node, scriptName, this.minusBetBtn.getComponent(Button), this.changeBet, '-1');
     }
@@ -175,11 +156,11 @@ export class SettingsController extends Component {
      * 設定事件監聽
      */
     private setEventListen() {
-        // this.spinBtn.node.on(Button.EventType.CLICK, this.onClickSpin, this);
         BaseEvent.resetSpin.on(this.onResetSpin, this);
         BaseEvent.changeScene.on(this.sceneChange, this);
         BaseEvent.setTurboBtnState.on(this.setTurboBtnState, this);//設定快速模式按鈕狀態
         BaseEvent.runAutoSpin.on(this.runAutoSpin, this);//執行自動遊戲
+        BaseEvent.stopAutoSpin.on(this.onStopAutoSpin, this);//停止自動遊戲
 
         SettingsController.refreshCredit.on(this.refreshCredit, this);//監聽刷新餘額事件
         SettingsController.refreshBet.on(this.refreshBet, this);//監聽刷新下注事件
@@ -188,7 +169,7 @@ export class SettingsController extends Component {
         SettingsController.updateAutoSpinCount.on(this.updateAutoSpinCount, this);
         SettingsController.updateFreeSpinCount.on(this.updateFreeSpinCount, this);
         SettingsController.changeBetValue.on(this.changeBetValue, this);
-        SettingsController.handleClickSpin.on(this.handleClickSpin, this);//點擊Spin按鈕
+        SettingsController.clickSpin.on(this.handleClickSpin, this);//點擊Spin按鈕
     }
 
     /**
@@ -210,7 +191,7 @@ export class SettingsController extends Component {
     public initialize() {
         BaseEvent.keyDown.on((keyCode: KeyCode) => {
             if (keyCode == KeyCode.SPACE || keyCode == KeyCode.ENTER) {
-                this.onClickSpin();
+                this.handleClickSpin();
             }
         }, this);
     }
@@ -258,8 +239,6 @@ export class SettingsController extends Component {
             this.addBetBtn.getComponent(Button).interactable = false;
             this.minusBetBtn.getComponent(Button).interactable = false;
         }
-        // this.screenBtn.getComponent(Button).interactable = bool;
-        // this.audioBtn.getComponent(Button).interactable = bool;
     }
 
     /**
@@ -270,33 +249,17 @@ export class SettingsController extends Component {
         this.minusBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
     }
 
-    /**
-     * 顯示/關閉超級 SPIN 模式
-     * @param show {boolean} 顯示/關閉
-     */
-    // private showSuperSpin(show: boolean) {
-    //     this.superSpin.active = show;
-    //     this.content.active = !show;
-    //     this.preMessage.active = show;
-    //     const isBS = DataManager.getInstance().isBS();
-    //     this.BsBg.active = isBS;
-    //     this.FsBg.active = !isBS;
-    // const copy = instantiate(this.props['superSpin']['win'].node);
-    // ObjectPool.registerNode('winLabelClone', copy);
-    // }
-
-    /**
-     * 顯示超級SPIN畫面
-     */
-    // private showSuperSpinContent() {
-    //     this.content.active = this.preMessage.active;
-    //     this.preMessage.active = !this.preMessage.active;
-    // }
-
-
     private sceneChange(moduleID: ModuleID) {
         if (moduleID === ModuleID.BS) {
-            this.onResetSpin();
+            if (DataManager.getInstance().isAutoMode) {
+                //自動轉模式，則顯示停止按鈕
+                this.spinBtn.active = false;
+                this.stopSpinBtn.active = true;
+                this.stopAutoSpinBtn.active = true;
+                this.freeSpin.active = false;
+            } else {
+                this.onResetSpin();
+            }
         } else {
             this.spinBtn.active = false;
             this.stopSpinBtn.active = false;
@@ -308,36 +271,10 @@ export class SettingsController extends Component {
 
     //===============================spinNode相關操作=================================
     /**
-     * 按下Spin按鈕事件
+     * 按下Spin按鈕事件(按鈕會有event事件，所以需要分開處理，不然handleClickSpin會傳入true)
      */
     private async onClickSpin() {
         this.handleClickSpin();
-        // if (this.curSettingPage === 1) return;
-
-        //如果是自動轉過程若點擊手動轉要停止自動
-        // if (DataManager.getInstance().isAutoMode) {
-        //     this.onClickStopAutoSpin();
-        //     return;
-        // }
-
-        //如果不在BS模式下，則不執行Spin功能
-        // if (!DataManager.getInstance().isBS()) return;
-        // if (DataManager.getInstance().superMode) return;
-        // if (DataManager.getInstance().curGameState === GameState.Ready) {
-
-        // this.clickAnim(this.spinBtn);
-        // this.rotateAnim(this.spinBtn);
-        // this.setBtnInteractable(false);//禁用控制器按鈕
-        // //切換成停止按鈕
-        // Utils.fadeOut(this.spinBtn, 0.1, 255, 0, () => {
-        //     this.spinBtn.active = false;
-        //     this.stopSpinBtn.active = true;
-        //     this.stopSpinBtn.getComponent(Button).interactable = true;
-        //     this.stopSpinBtn.getComponent(Animation).play('stopSpinShow');
-        // });
-
-        // BaseEvent.clickSpin.emit(isBuyFs);
-        // console.log('發送Spin請求');
     }
 
     /**
@@ -408,11 +345,22 @@ export class SettingsController extends Component {
     /**
      * 停止自動Spin
      */
-    private onClickStopAutoSpin() {
+    private onStopAutoSpin() {
         this.stopAutoSpinBtn.active = false;
         DataManager.getInstance().isAutoMode = false;
         DataManager.getInstance().autoSpinCount = 0;
-        this.onResetSpin();
+        this.stopSpinBtn.getComponent(Button).interactable = false;
+        // this.stopSpinBtn.active = false;
+        // if (this.spinBtn.active) return;
+        // Utils.fadeOut(this.stopSpinBtn, 0.1, 255, 0, () => {
+        //     this.stopSpinBtn.active = false;
+        //     this.freeSpin.active = false;
+        //     this.stopAutoSpinBtn.active = false;
+        //     this.spinBtn.active = true;
+        //     this.spinBtn.getComponent(Animation).play('spinBtnShow');
+        //     this.setBtnInteractable(true);//啟用控制器按鈕
+        // });
+        // this.onResetSpin();
     }
 
     /**
@@ -420,14 +368,15 @@ export class SettingsController extends Component {
      */
     private runAutoSpin() {
         if (DataManager.getInstance().autoSpinCount === 0) {
-            this.onClickStopAutoSpin();
+            this.onStopAutoSpin();
             return;
         }
-        else if (DataManager.getInstance().autoSpinCount > 0) {
+        this.stopAutoSpinBtn.active = true;
+        if (DataManager.getInstance().autoSpinCount > 0) {
             DataManager.getInstance().autoSpinCount--;//自動遊戲次數減1
         }
         this.updateAutoSpinCount();
-        this.onClickSpin();
+        this.handleClickSpin();
     }
 
     /**
@@ -436,10 +385,7 @@ export class SettingsController extends Component {
     private updateAutoSpinCount() {
         const stopAutoLabel = this.stopAutoSpinBtn.getChildByName('Label').getComponent(Label);
         //數字跳動
-        tween(stopAutoLabel.node)
-            .to(0.1, { scale: new Vec3(1.5, 1.5, 1) })
-            .to(0.2, { scale: new Vec3(1, 1, 1) })
-            .start();
+        this.tweenScale(stopAutoLabel.node);
         if (DataManager.getInstance().autoSpinCount < 0)
             stopAutoLabel.string = '∞';
         else
@@ -452,11 +398,16 @@ export class SettingsController extends Component {
     private updateFreeSpinCount(times: number) {
         const freeSpinLabel = this.freeSpin.getChildByName('Label').getComponent(Label);
         //數字跳動
-        tween(freeSpinLabel.node)
-            .to(0.1, { scale: new Vec3(1.5, 1.5, 1) })
-            .to(0.2, { scale: new Vec3(1, 1, 1) })
-            .start();
+        this.tweenScale(freeSpinLabel.node);
         freeSpinLabel.string = times.toString();
+    }
+
+    /**
+     * 數字跳動動畫
+     * @param node 節點
+     */
+    private tweenScale(node: Node) {
+        tween(node).to(0.1, { scale: new Vec3(1.5, 1.5, 1) }).to(0.2, { scale: new Vec3(1, 1, 1) }).start();
     }
 
     //===============================spinNode相關操作=================================
@@ -659,7 +610,7 @@ export class SettingsController extends Component {
     public getSpinPos(): Vec3 {
         const parent2Pos = this.spinNode.parent.parent.position;
         const parentPos = this.spinNode.parent.position;
-        return parent2Pos.add(parentPos);
+        return parent2Pos.clone().add(parentPos);
     }
     //============================= 刷新BetInfo資訊 =============================
 }

@@ -1,7 +1,12 @@
 import { _decorator, Component, instantiate, Label, Node, Prefab, sp, Sprite, tween, Vec3 } from 'cc';
 
+import { AudioKey } from '@game/script/data/AudioKey';
+
 import { XEvent, XEvent3, XEvent4 } from '@common/script/event/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
+
+
 
 const { ccclass, property } = _decorator;
 @ccclass('FreeGameUI')
@@ -48,10 +53,17 @@ export class FreeGameUI extends Component {
      * 顯示免費遊戲UI
      */
     private show(): void {
+        //初始化進度列表狀態
         this.progressList.forEach(progress => {
             progress.getChildByName('image').getComponent(Sprite).grayscale = true;
             progress.getChildByName('ani_multiply').getComponent(sp.Skeleton).node.active = false;
         });
+        //初始化等級列表狀態
+        this.levelList.forEach(level => {
+            level.getChildByName('image').getComponent(Sprite).grayscale = true;
+            level.getChildByName('ani_multiply').getComponent(sp.Skeleton).node.active = false;
+        });
+
         this.node.active = true;
         this.node.scale = new Vec3(0.6, 0.6, 1);
         tween(this.node)
@@ -78,6 +90,7 @@ export class FreeGameUI extends Component {
      * @param moveTime 移動時間
      */
     private showMoveScore(score: number, startPos: Vec3, targetPos: Vec3, moveTime: number): void {
+        AudioManager.getInstance().playSound(AudioKey.wildFishMove);//拉線
         const moveScore = instantiate(this.moveScore);
         moveScore.setParent(this.node);
         moveScore.setPosition(startPos);
@@ -86,6 +99,7 @@ export class FreeGameUI extends Component {
             .to(moveTime, { position: targetPos }, { easing: 'sineIn' })
             .call(() => {
                 this.creatLight(new Vec3(targetPos.x, targetPos.y - 57, 0), 'hitbubble');
+                // AudioManager.getInstance().playSound(AudioKey.wildCash);
                 moveScore.destroy();
             })
             .start();
@@ -111,6 +125,7 @@ export class FreeGameUI extends Component {
         tween(moveFly)
             .to(0.4, { position: endPos }, { easing: 'sineOut' })
             .call(() => {
+                AudioManager.getInstance().playSound(AudioKey.wildCount);
                 moveFly.destroy();
                 this.showNodeFx(progress, () => {
                     callback();
@@ -118,8 +133,10 @@ export class FreeGameUI extends Component {
                 //判斷等級球是否顯示
                 if (id === 3) {
                     this.showNodeFx(this.levelList[0]);
+                    AudioManager.getInstance().playSound(AudioKey.wildMultWin);
                 } else if (id === 7) {
                     this.showNodeFx(this.levelList[1]);
+                    AudioManager.getInstance().playSound(AudioKey.wildMultWin);
                 }
             })
             .start();

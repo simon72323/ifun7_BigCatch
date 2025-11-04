@@ -6,8 +6,6 @@ import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { ModuleID } from '@common/script/types/BaseType';
 

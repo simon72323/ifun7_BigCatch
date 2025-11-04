@@ -19,9 +19,13 @@ export class AddSpinUI extends Component {
         this.node.active = false;
     }
 
+    /**
+     * 顯示加spinUI
+     * @param onComplete 完成事件
+     */
     private async show(onComplete: () => void): Promise<void> {
         // if (this.node.active) return;
-        this.move.position = new Vec3(0, 0, 0);
+        this.move.position = Vec3.ZERO;
         this.node.active = true;
         Utils.fadeIn(this.node, 0.1, 0, 255);
         const spinPos = SettingsController.getInstance().getSpinPos();

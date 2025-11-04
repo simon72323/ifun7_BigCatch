@@ -119,89 +119,89 @@ export const FISH_ODDS = {
 /**
  * 共用音樂音效Key
  */
-export enum GameAudioKey {
-    //BGM----------------------------
-    /**BS BGM */
-    MG = 'MG',
-    /**BS BGM2 */
-    noBtn = 'noBtn',
-    /**FS BGM */
-    FG = 'FG',
+// export enum GameAudioKey {
+//     //BGM----------------------------
+//     /**BS BGM */
+//     MG = 'MG',
+//     /**BS BGM2 */
+//     noBtn = 'noBtn',
+//     /**FS BGM */
+//     FG = 'FG',
 
-    //老虎機----------------------------
-    /**瞇牌 */
-    waiting = 'waiting',
-    /**第一軸掉落到定位 */
-    down = 'down',
+//     //老虎機----------------------------
+//     /**瞇牌 */
+//     waiting = 'waiting',
+//     /**第一軸掉落到定位 */
+//     down = 'down',
 
-    //FS轉場----------------------------
-    /**FS點開始 */
-    FgStart = 'FgStart',
-    /**FS轉場 */
-    FgTran = 'FgTran',
-    /**FS面板 */
-    confrats = 'confrats',
+//     //FS轉場----------------------------
+//     /**FS點開始 */
+//     FgStart = 'FgStart',
+//     /**FS轉場 */
+//     FgTran = 'FgTran',
+//     /**FS面板 */
+//     confrats = 'confrats',
 
-    //準心----------------------------
-    /**準心 */
-    line = 'line',
-    /**準心開槍 */
-    lineShot = 'lineShot',
+//     //準心----------------------------
+//     /**準心 */
+//     line = 'line',
+//     /**準心開槍 */
+//     lineShot = 'lineShot',
 
-    //scatter----------------------------
-    /**scatter出現 */
-    scatter = 'scatter',
-    /**SC中獎 */
-    st = 'st',
+//     //scatter----------------------------
+//     /**scatter出現 */
+//     scatter = 'scatter',
+//     /**SC中獎 */
+//     st = 'st',
 
-    //左輪----------------------------
-    /**左輪補彈匣 */
-    reloading = 'reloading',
+//     //左輪----------------------------
+//     /**左輪補彈匣 */
+//     reloading = 'reloading',
 
-    //FS----------------------------
-    /**FS結算 */
-    TW = 'TW',
-    /**拔槍 */
-    dg = 'dg',
-    /**拍槍 */
-    hitGun = 'hitGun',
-    /**開槍 */
-    shot = 'shot',
-    /**收槍 */
-    putaway = 'putaway',
-    /**轉槍 */
-    rotation = 'rotation',
-    /**壞人笑 */
-    laughing = 'laughing',
-    /**壞人死 */
-    die = 'die',
+//     //FS----------------------------
+//     /**FS結算 */
+//     TW = 'TW',
+//     /**拔槍 */
+//     dg = 'dg',
+//     /**拍槍 */
+//     hitGun = 'hitGun',
+//     /**開槍 */
+//     shot = 'shot',
+//     /**收槍 */
+//     putaway = 'putaway',
+//     /**轉槍 */
+//     rotation = 'rotation',
+//     /**壞人笑 */
+//     laughing = 'laughing',
+//     /**壞人死 */
+//     die = 'die',
 
-    //免費遊戲----------------------------
-    /**免費遊戲按鈕 */
-    FeatureBuy = 'FeatureBuy',
-    /**免費遊戲購買按鈕 */
-    buy = 'buy',
+//     //免費遊戲----------------------------
+//     /**免費遊戲按鈕 */
+//     FeatureBuy = 'FeatureBuy',
+//     /**免費遊戲購買按鈕 */
+//     buy = 'buy',
 
-    //其他----------------------------
-    /**倍數出現 */
-    combine = 'combine',
-    /**贏得 */
-    win = 'win',
-    /**共贏得 */
-    wt = 'wt',
-    /**炸彈引信 */
-    fuse = 'fuse',
-    /**字母*/
-    Letter = 'Letter',
-    /**FS輪軸發光*/
-    scExpand = 'scExpand',
-    /**手槍*/
-    symbolGun = 'symbolGun',
-    /**帽子*/
-    symbolHat = 'symbolHat',
-    /**轉軸啟動*/
-    in = 'in',
-}
+//     //其他----------------------------
+//     /**倍數出現 */
+//     combine = 'combine',
+//     /**贏得 */
+//     win = 'win',
+//     /**共贏得 */
+//     wt = 'wt',
+//     /**炸彈引信 */
+//     fuse = 'fuse',
+//     /**字母*/
+//     Letter = 'Letter',
+//     /**FS輪軸發光*/
+//     scExpand = 'scExpand',
+//     /**手槍*/
+//     symbolGun = 'symbolGun',
+//     /**帽子*/
+//     symbolHat = 'symbolHat',
+//     /**轉軸啟動*/
+//     in = 'in',
+// }
 
 /**遊戲Layer */
 // export enum GameLayer {

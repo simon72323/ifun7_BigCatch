@@ -1,11 +1,12 @@
+import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 import { DataManager } from '@common/script/data/DataManager';
-import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
-import { Utils } from '@common/script/utils/Utils';
+
+
 
 /**
  * FS返回NG總結算(先BigWin再橫幅)
@@ -21,13 +22,12 @@ export class BackBSSettleTask extends GameTask {
     // public playerCent: number;
 
     execute(): void {
-
-        // AudioManager.getInstance().stopMusic(AudioKey.FsMusic);
-        AudioManager.getInstance().playMusic(AudioKey.BsMusic);
+        AudioManager.getInstance().playMusic(AudioKey.bgmMg);
 
         //更新玩家餘額
         SettingsController.refreshCredit.emit(this.userCredit);
         DataManager.getInstance().userCredit = this.userCredit;
+        FeatureBuyBtn.show.emit();
 
         //回復盤面
         // SlotMachine.backBSParser.emit(this.backBSParser);

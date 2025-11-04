@@ -1,19 +1,15 @@
-// import { BannerUI } from '@game/components/BannerUI/BannerUI';
-// import { FSUI } from '@game/components/FSUI/FSUI';
-import { tween } from 'cc';
 
+import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
 import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
 import { TransUI } from '@game/components/TransUI/TransUI';
-import { GameAudioKey } from '@game/script/data/GameConst';
+
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 
-import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
-// import { TimeoutManager } from '@common/script/manager/TimeoutManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { ModuleID } from '@common/script/types/BaseType';
 
@@ -22,12 +18,7 @@ import { ModuleID } from '@common/script/types/BaseType';
  * 轉場
  */
 export class TransTask extends GameTask {
-
     protected name: string = 'TransTask';
-
-    /**轉場目標 */
-    public toModuleID: ModuleID;
-
     /**免費遊戲次數 */
     public freeSpinTimes: number = 0;
 
@@ -42,18 +33,15 @@ export class TransTask extends GameTask {
     execute(): void {
         //第一次進入轉場
         if (this.isFirstTrans) {
-            DataManager.getInstance().curModuleID = this.toModuleID;
+            // console.log('轉場模式轉換為', this.toModuleID);
+            DataManager.getInstance().curModuleID = ModuleID.FG;
+            AudioManager.getInstance().playMusic(AudioKey.bgmFg);
+            FeatureBuyBtn.hide.emit();
             //中免費轉停止Auto模式
-            if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount <= 0) {
+            if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount === 0) {
                 DataManager.getInstance().isAutoMode = false;
             }
-            // AudioManager.getInstance().stopMusic(AudioKey.BsMusic);
-            // AudioManager.getInstance().playMusic(AudioKey.FsMusic);
         }
-
-        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
-        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWSCATTERWIN);
-        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRANSLATE);
 
         //設定初始次數
         // FeatureGameUI.refreshRemainTimes.emit(this.times);

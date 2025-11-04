@@ -1,10 +1,11 @@
 import { _decorator, Button, Color, Component, KeyCode, Label, sp, tween, Tween } from 'cc';
 
+import { AudioKey } from '@game/script/data/AudioKey';
+
 import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { BigWinType } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
@@ -62,21 +63,22 @@ export class BigWinUI extends Component {
     /**獎項參數 */
     private bigWinConfig: BigWinConfig[] = [
         {
-            sound: AudioKey.BigWin,
+            sound: AudioKey.bigWin,
             in: WinAnimation.big_in,
             loop: WinAnimation.big_loop,
-            duration: 4
+            duration: 3
         },
         {
-            sound: AudioKey.MegaWin,
-            in: WinAnimation.mega_in,
-            loop: WinAnimation.mega_loop,
-            duration: 4
-        }, {
-            sound: AudioKey.SuperWin,
+            sound: AudioKey.superWin,
             in: WinAnimation.super_in,
             loop: WinAnimation.super_loop,
-            duration: 4
+            duration: 3
+        },
+        {
+            sound: AudioKey.megaWin,
+            in: WinAnimation.mega_in,
+            loop: WinAnimation.mega_loop,
+            duration: 3
         }
     ];
 
@@ -112,6 +114,8 @@ export class BigWinUI extends Component {
      * @param value 
      */
     private onShow(value: number): void {
+        AudioManager.getInstance().editMusicVolume(0.1);//降低背景音樂音量
+        AudioManager.getInstance().playSound(AudioKey.afterMusic);//報獎音效
         const dataManager = DataManager.getInstance();
         //skip
         this.node.getChildByPath('SkipSensor').once(Button.EventType.CLICK, this.onSkip, this);
@@ -141,9 +145,6 @@ export class BigWinUI extends Component {
         this.aniCoin.setAnimation(0, CoinAnimation.superWin_in, false);
         this.aniCoin.addAnimation(0, CoinAnimation.superWin_loop, true);
 
-        // AudioManager.getInstance().playSound(AudioKey.Win);
-        // AudioManager.getInstance().playSound(AudioKey.WinRolling);
-        // AudioManager.getInstance().lowerMusic();
         this.bigWinValue = dataManager.bigWinMultiple[BigWinType.big] * dataManager.bet.getBetTotal();
         this.superWinValue = dataManager.bigWinMultiple[BigWinType.super] * dataManager.bet.getBetTotal();
         this.megaWinValue = dataManager.bigWinMultiple[BigWinType.mega] * dataManager.bet.getBetTotal();
@@ -211,7 +212,7 @@ export class BigWinUI extends Component {
                 //繼續下一等級
                 if (this.data.currentType !== this.data.finalType) {
                     //停止播放前一等級音效
-                    // AudioManager.getInstance().stopSound(this.bigWinConfig[this.data.currentType].sound);
+                    AudioManager.getInstance().stopSound(this.bigWinConfig[this.data.currentType].sound);
 
                     this.data.currentType++;
                     this.tweenAtLevel();
@@ -230,7 +231,7 @@ export class BigWinUI extends Component {
      */
     private setTypeStyle(type: BigWinType) {
         let config = this.bigWinConfig[type];
-        // AudioManager.getInstance().playSound(config.sound);
+        AudioManager.getInstance().playSound(config.sound);
 
         Utils.ClearSpine(this.aniWin);
         this.aniWin.setAnimation(0, config.in, false);
@@ -252,7 +253,7 @@ export class BigWinUI extends Component {
 
         if (this.data.currentType !== this.data.finalType) {
             //停止播放前一等級音效
-            // AudioManager.getInstance().stopSound(this.bigWinConfig[this.data.currentType].sound);
+            AudioManager.getInstance().stopSound(this.bigWinConfig[this.data.currentType].sound);
             //補最後一次等級設定
             this.data.currentType = this.data.finalType;
             this.setTypeStyle(this.data.currentType);
@@ -269,16 +270,11 @@ export class BigWinUI extends Component {
         this.isPlaying = false;
         Tween.stopAllByTarget(this.data);
         this.winLabel.string = Utils.numberFormat(this.data.finalRateValue);
-        // AudioManager.getInstance().stopSound(AudioKey.WinRolling);
-        // AudioManager.getInstance().stopSound(AudioKey.Win);
-        // AudioManager.getInstance().stopSound(config.sound);
+        AudioManager.getInstance().playSound(AudioKey.winEnd);
+        AudioManager.getInstance().stopSound(config.sound);
+        AudioManager.getInstance().stopSound(AudioKey.afterMusic);
 
-        //除了mega以外都要播放WinEnd
-        if (this.isSkip || this.data.finalType !== BigWinType.mega) {
-            // AudioManager.getInstance().playSound(AudioKey.WinEnd);
-        }
-
-        await Utils.delay(BaseConst.WIN_END_DELAY);
+        await Utils.delay(BaseConst.GAME_TIME.winEndDelay);
         Utils.fadeOut(this.node, 1, 255, 0, () => {
             this.onBigWinComplete();
         });
@@ -288,10 +284,7 @@ export class BigWinUI extends Component {
      * 演示完畢
      */
     private onBigWinComplete() {
-        // AudioManager.getInstance().stopSound(AudioKey.WinEnd);
-        let config = this.bigWinConfig[this.data.finalType];
-        // AudioManager.getInstance().stopSound(config.sound);
-        // AudioManager.getInstance().playSound(AudioKey.BsMusic);
+        AudioManager.getInstance().editMusicVolume(1);//恢復背景音樂
         this.node.active = false;
         BigWinUI.complete.emit();
     }

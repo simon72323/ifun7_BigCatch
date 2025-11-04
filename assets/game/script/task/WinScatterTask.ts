@@ -1,10 +1,14 @@
 import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
-import { BlackKey, GameAudioKey } from '@game/script/data/GameConst';
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+
+import { DataManager } from '@common/script/data/DataManager';
+import { BaseEvent } from '@common/script/event/BaseEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { Utils } from '@common/script/utils/Utils';
+
 
 
 /**
@@ -18,9 +22,15 @@ export class WinScatterTask extends GameTask {
     public payCredit: number;
 
     public async execute(): Promise<void> {
-        AudioManager.getInstance().playSound(GameAudioKey.st);
+        AudioManager.getInstance().playSound(AudioKey.scatterWin);
         ReelBlackUI.show.emit(); //壓黑
         SlotMachine.showSymbolWin.emit(this.winPos); //顯示中獎位置
+
+        //如果設定停止直到免費轉，則停止自動遊戲
+        if (DataManager.getInstance().isStopUntilFeature) {
+            BaseEvent.stopAutoSpin.emit();//停止自動遊戲
+        }
+
         await Utils.delay(2);
         ReelBlackUI.hide.emit();
         this.finish();

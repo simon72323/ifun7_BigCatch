@@ -1,13 +1,13 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, tween, Tween } from 'cc';
 
-import { GameAudioKey } from '@game/script/data/GameConst';
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent4 } from '@common/script/event/XEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { RunNumber } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
+
 
 
 enum TotalWinAnimation {
@@ -82,7 +82,9 @@ export class TotalWinUI extends Component {
         //跑分動畫
         this.runNum.curValue = 0;//初始化跑分數據
         this.runNum.finalValue = value;
-        Utils.runNumber(5, this.num_totalwin, this.runNum);
+        AudioManager.getInstance().playSound(AudioKey.totalWin);
+        //跑分時間1.5秒(根據音效長度決定)
+        Utils.runNumber(1.5, this.num_totalwin, this.runNum);
 
         this.runCountdown();//倒數計時器
 
@@ -95,9 +97,6 @@ export class TotalWinUI extends Component {
                 this.onComplete();
             }
         }, this);
-
-        // AudioManager.getInstance().playSound(GameAudioKey.TW);
-        // AudioManager.getInstance().playSound(AudioKey.WinRolling);
     }
 
     /**
@@ -132,7 +131,6 @@ export class TotalWinUI extends Component {
 
         await Utils.delay(1);
         Utils.fadeOut(this.node, 0.3, 255, 0, () => {
-            // AudioManager.getInstance().stopSound(AudioKey.WinRolling);
             this.node.active = false;
             this.cbComplete?.();
         });

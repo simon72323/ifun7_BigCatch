@@ -1,7 +1,11 @@
 import { _decorator, Component, Node, sp, tween, Vec3 } from 'cc';
 
+import { AudioKey } from '@game/script/data/AudioKey';
+
 import { XEvent1 } from '@common/script/event/XEvent';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
+
 
 const { ccclass, property } = _decorator;
 @ccclass('BootCatchUI')
@@ -29,6 +33,9 @@ export class BootCatchUI extends Component {
      */
     private async show(onComplete: () => void): Promise<void> {
         // if (this.node.active) return;
+        this.scheduleOnce(() => {
+            AudioManager.getInstance().playSound(AudioKey.hook);
+        }, 0.3);
         this.ani_hook.node.position = new Vec3(0, -35, 0);
         this.node.active = true;
         Utils.fadeIn(this.node, 0.1, 0, 255);
@@ -44,7 +51,7 @@ export class BootCatchUI extends Component {
 
         //鉤子上移
         tween(this.ani_hook.node)
-            .to(1, { position: new Vec3(0, 180, 0) }, { easing: 'sineInOut' })
+            .to(1.1, { position: new Vec3(0, 180, 0) }, { easing: 'sineInOut' })
             .call(() => {
                 onComplete?.();
             })

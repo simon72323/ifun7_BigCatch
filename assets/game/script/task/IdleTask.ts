@@ -1,23 +1,14 @@
-// import { AudioKey } from '@base/script/audio/AudioKey';
-// import { AudioManager } from '@common/script/manager/AudioManager';
-// import { BaseConst } from '@common/script/data/BaseConst';
 
 import { SpinTask } from '@game/script/task/SpinTask';
 
 import { Notice } from '@common/components/notice/Notice';
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 
-// import { BaseConst } from '@common/script/data/BaseConst';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
-import { AudioManager } from '@common/script/manager/AudioManager';
-// import { TimeoutManager } from '@common/script/manager/TimeoutManager';
-// import { BaseIdleTask } from '@common/script/tasks/BaseIdleTask';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ModuleID } from '@common/script/types/BaseType';
-
 
 /**
  * 待機
@@ -26,7 +17,7 @@ export class IdleTask extends GameTask {
     protected name: string = 'IdleTask';
 
     /**是否為首次Idle */
-    private static isFirstIdle: boolean = true;
+    // private static isFirstIdle: boolean = true;
 
     // private static payoutCallback: () => void;
 
@@ -41,7 +32,7 @@ export class IdleTask extends GameTask {
     // }
 
     execute(): void {
-        console.log('待機狀態');
+        console.log('待機狀態回歸BS模式');
         DataManager.getInstance().curModuleID = ModuleID.BS;
 
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
@@ -69,7 +60,7 @@ export class IdleTask extends GameTask {
         // //自動轉
         // else 
         if (DataManager.getInstance().isAutoMode) {
-            if (DataManager.getInstance().isAutoTimes) {
+            if (DataManager.getInstance().isAutoTimes && DataManager.getInstance().autoSpinCount > 0) {
                 DataManager.getInstance().autoSpinCount -= 1;
                 SettingsController.updateAutoSpinCount.emit();
             }
@@ -95,18 +86,17 @@ export class IdleTask extends GameTask {
 
         //購買功能
         BaseEvent.buyFeature.on(() => {
-            SettingsController.handleClickSpin.emit(true);//透過點擊Spin按鈕(購買免費遊戲)
+            SettingsController.clickSpin.emit(true);//透過點擊Spin按鈕(購買免費遊戲)
         }, this);
 
-        if (IdleTask.isFirstIdle) {
-            IdleTask.isFirstIdle = false;
-            AudioManager.getInstance().playMusic(AudioKey.BsMusic);//播放背景音樂
-        }
+        // if (IdleTask.isFirstIdle) {
+        //     IdleTask.isFirstIdle = false;
+        // }
     }
 
     /**
      * 執行Spin
-     * @param buyFs 是否購買免費遊戲
+     * @param buyFs 是否購買免費遊
      */
     private onSpin(buyFs: boolean = false): void {
         let betCredit = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()

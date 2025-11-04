@@ -1,12 +1,16 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity, tween, Vec3, instantiate, Tween } from 'cc';
 
+import { AudioKey } from '@game/script/data/AudioKey';
 import { FISH_ODDS, SymbolID } from '@game/script/data/GameConst';
 
 import { BaseSymbol } from '@common/components/slotMachine/BaseSymbol';
 import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
 
 import { DataManager } from '@common/script/data/DataManager';
+import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
+
+
 
 /**圖示ID對應的索引 */
 const symbolImageMap = new Map<number, number>([
@@ -201,10 +205,15 @@ export class Symbol extends BaseSymbol {
      */
     public onStop(): void {
         if (this.isScatter()) {
+            AudioManager.getInstance().playSound(AudioKey.scatterShow);
             tween(this.node)
                 .to(0.2, { scale: new Vec3(1.3, 1.3, 1) }, { easing: 'sineOut' })
                 .to(0.5, { scale: new Vec3(1, 1, 1) }, { easing: 'bounceOut' })
                 .start();
+        }
+        //免費遊戲wild出現時播放音效
+        if (this.isWild() && !DataManager.getInstance().isBS()) {
+            AudioManager.getInstance().playSound(AudioKey.wildShow);
         }
         this.isStop = true;
     }
@@ -250,6 +259,7 @@ export class Symbol extends BaseSymbol {
      * @param score 分數
      */
     public showWildScore(score: number): void {
+        AudioManager.getInstance().playSound(AudioKey.wildCash);
         if (!this.score.active) {
             this.score.active = true;
             this.score.getComponent(UIOpacity).opacity = 255;

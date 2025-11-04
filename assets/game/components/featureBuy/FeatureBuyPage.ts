@@ -1,18 +1,15 @@
-import { _decorator, Button, Component, EventTouch, Label, Node, sp, Sprite, tween, UIOpacity, Vec3 } from 'cc';
+import { _decorator, Button, Component, EventTouch, Label, Node, tween, Vec3 } from 'cc';
+
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { XEvent } from '@common/script/event/XEvent';
-import { AudioKey } from '@common/script/manager/AudioKey';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
 
-
-enum BoxAni {
-    start = 'start'
-}
 
 const { ccclass } = _decorator;
 
@@ -47,7 +44,6 @@ export class FeatureBuyPage extends Component {
 
         const cancelBtn = this.node.getChildByPath('pic_buy/btn_cancel').getComponent(Button);
         cancelBtn.node.on(Button.EventType.CLICK, () => {
-            // AudioManager.getInstance().play(AudioKey.BetClick);
             this.hide();
         }, this);
 
@@ -85,6 +81,7 @@ export class FeatureBuyPage extends Component {
      * 開啟FeatureBuy介面
      */
     private show(): void {
+        AudioManager.getInstance().playSound(AudioKey.showBuyWindow);
         this.updateBuyInfo();//更新購買資訊
         this.node.active = true;
         Utils.fadeIn(this.buyUI, 0.3, 0, 255);
@@ -102,11 +99,9 @@ export class FeatureBuyPage extends Component {
         if (this.isHiding) {
             return;
         }
+        AudioManager.getInstance().playSound(AudioKey.btnBuyCancle);
         this.isHiding = true;
         this.forceHide();
-
-        // AudioManager.getInstance().playSound(AudioKey.Close);
-        // AudioManager.getInstance().playSound(AudioKey.Trans);
     }
 
     /**
@@ -116,7 +111,7 @@ export class FeatureBuyPage extends Component {
         if (this.isHiding) {
             return;
         }
-        // AudioManager.getInstance().playSound(GameAudioKey.buy);
+        AudioManager.getInstance().playSound(AudioKey.btnBuyConfirm);
         this.forceHide();
         BaseEvent.buyFeature.emit();
     }

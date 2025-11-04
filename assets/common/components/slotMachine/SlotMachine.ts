@@ -10,6 +10,11 @@ import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
 
 
+//公版音效名稱(需透過遊戲指定)
+export const slotAudioKey = {
+    reelStop: 'reelStop'//轉軸停止音效
+};
+
 const { ccclass, property } = _decorator;
 /**
  * 老虎機
@@ -359,7 +364,7 @@ export class SlotMachine extends Component {
         tween(reelNode)
             .to(runTime, { position: new Vec3(reelNode.x, -10, 0) }, { easing: easing.cubicOut })
             .call(() => {
-                // AudioManager.getInstance().playOnceSound(G5251AudioName.ReelStop);//播放回彈音效
+                AudioManager.getInstance().playOnceSound(slotAudioKey.reelStop);//播放輪軸停止音效
             })
             .to(backTime, { position: new Vec3(reelNode.x, 0, 0) })
             .call(async () => {

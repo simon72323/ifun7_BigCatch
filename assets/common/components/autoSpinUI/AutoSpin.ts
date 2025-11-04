@@ -83,6 +83,7 @@ export class AutoSpin extends Component {
      * 開啟自動選單
      */
     private onShow() {
+        DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
         Utils.fadeIn(this.node, 0.15, 0, 255);
         Utils.tweenScaleTo(this.node, 0.15, 0.8, 1);
         this.node.active = true;
@@ -107,6 +108,7 @@ export class AutoSpin extends Component {
      * 關閉自動選單
      */
     private onClose() {
+        DataManager.getInstance().lockKeyboard = false;//解除鎖定鍵盤功能
         Utils.tweenScaleTo(this.node, 0.1, 1, 0.9);
         Utils.fadeOut(this.node, 0.1, 255, 0, () => {
             this.node.active = false;
@@ -119,7 +121,17 @@ export class AutoSpin extends Component {
      */
     private onClickStart() {
         this.onClose();
-        console.log('執行自動遊戲');
+        if (DataManager.getInstance().isAutoTimes) {
+            /** 設置自動旋轉次數 */
+            const autoCount = this.displayItemLabel.string === 'UNLIMITED' ? -1 : parseInt(this.displayItemLabel.string);
+            DataManager.getInstance().autoSpinCount = autoCount;
+            DataManager.getInstance().isAutoMode = true;
+            BaseEvent.runAutoSpin.emit();
+            // this.updateStopUntilFeature();
+            // this.updateAutoTimes();
+            // this.updateSpeedSwitch();
+            console.log('執行自動遊戲');
+        }
     }
 
     /**
@@ -216,8 +228,7 @@ export class AutoSpin extends Component {
      * 更新直到獎勵遊戲
      */
     private updateStopUntilFeature() {
-        const dataManager = DataManager.getInstance();
-        const animtion = dataManager.isStopUntilFeature
+        DataManager.getInstance().isStopUntilFeature
             ? this.tweenOn(this.stopUntilFeatureBtn)
             : this.tweenOff(this.stopUntilFeatureBtn);
     }
@@ -226,8 +237,7 @@ export class AutoSpin extends Component {
      * 更新自動旋轉次數
      */
     private updateAutoTimes() {
-        const dataManager = DataManager.getInstance();
-        const animtion = dataManager.isAutoTimes
+        DataManager.getInstance().isAutoTimes
             ? this.tweenOn(this.autoTimesBtn)
             : this.tweenOff(this.autoTimesBtn);
     }

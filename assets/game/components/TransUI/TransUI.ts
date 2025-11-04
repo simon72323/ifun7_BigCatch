@@ -1,6 +1,6 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Tween, tween } from 'cc';
 
-import { GameAudioKey } from '@game/script/data/GameConst';
+import { AudioKey } from '@game/script/data/AudioKey';
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
@@ -74,8 +74,10 @@ export class TransUI extends Component {
      * @param onComplete 完成事件
      */
     private async show(times: number, onCover: () => void, onComplete: () => void): Promise<void> {
+        AudioManager.getInstance().editMusicVolume(0.1);//降低背景音樂音量
+        AudioManager.getInstance().playSound(AudioKey.bgTrans);
+        AudioManager.getInstance().playSound(AudioKey.trans);
         this.node.active = true;
-        AudioManager.getInstance().playSound(GameAudioKey.FgTran);
         this.cbComplete = onComplete;
 
         Utils.fadeIn(this.node, 0.3, 0, 255);
@@ -119,11 +121,10 @@ export class TransUI extends Component {
      * 完成
      */
     private async onComplete(): Promise<void> {
+        AudioManager.getInstance().editMusicVolume(1);//恢復背景音樂
+        AudioManager.getInstance().stopSound(AudioKey.bgTrans);
         this.sens.off(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.off(this);
-
-        // AudioManager.getInstance().stopSound(GameAudioKey.FgTran);
-        // AudioManager.getInstance().playSound(GameAudioKey.confrats);
         Tween.stopAllByTarget(this.countdown);
         this.showTime.string = '0';
 
