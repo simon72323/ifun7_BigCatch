@@ -1,1 +1,10 @@
-{"imports":{"cc":"./../cocos-js/cc.js"}}
+{
+    "imports": {
+      "cc": "./../cocos-js/cc.js"
+    },
+    "scopes": {
+      "./../cocos-js/": {
+        "./_virtual_cc-2d1fe3d2.js": "./../cocos-js/_virtual_cc-2d1fe3d2.js"
+      }
+    }
+  }
