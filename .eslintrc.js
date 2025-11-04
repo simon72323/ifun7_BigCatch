@@ -8,19 +8,6 @@ module.exports = {
         'eslint:recommended', // ESLint 推薦的基本規則
         'plugin:import/typescript' // TypeScript import 相關規則
     ],
-    settings: {
-        'import/resolver': {
-            alias: {
-                map: [
-                    ['@base', './assets/base'], // @base 目錄別名
-                    ['@game', './assets/game'], // @game 目錄別名
-                    ['@common', './assets/common'], // @common 目錄別名
-                    ['@', './assets'], // @ 根目錄別名
-                ],
-                extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] // 支援的檔案副檔名
-            }
-        }
-    },
     parser: '@typescript-eslint/parser', // 使用 TypeScript 解析器
     parserOptions: {
         ecmaVersion: 2020, // 使用 ES2020 語法
@@ -88,27 +75,6 @@ module.exports = {
                     'unknown' // 未知類型
                 ],
                 'newlines-between': 'always-and-inside-groups', // 不同群組之間必須有空行
-                alphabetize: {
-                    order: 'asc', // 按字母順序升序排列
-                    caseInsensitive: true // 忽略大小寫
-                },
-                pathGroups: [
-                    {
-                        pattern: '@base/**', // @base 別名路徑
-                        group: 'internal',
-                        position: 'before'
-                    },
-                    {
-                        pattern: '@game/**', // @game 別名路徑
-                        group: 'internal',
-                        position: 'before'
-                    },
-                    {
-                        pattern: '@/**', // @ 根目錄別名
-                        group: 'internal',
-                        position: 'before'
-                    }
-                ],
                 pathGroupsExcludedImportTypes: ['builtin']
             }
         ],

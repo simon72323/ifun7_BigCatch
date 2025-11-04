@@ -1,4 +1,4 @@
-import { TurboMode } from '@common/script/types/BaseType';
+import { TurboMode } from 'db://assets/common/script/types/BaseType';
 
 /**
  * 公版全域常數

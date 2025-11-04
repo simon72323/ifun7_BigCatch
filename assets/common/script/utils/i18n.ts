@@ -1,7 +1,7 @@
 import { _decorator, Component, JsonAsset, Enum, director } from 'cc';
 import { EDITOR, PREVIEW } from 'cc/env';
 
-import { LanguageLabel } from '@common/components/localized/LanguageLabel';
+import { LanguageLabel } from 'db://assets/common/components/localized/LanguageLabel';
 
 enum Language {
     en = 'en',
@@ -116,7 +116,7 @@ export class i18n extends Component {
 
         this.isLoadDone = true;
         i18n.refreshLanguageContent();
-        console.log('i18n 資料載入完成');
+        // console.log('i18n 資料載入完成');
     }
 
     /**

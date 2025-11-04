@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
+import { XEvent, XEvent1 } from 'db://assets/common/script/event/XEvent';
+import { ErrorCodeConfig } from 'db://assets/common/script/network/ErrorCodeConfig';
 
 const { ccclass } = _decorator;
 

@@ -1,12 +1,12 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, tween, Tween } from 'cc';
 
-import { AudioKey } from '@game/script/data/AudioKey';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { XEvent4 } from 'db://assets/common/script/event/XEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { RunNumber } from 'db://assets/common/script/types/BaseType';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent4 } from '@common/script/event/XEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { RunNumber } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 enum TotalWinAnimation {
     totalWin_loop = 'totalWin_loop',

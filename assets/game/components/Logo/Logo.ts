@@ -1,7 +1,7 @@
 import { _decorator, Component, Sprite } from 'cc';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { BundleLoader } from '@common/script/loading/BundleLoader';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BundleLoader } from 'db://assets/common/script/loading/BundleLoader';
 
 const { ccclass, property } = _decorator;
 

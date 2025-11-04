@@ -1,13 +1,11 @@
-import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
-import { GameConst, SymbolID } from '@game/script/data/GameConst';
 
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { GameTask } from '@common/script/tasks/GameTask';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 
-
+import { ReelBlackUI } from 'db://assets/game/components/ReelBlackUI/ReelBlackUI';
+import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
 
 /**
  * 老虎機停輪

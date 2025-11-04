@@ -1,15 +1,13 @@
 
-import { SpinTask } from '@game/script/task/SpinTask';
+import { Notice } from 'db://assets/common/components/notice/Notice';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
+import { ModuleID } from 'db://assets/common/script/types/BaseType';
 
-import { Notice } from '@common/components/notice/Notice';
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { GameTask } from '@common/script/tasks/GameTask';
-import { TaskManager } from '@common/script/tasks/TaskManager';
-import { ModuleID } from '@common/script/types/BaseType';
-
+import { SpinTask } from 'db://assets/game/script/task/SpinTask';
 /**
  * 待機
  */
@@ -32,7 +30,6 @@ export class IdleTask extends GameTask {
     // }
 
     execute(): void {
-        console.log('待機狀態回歸BS模式');
         DataManager.getInstance().curModuleID = ModuleID.BS;
 
         // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_IDLE);
@@ -81,7 +78,7 @@ export class IdleTask extends GameTask {
         // SettingsController.setEnabled.emit(true);//設定可用狀態
         SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());//刷新下注
 
-        console.log('待機狀態監聽按下');
+        // console.log('待機狀態監聽按下');
         BaseEvent.clickSpin.on(this.onSpin, this);
 
         //購買功能
@@ -103,7 +100,7 @@ export class IdleTask extends GameTask {
             : DataManager.getInstance().bet.getBetTotal();
         // DataManager.getInstance().isBuyFs = buyFs;
 
-        console.log('Spin下注金額', betCredit);
+        // console.log('Spin下注金額', betCredit);
         SettingsController.refreshWin.emit(0, 0);//刷新贏分=0
 
         //免費轉

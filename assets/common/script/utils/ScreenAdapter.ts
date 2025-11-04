@@ -1,8 +1,8 @@
 import { game, ResolutionPolicy, view, Game } from 'cc';
 import { EDITOR } from 'cc/env';
 
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { OrientationtMode } from '@common/script/types/BaseType';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { OrientationtMode } from 'db://assets/common/script/types/BaseType';
 
 /**
  * 屏幕適配管理器 - 靜態類
@@ -26,7 +26,7 @@ export class ScreenAdapter {
                 window.addEventListener('resize', ScreenAdapter.handleResize);
             }
             // 初始設置一次
-            console.log('初始設置一次');
+            // console.log('初始設置一次');
             ScreenAdapter.handleResize();
         });
     }
@@ -47,9 +47,8 @@ export class ScreenAdapter {
      * 處理畫面大小變化 
      */
     public static handleResize() {
-        console.log('處理畫面大小變化');
+        // console.log('處理畫面大小變化');
         if (!game.canvas) return;
-        console.log('game.canvas', game.canvas);
 
         const rect = game.canvas.getBoundingClientRect();
         const aspectRatio = rect.width / rect.height;
@@ -58,12 +57,12 @@ export class ScreenAdapter {
         if (aspectRatio > (720 / 1280)) {
             // 橫屏模式
             view.setDesignResolutionSize(1280, 720, ResolutionPolicy.SHOW_ALL);
-            console.log('橫屏模式');
+            // console.log('橫屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
             // 豎屏模式
             view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
-            console.log('豎屏模式');
+            // console.log('豎屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
     }
@@ -72,7 +71,7 @@ export class ScreenAdapter {
      * 銷毀屏幕適配（如果需要）
      */
     public static destroy() {
-        console.log('銷毀屏幕適配');
+        // console.log('銷毀屏幕適配');
         ScreenAdapter.cleanupResize();
     }
 }

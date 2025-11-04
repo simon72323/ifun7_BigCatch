@@ -1,10 +1,10 @@
 import { _decorator, Component, Label, Tween, tween, Vec3 } from 'cc';
 
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { RunNumber } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { XEvent, XEvent1 } from 'db://assets/common/script/event/XEvent';
+import { RunNumber } from 'db://assets/common/script/types/BaseType';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 const { ccclass } = _decorator;

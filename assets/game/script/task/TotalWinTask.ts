@@ -1,15 +1,12 @@
-import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
-import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
-import { TotalWinUI } from '@game/components/TotalWinUI/TotalWinUI';
+import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { ModuleID } from 'db://assets/common/script/types/BaseType';
 
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
-
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { GameTask } from '@common/script/tasks/GameTask';
-import { ModuleID } from '@common/script/types/BaseType';
-
-
+import { FreeGameUI } from 'db://assets/game/components/FreeGameUI/FreeGameUI';
+import { ReelBlackUI } from 'db://assets/game/components/ReelBlackUI/ReelBlackUI';
+import { TotalWinUI } from 'db://assets/game/components/TotalWinUI/TotalWinUI';
+import { SlotData } from 'db://assets/game/script/data/SlotData';
 /**
  * FS總結算
  */
@@ -37,7 +34,7 @@ export class TotalWinTask extends GameTask {
                 ReelBlackUI.hide.emit();//隱藏遮黑
                 BaseEvent.changeScene.emit(ModuleID.BS);
                 FreeGameUI.hide.emit();
-                DataManager.getInstance().slotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
+                SlotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
                 SlotMachine.backBSParser.emit(this.backBSParser);//回復BS盤面
             },
             //演示完畢

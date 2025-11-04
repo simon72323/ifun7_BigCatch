@@ -1,8 +1,8 @@
 import { _decorator, Component, Node, sp, tween, Vec3 } from 'cc';
 
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { XEvent1 } from '@common/script/event/XEvent';
-import { Utils } from '@common/script/utils/Utils';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { XEvent1 } from 'db://assets/common/script/event/XEvent';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 const { ccclass, property } = _decorator;

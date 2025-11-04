@@ -6,7 +6,7 @@
  */
 import { _decorator, CCInteger, Label } from 'cc';
 
-import { i18n } from '@common/script/utils/i18n';
+import { i18n } from 'db://assets/common/script/utils/i18n';
 
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('LanguageLabel')

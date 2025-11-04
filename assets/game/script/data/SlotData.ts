@@ -1,29 +1,16 @@
 
-// import { SlotParser } from '@game/components/slotMachine/SlotParser';
-import { SymbolID } from '@game/script/data/GameConst';
+import { SymbolID } from 'db://assets/game/script/data/GameConst';
 
-// import { BaseSymbolData } from '@common/components/slotMachine/BaseSymbolData';
-import { DataManager } from '@common/script/data/DataManager';
-import { Utils } from '@common/script/utils/Utils';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 export class SlotData {
-    /**剩餘次數紀錄(提早結束特殊處理) */
-    // public fsRemainTimes: number = -1;
-    /**FS內總贏分 */
-    // public fsWin: number = 0;
-    /**是否剛進入FS */
-    // public fsInitialize: boolean = false;
-    /**BS最後盤面 */
-    // public bsLastMap: BaseSymbolData[][] = [];
-    /**此轉是否有skip(決定自動轉延遲時間) */
-    // public hasSkip: boolean = false;
-
     /**紀錄免費遊戲 wild倍率 */
-    public fsWildMultiply: number = 0;
+    public static fsWildMultiply: number = 0;
 
     /**賠率資料 */
-    private payloadTemplate = {
+    private static payloadTemplate = {
         symbolPoints: {
             H1: [
                 { count: 5, point: 200 },
@@ -125,7 +112,7 @@ export class SlotData {
      * @param symbolID 符號ID
      * @returns 賠率資料
      */
-    public getPayBySymbolID(symbolID: number): { count: number, cent: string }[] {
+    public static getPayBySymbolID(symbolID: number): { count: number, cent: string }[] {
         /**symbolID對應的賠率資料key */
         const symbolIDPayloadMap = new Map<number, string>([
             [SymbolID.H1, 'H1'],

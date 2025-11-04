@@ -1,13 +1,13 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Tween, tween } from 'cc';
 
-import { AudioKey } from '@game/script/data/AudioKey';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent, XEvent3 } from '@common/script/event/XEvent';
-import { BundleLoader } from '@common/script/loading/BundleLoader';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { Utils } from '@common/script/utils/Utils';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { XEvent, XEvent3, XEvent4 } from 'db://assets/common/script/event/XEvent';
+import { BundleLoader } from 'db://assets/common/script/loading/BundleLoader';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 enum CutsceneAni {
@@ -23,7 +23,7 @@ const { ccclass, property } = _decorator;
 @ccclass('TransUI')
 export class TransUI extends Component {
     /**轉場淡入(times:次數) */
-    public static show: XEvent3<number, () => void, () => void> = new XEvent3();
+    public static show: XEvent4<number, number, () => void, () => void> = new XEvent4();
     /**點擊 */
     public static click: XEvent = new XEvent();
 
@@ -33,6 +33,11 @@ export class TransUI extends Component {
     private num_freeSpin: Label;
     /**顯示時間 */
     private showTime: Label;
+    /**wild 節點*/
+    private wildNode: Node;
+    /**wild倍率 */
+    private wildLabel: Label;
+
     /**畫面自動關閉計時器 */
     private countdown = {
         curTime: 0,
@@ -48,9 +53,12 @@ export class TransUI extends Component {
         this.cutscene_ani = this.node.getChildByName('cutscene_ani').getComponent(sp.Skeleton);
         this.num_freeSpin = this.node.getChildByPath('cutscene_ani/Content/num_freeSpin').getComponent(Label);
         this.showTime = this.node.getChildByPath('cutscene_ani/Content/Layout/ShowTime').getComponent(Label);
+        this.wildNode = this.node.getChildByPath('cutscene_ani/Content/Wild');
+        this.wildLabel = this.wildNode.getChildByName('Label').getComponent(Label);
         this.sens = this.node.getChildByName('Sens');
         TransUI.show.on(this.show, this);//轉場淡入
         this.node.active = false;
+        this.wildNode.active = false;
     }
 
     /**
@@ -67,14 +75,21 @@ export class TransUI extends Component {
     /**
      * 顯示轉場
      * @param times 次數
+     * @param wildMultiplier wild倍率
      * @param onCover 覆蓋事件
      * @param onComplete 完成事件
      */
-    private async show(times: number, onCover: () => void, onComplete: () => void): Promise<void> {
+    private async show(times: number, wildMultiplier: number, onCover: () => void, onComplete: () => void): Promise<void> {
         AudioManager.getInstance().editMusicVolume(0.1);//降低背景音樂音量
         AudioManager.getInstance().playSound(AudioKey.bgTrans);
         AudioManager.getInstance().playSound(AudioKey.trans);
         this.node.active = true;
+        if (wildMultiplier > 1) {
+            this.wildNode.active = true;
+            this.wildLabel.string = `x${wildMultiplier}`;
+        } else {
+            this.wildNode.active = false;
+        }
         this.cbComplete = onComplete;
 
         Utils.fadeIn(this.node, 0.3, 0, 255);

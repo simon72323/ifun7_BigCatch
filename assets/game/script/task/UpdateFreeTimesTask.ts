@@ -1,7 +1,7 @@
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { DataManager } from '@common/script/data/DataManager';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 
-import { GameTask } from '@common/script/tasks/GameTask';
+import { SlotData } from 'db://assets/game/script/data/SlotData';
 
 /**
  * 更新免費遊戲次數
@@ -13,7 +13,7 @@ export class UpdateFreeTimesTask extends GameTask {
 
     async execute(): Promise<void> {
         if (this.wildMultiplier > 0) {
-            DataManager.getInstance().slotData.fsWildMultiply = this.wildMultiplier;//變更免費遊戲 wild倍率
+            SlotData.fsWildMultiply = this.wildMultiplier;//變更免費遊戲 wild倍率
         }
         SettingsController.updateFreeSpinCount.emit(this.freeSpinTimes);
         this.finish();

@@ -1,6 +1,6 @@
 import { _decorator, Component, sp } from 'cc';
 
-import { XEvent } from '@common/script/event/XEvent';
+import { XEvent } from 'db://assets/common/script/event/XEvent';
 
 const { ccclass, property } = _decorator;
 @ccclass('CharacterUI')

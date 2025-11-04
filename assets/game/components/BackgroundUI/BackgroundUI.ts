@@ -1,8 +1,8 @@
 import { _decorator, Component, Node } from 'cc';
 
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { ModuleID } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { ModuleID } from 'db://assets/common/script/types/BaseType';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 const { ccclass } = _decorator;
 
 /**

@@ -1,11 +1,10 @@
-import { FeatureBuyBtn } from '@game/components/FeatureBuyUI/FeatureBuyBtn';
-import { AudioKey } from '@game/script/data/AudioKey';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { DataManager } from '@common/script/data/DataManager';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { GameTask } from '@common/script/tasks/GameTask';
-
+import { FeatureBuyBtn } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyBtn';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 
 /**

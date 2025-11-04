@@ -1,13 +1,12 @@
 import { _decorator, Component, director, Label, Node, ProgressBar, sp } from 'cc';
 
-import { Notice } from '@common/components/notice/Notice';
-
-import { BaseConfig } from '@common/script/data/BaseConfig';
-import { DataManager } from '@common/script/data/DataManager';
-import { NetworkManager } from '@common/script/network/NetworkManager';
-import { i18n } from '@common/script/utils/i18n';
-import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
-import { Utils } from '@common/script/utils/Utils';
+import { Notice } from 'db://assets/common/components/notice/Notice';
+import { BaseConfig } from 'db://assets/common/script/data/BaseConfig';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
+import { i18n } from 'db://assets/common/script/utils/i18n';
+import { ScreenAdapter } from 'db://assets/common/script/utils/ScreenAdapter';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 const { ccclass, property, disallowMultiple } = _decorator;
@@ -55,7 +54,7 @@ export class Loading extends Component {
     public async start() {
         // Utils.GoogleTag('EnterGame', { 'currency': urlParameters.currency, 'language': urlParameters.lang });
 
-        console.log('獲取資料');
+        // console.log('獲取資料');
         // this.getRenewToken()
         //     .then(this.sendUserData)
         //     .then(this.sendGameData)
@@ -75,13 +74,13 @@ export class Loading extends Component {
             .then(this.getCurrencyJson)
             .then(() => {
                 this.loadGameScene();
-                console.log('Loading Done');
+                // console.log('Loading Done');
             })
             .catch((e: any) => {
                 //要出現405錯誤
                 Notice.showError.emit(405);
-                console.error(e);
-                console.error('fail to load data from server');
+                // console.error(e);
+                // console.error('fail to load data from server');
             });
     }
 
@@ -132,7 +131,7 @@ export class Loading extends Component {
             this.progressLabel.string = progress + '%';
         }, () => {
             director.loadScene(this.GameScene, (err, scene) => {
-                console.log('loadScene 完成!');
+                // console.log('loadScene 完成!');
                 // this._loadingDone = true;
                 // let loadingTime = Math.floor((Date.now() - this.loadingTime) / 1000 + 4);
                 // Utils.GoogleTag('LoadingEnd', { 'time': loadingTime });
@@ -157,11 +156,11 @@ export class Loading extends Component {
 
             const configUrl = `${protocol}//${hostname}/webAssets/game/common.json`;
 
-            console.log(`嘗試從以下位置獲取貨幣資料: ${configUrl}`);
+            // console.log(`嘗試從以下位置獲取貨幣資料: ${configUrl}`);
             currencyJson = await fetch(configUrl).then(res => res.json());
-            console.log(`取得網路貨幣資料成功: ${configUrl}`);
+            // console.log(`取得網路貨幣資料成功: ${configUrl}`);
         } catch (error) {
-            console.log('無法取得網路貨幣資料，使用本地貨幣資料');
+            // console.log('無法取得網路貨幣資料，使用本地貨幣資料');
             currencyJson = await Utils.loadCurrency();
         }
 

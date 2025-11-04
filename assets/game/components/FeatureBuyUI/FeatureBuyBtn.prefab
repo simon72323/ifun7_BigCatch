@@ -236,7 +236,7 @@
       "r": 255,
       "g": 255,
       "b": 255,
-      "a": 99
+      "a": 150
     },
     "_normalSprite": null,
     "_hoverSprite": null,
@@ -393,8 +393,8 @@
     },
     "landscapePosition": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
+      "x": -545,
+      "y": -174,
       "z": 0
     }
   },

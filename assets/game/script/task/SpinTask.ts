@@ -1,21 +1,18 @@
 
-import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
-import { WinScoreUI } from '@game/components/WinScoreUI/WinScoreUI';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
+import { TurboMode } from 'db://assets/common/script/types/BaseType';
 
-import { AudioKey } from '@game/script/data/AudioKey';
-import { IdleTask } from '@game/script/task/IdleTask';
-
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { NetworkManager } from '@common/script/network/NetworkManager';
-import { GameTask } from '@common/script/tasks/GameTask';
-import { TaskManager } from '@common/script/tasks/TaskManager';
-import { TurboMode } from '@common/script/types/BaseType';
-
-
-
+import { ReelBlackUI } from 'db://assets/game/components/ReelBlackUI/ReelBlackUI';
+import { WinScoreUI } from 'db://assets/game/components/WinScoreUI/WinScoreUI';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+import { IdleTask } from 'db://assets/game/script/task/IdleTask';
+import { SlotData } from 'db://assets/game/script/data/SlotData';
 
 /**
  * 共用開始轉動流程(成功送出Spin請求)
@@ -29,7 +26,7 @@ export class SpinTask extends GameTask {
     public betCredit: number = 0;
 
     async execute(): Promise<void> {
-        console.log('==========================================新局開始==========================================');
+        // console.log('==========================================新局開始==========================================');
 
         // const dataManager = DataManager.getInstance();
         AudioManager.getInstance().playSound(AudioKey.spinClick);
@@ -38,7 +35,7 @@ export class SpinTask extends GameTask {
         BaseEvent.buyFeatureEnabled.emit(false);//禁用購買功能
         SettingsController.setEnabled.emit(false);
         ReelBlackUI.hide.emit();
-        DataManager.getInstance().slotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
+        SlotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
         // SettingsController.refreshWin.emit(0, 0);//重置贏分
         WinScoreUI.hideWin.emit();//隱藏贏得分數
         // SettingsPage1.setSpinState.emit(SpinBtnState.Loop);
@@ -79,7 +76,7 @@ export class SpinTask extends GameTask {
         let spinID = this.isBuyFs ? 1 : 0;
 
         //發送spin請求
-        console.log('【發送spin請求】:', spinID);
+        // console.log('【發送spin請求】:', spinID);
 
         //跑假資料------------------------
         // const fakeSpinResult = { 'game_id': 5800, 'main_game': { 'pay_credit_total': 1.5, 'game_result': [[1, 17, 18], [19, 1, 1], [5, 6, 16], [18, 19, 6], [20, 17, 16]], 'pay_line': [{ 'pay_line': 6, 'symbol_id': 1, 'amount': 2, 'pay_credit': 1.5, 'multiplier': 1 }], 'scatter_info': { 'id': [20], 'position': [[4, 0]], 'amount': 1, 'multiplier': 0, 'pay_credit': 0, 'pay_rate': 0 }, 'wild_info': null, 'scatter_extra': null, 'extra': null }, 'get_sub_game': false, 'sub_game': { 'game_result': null, 'pay_credit_total': 0, 'over_win': false }, 'get_jackpot': false, 'jackpot': { 'jackpot_id': '', 'jackpot_credit': 0, 'symbol_id': null }, 'get_jackpot_increment': false, 'jackpot_increment': null, 'grand': 0, 'major': 0, 'minor': 0, 'mini': 0, 'user_credit': 499999995.5, 'bet_credit': 3, 'payout_credit': 1.5, 'change_credit': -1.5, 'effect_credit': 3, 'buy_spin': 0, 'buy_spin_multiplier': 1, 'extra': null };
@@ -560,7 +557,7 @@ export class SpinTask extends GameTask {
         NetworkManager.getInstance().sendSpin(spinID, (spinResult) => {
             //判斷是否有spin成功回傳資料
             if (spinResult) {
-                console.log('【spin結果】:', spinResult);
+                // console.log('【spin結果】:', spinResult);
                 BaseEvent.onSpinResult.emit(spinResult);
                 //更新玩家餘額(減去總下注額度)
                 const newUserCredit = DataManager.getInstance().userCredit - this.betCredit;

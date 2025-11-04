@@ -1,15 +1,6 @@
 import { _decorator } from 'cc';
 
 /**
- * 圖示狀態
- */
-// export enum SymbolState {
-//     Normal = 0,
-//     Blur,
-//     Ani
-// }
-
-/**
  * 中獎魚資料
  */
 export interface IWinFishData {

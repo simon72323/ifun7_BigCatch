@@ -2,8 +2,8 @@
 import { _decorator, Component, Layout, Node, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec3 } from 'cc';
 import { EDITOR } from 'cc/env';
 
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { OrientationtMode } from '@common/script/types/BaseType';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { OrientationtMode } from 'db://assets/common/script/types/BaseType';
 
 /**
  * 直橫式管理器
@@ -182,10 +182,10 @@ export class OrientationManager extends Component {
      * @param orientation 方向模式
      */
     private onChangeOrientation(orientation: OrientationtMode) {
-        console.log('執行直橫式切換', orientation);
+        // console.log('執行直橫式切換', orientation);
         const isLandscape = orientation === OrientationtMode.Landscape;
 
-        console.log('this.orientationNode', this.orientationNode);
+        // console.log('this.orientationNode', this.orientationNode);
         //節點搬移
         if (this.orientationNode) {
             this.orientationNode.forEach((node, index) => {

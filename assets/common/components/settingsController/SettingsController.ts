@@ -1,13 +1,11 @@
 import { _decorator, Animation, Button, Component, EventTouch, KeyCode, Label, Node, screen, Tween, tween, Vec3 } from 'cc';
-
-import { Notice } from '@common/components/notice/Notice';
-
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { AudioMode, ModuleID, TurboMode } from '@common/script/types/BaseType';
-import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
+import { Notice } from 'db://assets/common/components/notice/Notice';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { XEvent, XEvent1, XEvent2 } from 'db://assets/common/script/event/XEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { AudioMode, ModuleID, TurboMode } from 'db://assets/common/script/types/BaseType';
+import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
 
@@ -193,6 +191,7 @@ export class SettingsController extends Component {
                 this.handleClickSpin();
             }
         }, this);
+        this.updateBetBtnInteractable();
     }
 
     /**
@@ -230,6 +229,8 @@ export class SettingsController extends Component {
         this.turboBtn.getComponent(Button).interactable = enabled;
         this.optionBtn.getComponent(Button).interactable = enabled;
         this.informationBtn.getComponent(Button).interactable = enabled;
+
+        DataManager.getInstance().lockKeyboard = !enabled;//鎖定/解除鍵盤功能
 
         //true時要判斷更新+-按鈕是否可用，false時直接禁用
         if (enabled) {
@@ -293,7 +294,7 @@ export class SettingsController extends Component {
         });
 
         BaseEvent.clickSpin.emit(isBuyFs);
-        console.log('發送Spin請求');
+        // console.log('發送Spin請求');
     }
 
 
@@ -404,7 +405,7 @@ export class SettingsController extends Component {
      * 點擊自動下注按鈕
      */
     private onClickAuto() {
-        console.log('onClickAuto');
+        // console.log('onClickAuto');
         BaseEvent.showAutoSpin.emit();
     }
 
@@ -414,7 +415,7 @@ export class SettingsController extends Component {
      * @param eventData 事件數據
      */
     private changeBet(event: EventTouch, eventData: string) {
-        console.log('changeBet', eventData);
+        // console.log('changeBet', eventData);
         const changeValue = parseInt(eventData);
         this.changeBetValue(changeValue);
     }
@@ -465,6 +466,8 @@ export class SettingsController extends Component {
      */
     private onClickOption() {
         this.isOpenOption = !this.isOpenOption;
+        DataManager.getInstance().lockKeyboard = this.isOpenOption;//鎖定/解除鍵盤功能
+        // console.log('lockKeyboard', DataManager.getInstance().lockKeyboard);
         if (this.isOpenOption) {
             this.porControllerBtns.getComponent(Animation).play('optionMenuHide');
             this.porOptionMenu.getComponent(Animation).play('optionMenuShow');

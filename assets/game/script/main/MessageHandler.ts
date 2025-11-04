@@ -1,21 +1,21 @@
-import { GameConst, SymbolID } from '@game/script/data/GameConst';
-import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
-import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
-import { BootCatchTask } from '@game/script/task/BootCatchTask';
-import { IdleTask } from '@game/script/task/IdleTask';
-import { StopTask } from '@game/script/task/StopTask';
-import { TotalWinTask } from '@game/script/task/TotalWinTask';
-import { TransTask } from '@game/script/task/TransTask';
-import { UpdateFreeTimesTask } from '@game/script/task/UpdateFreeTimesTask';
-import { WinScatterTask } from '@game/script/task/WinScatterTask';
-import { WinSymbolTask } from '@game/script/task/WinSymbolTask';
+import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
+import { AutoSpinDelayTask } from 'db://assets/game/script/task/AutoSpinDelayTask';
+import { BackBSSettleTask } from 'db://assets/game/script/task/BackBSSettleTask';
+import { BootCatchTask } from 'db://assets/game/script/task/BootCatchTask';
+import { IdleTask } from 'db://assets/game/script/task/IdleTask';
+import { StopTask } from 'db://assets/game/script/task/StopTask';
+import { TotalWinTask } from 'db://assets/game/script/task/TotalWinTask';
+import { TransTask } from 'db://assets/game/script/task/TransTask';
+import { UpdateFreeTimesTask } from 'db://assets/game/script/task/UpdateFreeTimesTask';
+import { WinScatterTask } from 'db://assets/game/script/task/WinScatterTask';
+import { WinSymbolTask } from 'db://assets/game/script/task/WinSymbolTask';
 
-import { IWinFishData, IWinLineData } from '@common/components/slotMachine/SlotType';
+import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
 
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { IGameResult, ISpinData } from '@common/script/network/NetworkApi';
-import { TaskManager } from '@common/script/tasks/TaskManager';
-import { Utils } from '@common/script/utils/Utils';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { IGameResult, ISpinData } from 'db://assets/common/script/network/NetworkApi';
+import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 /**
@@ -49,7 +49,7 @@ export class MessageHandler {
      * @param slotResult 結果
      */
     private parseBSResult(slotResult: ISpinData): void {
-        console.log('接收Spin結果', slotResult);
+        // console.log('接收Spin結果', slotResult);
         //執行主遊戲結果
         const mainGame = slotResult.main_game;
         // console.log('======執行主遊戲結果======');
@@ -64,7 +64,7 @@ export class MessageHandler {
             this.fgBonus2 = false;//重置bonus狀態
 
             //執行scatter表演
-            const winScatterPos = slotResult.main_game.scatter_info.position.map((pos) => Utils.gridToPos(pos[0], pos[1]));
+            const winScatterPos = slotResult.main_game.scatter_info.position.map((pos) => pos[0] * GameConst.REEL_ROW + pos[1]);
             const winScatterTask = new WinScatterTask();
             winScatterTask.winPos = winScatterPos;
             TaskManager.getInstance().addTask(winScatterTask);
@@ -76,6 +76,7 @@ export class MessageHandler {
             const transTask = new TransTask();
             transTask.freeSpinTimes = this.freeSpinTimes;
             transTask.isFirstTrans = true;
+            transTask.wildMultiplier = 1;
             TaskManager.getInstance().addTask(transTask);
 
             //執行子遊戲(免費遊戲)結果
@@ -145,7 +146,7 @@ export class MessageHandler {
                     fishSymbolIDs.push(symbolID);
                 }
             });
-            const allWildPos = gameResult.extra?.wild_pos.map((pos) => Utils.gridToPos(pos[0], pos[1]));
+            const allWildPos = gameResult.extra?.wild_pos.map((pos) => pos[0] * GameConst.REEL_ROW + pos[1]);
             winFishData = {
                 allWildPos,
                 allFishPos,
@@ -191,6 +192,7 @@ export class MessageHandler {
             const transTask = new TransTask();
             transTask.freeSpinTimes = 10;
             transTask.isFirstTrans = false;
+            transTask.wildMultiplier = 2;
             TaskManager.getInstance().addTask(transTask);
             this.fgBonus1 = true;//已啟用第一個bouns
 
@@ -206,6 +208,7 @@ export class MessageHandler {
             const transTask = new TransTask();
             transTask.freeSpinTimes = 10;
             transTask.isFirstTrans = false;
+            transTask.wildMultiplier = 4;
             TaskManager.getInstance().addTask(transTask);
             this.fgBonus2 = true;//已啟用第二個bouns
 

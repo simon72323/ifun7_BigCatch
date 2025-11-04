@@ -1,10 +1,10 @@
 import { _decorator } from 'cc';
 
-import { Notice } from '@common/components/notice/Notice';
-import { DataManager } from '@common/script/data/DataManager';
-import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
-import { FETCH_METHODS, FetchRequestUtils, IFetchPayload } from '@common/script/network/FetchRequestUtils';
-import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
+import { Notice } from 'db://assets/common/components/notice/Notice';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { ErrorCodeConfig } from 'db://assets/common/script/network/ErrorCodeConfig';
+import { FETCH_METHODS, FetchRequestUtils, IFetchPayload } from 'db://assets/common/script/network/FetchRequestUtils';
+import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from 'db://assets/common/script/network/NetworkApi';
 
 const { ccclass, property } = _decorator;
 
@@ -111,7 +111,7 @@ export class NetworkManager {
      */
     public async sendRenewToken(): Promise<string> {
         const response = await this.sendRequest(NetworkApi.RENEW_TOKEN);
-        console.log('[NetworkManager] onRenewTokenReceived =>', response);
+        // console.log('[NetworkManager] onRenewTokenReceived =>', response);
         return response.data[0].token as string;
     }
 
@@ -132,7 +132,7 @@ export class NetworkManager {
                 buy_spin: SpinID
             };
             const response = await this.sendRequest(NetworkApi.SPIN, data);
-            console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
+            // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
             // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
             DataManager.getInstance().spinResult = response.data;
             callback(response.data);// 成功回調
@@ -150,7 +150,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_FREE_SPIN_TOTAL_PAYOUT, {
             free_spin_id: freeSpinId
         });
-        console.log('[NetworkManager] onGetFreeSpinTotalPayoutReceived =>', response);
+        // console.log('[NetworkManager] onGetFreeSpinTotalPayoutReceived =>', response);
         return response.data[0] as IFreeSpinTotalPayoutResponse;
     }
 
@@ -159,7 +159,7 @@ export class NetworkManager {
      */
     public async sendReelStop(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.REEL_STOP);
-        console.log('[NetworkManager] onReelStopReceived =>', response);
+        // console.log('[NetworkManager] onReelStopReceived =>', response);
     }
 
     /**
@@ -169,7 +169,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_PROMOTION_BRIEF, {
             promotion_id: '-1'
         });
-        console.log('[NetworkManager] onGetPromotionBriefReceived =>', response);
+        // console.log('[NetworkManager] onGetPromotionBriefReceived =>', response);
         this.processPromotionBrief(response);
     }
 
@@ -207,7 +207,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_CASH_DROP, {
             promotion_id: promotionId
         });
-        console.log('[NetworkManager] onGetCashDropReceived =>', response);
+        // console.log('[NetworkManager] onGetCashDropReceived =>', response);
         return response.data as ICashDrop[];
     }
 
@@ -218,7 +218,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_CASH_DROP_PRIZE_RECORD, {
             promotion_id: promotionId
         });
-        console.log('[NetworkManager] onGetCashDropPrizeRecordReceived =>', response);
+        // console.log('[NetworkManager] onGetCashDropPrizeRecordReceived =>', response);
         return response.data as ICashDropPrizeRecord[];
     }
 
@@ -229,7 +229,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_TOURNAMENT, {
             promotion_id: promotionId
         });
-        console.log('[NetworkManager] onGetTournamentReceived =>', response);
+        // console.log('[NetworkManager] onGetTournamentReceived =>', response);
         return response.data as ITournament[];
     }
 
@@ -240,7 +240,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_TOURNAMENT_PRIZE_RECORD, {
             promotion_id: promotionId
         });
-        console.log('[NetworkManager] onGetTournamentPrizeRecordReceived =>', response);
+        // console.log('[NetworkManager] onGetTournamentPrizeRecordReceived =>', response);
         return response.data as ITournamentPrizeRecord[];
     }
 
@@ -251,7 +251,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_EXTRA_DATA, {
             interval
         });
-        console.log('[NetworkManager] onGetExtraDataReceived =>', response);
+        // console.log('[NetworkManager] onGetExtraDataReceived =>', response);
         return response.data as IExtraDataResponse[];
     }
 
@@ -260,7 +260,7 @@ export class NetworkManager {
      */
     public async sendInGameMenuStatus(): Promise<boolean> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU_STATUS);
-        console.log('[NetworkManager] onGetInGameMenuStatusReceived =>', response);
+        // console.log('[NetworkManager] onGetInGameMenuStatusReceived =>', response);
         return response.data[0].status as boolean;
     }
 
@@ -276,7 +276,7 @@ export class NetworkManager {
             lang,
             b
         });
-        console.log('[NetworkManager] onGetInGameMenuGameUrlReceived =>', response);
+        // console.log('[NetworkManager] onGetInGameMenuGameUrlReceived =>', response);
         return response.data[0].url as string;
     }
 
@@ -285,7 +285,7 @@ export class NetworkManager {
      */
     public async sendUserData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
-        console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
+        // console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
         // return response.data as IUserData;
         DataManager.getInstance().userData = response.data[0];
     }
@@ -297,7 +297,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_GAME_DATA, {
             game_id: DataManager.getInstance().urlParam.gameId
         });
-        console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
+        // console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
         // return response.data as IGameData;
         DataManager.getInstance().gameData = response.data[0];
     }
@@ -307,7 +307,7 @@ export class NetworkManager {
      */
     public async sendJackpot(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_JACKPOT);
-        console.log('[NetworkManager] onGetJackpotReceived =>', response);
+        // console.log('[NetworkManager] onGetJackpotReceived =>', response);
         // TODO: 處理累積獎金資料
     }
 
@@ -316,7 +316,7 @@ export class NetworkManager {
      */
     public async sendInGameMenu(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_IN_GAME_MENU);
-        console.log('[NetworkManager] onGetInGameMenuReceived =>', response);
+        // console.log('[NetworkManager] onGetInGameMenuReceived =>', response);
         this.getInGameMenu(response);
     }
 
@@ -362,7 +362,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.UPDATE_IN_GAME_MENU_FAVORITE_GAME, {
             favorite: favoriteList
         });
-        console.log('[NetworkManager] onUpdateInGameMenuFavoriteGameReceived =>', response);
+        // console.log('[NetworkManager] onUpdateInGameMenuFavoriteGameReceived =>', response);
         // TODO: 處理更新最愛遊戲結果
     }
 }

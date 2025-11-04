@@ -32,7 +32,7 @@ export class TimeUI extends Component {
         if (!document.hidden) {
             this.updateTime();
         }
-    }
+    };
 
     onDestroy() {
         if (this.timeInterval) {

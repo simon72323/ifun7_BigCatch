@@ -1,13 +1,13 @@
-import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
-import { AudioKey } from '@game/script/data/AudioKey';
+import { ReelBlackUI } from 'db://assets/game/components/ReelBlackUI/ReelBlackUI';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
+import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { GameTask } from '@common/script/tasks/GameTask';
-import { Utils } from '@common/script/utils/Utils';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 /**
  * Scatter中獎

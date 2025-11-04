@@ -1,14 +1,13 @@
 import { _decorator, Button, Component, EventTouch, Label, Node, tween, Vec3 } from 'cc';
 
-import { AudioKey } from '@game/script/data/AudioKey';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent } from '@common/script/event/XEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { XEvent } from 'db://assets/common/script/event/XEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 
 
 const { ccclass } = _decorator;
@@ -68,6 +67,7 @@ export class FeatureBuyPage extends Component {
      * 開啟FeatureBuy介面
      */
     private show(): void {
+        DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
         AudioManager.getInstance().playSound(AudioKey.showBuyWindow);
         this.updateBuyInfo();//更新購買資訊
         this.node.active = true;
@@ -86,6 +86,7 @@ export class FeatureBuyPage extends Component {
         if (this.isHiding) {
             return;
         }
+        DataManager.getInstance().lockKeyboard = false;//解除鎖定鍵盤功能
         AudioManager.getInstance().playSound(AudioKey.btnBuyCancle);
         this.isHiding = true;
         this.forceHide();

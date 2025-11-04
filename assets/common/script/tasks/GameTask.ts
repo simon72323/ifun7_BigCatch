@@ -1,4 +1,4 @@
-import { TaskManager } from '@common/script/tasks/TaskManager';
+import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
 
 /**
  * 遊戲任務

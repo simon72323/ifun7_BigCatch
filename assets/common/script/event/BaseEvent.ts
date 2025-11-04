@@ -1,8 +1,8 @@
 import { KeyCode } from 'cc';
 
-import { XEvent, XEvent1 } from '@common/script/event/XEvent';
-import { ISpinData } from '@common/script/network/NetworkApi';
-import { ModuleID, OrientationtMode, TurboMode } from '@common/script/types/BaseType';
+import { XEvent, XEvent1 } from 'db://assets/common/script/event/XEvent';
+import { ISpinData } from 'db://assets/common/script/network/NetworkApi';
+import { ModuleID, OrientationtMode, TurboMode } from 'db://assets/common/script/types/BaseType';
 
 /**
  * 共用遊戲事件

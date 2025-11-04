@@ -1,13 +1,12 @@
 import { _decorator, Component, Node, Prefab, tween, instantiate, UITransform, Vec3, Tween, easing, Button } from 'cc';
 
-import { BaseSymbol } from '@common/components/slotMachine/BaseSymbol';
-
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent, XEvent1, XEvent2 } from '@common/script/event/XEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { Utils } from '@common/script/utils/Utils';
+import { BaseSymbol } from 'db://assets/common/components/slotMachine/BaseSymbol';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { XEvent, XEvent1, XEvent2 } from 'db://assets/common/script/event/XEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 //公版音效名稱(需透過遊戲指定)
@@ -162,7 +161,7 @@ export class SlotMachine extends Component {
                     this.reelMainSymbol[i].push(symbol);
                     this.reelSymbols[i].push(symbol);
                     symbol.posID = i * row1x + idx - row1x;
-                    symbol.grid = { col: i, row: idx };
+                    // symbol.grid = { col: i, row: idx };
                     symbol.setSymbolID(initParser[i][idx - row1x]);
                     this.allMainSymbols.push(symbol.node);
                     this.allMainSymbolPos.push(new Vec3(reelNode.x, child.position.y, 0));

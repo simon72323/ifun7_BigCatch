@@ -10,7 +10,7 @@
   },
   "script": {
     "loose": false,
-    "importMap": "project://import-map.json"
+    "importMap": ""
   },
   "custom_joint_texture_layouts": []
 }

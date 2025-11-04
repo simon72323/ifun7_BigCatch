@@ -1,7 +1,7 @@
 import { EventKeyboard, input, Input } from 'cc';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 
 /**
  * 鍵盤控制器
@@ -31,7 +31,9 @@ export class KeyboardManager {
      */
     private onKeyDown(event: EventKeyboard) {
 
-        if (DataManager.getInstance().isBlockKeyboard() === true) {
+        if (DataManager.getInstance().lockKeyboard
+            || DataManager.getInstance().isAutoMode
+            || !DataManager.getInstance().isBS()) {
             return;
         }
 

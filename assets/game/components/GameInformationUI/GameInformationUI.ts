@@ -1,9 +1,9 @@
 import { _decorator, Button, Component, Node, Vec3 } from 'cc';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent } from '@common/script/event/XEvent';
-import { Utils } from '@common/script/utils/Utils';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { XEvent } from 'db://assets/common/script/event/XEvent';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 const { ccclass, property } = _decorator;

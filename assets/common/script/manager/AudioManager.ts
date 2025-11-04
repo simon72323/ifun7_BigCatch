@@ -12,7 +12,7 @@
 
 import { _decorator, AudioSource, game, Game, tween, Component, assetManager, AudioClip, AssetManager, Tween, Node, director } from 'cc';
 
-import { Logger } from '@common/script/utils/Logger';
+import { Logger } from 'db://assets/common/script/utils/Logger';
 
 interface AudioInfo {
     startTime: number;//紀錄播放當下時間(讓後台來回切換時正常接續播放音效)

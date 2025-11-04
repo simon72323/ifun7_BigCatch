@@ -1,10 +1,9 @@
 
 
-import { BaseConst } from '@common/script/data/BaseConst';
-
-import { DataManager } from '@common/script/data/DataManager';
-import { GameTask } from '@common/script/tasks/GameTask';
-import { Utils } from '@common/script/utils/Utils';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 
 /**

@@ -1,26 +1,23 @@
 import { Tween, tween, Vec3 } from 'cc';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
+import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { BigWinType } from 'db://assets/common/script/types/BaseType';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
-import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
-import { CharacterUI } from '@game/components/CharacterUI/CharacterUI';
-import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
-import { ReelBlackUI } from '@game/components/ReelBlackUI/ReelBlackUI';
-import { Symbol } from '@game/components/slotMachine/Symbol';
-import { WinScoreUI } from '@game/components/WinScoreUI/WinScoreUI';
-
-import { AudioKey } from '@game/script/data/AudioKey';
-import { FISH_ODDS } from '@game/script/data/GameConst';
-
-import { SettingsController } from '@common/components/settingsController/SettingsController';
-import { SlotMachine } from '@common/components/slotMachine/SlotMachine';
-import { IWinFishData, IWinLineData } from '@common/components/slotMachine/SlotType';
-
-import { BaseConst } from '@common/script/data/BaseConst';
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { AudioManager } from '@common/script/manager/AudioManager';
-import { GameTask } from '@common/script/tasks/GameTask';
-import { BigWinType } from '@common/script/types/BaseType';
-import { Utils } from '@common/script/utils/Utils';
+import { BigWinUI } from 'db://assets/game/components/BigWinUI/BigWinUI';
+import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
+import { FreeGameUI } from 'db://assets/game/components/FreeGameUI/FreeGameUI';
+import { ReelBlackUI } from 'db://assets/game/components/ReelBlackUI/ReelBlackUI';
+import { Symbol } from 'db://assets/game/components/slotMachine/Symbol';
+import { WinScoreUI } from 'db://assets/game/components/WinScoreUI/WinScoreUI';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+import { FISH_ODDS } from 'db://assets/game/script/data/GameConst';
 
 
 /**

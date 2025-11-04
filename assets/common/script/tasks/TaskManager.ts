@@ -1,5 +1,5 @@
-import { XEvent1 } from '@common/script/event/XEvent';
-import { GameTask } from '@common/script/tasks/GameTask';
+import { XEvent1 } from 'db://assets/common/script/event/XEvent';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 
 /**
  * 任務管理
@@ -47,7 +47,7 @@ export class TaskManager {
         if (this.curTask) {
             //第一次進入該任務才執行baseExecute
             if (this.curTask.executed === false) {
-                console.log('TaskManager 执行任務 ' + this.curTask.getName());
+                // console.log('TaskManager 执行任務 ' + this.curTask.getName());
                 this.curTask.baseExecute();
             }
             else {
@@ -62,7 +62,7 @@ export class TaskManager {
      */
     private onFinishTask(task: GameTask) {
         if (task != this.curTask) {
-            console.log('TaskManager 不是當前任務');
+            // console.log('TaskManager 不是當前任務');
             return;
         }
 
@@ -75,10 +75,10 @@ export class TaskManager {
     private doNextTask(): void {
         this.curTask = this.tasks.shift();
         if (!this.curTask) {
-            console.log('TaskManager 所有任務完成');
+            // console.log('TaskManager 所有任務完成');
             return;
         }
-        console.log('TaskManager 执行任務 ' + this.curTask.getName());
+        // console.log('TaskManager 执行任務 ' + this.curTask.getName());
         this.curTask.baseExecute();
     }
 }

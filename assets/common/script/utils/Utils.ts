@@ -1,10 +1,7 @@
-import { EventHandler, bezier, JsonAsset, resources, CurveRange, _decorator, Enum, EventTarget, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, Toggle, sp, Label } from 'cc';
-import { PREVIEW, EDITOR } from 'cc/env';
+import { JsonAsset, resources, _decorator, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, sp, Label } from 'cc';
 
-import { GameConst } from '@game/script/data/GameConst';
-
-import { BaseConfig } from '@common/script/data/BaseConfig';
-import { RunNumber } from '@common/script/types/BaseType';
+import { BaseConfig } from 'db://assets/common/script/data/BaseConfig';
+import { RunNumber } from 'db://assets/common/script/types/BaseType';
 
 const { ccclass, property } = _decorator;
 
@@ -265,7 +262,6 @@ export class Utils {
      */
     public static getLinePathPosition(payLineId: number, amount: number, slotPattern: number[][], payLineData: number[][]): { winPos: number[], winSymbolIDs: number[] } {
         const linePath = payLineData[payLineId];
-        console.log('linePath', linePath);
         let winPos: number[] = [];
         let winSymbolIDs: number[] = [];
 
@@ -281,16 +277,6 @@ export class Utils {
         }
 
         return { winPos, winSymbolIDs };
-    }
-
-    /**
-     * 將欄列轉換為位置
-     * @param col 欄
-     * @param row 列
-     * @returns 位置
-     */
-    public static gridToPos(col: number, row: number): number {
-        return col * GameConst.REEL_ROW + row;
     }
 
     /**

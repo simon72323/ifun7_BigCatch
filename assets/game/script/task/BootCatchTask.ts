@@ -1,8 +1,7 @@
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 
-import { AddSpinUI } from '@game/components/BootCatchUI/AddSpinUI';
-import { BootCatchUI } from '@game/components/BootCatchUI/BootCatchUI';
-
-import { GameTask } from '@common/script/tasks/GameTask';
+import { AddSpinUI } from 'db://assets/game/components/BootCatchUI/AddSpinUI';
+import { BootCatchUI } from 'db://assets/game/components/BootCatchUI/BootCatchUI';
 
 
 /**

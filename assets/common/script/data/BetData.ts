@@ -1,5 +1,5 @@
-import { IGameData } from '@common/script/network/NetworkApi';
-import { Utils } from '@common/script/utils/Utils';
+import { IGameData } from 'db://assets/common/script/network/NetworkApi';
+import { Utils } from 'db://assets/common/script/utils/Utils';
 
 /**
  * 下注相關資料

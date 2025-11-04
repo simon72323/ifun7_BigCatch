@@ -1,10 +1,8 @@
 
-import { SlotData } from '@game/script/data/SlotData';
-
-import { BetData } from '@common/script/data/BetData';
-import { UrlParam } from '@common/script/data/UrlParam';
-import { IGameData, IPromotionBrief, ISpinData, IUserData } from '@common/script/network/NetworkApi';
-import { BigWinType, ModuleID, TurboMode } from '@common/script/types/BaseType';
+import { BetData } from 'db://assets/common/script/data/BetData';
+import { UrlParam } from 'db://assets/common/script/data/UrlParam';
+import { IGameData, IPromotionBrief, ISpinData, IUserData } from 'db://assets/common/script/network/NetworkApi';
+import { BigWinType, ModuleID, TurboMode } from 'db://assets/common/script/types/BaseType';
 
 /** 遊戲內選單資料 */
 type InGameMenuStore = {
@@ -17,8 +15,8 @@ type InGameMenuStore = {
 };
 
 /**
- * 遊戲資料控制器
- */
+     * 遊戲資料控制器
+     */
 export class DataManager {
     private static instance: DataManager = null;
     public static getInstance(): DataManager {
@@ -54,8 +52,6 @@ export class DataManager {
     public lockKeyboard: boolean = false;
 
     //=================================== 資料 ======================================
-    /** 獲取slot資料 */
-    public slotData: SlotData = new SlotData();
     /**網址參數 */
     public urlParam: UrlParam = new UrlParam();
     /**下注相關資料 */
@@ -82,11 +78,10 @@ export class DataManager {
     }
 
     public set gameData(gameData: IGameData) {
-        console.log('設置遊戲資料', gameData);
         this._gameData = gameData;
-        this.bigWinMultiple.push(5);
-        this.bigWinMultiple.push(10);
-        this.bigWinMultiple.push(15);
+        this.bigWinMultiple.push(gameData.big_win);
+        this.bigWinMultiple.push(gameData.super_win);
+        this.bigWinMultiple.push(gameData.mega_win);
 
         // 初始化 BetData 的數據依賴
         this.bet.setGameData(gameData);
@@ -150,7 +145,7 @@ export class DataManager {
      */
     public getBigWinTypeByValue(value: number): BigWinType {
         if (!this.bigWinMultiple || this.bigWinMultiple.length === 0) {
-            console.warn('BetData: bigWinMultiple not initialized');
+            // console.warn('BetData: bigWinMultiple not initialized');
             return BigWinType.non;
         }
 

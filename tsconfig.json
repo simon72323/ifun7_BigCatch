@@ -9,16 +9,5 @@
     "strict": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-	// "types": [
-  //       "./types/reference",
-  //       "./types/AnimationConfig",
-  //       "./types/toolTypes",
-  //       "jest"
-  //   ],
-	"paths": {
-        "@base/*": ["./assets/base/*"],
-        "@game/*": ["./assets/game/*"],
-        "@common/*": ["./assets/common/*"]
-    }
   }
 }

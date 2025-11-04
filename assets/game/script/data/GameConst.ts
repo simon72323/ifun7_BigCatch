@@ -1,5 +1,5 @@
-import { BaseConst } from '@common/script/data/BaseConst';
-import { TurboMode } from '@common/script/types/BaseType';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { TurboMode } from 'db://assets/common/script/types/BaseType';
 
 /**
  * 遊戲常數

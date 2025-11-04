@@ -1,9 +1,9 @@
 import { _decorator, Button, Color, Component, EventTouch, instantiate, Label, Node, ScrollView, Sprite, tween, Vec3 } from 'cc';
 
-import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
-import { TurboMode } from '@common/script/types/BaseType';
-import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { TurboMode } from 'db://assets/common/script/types/BaseType';
+import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 
 const { ccclass, property } = _decorator;
 
@@ -167,17 +167,17 @@ export class AutoSpin extends Component {
         BaseEvent.setTurboBtnState.emit(turboMode);
         switch (turboMode) {
             case TurboMode.Normal:
-                console.log('TurboMode.Normal');
+                // console.log('TurboMode.Normal');
                 this.tweenOff(this.fastSpinBtn);
                 this.tweenOff(this.turboSpinBtn);
                 break;
             case TurboMode.Fast:
-                console.log('TurboMode.Fast');
+                // console.log('TurboMode.Fast');
                 this.tweenOn(this.fastSpinBtn);
                 this.tweenOff(this.turboSpinBtn);
                 break;
             case TurboMode.Turbo:
-                console.log('TurboMode.Turbo');
+                // console.log('TurboMode.Turbo');
                 this.tweenOn(this.turboSpinBtn);
                 this.tweenOff(this.fastSpinBtn);
                 break;
