@@ -8,8 +8,6 @@ import { AudioManager } from '@common/script/manager/AudioManager';
 import { RunNumber } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
 
-
-
 enum TotalWinAnimation {
     totalWin_loop = 'totalWin_loop',
     totalWin_in = 'totalWin_in',
@@ -24,8 +22,6 @@ const { ccclass } = _decorator;
 export class TotalWinUI extends Component {
     /**顯示 */
     public static show: XEvent4<number, number, () => void, () => void> = new XEvent4();
-    /**隱藏 */
-    // public static hide: XEvent = new XEvent();
 
     private totalwin_ani: sp.Skeleton;
     private num_totalwin: Label;
@@ -55,7 +51,6 @@ export class TotalWinUI extends Component {
         this.sens = this.node.getChildByName('Sens');
 
         TotalWinUI.show.on(this.show, this);//結算演示
-        // TotalWinUI.hide.on(() => { }, this);//關閉結算
         this.node.active = false;
     }
 
@@ -75,7 +70,6 @@ export class TotalWinUI extends Component {
         this.cbComplete = onComplete;
         this.num_totalwin.string = '';
 
-        // Utils.ClearSpine(this.totalwin_ani);
         this.totalwin_ani.setAnimation(0, TotalWinAnimation.totalWin_in, false);
         this.totalwin_ani.addAnimation(0, TotalWinAnimation.totalWin_loop, true);
 
@@ -121,7 +115,6 @@ export class TotalWinUI extends Component {
      * 完成
      */
     private async onComplete(): Promise<void> {
-        // console.log('取消監聽sens click');
         this.sens.off(Button.EventType.CLICK, this.onComplete, this);
         BaseEvent.keyDown.off(this);
 
@@ -134,5 +127,9 @@ export class TotalWinUI extends Component {
             this.node.active = false;
             this.cbComplete?.();
         });
+    }
+
+    onDestroy() {
+        TotalWinUI.show.off(this);
     }
 }

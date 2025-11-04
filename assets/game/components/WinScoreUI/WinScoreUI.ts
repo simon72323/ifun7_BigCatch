@@ -57,4 +57,9 @@ export class WinScoreUI extends Component {
         Tween.stopAllByTarget(this.node);
         this.node.active = false;
     }
+
+    onDestroy() {
+        WinScoreUI.showWin.off(this);
+        WinScoreUI.hideWin.off(this);
+    }
 }

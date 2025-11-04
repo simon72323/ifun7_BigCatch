@@ -5,6 +5,9 @@ import { EDITOR } from 'cc/env';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { OrientationtMode } from '@common/script/types/BaseType';
 
+/**
+ * 直橫式管理器
+ */
 const { ccclass, property } = _decorator;
 
 /**

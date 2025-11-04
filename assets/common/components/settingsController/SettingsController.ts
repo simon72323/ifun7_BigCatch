@@ -98,9 +98,8 @@ export class SettingsController extends Component {
     private totalBetValue: Label = null;//總下注
 
     /**當前設置頁面 0=spin頁面 1=menu頁面*/
-    private curSettingPage: number = 0;
+    // private curSettingPage: number = 0;
     private totalBet: number = 0;//總下注
-
 
     /**
      * 遊戲初始化設定
@@ -350,17 +349,6 @@ export class SettingsController extends Component {
         DataManager.getInstance().isAutoMode = false;
         DataManager.getInstance().autoSpinCount = 0;
         this.stopSpinBtn.getComponent(Button).interactable = false;
-        // this.stopSpinBtn.active = false;
-        // if (this.spinBtn.active) return;
-        // Utils.fadeOut(this.stopSpinBtn, 0.1, 255, 0, () => {
-        //     this.stopSpinBtn.active = false;
-        //     this.freeSpin.active = false;
-        //     this.stopAutoSpinBtn.active = false;
-        //     this.spinBtn.active = true;
-        //     this.spinBtn.getComponent(Animation).play('spinBtnShow');
-        //     this.setBtnInteractable(true);//啟用控制器按鈕
-        // });
-        // this.onResetSpin();
     }
 
     /**
@@ -558,12 +546,6 @@ export class SettingsController extends Component {
      */
     private onClickInformation() {
         BaseEvent.showGameInformation.emit();
-        // GameHelpWebView.show.emit();
-        // 發送xevent 開啟遊戲說明
-        // if (this.machine.isBusy === true) return;
-        // this.clickOptionBack();
-        // Utils.GoogleTag('ClickInformation', { 'event_category': 'Information', 'event_label': 'ClickInformation' });
-        // GameInformationUI.OpenUI();
     }
 
 

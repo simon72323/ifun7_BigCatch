@@ -54,7 +54,7 @@
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
-        "packable": true,
+        "packable": false,
         "pixelsToUnit": 100,
         "pivotX": 0.5,
         "pivotY": 0.5,
@@ -132,7 +132,7 @@
     "redirect": "ce6f67ab-eb27-4e2f-9795-4d6bf3abafde@6c48a",
     "compressSettings": {
       "useCompressTexture": true,
-      "presetId": "e5DVTOEOBIB5ynRrTPNoWL"
+      "presetId": "acmUQQ3+dJXKgcuQ/k9hXx"
     }
   }
 }

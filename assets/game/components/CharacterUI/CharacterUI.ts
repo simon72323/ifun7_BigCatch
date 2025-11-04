@@ -25,5 +25,6 @@ export class CharacterUI extends Component {
 
     onDestroy() {
         CharacterUI.win.off(this);
+        CharacterUI.idle.off(this);
     }
 }

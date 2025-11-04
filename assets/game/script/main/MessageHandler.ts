@@ -2,9 +2,7 @@ import { GameConst, SymbolID } from '@game/script/data/GameConst';
 import { AutoSpinDelayTask } from '@game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from '@game/script/task/BackBSSettleTask';
 import { BootCatchTask } from '@game/script/task/BootCatchTask';
-// import { EndGameTask } from '@game/script/task/EndGameTask';
 import { IdleTask } from '@game/script/task/IdleTask';
-// import { SpinTask } from '@game/script/task/SpinTask';
 import { StopTask } from '@game/script/task/StopTask';
 import { TotalWinTask } from '@game/script/task/TotalWinTask';
 import { TransTask } from '@game/script/task/TransTask';
@@ -12,17 +10,12 @@ import { UpdateFreeTimesTask } from '@game/script/task/UpdateFreeTimesTask';
 import { WinScatterTask } from '@game/script/task/WinScatterTask';
 import { WinSymbolTask } from '@game/script/task/WinSymbolTask';
 
-// import { SettingsController } from '@common/components/settingsController/SettingsController';
 import { IWinFishData, IWinLineData } from '@common/components/slotMachine/SlotType';
 
-// import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 import { IGameResult, ISpinData } from '@common/script/network/NetworkApi';
-// import { DelayTask } from '@common/script/tasks/DelayTask';
 import { TaskManager } from '@common/script/tasks/TaskManager';
-import { ModuleID } from '@common/script/types/BaseType';
 import { Utils } from '@common/script/utils/Utils';
-// import { BaseConst } from '@common/script/data/BaseConst';
 
 
 /**
@@ -57,7 +50,6 @@ export class MessageHandler {
      */
     private parseBSResult(slotResult: ISpinData): void {
         console.log('接收Spin結果', slotResult);
-
         //執行主遊戲結果
         const mainGame = slotResult.main_game;
         // console.log('======執行主遊戲結果======');

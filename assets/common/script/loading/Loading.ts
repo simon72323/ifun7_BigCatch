@@ -4,12 +4,10 @@ import { Notice } from '@common/components/notice/Notice';
 
 import { BaseConfig } from '@common/script/data/BaseConfig';
 import { DataManager } from '@common/script/data/DataManager';
-import { BaseEvent } from '@common/script/event/BaseEvent';
 import { NetworkManager } from '@common/script/network/NetworkManager';
 import { i18n } from '@common/script/utils/i18n';
 import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 import { Utils } from '@common/script/utils/Utils';
-
 
 
 const { ccclass, property, disallowMultiple } = _decorator;
@@ -27,8 +25,6 @@ export class Loading extends Component {
     /** 載入Logo動態Spine */
     public logoSpine: sp.Skeleton = null;
 
-    // private blackLayer: Node = null;
-    // private loadingTime = 0;
 
     protected onLoad() {
         // E2ETest.E2EStartLoading();
@@ -58,11 +54,6 @@ export class Loading extends Component {
      */
     public async start() {
         // Utils.GoogleTag('EnterGame', { 'currency': urlParameters.currency, 'language': urlParameters.lang });
-
-        //監聽資源載入完成
-        // BaseEvent.initResourceComplete.once(() => {
-        //     this.node.active = false;//關閉載入畫面
-        // }, this);
 
         console.log('獲取資料');
         // this.getRenewToken()

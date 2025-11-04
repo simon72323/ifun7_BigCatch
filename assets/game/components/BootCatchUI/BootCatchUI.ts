@@ -14,13 +14,13 @@ export class BootCatchUI extends Component {
     private ani_hook: sp.Skeleton;
     private ani_multiply: sp.Skeleton;
     private boot: Node;
-    private pic_boots: Node;
+    // private pic_boots: Node;
 
     onLoad() {
         BootCatchUI.show.on(this.show, this);
         this.ani_hook = this.node.getChildByName('ani_hook').getComponent(sp.Skeleton);
         this.boot = this.node.getChildByPath('ani_hook/boot');
-        this.pic_boots = this.node.getChildByPath('ani_hook/boot/pic_boots');
+        // this.pic_boots = this.node.getChildByPath('ani_hook/boot/pic_boots');
         this.ani_multiply = this.node.getChildByPath('ani_hook/ani_multiply').getComponent(sp.Skeleton);
         this.node.active = false;
         this.boot.active = false;
@@ -68,6 +68,5 @@ export class BootCatchUI extends Component {
 
     onDestroy() {
         BootCatchUI.show.off(this);
-        // BootCatchUI.hide.off(this);
     }
 }

@@ -1,5 +1,5 @@
 
-import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
+import { FeatureBuyBtn } from '@game/components/FeatureBuyUI/FeatureBuyBtn';
 import { FreeGameUI } from '@game/components/FreeGameUI/FreeGameUI';
 import { TransUI } from '@game/components/TransUI/TransUI';
 

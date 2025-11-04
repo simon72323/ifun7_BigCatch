@@ -1,7 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 
 import { BaseSymbolData } from '@common/components/slotMachine/BaseSymbolData';
-import { Grid } from '@common/script/types/BaseType';
+// import { Grid } from '@common/script/types/BaseType';
 
 const { ccclass } = _decorator;
 
@@ -21,7 +21,7 @@ export class BaseSymbol extends Component {
     /**win層 */
     public winLayer: Node = null;
     /**盤面欄列位置 */
-    public grid: Grid = { col: 0, row: 0 };
+    // public grid: Grid = { col: 0, row: 0 };
     /**是否為空圖示 */
     // private empty: boolean = false;
     /**是否停止 */
@@ -90,9 +90,4 @@ export class BaseSymbol extends Component {
     public backBS(symbolID: number): void {
         //override
     }
-
-    /**設定是否可見 */
-    // public setVisible(_visible: boolean): void {
-    //     //override
-    // }
 }

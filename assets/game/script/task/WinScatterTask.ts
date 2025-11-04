@@ -9,8 +9,6 @@ import { AudioManager } from '@common/script/manager/AudioManager';
 import { GameTask } from '@common/script/tasks/GameTask';
 import { Utils } from '@common/script/utils/Utils';
 
-
-
 /**
  * Scatter中獎
  */

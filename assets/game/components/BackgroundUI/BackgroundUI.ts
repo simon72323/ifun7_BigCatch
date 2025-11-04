@@ -12,10 +12,10 @@ const { ccclass } = _decorator;
 export class BackgroundUI extends Component {
 
     private bg_fg: Node;
-    private bg_mg: Node;
+    // private bg_mg: Node;
 
     onLoad() {
-        this.bg_mg = this.node.getChildByName('bg_mg');
+        // this.bg_mg = this.node.getChildByName('bg_mg');
         this.bg_fg = this.node.getChildByName('bg_fg');
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
@@ -40,8 +40,6 @@ export class BackgroundUI extends Component {
                 Utils.fadeIn(this.bg_fg, 0.5, 0, 255);
             }
         }
-        // this.bg_mg.active = id === ModuleID.BS;
-        // this.bg_fg.active = id === ModuleID.FG;
     }
 }
 

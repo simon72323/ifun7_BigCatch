@@ -6,8 +6,6 @@ import { ErrorCodeConfig } from '@common/script/network/ErrorCodeConfig';
 import { FETCH_METHODS, FetchRequestUtils, IFetchPayload } from '@common/script/network/FetchRequestUtils';
 import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from '@common/script/network/NetworkApi';
 
-
-
 const { ccclass, property } = _decorator;
 
 @ccclass('NetworkManager')

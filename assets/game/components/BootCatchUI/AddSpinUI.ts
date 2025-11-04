@@ -44,6 +44,5 @@ export class AddSpinUI extends Component {
 
     onDestroy() {
         AddSpinUI.show.off(this);
-        // BootCatchUI.hide.off(this);
     }
 }

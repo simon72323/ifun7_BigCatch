@@ -1,4 +1,4 @@
-import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
+import { FeatureBuyBtn } from '@game/components/FeatureBuyUI/FeatureBuyBtn';
 import { AudioKey } from '@game/script/data/AudioKey';
 
 import { SettingsController } from '@common/components/settingsController/SettingsController';

@@ -8,9 +8,6 @@ import { ModuleID, OrientationtMode, TurboMode } from '@common/script/types/Base
  * 共用遊戲事件
  */
 export class BaseEvent {
-
-
-
     /**開啟'開始遊戲'按鈕 */
     public static showStartBtn: XEvent = new XEvent();
     /**切換直橫式 */
@@ -21,7 +18,6 @@ export class BaseEvent {
     public static clickStop: XEvent = new XEvent();
     /**重置Spin */
     public static resetSpin: XEvent = new XEvent();
-
 
     //========================= server回傳事件 =========================
     /**傳送Spin結果 */
@@ -40,10 +36,7 @@ export class BaseEvent {
     public static runAutoSpin: XEvent = new XEvent();
     /**停止自動遊戲 */
     public static stopAutoSpin: XEvent = new XEvent();
-    /**設定自動模式按鈕狀態 */
-    // public static setAutoBtnState: XEvent1<boolean> = new XEvent1();
     //=========================== settingsController事件 =========================
-
 
     /**初始化封包完成 */
     public static initMessageComplete: XEvent = new XEvent();
@@ -62,8 +55,6 @@ export class BaseEvent {
 
     /**點擊加速 */
     public static clickTurbo: XEvent1<boolean> = new XEvent1();
-    /**點擊自動 */
-    // public static clickAuto: XEvent1<boolean> = new XEvent1();
     /**點擊SKIP */
     public static clickSkip: XEvent = new XEvent();
 
@@ -77,14 +68,6 @@ export class BaseEvent {
     /**廣播是否可點擊購買功能 */
     public static buyFeatureEnabled: XEvent1<boolean> = new XEvent1();
 
-
-    /**刷新獲得 */
-    // public static refreshWin: XEvent1<number> = new XEvent1<number>();
-    // /**刷新額度 */
-    // public static refreshCredit: XEvent1<number> = new XEvent1<number>();
-    // /**刷新額度 */
-    // public static refreshBet: XEvent1<number> = new XEvent1<number>();
-
     /**切換場景(BS/FS) */
     public static changeScene: XEvent1<ModuleID> = new XEvent1();
 
@@ -93,10 +76,6 @@ export class BaseEvent {
 
     /**停止自動轉通知 */
     public static onStopAuto: XEvent = new XEvent();
-
-    /**Config回應 */
-    // public static onConfigRecall: XEvent1<s5g.game.proto.ConfigRecall> = new XEvent1();
-
 
     /**淡入FeatureBuy */
     public static fadeInFeatureBuy: XEvent = new XEvent();

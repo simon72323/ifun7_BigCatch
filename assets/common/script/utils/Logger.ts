@@ -1,4 +1,4 @@
-// assets/common/core/utils/Logger.ts
+
 export class Logger {
     private static _debugSwitch: boolean = false;
 

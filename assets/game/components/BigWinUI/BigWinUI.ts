@@ -59,7 +59,7 @@ export class BigWinUI extends Component {
     private aniCoin: sp.Skeleton;
 
     /**是否提早結束 */
-    private isSkip: boolean = false;
+    // private isSkip: boolean = false;
     /**獎項參數 */
     private bigWinConfig: BigWinConfig[] = [
         {
@@ -136,7 +136,7 @@ export class BigWinUI extends Component {
 
         this.node.active = true;
         this.isPlaying = true;
-        this.isSkip = false;
+        // this.isSkip = false;
 
         this.winLabel.string = '';
         this.winLabel.color = Color.WHITE;
@@ -258,7 +258,7 @@ export class BigWinUI extends Component {
             this.data.currentType = this.data.finalType;
             this.setTypeStyle(this.data.currentType);
         }
-        this.isSkip = true;
+        // this.isSkip = true;
         this.onBigWinEnd();
     }
 
@@ -287,5 +287,10 @@ export class BigWinUI extends Component {
         AudioManager.getInstance().editMusicVolume(1);//恢復背景音樂
         this.node.active = false;
         BigWinUI.complete.emit();
+    }
+
+    onDestroy() {
+        BigWinUI.complete.off(this);
+        BigWinUI.show.off(this);
     }
 }

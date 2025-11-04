@@ -1,8 +1,6 @@
 import { XEvent1 } from '@common/script/event/XEvent';
 import { GameTask } from '@common/script/tasks/GameTask';
 
-// import { logger } from '@common/script/utils/XUtils';
-
 /**
  * 任務管理
  */

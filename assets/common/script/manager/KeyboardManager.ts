@@ -3,8 +3,6 @@ import { EventKeyboard, input, Input } from 'cc';
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
 
-
-
 /**
  * 鍵盤控制器
  */
@@ -21,15 +19,15 @@ export class KeyboardManager {
     }
 
     /**
-     * 
+     * 初始化
      */
     public initialize(): void {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
     }
 
     /**
-     * 
-     * @param event 
+     * 按下鍵盤
+     * @param event 事件
      */
     private onKeyDown(event: EventKeyboard) {
 

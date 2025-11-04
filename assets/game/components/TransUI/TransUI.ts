@@ -24,18 +24,15 @@ const { ccclass, property } = _decorator;
 export class TransUI extends Component {
     /**轉場淡入(times:次數) */
     public static show: XEvent3<number, () => void, () => void> = new XEvent3();
-
+    /**點擊 */
     public static click: XEvent = new XEvent();
 
     /**面板動畫 */
     private cutscene_ani: sp.Skeleton;
-
     /**次數 */
     private num_freeSpin: Label;
-
     /**顯示時間 */
     private showTime: Label;
-
     /**畫面自動關閉計時器 */
     private countdown = {
         curTime: 0,
@@ -133,5 +130,10 @@ export class TransUI extends Component {
             this.node.active = false;
             this.cbComplete?.();
         });
+    }
+
+    onDestroy() {
+        TransUI.show.off(this);
+        TransUI.click.off(this);
     }
 }

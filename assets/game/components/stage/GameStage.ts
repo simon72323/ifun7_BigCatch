@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, UIOpacity } from 'cc';
 
-import { FeatureBuyBtn } from '@game/components/FeatureBuy/FeatureBuyBtn';
-import { FeatureBuyPage } from '@game/components/FeatureBuy/FeatureBuyPage';
+import { FeatureBuyBtn } from '@game/components/FeatureBuyUI/FeatureBuyBtn';
+import { FeatureBuyPage } from '@game/components/FeatureBuyUI/FeatureBuyPage';
 
 import { AudioKey } from '@game/script/data/AudioKey';
 import { GameConst } from '@game/script/data/GameConst';
@@ -21,8 +21,6 @@ import { TaskManager } from '@common/script/tasks/TaskManager';
 import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
 import { Utils } from '@common/script/utils/Utils';
 
-
-
 const { ccclass, property } = _decorator;
 
 @ccclass('GameStage')
@@ -37,8 +35,6 @@ export class GameStage extends Component {
     @property({ tooltip: '是否為假老虎機' })
     private isFake: boolean = false;
 
-    private isMi: boolean = false;
-    private scaleNode: Node;
     async onLoad() {
         //初始化盤面
         //初始化遊戲資料
@@ -50,7 +46,6 @@ export class GameStage extends Component {
         this.topBlack.active = true;
         this.topBlack.getComponent(UIOpacity).opacity = 255;
 
-        //===================不確定cocos內做，且收到要做甚麼?===================
         if (this.isFake === false) {
             this.sendPromotionBrief()
                 .then(this.sendInGameMenuStatus)
@@ -71,19 +66,8 @@ export class GameStage extends Component {
             }, 0);
         }
 
-        //===================不確定cocos內做，且收到要做甚麼?===================
-
-        // BaseEvent.initMessageComplete.once(this.netReady, this);//監聽網路準備完成事件(一次)
-        // BaseEvent.changeScene.on(this.onChangeScene, this);//監聽切換場景事件
-
-        // GameStage.shake.on(this.shake, this);//監聽震動事件
-        // GameStage.fsOpening.on(this.fsOpening, this);//監聽FS開場事件
 
         FeatureBuyBtn.click.on(this.clickFeatureBuyBtn, this);//監聽點擊免費遊戲事件
-        // SettingsPage2.clickHelp.on(this.HelpOpen, this);//監聽點擊幫助事件
-
-        // SlotMachine.startMi.on(this.startMi, this);//監聽開始咪牌事件
-        // SlotMachine.stopMi.on(this.stopMi, this);//監聽停止咪牌事件
 
         SlotMachine.startMi.on((column: number) => {
             AudioManager.getInstance().playSound(AudioKey.teasing);
@@ -107,7 +91,6 @@ export class GameStage extends Component {
 
     private async sendInGameMenuStatus() {
         await NetworkManager.getInstance().sendInGameMenuStatus();
-        // this.initGame();
     }
 
     private async sendInGameMenu() {
@@ -142,81 +125,17 @@ export class GameStage extends Component {
 
         KeyboardManager.getInstance().initialize();
         MessageHandler.getInstance().initialize();//初始化消息處理
-        // UIManager.getInstance().initialize();//需要注意各UI onLoad時機
 
-        //讀取完成後通知LoadingScene可以關閉
-        // BaseEvent.initResourceComplete.emit();
         //開始遊戲--------------------------------------------------------
         console.log('開始遊戲');
         TaskManager.getInstance().addTask(new IdleTask());
         AudioManager.getInstance().playMusic(AudioKey.bgmMg);//播放背景音樂
     }
 
-    /**震動 */
-    // private shake(): void {
-    //     this.node.getComponent(Animation).play(GameAnimationName.gameShakeLeft);
-    // }
-
-    /**開始咪牌 */
-    // private startMi(): void {
-    //     if (this.isMi) return;
-    //     this.isMi = true;
-    //     tween(this.scaleNode)
-    //         .to(3, { scale: new Vec3(0.95, 0.95, 1) }, { easing: easing.circOut })
-    //         .start();
-    // }
-
-    // /**停止咪牌 */
-    // private stopMi(): void {
-    //     if (!this.isMi) return;
-    //     this.isMi = false;
-    //     Tween.stopAllByTarget(this.scaleNode);
-    //     tween(this.scaleNode)
-    //         .to(1.5, { scale: new Vec3(1, 1, 1) })
-    //         .start();
-    // }
-
     /**點擊免費遊戲 */
     private clickFeatureBuyBtn(): void {
-        // DataManager.getInstance().isMenuOn = true;
         FeatureBuyPage.show.emit();
     }
-
-    /**網路準備完成(loading時已經獲取完玩家與遊戲資料) */
-    // private netReady(): void {
-
-    // }
-
-    /**幫助開啟 */
-    // private HelpOpen() {
-    //     if (DataManager.getInstance().isMenuOn == true) return;
-    //     if (DataManager.getInstance().isAutoMode == true) return;
-    //     // if (DataManager.getInstance().isIdle() === false) return;
-    //     DataManager.getInstance().isMenuOn = true;
-    //     SettingsPage2.hide.emit();
-    //     GameHelpWebView.show.emit();
-    // }
-
-    // /**幫助關閉 */
-    // private HelpClose() {
-    //     DataManager.getInstance().isMenuOn = false;
-    //     SettingsPage2.show.emit();
-    // }
-
-    /**
-     * 切換場景動畫
-     * @param id 
-     */
-    // private onChangeScene(id: ModuleID) {
-    //     // this.node.getChildByPath('ScaleNode/BSUI1').active = id === ModuleID.BS;
-    //     // this.node.getChildByPath('ScaleNode/BSUI2').active = id === ModuleID.BS;
-    //     // this.node.getChildByPath('ScaleNode/FSUI').active = id !== ModuleID.BS;
-
-    //     // if (id === ModuleID.BS) {
-    //     //     XUtils.ClearSpine(this.roller_ani);
-    //     //     this.roller_ani.setAnimation(0, RollerAni.ng_roller, true);
-    //     // }
-    // }
 
     /**持續更新任務 */
     update(deltaTime: number) {

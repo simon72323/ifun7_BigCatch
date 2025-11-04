@@ -10,10 +10,6 @@ const { ccclass } = _decorator;
  */
 @ccclass('Notice')
 export class Notice extends Component {
-    // private static instance: Notice;
-    // public static getInstance(): Notice {
-    //     return Notice.instance;
-    // }
     public static showError: XEvent1<number> = new XEvent1();
     public static showNoBalance: XEvent = new XEvent();
 

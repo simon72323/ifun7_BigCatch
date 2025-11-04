@@ -2,7 +2,6 @@ import { _decorator, Button, Color, Component, EventTouch, instantiate, Label, N
 
 import { DataManager } from '@common/script/data/DataManager';
 import { BaseEvent } from '@common/script/event/BaseEvent';
-import { XEvent } from '@common/script/event/XEvent';
 import { TurboMode } from '@common/script/types/BaseType';
 import { addBtnClickEvent, Utils } from '@common/script/utils/Utils';
 
@@ -10,8 +9,6 @@ const { ccclass, property } = _decorator;
 
 @ccclass('AutoSpin')
 export class AutoSpin extends Component {
-    // public static show: XEvent = new XEvent();
-
     private backMask: Node = null;//背景遮罩
     private autoContent: Node = null;//內容
 
@@ -88,14 +85,6 @@ export class AutoSpin extends Component {
         Utils.tweenScaleTo(this.node, 0.15, 0.8, 1);
         this.node.active = true;
 
-        // this.startBtn.once(Button.EventType.CLICK, this.onClickStart, this);
-        // this.closeBtn.once(Button.EventType.CLICK, this.onClose, this);
-        // this.stopUntilFeatureBtn.once(Button.EventType.CLICK, this.onClickStopUntilFeature, this);
-        // this.fastSpinBtn.once(Button.EventType.CLICK, this.onClickFastSpin, this);
-        // this.turboSpinBtn.once(Button.EventType.CLICK, this.onClickTurboSpin, this);
-        // this.autoTimesBtn.once(Button.EventType.CLICK, this.onClickAutoTimes, this);
-        // this.backMask.once(Button.EventType.CLICK, this.onClose, this);
-
         this.updateSpeedSwitch();
         this.updateStopUntilFeature();
         this.updateAutoTimes();
@@ -127,10 +116,6 @@ export class AutoSpin extends Component {
             DataManager.getInstance().autoSpinCount = autoCount;
             DataManager.getInstance().isAutoMode = true;
             BaseEvent.runAutoSpin.emit();
-            // this.updateStopUntilFeature();
-            // this.updateAutoTimes();
-            // this.updateSpeedSwitch();
-            console.log('執行自動遊戲');
         }
     }
 
@@ -305,12 +290,4 @@ export class AutoSpin extends Component {
         this.maskBtn.off(Button.EventType.CLICK, this.onCloseDrop, this);
         this.displayItemLabel.node.off(Node.EventType.TOUCH_END, this.onClickDrop, this);
     }
-}
-
-/**
- * 速度開關動畫
- */
-enum SwitchBtnAnim {
-    Off = 'switchButtonOff',
-    On = 'switchButtonOn',
 }

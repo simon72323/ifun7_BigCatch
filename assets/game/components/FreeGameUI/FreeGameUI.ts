@@ -6,8 +6,6 @@ import { XEvent, XEvent3, XEvent4 } from '@common/script/event/XEvent';
 import { AudioManager } from '@common/script/manager/AudioManager';
 import { Utils } from '@common/script/utils/Utils';
 
-
-
 const { ccclass, property } = _decorator;
 @ccclass('FreeGameUI')
 export class FreeGameUI extends Component {

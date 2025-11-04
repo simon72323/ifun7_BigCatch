@@ -117,13 +117,8 @@ export class Symbol extends BaseSymbol {
         this.symIDLabel = this.node.getChildByName('symIDLabel').getComponent(Label);
         this.posIDLabel = this.node.getChildByName('posIDLabel').getComponent(Label);
         this.spine = this.node.getChildByName('Spine').getComponent(sp.Skeleton);
-        // this.wild = this.node.getChildByName('Wild').getComponent(sp.Skeleton);
-
         this.score = this.node.getChildByName('Score');
-        // this.ani_multiply = this.node.getChildByName('ani_multiply').getComponent(sp.Skeleton);
         this.multiply = this.node.getChildByName('Multiply');
-
-        // this.parentNode = this.node.parent;
 
         SlotMachine.startMi.on((column) => {
             if (this.isScatter() && this.isStop) {
@@ -324,9 +319,7 @@ export class Symbol extends BaseSymbol {
         this.node.parent = this.parentNode;//回歸原始父節點
         this.normal.node.active = true;
         this.spine.node.active = false;
-        // this.wild.node.active = false;
         this.blur.node.active = false;
-        // this.setScoreState();//設置分數的狀態
     }
 
     /**

@@ -4,9 +4,6 @@ import { TurboMode } from '@common/script/types/BaseType';
  * 公版全域常數
  */
 export class BaseConst {
-    /**自動轉次數選項 */
-    // public static AUTO_OPTIONS: number[] = [10, 25, 50, 75, 100, 250, 500, 750, 1000, -1];
-
     /**逾時時間 */
     public static TIMEOUT_TIME = {
         loading: 120,  // 讀取畫面逾時設定(2分鐘)

@@ -4,10 +4,10 @@ import { assetManager } from 'cc';
  * bundle資源讀取器
  */
 export class BundleLoader {
-
     /**讀取完成通知註冊 */
     private static eventMap: Map<string, ((assets: any) => void)[]> = new Map();
 
+    /**任務列表 */
     private taskList: LoadTask[] = [];
 
     /**已經讀取完成的bundle資源 */
@@ -111,7 +111,6 @@ export class BundleLoader {
         });
     }
 }
-
 
 /**
  * 逾時定義

@@ -1,7 +1,5 @@
 import { sys } from 'cc';
 
-import { ScreenAdapter } from '@common/script/utils/ScreenAdapter';
-
 /** 針對IOS14以下版本，禁用WEBP */
 const ua = navigator.userAgent;//獲取瀏覽器userAgent
 const iosMatch = ua.match(/OS (\d+)_/i);//匹配IOS版本號

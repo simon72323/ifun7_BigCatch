@@ -1,4 +1,4 @@
-import { Node, Tween, tween, Vec3 } from 'cc';
+import { Tween, tween, Vec3 } from 'cc';
 
 import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
 import { CharacterUI } from '@game/components/CharacterUI/CharacterUI';
@@ -94,7 +94,6 @@ export class WinSymbolTask extends GameTask {
             await this.waitForBigWinComplete();
         }
 
-        // await Utils.delay(BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime);
         this.complete();
     }
 

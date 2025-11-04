@@ -57,9 +57,7 @@ export class GameInformationUI extends Component {
         this.closeBtn.off(Button.EventType.CLICK, this.hide, this);
     }
 
-    update(deltaTime: number) {
-
+    onDestroy() {
+        BaseEvent.showGameInformation.off(this);
     }
 }
-
-

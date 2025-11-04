@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Tween, tween } from 'cc';
+import { _decorator, Component, Label } from 'cc';
 
 
 const { ccclass, property } = _decorator;
