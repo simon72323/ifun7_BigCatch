@@ -1,6 +1,7 @@
 {
     "imports": {
-      "cc": "./../cocos-js/cc.js"
+      "cc": "./../cocos-js/cc.js",
+      "./../cocos-js/_virtual_cc-B7ve7KxY.js": "./../cocos-js/_virtual_cc-B7ve7KxY.js"
     },
     "scopes": {
       "./../cocos-js/": {
