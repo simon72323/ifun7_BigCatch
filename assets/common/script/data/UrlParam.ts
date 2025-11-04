@@ -20,16 +20,28 @@ export class UrlParam {
      * 初始化並快取所有URL參數
      */
     public initUrlParameters(): void {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        this.token = urlParams.get(urlParamKey.TOKEN) || '';
-        this.gameId = parseInt(urlParams.get(urlParamKey.GAME_ID) || '0');
-        this.lang = urlParams.get(urlParamKey.LANGUAGE) || '';
-        this.betRecordUrl = urlParams.get(urlParamKey.BET_RECORD_URL) || '';
-        this.homeUrl = urlParams.get(urlParamKey.HOME_URL) || '';
-        this.mode = urlParams.get(urlParamKey.MODE) || '';
-        this.serverUrl = urlParams.get(urlParamKey.SERVER_URL) || '';
-        this.b = urlParams.get(urlParamKey.B) || '';
+        const hostname = window.location.hostname;
+        const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+        if (isLocal) {
+            this.token = 'testtokenUSD5800';
+            this.gameId = 5800;
+            this.lang = 'zh-cn';
+            this.betRecordUrl = 'https://gc.ifun7.vip/betrecord/';
+            this.homeUrl = '';
+            this.mode = '0';
+            this.serverUrl = 'https://gs.ifun7.vip';
+            this.b = 'iqazwsxi';
+        } else {
+            const urlParams = new URLSearchParams(window.location.search);
+            this.token = urlParams.get(urlParamKey.TOKEN) || '';
+            this.gameId = parseInt(urlParams.get(urlParamKey.GAME_ID) || '0');
+            this.lang = urlParams.get(urlParamKey.LANGUAGE) || '';
+            this.betRecordUrl = urlParams.get(urlParamKey.BET_RECORD_URL) || '';
+            this.homeUrl = urlParams.get(urlParamKey.HOME_URL) || '';
+            this.mode = urlParams.get(urlParamKey.MODE) || '';
+            this.serverUrl = urlParams.get(urlParamKey.SERVER_URL) || '';
+            this.b = urlParams.get(urlParamKey.B) || '';
+        }
     }
 }
 

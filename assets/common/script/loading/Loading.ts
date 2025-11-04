@@ -43,7 +43,7 @@ export class Loading extends Component {
         this.progressBar = this.node.getChildByPath('ProgressBar').getComponent(ProgressBar);
         this.progressLabel = this.node.getChildByPath('ProgressBar/Value').getComponent(Label);
         this.logoSpine = this.node.getChildByPath('Logo').getComponent(sp.Skeleton);
-        this.logoSpine.addAnimation(0, 'in', false);
+        this.logoSpine.setAnimation(0, 'in', false);
         this.logoSpine.addAnimation(0, 'loop', true);
         // this.blackLayer = this.node.getChildByName('Black');
     }
