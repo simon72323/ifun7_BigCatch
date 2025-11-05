@@ -132,21 +132,21 @@ export class SettingsController extends Component {
      */
     private setupBtnEvent() {
         const scriptName = 'SettingsController';
-        addBtnClickEvent(this.node, scriptName, this.spinBtn.getComponent(Button), this.onClickSpin);
-        addBtnClickEvent(this.node, scriptName, this.stopSpinBtn.getComponent(Button), this.onClickStopSpin);
-        addBtnClickEvent(this.node, scriptName, this.autoBtn.getComponent(Button), this.onClickAuto);
-        addBtnClickEvent(this.node, scriptName, this.turboBtn.getComponent(Button), this.onClickTurbo);
-        addBtnClickEvent(this.node, scriptName, this.optionBtn.getComponent(Button), this.onClickOption);
-        addBtnClickEvent(this.node, scriptName, this.screenBtn.getComponent(Button), this.onClickScreen);
-        addBtnClickEvent(this.node, scriptName, this.audioBtn.getComponent(Button), this.onClickAudio);
-        addBtnClickEvent(this.node, scriptName, this.recordBtn.getComponent(Button), this.onClickRecord);
-        addBtnClickEvent(this.node, scriptName, this.favoritesBtn.getComponent(Button), this.onClickFavorites);
-        addBtnClickEvent(this.node, scriptName, this.informationBtn.getComponent(Button), this.onClickInformation);
+        addBtnClickEvent(this.node, scriptName, this.spinBtn.getComponent(Button), 'onClickSpin');
+        addBtnClickEvent(this.node, scriptName, this.stopSpinBtn.getComponent(Button), 'onClickStopSpin');
+        addBtnClickEvent(this.node, scriptName, this.autoBtn.getComponent(Button), 'onClickAuto');
+        addBtnClickEvent(this.node, scriptName, this.turboBtn.getComponent(Button), 'onClickTurbo');
+        addBtnClickEvent(this.node, scriptName, this.optionBtn.getComponent(Button), 'onClickOption');
+        addBtnClickEvent(this.node, scriptName, this.screenBtn.getComponent(Button), 'onClickScreen');
+        addBtnClickEvent(this.node, scriptName, this.audioBtn.getComponent(Button), 'onClickAudio');
+        addBtnClickEvent(this.node, scriptName, this.recordBtn.getComponent(Button), 'onClickRecord');
+        addBtnClickEvent(this.node, scriptName, this.favoritesBtn.getComponent(Button), 'onClickFavorites');
+        addBtnClickEvent(this.node, scriptName, this.informationBtn.getComponent(Button), 'onClickInformation');
 
-        addBtnClickEvent(this.node, scriptName, this.backBtn.getComponent(Button), this.onClickOption);
-        addBtnClickEvent(this.node, scriptName, this.stopAutoSpinBtn.getComponent(Button), this.onStopAutoSpin);
-        addBtnClickEvent(this.node, scriptName, this.addBetBtn.getComponent(Button), this.changeBet, '1');
-        addBtnClickEvent(this.node, scriptName, this.minusBetBtn.getComponent(Button), this.changeBet, '-1');
+        addBtnClickEvent(this.node, scriptName, this.backBtn.getComponent(Button), 'onClickOption');
+        addBtnClickEvent(this.node, scriptName, this.stopAutoSpinBtn.getComponent(Button), 'onStopAutoSpin');
+        addBtnClickEvent(this.node, scriptName, this.addBetBtn.getComponent(Button), 'changeBet', '1');
+        addBtnClickEvent(this.node, scriptName, this.minusBetBtn.getComponent(Button), 'changeBet', '-1');
     }
 
     /**

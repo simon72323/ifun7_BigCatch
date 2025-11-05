@@ -481,11 +481,11 @@ export class Utils {
 * @param handler 處理器
 * @param eventData 事件數據(可選)
 */
-export function addBtnClickEvent(target: Node, component: string, button: Button, handler: Function, eventData?: string) {
+export function addBtnClickEvent(target: Node, component: string, button: Button, handler: string, eventData?: string) {
     const eventHandler = new Component.EventHandler();
     eventHandler.target = target;
     eventHandler.component = component;
-    eventHandler.handler = handler.name;
+    eventHandler.handler = handler;
     if (eventData) eventHandler.customEventData = eventData;
     button.clickEvents.push(eventHandler);
 }
