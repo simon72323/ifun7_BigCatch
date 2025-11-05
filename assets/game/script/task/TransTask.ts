@@ -1,99 +1,78 @@
-import { AudioKey } from 'db://assets/base/script/audio/AudioKey';
-import { BaseConst } from "db://assets/base/script/constant/BaseConst";
-import { TimeoutManager } from "db://assets/base/script/utils/TimeoutManager";
-import { AudioManager } from "../../../base/script/audio/AudioManager";
-import { BaseDataManager } from "../../../base/script/main/BaseDataManager";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { AutoPlayMode, ModuleID } from "../../../base/script/types/BaseType";
-import { BannerUI } from '../../components/BannerUI/BannerUI';
-import { FSUI } from '../../components/FSUI/FSUI';
-import { RevolverUI } from '../../components/RevolverUI/RevolverUI';
-import { SlotMachine2 } from '../../components/slotMachine2/base/slotMachine2/SlotMachine2';
-import { TransUI } from '../../components/TransUI/TransUI';
-import { GameAudioKey, GameConst } from '../constant/GameConst';
-import { GameData } from '../main/GameData';
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { ModuleID } from 'db://assets/common/script/types/BaseType';
+
+import { FeatureBuyBtn } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyBtn';
+import { FreeGameUI } from 'db://assets/game/components/FreeGameUI/FreeGameUI';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+import { TransUI } from 'db://assets/game/components/TransUI/TransUI';
 
 /**
  * 轉場
  */
 export class TransTask extends GameTask {
+    protected name: string = 'TransTask';
+    /**免費遊戲次數 */
+    public freeSpinTimes: number = 0;
 
-    protected name: string = "TransTask";
+    /**是否第一次轉場 */
+    public isFirstTrans: boolean = true;
 
-    /**轉場目標 */
-    public to: ModuleID;
+    /**wild倍率 */
+    public wildMultiplier: number = 0;
 
-    /**次數 */
-    public times: number;
+    private timer = {
+        curTime: 0,
+        finalTime: 10
+    };
 
     execute(): void {
-
-        BaseDataManager.getInstance().curModuleID = BaseDataManager.getInstance().nextModuleID;
-
-        //中免費轉停止
-        if (BaseDataManager.getInstance().auto.isAutoPlay() === true && BaseDataManager.getInstance().auto.mode === AutoPlayMode.tillBonus) {
-            BaseDataManager.getInstance().auto.stopAuto();
+        //第一次進入轉場
+        if (this.isFirstTrans) {
+            // console.log('轉場模式轉換為', this.toModuleID);
+            DataManager.getInstance().curModuleID = ModuleID.FG;
+            AudioManager.getInstance().playMusic(AudioKey.bgmFg);
+            FeatureBuyBtn.hide.emit();
+            //中免費轉停止Auto模式
+            if (DataManager.getInstance().isAutoMode && DataManager.getInstance().autoSpinCount === 0) {
+                DataManager.getInstance().isAutoMode = false;
+            }
         }
-
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRIGGER);
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWSCATTERWIN);
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_TRANSLATE);
 
         //設定初始次數
         // FeatureGameUI.refreshRemainTimes.emit(this.times);
 
-        AudioManager.getInstance().stop(AudioKey.BsMusic);
-
         //轉場開始
-        TransUI.fadeIn.emit(this.times,
+        SettingsController.updateFreeSpinCount.emit(this.freeSpinTimes);
+        TransUI.show.emit(this.freeSpinTimes, this.wildMultiplier,
             () => {
                 //轉場全遮(更換場景資源)
-                BaseEvent.changeScene.emit(ModuleID.FS);
-
-                //還原廣告狀態
-                BannerUI.reset.emit();
-
-                FSUI.refreshRemainTimes.emit(this.times);
-                // RevolverUI.setMultiplier.emit(GameConst.FS_INIT_MULTIPLIER);
-
-                //FS強制改回倍數1
-                RevolverUI.reset.emit(ModuleID.BS, GameConst.multiplierList[0]);
-
-                //初始化盤面
-                let gameData = BaseDataManager.getInstance().getData<GameData>();
-                gameData.slotParser.setStripTable(BaseDataManager.getInstance().getStripTable()._strips, gameData.fsInitRng, null, gameData.fsInitGoldenPattern);
-                SlotMachine2.setup.emit(0, gameData.slotParser);
-
+                if (this.isFirstTrans) {
+                    BaseEvent.changeScene.emit(ModuleID.FG);
+                    FreeGameUI.show.emit();//顯示免費遊戲UI
+                }
             },
             () => {
-                //點擊轉場按鈕
-                TransUI.click.once(() => {
-                    this.onTransEnd();
-                }, this);
-                //10秒自動進入
-                TimeoutManager.getInstance().register(BaseConst.TIMEOUT_FEATURE_WAIT_START.key, BaseConst.TIMEOUT_FEATURE_WAIT_START.seconds, () => {
-                    this.onTransEnd();
-                })
+                this.finish();
             });
+        //10秒自動進入
+        // TimeoutManager.getInstance().register(BaseConst.TIMEOUT_FEATURE_WAIT_START.key, BaseConst.TIMEOUT_FEATURE_WAIT_START.seconds, () => {
+        //     this.onTransEnd();
+        // });
     }
 
     /**
-     * 
+     * 轉場結束
      */
-    private onTransEnd(): void {
-        AudioManager.getInstance().play(GameAudioKey.FgStart);
-        AudioManager.getInstance().play(AudioKey.FsMusic);
-
-        TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_FEATURE_WAIT_START.key);
-        TransUI.click.off(this);
-        //轉場結束
-        TransUI.fadeOut.emit(() => {
-            this.finish();
-        });
-    }
+    // private onTransEnd(): void {
+    //     // TimeoutManager.getInstance().remove(BaseConst.TIMEOUT_FEATURE_WAIT_START.key);
+    //     this.finish();
+    // }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

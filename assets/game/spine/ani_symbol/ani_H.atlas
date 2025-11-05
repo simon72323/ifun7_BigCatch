@@ -1,0 +1,384 @@
+
+ani_H.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+02_fx/ani_star/ani_star_01
+  rotate: false
+  xy: 758, 365
+  size: 19, 24
+  orig: 82, 79
+  offset: 23, 40
+  index: -1
+02_fx/ani_star/ani_star_02
+  rotate: false
+  xy: 274, 61
+  size: 30, 30
+  orig: 82, 79
+  offset: 22, 36
+  index: -1
+02_fx/ani_star/ani_star_03
+  rotate: false
+  xy: 260, 27
+  size: 32, 32
+  orig: 82, 79
+  offset: 20, 35
+  index: -1
+02_fx/ani_star/ani_star_04
+  rotate: false
+  xy: 129, 21
+  size: 35, 36
+  orig: 82, 79
+  offset: 19, 31
+  index: -1
+02_fx/ani_star/ani_star_05
+  rotate: false
+  xy: 490, 197
+  size: 36, 45
+  orig: 82, 79
+  offset: 19, 22
+  index: -1
+02_fx/ani_star/ani_star_06
+  rotate: false
+  xy: 758, 391
+  size: 36, 49
+  orig: 82, 79
+  offset: 19, 18
+  index: -1
+02_fx/ani_star/ani_star_07
+  rotate: false
+  xy: 758, 442
+  size: 37, 50
+  orig: 82, 79
+  offset: 19, 16
+  index: -1
+02_fx/ani_star/ani_star_08
+  rotate: false
+  xy: 758, 255
+  size: 37, 52
+  orig: 82, 79
+  offset: 20, 14
+  index: -1
+02_fx/ani_star/ani_star_09
+  rotate: false
+  xy: 758, 309
+  size: 37, 51
+  orig: 82, 79
+  offset: 21, 14
+  index: -1
+02_fx/ani_star/ani_star_10
+  rotate: false
+  xy: 634, 148
+  size: 36, 42
+  orig: 82, 79
+  offset: 21, 14
+  index: -1
+02_fx/ani_star/ani_star_11
+  rotate: false
+  xy: 637, 202
+  size: 36, 40
+  orig: 82, 79
+  offset: 21, 14
+  index: -1
+02_fx/ani_star/ani_star_12
+  rotate: false
+  xy: 44, 5
+  size: 33, 32
+  orig: 82, 79
+  offset: 24, 15
+  index: -1
+02_fx/ani_star/ani_star_13
+  rotate: false
+  xy: 648, 115
+  size: 32, 31
+  orig: 82, 79
+  offset: 24, 16
+  index: -1
+02_fx/light
+  rotate: false
+  xy: 2, 59
+  size: 185, 185
+  orig: 185, 185
+  offset: 0, 0
+  index: -1
+02_fx/star/star_00
+  rotate: false
+  xy: 275, 1004
+  size: 269, 280
+  orig: 400, 400
+  offset: 65, 72
+  index: -1
+02_fx/star/star_01
+  rotate: false
+  xy: 1091, 1007
+  size: 265, 277
+  orig: 400, 400
+  offset: 67, 72
+  index: -1
+02_fx/star/star_02
+  rotate: false
+  xy: 1625, 1013
+  size: 256, 271
+  orig: 400, 400
+  offset: 73, 72
+  index: -1
+02_fx/star/star_03
+  rotate: true
+  xy: 1083, 746
+  size: 259, 262
+  orig: 400, 400
+  offset: 69, 73
+  index: -1
+02_fx/star/star_04
+  rotate: false
+  xy: 272, 746
+  size: 264, 256
+  orig: 400, 400
+  offset: 63, 74
+  index: -1
+02_fx/star/star_05
+  rotate: false
+  xy: 546, 753
+  size: 269, 255
+  orig: 400, 400
+  offset: 60, 74
+  index: -1
+02_fx/star/star_06
+  rotate: false
+  xy: 2, 748
+  size: 268, 254
+  orig: 400, 400
+  offset: 61, 75
+  index: -1
+02_fx/star/star_07
+  rotate: false
+  xy: 1358, 752
+  size: 265, 259
+  orig: 400, 400
+  offset: 65, 70
+  index: -1
+02_fx/star/star_08
+  rotate: true
+  xy: 1625, 752
+  size: 259, 265
+  orig: 400, 400
+  offset: 71, 63
+  index: -1
+02_fx/star/star_09
+  rotate: true
+  xy: 538, 494
+  size: 257, 262
+  orig: 400, 400
+  offset: 72, 65
+  index: -1
+02_fx/star/star_10
+  rotate: false
+  xy: 1347, 495
+  size: 258, 255
+  orig: 400, 400
+  offset: 70, 71
+  index: -1
+02_fx/star/star_11
+  rotate: false
+  xy: 1607, 499
+  size: 253, 251
+  orig: 400, 400
+  offset: 73, 74
+  index: -1
+02_fx/star/star_12
+  rotate: false
+  xy: 271, 494
+  size: 254, 250
+  orig: 400, 400
+  offset: 73, 74
+  index: -1
+02_fx/star/star_13
+  rotate: false
+  xy: 1060, 250
+  size: 252, 249
+  orig: 400, 400
+  offset: 74, 74
+  index: -1
+02_fx/star/star_14
+  rotate: false
+  xy: 1607, 249
+  size: 251, 248
+  orig: 400, 400
+  offset: 75, 74
+  index: -1
+02_fx/star/star_15
+  rotate: false
+  xy: 1314, 245
+  size: 249, 248
+  orig: 400, 400
+  offset: 76, 74
+  index: -1
+02_fx/star/star_16
+  rotate: false
+  xy: 255, 244
+  size: 249, 248
+  orig: 400, 400
+  offset: 76, 74
+  index: -1
+02_fx/star/star_17
+  rotate: false
+  xy: 2, 246
+  size: 251, 247
+  orig: 400, 400
+  offset: 72, 75
+  index: -1
+02_fx/star/star_18
+  rotate: true
+  xy: 758, 6
+  size: 247, 248
+  orig: 400, 400
+  offset: 76, 75
+  index: -1
+02_fx/star/star_19
+  rotate: true
+  xy: 1008, 2
+  size: 246, 247
+  orig: 400, 400
+  offset: 76, 75
+  index: -1
+02_fx/star/star_20
+  rotate: true
+  xy: 506, 244
+  size: 246, 250
+  orig: 400, 400
+  offset: 76, 72
+  index: -1
+02_fx/star/star_21
+  rotate: true
+  xy: 802, 255
+  size: 246, 256
+  orig: 400, 400
+  offset: 76, 66
+  index: -1
+02_fx/star/star_22
+  rotate: true
+  xy: 1072, 501
+  size: 243, 261
+  orig: 400, 400
+  offset: 76, 64
+  index: -1
+02_fx/star/star_23
+  rotate: true
+  xy: 802, 503
+  size: 243, 268
+  orig: 400, 400
+  offset: 75, 67
+  index: -1
+02_fx/star/star_24
+  rotate: true
+  xy: 2, 495
+  size: 251, 267
+  orig: 400, 400
+  offset: 70, 71
+  index: -1
+02_fx/star/star_25
+  rotate: true
+  xy: 817, 748
+  size: 259, 264
+  orig: 400, 400
+  offset: 66, 75
+  index: -1
+02_fx/star/star_26
+  rotate: true
+  xy: 1358, 1015
+  size: 269, 265
+  orig: 400, 400
+  offset: 64, 75
+  index: -1
+02_fx/star/star_27
+  rotate: true
+  xy: 546, 1010
+  size: 274, 271
+  orig: 400, 400
+  offset: 63, 74
+  index: -1
+02_fx/star/star_28
+  rotate: false
+  xy: 819, 1009
+  size: 270, 275
+  orig: 400, 400
+  offset: 64, 73
+  index: -1
+02_fx/star/star_29
+  rotate: false
+  xy: 2, 1004
+  size: 271, 280
+  orig: 400, 400
+  offset: 62, 72
+  index: -1
+symbo/H1
+  rotate: false
+  xy: 302, 10
+  size: 166, 150
+  orig: 166, 151
+  offset: 0, 1
+  index: -1
+symbo/H2_back
+  rotate: false
+  xy: 464, 7
+  size: 155, 151
+  orig: 155, 151
+  offset: 0, 0
+  index: -1
+symbo/H2_front
+  rotate: false
+  xy: 334, 156
+  size: 155, 81
+  orig: 155, 81
+  offset: 0, 0
+  index: -1
+symbo/H2_line
+  rotate: false
+  xy: 181, 12
+  size: 78, 63
+  orig: 78, 63
+  offset: 0, 0
+  index: -1
+symbo/H2_shadow
+  rotate: false
+  xy: 452, 150
+  size: 96, 28
+  orig: 102, 32
+  offset: 3, 2
+  index: -1
+symbo/H3_back
+  rotate: false
+  xy: 189, 86
+  size: 163, 158
+  orig: 164, 158
+  offset: 1, 0
+  index: -1
+symbo/H3_fish
+  rotate: false
+  xy: 596, 5
+  size: 129, 114
+  orig: 136, 128
+  offset: 5, 14
+  index: -1
+symbo/H3_nets
+  rotate: false
+  xy: 1257, 103
+  size: 163, 142
+  orig: 164, 142
+  offset: 1, 0
+  index: -1
+symbo/symbo_H4
+  rotate: false
+  xy: 544, 138
+  size: 100, 105
+  orig: 100, 129
+  offset: 0, 24
+  index: -1
+symbo/symbo_H4_water
+  rotate: false
+  xy: 2, 17
+  size: 125, 41
+  orig: 125, 41
+  offset: 0, 0
+  index: -1

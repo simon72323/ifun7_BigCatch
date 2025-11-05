@@ -1,23 +1,25 @@
-import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
-import { GameTask } from "db://assets/base/script/tasks/GameTask";
-import { XUtils } from "db://assets/base/script/utils/XUtils";
-import { GameData } from "../main/GameData";
+
+
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+import { Utils } from 'db://assets/common/script/utils/Utils';
+
 
 /**
  * 自動轉等待時間
  */
 export class AutoSpinDelayTask extends GameTask {
+    protected name: string = 'AutoSpinDelayTask';
 
-    execute(): void {
-
+    async execute(): Promise<void> {
+        const dataManager = DataManager.getInstance();
         //自動轉 & 沒有skip 才延遲0.3秒
-        if (BaseDataManager.getInstance().auto.isAutoPlay() == true &&
-            BaseDataManager.getInstance().getData<GameData>().hasSkip === false) {
+        // if (dataManager.isAutoMode && !dataManager.slotData.hasSkip) {
+        if (dataManager.isAutoMode) {
             //延遲時間依照速度模式
-            let delay = BaseDataManager.getInstance().getData<GameData>().getTurboSetting().autoSpinRoundDelay;
-            XUtils.scheduleOnce(() => {
-                this.finish();
-            }, delay, this);
+            await Utils.delay(BaseConst.SLOT_TIME[dataManager.curTurboMode].waitNextSpinTime);
+            this.finish();
         }
         else {
             this.finish();

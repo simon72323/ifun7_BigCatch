@@ -1,0 +1,13 @@
+
+ani_hook.png
+size: 128,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+hook
+  rotate: false
+  xy: 2, 3
+  size: 95, 562
+  orig: 97, 566
+  offset: 1, 4
+  index: -1

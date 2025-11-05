@@ -1,29 +1,23 @@
-import { CheatUI } from "db://assets/base/components/cheat/CheatUI";
-import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
-import { BaseEvent } from "db://assets/base/script/main/BaseEvent";
-import { DelayTask } from "db://assets/base/script/tasks/DelayTask";
-import { TaskManager } from "db://assets/base/script/tasks/TaskManager";
-import { ModuleID } from "db://assets/base/script/types/BaseType";
-import { XUtils } from "db://assets/base/script/utils/XUtils";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { SymbolData2 } from "../../components/slotMachine2/SymbolData2";
-import { GameConst, SlotMachineID, SymbolID } from "../constant/GameConst";
-import { AutoSpinDelayTask } from "../task/AutoSpinDelayTask";
-import { BackBSSettleTask } from "../task/BackBSSettleTask";
-import { DropTask } from "../task/DropTask";
-import { EndGameTask } from "../task/EndGameTask";
-import { ExplodeTask } from "../task/ExplodeTask";
-import { FSOpeningTask } from "../task/FSOpeningTask";
-import { FSSettleTask } from "../task/FSSettleTask";
-import { FSUpdateRemainTimesTask } from "../task/FSUpdateRemainTimesTask";
-import { IdleTask } from "../task/IdleTask";
-import { RetriggerTask } from "../task/RetriggerTask";
-import { ScatterWinTask } from "../task/ScatterWinTask";
-import { ShowWinTask } from "../task/ShowWinTask";
-import { SpinTask } from "../task/SpinTask";
-import { StopTask } from "../task/StopTask";
-import { TransTask } from "../task/TransTask";
-import { GameData } from "./GameData";
+import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
+import { AutoSpinDelayTask } from 'db://assets/game/script/task/AutoSpinDelayTask';
+import { BackBSSettleTask } from 'db://assets/game/script/task/BackBSSettleTask';
+import { BootCatchTask } from 'db://assets/game/script/task/BootCatchTask';
+import { IdleTask } from 'db://assets/game/script/task/IdleTask';
+import { StopTask } from 'db://assets/game/script/task/StopTask';
+import { TotalWinTask } from 'db://assets/game/script/task/TotalWinTask';
+import { TransTask } from 'db://assets/game/script/task/TransTask';
+import { UpdateFreeTimesTask } from 'db://assets/game/script/task/UpdateFreeTimesTask';
+import { WinScatterTask } from 'db://assets/game/script/task/WinScatterTask';
+import { WinSymbolTask } from 'db://assets/game/script/task/WinSymbolTask';
+
+import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
+
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { IGameResult, ISpinData } from 'db://assets/common/script/network/NetworkApi';
+import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
+import { Utils } from 'db://assets/common/script/utils/Utils';
+
+
 /**
  * 消息處理
  */
@@ -37,274 +31,193 @@ export class MessageHandler {
         return MessageHandler.instance;
     }
 
+    private fgBonus1: boolean = false;//是否啟用額外免費遊戲1
+    private fgBonus2: boolean = false;//是否啟用額外免費遊戲2
+    private fsTotalWin: number = 0;//免費遊戲總贏分
+    private freeSpinTimes: number = 0;//免費遊戲次數
+
     /**
-     * 
+     * 初始化
      */
     public initialize(): void {
-        BaseEvent.onResultRecall.on(this.onResultRecallMessage, this);
+        //監聽Spin結果
+        BaseEvent.onSpinResult.on(this.parseBSResult, this);
     }
 
     /**
-     * 
-     * @param message 
+     * 接收Spin結果並開始排腳本
+     * @param slotResult 結果
      */
-    private onResultRecallMessage(message: s5g.game.proto.ResultRecall): void {
-
-        //有debug功能才使用
-        if (CheatUI.activate) {
-            let msgStr = JSON.stringify(message);
-            console.log(msgStr);
-        }
-        this.parseBSResult(message.result, message.cur_module_total_times - message.cur_module_play_times);
-    }
-
-
-    /**
-     * 要求Spin結果成功開始排腳本
-     * @param slotResult 
-     * @param fsRemainTimes 
-     */
-    public parseBSResult(slotResult: s5g.game.proto.ISlotResult, fsRemainTimes: number = -1): void {
-
-        let gameData = BaseDataManager.getInstance().getData<GameData>();
-        BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SPINSTOPING);
-
-        //過程計算加總用(右下角win用)
-        let sumWin: number = BaseDataManager.getInstance().isBS() ? 0 : BaseDataManager.getInstance().winTotal;
-        if (BaseDataManager.getInstance().isBS() === true) {
-            BaseDataManager.getInstance().winTotal = 0;
-        }
-
-        //中獎位置
-        let winPos: number[];
-        let winSymbolID: number[];
-        //此盤面中獎金額
-        let planeWin: number;
-        //此盤面尚未乘上倍率金額
-        let planeOriginalWin: number;
-
-        //把第一盤和N盤結果合併, 取用資料時再決定轉型成SlotResult或SubResult
-        let allResult = slotResult.sub_result ? [slotResult, ...slotResult.sub_result] : [slotResult];
-
-        //獲得額外局數
-        let getExtraTimes = (slotResult.win_bonus_group && slotResult.win_bonus_group.length > 0) ? slotResult.win_bonus_group[0].times : 0;
-
-        //盤面資料
-        let preSymbolPattern: number[];
-        let newSymbolPattern: number[];
-        let numScatterInPattern: number = 0;
-        let goldenPattern: number[];
-
-        //盤面起始倍數
-        let curMultiplierIdx: number = BaseDataManager.getInstance().getData<GameData>().getInitMultiplierIdx();
-
-        allResult.forEach((temp, msgResultIndex) => {
-            let isSubResult = (temp as s5g.game.proto.SlotResult.SubResult).sub_game_id !== undefined;
-            let subResult = temp as s5g.game.proto.SlotResult.SubResult;
-
-            //第幾個subResult(allResult[0]是SlotResult)
-            let subIdx = msgResultIndex - 1;
-            preSymbolPattern = newSymbolPattern || [];
-            newSymbolPattern = isSubResult ? slotResult.total_star_times[subIdx].times : slotResult.full_symbol_pattern;
-            numScatterInPattern = newSymbolPattern.filter((symbolID) => symbolID === SymbolID.Scatter).length;
-            goldenPattern = [];
+    private parseBSResult(slotResult: ISpinData): void {
+        // console.log('接收Spin結果', slotResult);
+        //執行主遊戲結果
+        const mainGame = slotResult.main_game;
+        // console.log('======執行主遊戲結果======');
+        this.handleGameResult(mainGame, false);
+        this.fsTotalWin = 0;//重置免費遊戲總贏分
+        this.freeSpinTimes = 0;//重置免費遊戲次數
 
 
-            //為了乘倍,移到這提早運算
-            winPos = [];
-            winSymbolID = [];
-            let winLineGroupList = isSubResult ? subResult.win_line_group : slotResult.win_line_group;
-            let normalWinLineList = winLineGroupList.filter((winLineGroup) => winLineGroup.symbol_id !== SymbolID.Scatter);
-            let scatterWinLine = winLineGroupList.filter((winLineGroup) => winLineGroup.symbol_id === SymbolID.Scatter);
-            if (normalWinLineList && normalWinLineList.length > 0) {
-                planeWin = 0;
-                planeOriginalWin = 0;
-                normalWinLineList.forEach((winLineGroup) => {
-                    winPos = winPos.concat(winLineGroup.pos);
-                    winSymbolID.push(winLineGroup.symbol_id);
-                    planeOriginalWin += winLineGroup.credit;
-                    planeWin += winLineGroup.credit_long;
-                })
-            }
-            winPos = XUtils.uniq(winPos);//只取前六個位置
-            let errorWinPos = winPos.filter((pos, idx, arr) => pos % 10 >= 6);//只取前六個位置
-            if (errorWinPos.length > 0) {
-                throw new Error("winPos異常!!");
-            }
+        //如果有子遊戲，則執行子遊戲(免費遊戲)結果
+        if (slotResult.get_sub_game) {
+            this.fgBonus1 = false;//重置bonus狀態
+            this.fgBonus2 = false;//重置bonus狀態
 
+            //執行scatter表演
+            const winScatterPos = slotResult.main_game.scatter_info.position.map((pos) => pos[0] * GameConst.REEL_ROW + pos[1]);
+            const winScatterTask = new WinScatterTask();
+            winScatterTask.winPos = winScatterPos;
+            TaskManager.getInstance().addTask(winScatterTask);
 
-            //首次停輪
-            if (isSubResult === false) {
+            //獲得免費遊戲次數
+            this.freeSpinTimes = GameConst.SCATTER_MAPPING[slotResult.main_game.scatter_info.amount];
 
-                if (BaseDataManager.getInstance().isBS() === false) {
-                    let fsTask = new FSUpdateRemainTimesTask();
-                    fsTask.fsRemainTimes = --gameData.fsRemainTimes;
-                    TaskManager.getInstance().addTask(fsTask);
+            //執行轉場
+            const transTask = new TransTask();
+            transTask.freeSpinTimes = this.freeSpinTimes;
+            transTask.isFirstTrans = true;
+            transTask.wildMultiplier = 1;
+            TaskManager.getInstance().addTask(transTask);
+
+            //執行子遊戲(免費遊戲)結果
+            slotResult.sub_game.game_result.forEach((subGame, index) => {
+                this.freeSpinTimes--;  // 免費遊戲次數-1
+                const updateFreeTimesTask = new UpdateFreeTimesTask();
+                updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
+                TaskManager.getInstance().addTask(updateFreeTimesTask);
+
+                // console.log('======執行子遊戲結果======');
+                this.handleGameResult(subGame, true);
+                //如果剩餘免費遊戲次數為0，則判斷是否表演retrigger
+                if (this.freeSpinTimes === 0) {
+                    this.handleRetrigger(subGame);
                 }
+            });
 
-                //因為要處理輪帶金框, 只有第一轉設定, 否則slotParser內的資料會被子盤面覆蓋
-                gameData.slotParser.setStripTable(BaseDataManager.getInstance().getStripTable()._strips, slotResult.rng, newSymbolPattern, goldenPattern);
-                gameData.slotParser.buyFS = BaseDataManager.getInstance().buyFs;
-                SlotMachine2.changeStrip.emit(SlotMachineID.BS, gameData.slotParser);
-
-                let stop = new StopTask();
-                stop.rngList = slotResult.rng;
-                //第一盤就中FS, 如果還有得分的話要在掉落後的盤面處理
-                stop.isScatterWin = numScatterInPattern >= GameConst.BONUS_WIN_COUNT && msgResultIndex == allResult.length - 1;
-                stop.isLastPlane = msgResultIndex == allResult.length - 1;
-                // stop.symbolPattern = temp.full_symbol_pattern;
-                TaskManager.getInstance().addTask(stop);
-            }
-            else {
-                //掉落
-                let drop: DropTask = new DropTask();
-                drop.preSymbolPattern = preSymbolPattern;
-                drop.newSymbolPattern = newSymbolPattern;//下一盤的結果
-                drop.goldenPattern = goldenPattern;
-                drop.isScatterWin = numScatterInPattern >= GameConst.BONUS_WIN_COUNT && msgResultIndex == allResult.length - 1;
-                drop.isLastPlane = msgResultIndex == allResult.length - 1;
-                TaskManager.getInstance().addTask(drop);
-                // TaskManager.getInstance().addTask(new DelayTask(0.5));
-            }
-
-            TaskManager.getInstance().addTask(new DelayTask(numScatterInPattern > 0 ? 0.5 : 0.2));
-
-            // 有贏分資料才演示後續
-            if (winPos && winPos.length > 0) {
-
-                //中獎線
-                let winTask = new ShowWinTask();
-                winTask.curMultiplier = GameConst.multiplierList[curMultiplierIdx];
-                winTask.originalWin = planeOriginalWin;
-                winTask.winPos = winPos;
-                winTask.winSymbolID = winSymbolID;
-                winTask.sumWin = sumWin + planeOriginalWin;//還不能真的加入
-                winTask.playerCent = BaseDataManager.getInstance().playerCent + planeOriginalWin * BaseDataManager.getInstance().bet.getCurRate();//還不能真的加入
-                TaskManager.getInstance().addTask(winTask);
-
-                //檢查消去位置是否有金框, 遇到金框要轉換WILD
-                let changeMap: SymbolData2[][] = null;
-                winPos.forEach((pos) => {
-                    let winGrid = XUtils.posToGrid(pos);
-                    let isGolden = !!goldenPattern[winGrid.row * gameData.REEL_COL + winGrid.col];
-                    if (isGolden) {
-                        if (!changeMap) {
-                            changeMap = [];
-                        }
-                        if (!changeMap[winGrid.col]) {
-                            changeMap[winGrid.col] = [];
-                        }
-                        let data = new SymbolData2();
-                        data.symbolID = SymbolID.Wild;
-                        data.isChange = true;
-                        changeMap[winGrid.col][winGrid.row] = data;
-                    }
-                }, this);
-
-                sumWin += planeWin;
-                BaseDataManager.getInstance().winTotal += planeWin;
-                BaseDataManager.getInstance().playerCent += planeWin * BaseDataManager.getInstance().bet.getCurRate();
-
-                //爆炸
-                let preMultiplierIdx = curMultiplierIdx;
-                curMultiplierIdx = Math.min(curMultiplierIdx + 1, GameConst.multiplierList.length - 1);
-                let explode = new ExplodeTask();
-                explode.winPos = winPos;
-                explode.hitMultiplier = GameConst.multiplierList[preMultiplierIdx];
-                explode.newMultiplier = GameConst.multiplierList[curMultiplierIdx];
-                explode.changeMap = changeMap;
-                explode.win = planeWin;
-                explode.sumWin = sumWin;
-                explode.playerCent = BaseDataManager.getInstance().playerCent;
-                TaskManager.getInstance().addTask(explode);
-            }
-
-        }, this);
-
-        //一轉結束
-        let end = new EndGameTask();
-        let spinWin = XUtils.convertToLong(slotResult.credit);
-        end.win = spinWin;
-        end.playerCent = BaseDataManager.getInstance().playerCent;
-        TaskManager.getInstance().addTask(end);
-
-        gameData.fsWin += spinWin;
-
-        //BS:檢查是否要進FS
-        if (BaseDataManager.getInstance().curModuleID === ModuleID.BS) {
-            //進入FS
-            if (BaseDataManager.getInstance().nextModuleID !== ModuleID.BS) {
-
-                gameData.bsLastMap.length = 0;
-                for (let col: number = 0; col < gameData.REEL_COL; ++col) {
-                    gameData.bsLastMap[col] = [];
-                    for (let row: number = 0; row < gameData.REEL_ROW; ++row) {
-                        let data = new SymbolData2();
-                        let symbolID = newSymbolPattern[row * gameData.REEL_COL + col];
-                        data.symbolID = symbolID;
-                        data.isBadge = goldenPattern[row * gameData.REEL_COL + col] > 0;
-                        gameData.bsLastMap[col].push(data);
-                    }
-                }
-
-                let scatterWin = new ScatterWinTask();
-                scatterWin.symbolPattern = newSymbolPattern;
-                TaskManager.getInstance().addTask(scatterWin);
-
-                gameData.resetFS();
-
-                gameData.fsRemainTimes = (slotResult.win_bonus_group && slotResult.win_bonus_group.length > 0) ? slotResult.win_bonus_group[0].times : 0;
-
-                let trans = new TransTask();
-                trans.to = BaseDataManager.getInstance().nextModuleID;
-                trans.times = gameData.fsRemainTimes;
-                TaskManager.getInstance().addTask(trans);
-
-                //FS開場
-                let fsOpen = new FSOpeningTask();
-                TaskManager.getInstance().addTask(fsOpen);
-
-                BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT_START);
-                BaseDataManager.getInstance().buyFs = false;
-                let task = new SpinTask();
-                TaskManager.getInstance().addTask(task);
-            }
-            //相同模式
-            else {
-                TaskManager.getInstance().addTask(new AutoSpinDelayTask());
-                TaskManager.getInstance().addTask(new IdleTask());
-            }
-        }
-        //FS
-        else {
-
-            //FS獲得局數
-            if (getExtraTimes > 0) {
-                let task = new RetriggerTask();
-                task.from = gameData.fsRemainTimes;
-                task.to = gameData.fsRemainTimes + getExtraTimes;
-                gameData.fsRemainTimes += getExtraTimes;
-                TaskManager.getInstance().addTask(task);
-            }
+            //FG結算
+            const totalWinTask = new TotalWinTask();
+            totalWinTask.totalWin = slotResult.sub_game.pay_credit_total;//FG中獎總金額
+            totalWinTask.backBSParser = slotResult.main_game.game_result;
+            totalWinTask.totalFreeSpinTimes = slotResult.sub_game.game_result.length;
+            TaskManager.getInstance().addTask(totalWinTask);
 
             //返回BS
-            if (BaseDataManager.getInstance().nextModuleID === ModuleID.BS) {
-                let settle = new FSSettleTask();
-                settle.win = gameData.fsWin;
-                TaskManager.getInstance().addTask(settle);
+            const backBSSettleTask = new BackBSSettleTask();
+            backBSSettleTask.userCredit = slotResult.user_credit;
+            TaskManager.getInstance().addTask(backBSSettleTask);
+        }
+        // console.log('======回到待機======');
+        TaskManager.getInstance().addTask(new AutoSpinDelayTask());
+        TaskManager.getInstance().addTask(new IdleTask());
+    }
 
-                let backBSSettle = new BackBSSettleTask();
-                backBSSettle.sumWin = BaseDataManager.getInstance().winTotal;
-                backBSSettle.playerCent = BaseDataManager.getInstance().playerCent;
-                TaskManager.getInstance().addTask(backBSSettle);
+    /**
+    * 處理盤面停止結果
+    * @param gameResult 盤面結果
+    * @param isSubGame 是否子遊戲(免費遊戲)
+    */
+    private handleGameResult(gameResult: IGameResult, isSubGame: boolean = false): void {
+        //執行盤面停止
+        const stopTask = new StopTask();
+        stopTask.resultPattern = gameResult.game_result;
+        TaskManager.getInstance().addTask(stopTask);
 
-                TaskManager.getInstance().addTask(new IdleTask());
-            }
-            //繼續FS下一轉
-            else {
-                let task = new SpinTask();
-                TaskManager.getInstance().addTask(task);
-            }
+        //是否表演額外加次數(釣起靴子)
+        if (gameResult.extra?.no_m_add_spin) {
+            const bootCatchTask = new BootCatchTask();
+            TaskManager.getInstance().addTask(bootCatchTask);
+
+            //更新免費遊戲次數
+            this.freeSpinTimes += 1;// 免費遊戲次數+1
+            const updateFreeTimesTask = new UpdateFreeTimesTask();
+            updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
+            TaskManager.getInstance().addTask(updateFreeTimesTask);
+        }
+
+        //子遊戲漁夫與魚的表演資料
+        let winFishData: IWinFishData = null;
+        if (isSubGame && gameResult.extra?.wild_pos) {
+            const flatResult = gameResult.game_result.flat();//盤面結果扁平化
+            const allFishPos: number[] = [];
+            const fishSymbolIDs: number[] = [];
+            flatResult.forEach((symbolID, index) => {
+                if (symbolID >= SymbolID.F1 && symbolID <= SymbolID.F8) {
+                    allFishPos.push(index);
+                    fishSymbolIDs.push(symbolID);
+                }
+            });
+            const allWildPos = gameResult.extra?.wild_pos.map((pos) => pos[0] * GameConst.REEL_ROW + pos[1]);
+            winFishData = {
+                allWildPos,
+                allFishPos,
+                fishSymbolIDs,
+                totalWildCount: gameResult.extra?.total_wild_count
+            };
+        }
+
+        //中獎線資料
+        let winLineData: IWinLineData[] = [];//此盤面細部中獎資料
+        if (gameResult.pay_line.length > 0) {
+            //轉換中獎線資料
+            gameResult.pay_line.forEach((payLine) => {
+                const data = Utils.getLinePathPosition(payLine.pay_line, payLine.amount, gameResult.game_result, GameConst.payLineData);
+                winLineData.push({
+                    payLineID: payLine.pay_line,
+                    winPos: data.winPos,
+                    winSymbolIDs: data.winSymbolIDs,
+                    payCredit: payLine.pay_credit
+                });
+            });
+        }
+
+        //表演中獎流程
+        const winTask = new WinSymbolTask();
+        winTask.winLineData = winLineData;
+        winTask.winFishData = winFishData;
+        winTask.isSubGame = isSubGame;
+        winTask.curFsTotalWin = this.fsTotalWin;
+        winTask.payCreditTotal = gameResult.pay_credit_total;
+        TaskManager.getInstance().addTask(winTask);
+        this.fsTotalWin += gameResult.pay_credit_total;//累計免費遊戲總贏分
+    }
+
+    /**
+     * 處理額外免費遊戲retrigger
+     * @param subGame 免費遊戲結果
+     */
+    private handleRetrigger(subGame: IGameResult): void {
+        //如果wild次數大於等於4，且未啟用第一個bouns，則表演額外加10次，倍率變2倍
+        if (subGame.extra.total_wild_count >= 4 && this.fgBonus1 === false) {
+            //執行轉場
+            const transTask = new TransTask();
+            transTask.freeSpinTimes = 10;
+            transTask.isFirstTrans = false;
+            transTask.wildMultiplier = 2;
+            TaskManager.getInstance().addTask(transTask);
+            this.fgBonus1 = true;//已啟用第一個bouns
+
+            //更新免費遊戲次數
+            this.freeSpinTimes += 10;// 免費遊戲次數+10
+            const updateFreeTimesTask = new UpdateFreeTimesTask();
+            updateFreeTimesTask.wildMultiplier = 2;
+            updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
+            TaskManager.getInstance().addTask(updateFreeTimesTask);
+
+        } else if (subGame.extra.total_wild_count >= 8 && this.fgBonus2 === false) {
+            //執行轉場
+            const transTask = new TransTask();
+            transTask.freeSpinTimes = 10;
+            transTask.isFirstTrans = false;
+            transTask.wildMultiplier = 4;
+            TaskManager.getInstance().addTask(transTask);
+            this.fgBonus2 = true;//已啟用第二個bouns
+
+            //更新免費遊戲次數
+            this.freeSpinTimes += 10;// 免費遊戲次數+10
+            const updateFreeTimesTask = new UpdateFreeTimesTask();
+            updateFreeTimesTask.wildMultiplier = 4;
+            updateFreeTimesTask.freeSpinTimes = this.freeSpinTimes;
+            TaskManager.getInstance().addTask(updateFreeTimesTask);
         }
     }
 }

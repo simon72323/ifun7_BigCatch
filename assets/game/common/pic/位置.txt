@@ -1,5 +1,0 @@
-roller_mask
-( 0,55.75)
-
-roller_mask
-(0,-279)

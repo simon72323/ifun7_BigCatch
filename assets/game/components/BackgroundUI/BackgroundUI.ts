@@ -1,7 +1,9 @@
 import { _decorator, Component, Node } from 'cc';
-import { BaseEvent } from '@/base/script/main/BaseEvent';
-import { ModuleID } from '@/base/script/types/BaseType';
-const { ccclass, property } = _decorator;
+
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { ModuleID } from 'db://assets/common/script/types/BaseType';
+import { Utils } from 'db://assets/common/script/utils/Utils';
+const { ccclass } = _decorator;
 
 /**
  * 背景UI
@@ -9,12 +11,12 @@ const { ccclass, property } = _decorator;
 @ccclass('BackgroundUI')
 export class BackgroundUI extends Component {
 
-    private fg_bkg: Node;
-    private ng_bkg: Node;
+    private bg_fg: Node;
+    // private bg_mg: Node;
 
     onLoad() {
-        this.ng_bkg = this.node.getChildByName("ng_bkg_ani");
-        this.fg_bkg = this.node.getChildByName("fg_bkg_ani");
+        // this.bg_mg = this.node.getChildByName('bg_mg');
+        this.bg_fg = this.node.getChildByName('bg_fg');
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
 
@@ -26,8 +28,18 @@ export class BackgroundUI extends Component {
      * @param id 
      */
     private onChangeScene(id: ModuleID) {
-        this.ng_bkg.active = id === ModuleID.BS;
-        this.fg_bkg.active = id === ModuleID.FS;
+        if (id === ModuleID.BS) {
+            if (this.bg_fg.active) {
+                Utils.fadeOut(this.bg_fg, 0.5, 255, 0, () => {
+                    this.bg_fg.active = false;
+                });
+            }
+        } else {
+            if (!this.bg_fg.active) {
+                this.bg_fg.active = true;
+                Utils.fadeIn(this.bg_fg, 0.5, 0, 255);
+            }
+        }
     }
 }
 

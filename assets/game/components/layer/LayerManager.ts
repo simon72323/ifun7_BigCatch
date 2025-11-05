@@ -28,10 +28,10 @@ export class LayerManager extends Component {
     }
 
     public addChildToLayer(col: number, node: Node, layer: number) {
-        this.layers[layer].getChildByName("Reel" + col).addChild(node);
+        this.layers[layer].getChildByName('Reel' + col).addChild(node);
     }
 
-    public removeChildFromLayer(node: Node, layer: number) {
+    public removeChildFromLayer(node: Node, _layer: number) {
         node.removeFromParent();
     }
 }

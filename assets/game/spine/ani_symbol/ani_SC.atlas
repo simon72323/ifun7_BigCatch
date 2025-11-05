@@ -1,0 +1,146 @@
+
+ani_SC.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+02_fx/ani_SC_water/ani_SC_water_00
+  rotate: false
+  xy: 92, 5
+  size: 38, 26
+  orig: 100, 50
+  offset: 30, 2
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_01
+  rotate: false
+  xy: 259, 14
+  size: 54, 32
+  orig: 100, 50
+  offset: 22, 2
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_02
+  rotate: false
+  xy: 90, 33
+  size: 75, 38
+  orig: 100, 50
+  offset: 11, 1
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_03
+  rotate: true
+  xy: 331, 32
+  size: 78, 39
+  orig: 100, 50
+  offset: 10, 1
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_04
+  rotate: false
+  xy: 156, 73
+  size: 83, 39
+  orig: 100, 50
+  offset: 7, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_05
+  rotate: false
+  xy: 2, 61
+  size: 86, 37
+  orig: 100, 50
+  offset: 6, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_06
+  rotate: false
+  xy: 241, 48
+  size: 88, 36
+  orig: 100, 50
+  offset: 5, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_07
+  rotate: false
+  xy: 167, 17
+  size: 90, 29
+  orig: 100, 50
+  offset: 4, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_08
+  rotate: false
+  xy: 2, 3
+  size: 88, 28
+  orig: 100, 50
+  offset: 5, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_09
+  rotate: false
+  xy: 2, 35
+  size: 77, 24
+  orig: 100, 50
+  offset: 8, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_10
+  rotate: false
+  xy: 90, 87
+  size: 41, 11
+  orig: 100, 50
+  offset: 30, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_11
+  rotate: false
+  xy: 156, 246
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_12
+  rotate: false
+  xy: 156, 246
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_13
+  rotate: false
+  xy: 156, 246
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+02_fx/ani_SC_water/ani_SC_water_14
+  rotate: false
+  xy: 156, 246
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+symbo/SC_bg
+  rotate: false
+  xy: 2, 100
+  size: 152, 147
+  orig: 155, 149
+  offset: 2, 1
+  index: -1
+symbo/SC_board
+  rotate: 270
+  xy: 272, 86
+  size: 162, 55
+  orig: 162, 152
+  offset: 0, 0
+  index: -1
+symbo/SC_fish
+  rotate: false
+  xy: 156, 114
+  size: 115, 135
+  orig: 120, 139
+  offset: 3, 2
+  index: -1
+symbo/SC_g
+  rotate: 180
+  xy: 315, 6
+  size: 36, 41
+  orig: 36, 41
+  offset: 0, 0
+  index: -1
+symbo/SC_tx
+  rotate: true
+  xy: 327, 112
+  size: 134, 44
+  orig: 140, 149
+  offset: 1, 1
+  index: -1

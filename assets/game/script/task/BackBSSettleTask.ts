@@ -1,82 +1,68 @@
-import { SettingsPage1 } from "db://assets/base/components/settingsPage/SettingsPage1";
-import { AudioKey } from "db://assets/base/script/audio/AudioKey";
-import { AudioManager } from "db://assets/base/script/audio/AudioManager";
-import { BaseDataManager } from "db://assets/base/script/main/BaseDataManager";
-import { XUtils } from "db://assets/base/script/utils/XUtils";
-import { BaseEvent } from "../../../base/script/main/BaseEvent";
-import { GameTask } from "../../../base/script/tasks/GameTask";
-import { BigWinType, SpinButtonState } from "../../../base/script/types/BaseType";
-import { BannerUI } from "../../components/BannerUI/BannerUI";
-import { BigWinUI } from "../../components/BigWinUI/BigWinUI";
-import { SlotMachine2 } from "../../components/slotMachine2/base/slotMachine2/SlotMachine2";
-import { SlotMachineID } from "../constant/GameConst";
-import { GameData } from "../main/GameData";
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+
+import { FeatureBuyBtn } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyBtn';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+
 
 /**
  * FS返回NG總結算(先BigWin再橫幅)
  */
 export class BackBSSettleTask extends GameTask {
 
-    protected name: string = "BackBSSettleTask";
+    protected name: string = 'BackBSSettleTask';
 
     /**目前累計獲得金額(右下角Win) */
-    public sumWin: number;
+    public userCredit: number;
 
     /**剩餘額度 */
-    public playerCent: number;
+    // public playerCent: number;
 
     execute(): void {
+        AudioManager.getInstance().playMusic(AudioKey.bgmMg);
 
-        AudioManager.getInstance().stop(AudioKey.FsMusic);
-        AudioManager.getInstance().play(AudioKey.BsMusic);
+        //更新玩家餘額
+        SettingsController.refreshCredit.emit(this.userCredit);
+        DataManager.getInstance().userCredit = this.userCredit;
+        FeatureBuyBtn.show.emit();
 
         //回復盤面
-        SlotMachine2.change.emit(SlotMachineID.BS, BaseDataManager.getInstance().getData<GameData>().bsLastMap);
+        // SlotMachine.backBSParser.emit(this.backBSParser);
+        // SlotMachine.change.emit(SlotMachineID.BS, DataManager.getInstance().gameData.bsLastMap);
         // UIController
-        SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
+        // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
 
-        //達到BigWin額外演示
-        if (BaseDataManager.getInstance().getBigWinTypeByValue(this.sumWin) != BigWinType.non) {
-            BigWinUI.complete.once(() => {
-                this.onTaskEnd();
-            }, this);
-
-            BigWinUI.show.emit(this.sumWin);
-        }
-        else {
-            this.onTaskEnd();
-        }
+        this.onTaskEnd();
     }
 
     /**
      * 
      */
-    private onTaskEnd(): void {
+    private async onTaskEnd(): Promise<void> {
 
-        BaseEvent.refreshCredit.emit(this.playerCent);
-        BaseEvent.refreshWin.emit(this.sumWin * BaseDataManager.getInstance().bet.getCurRate());
+        // SettingsController.refreshCredit.emit(this.playerCent);
+        // SettingsController.refreshWin.emit(this.sumWin * DataManager.getInstance().bet.getLineTotal());
 
         //橫幅贏分
-        if (this.sumWin > 0) {
-            let multiple: number = BaseDataManager.getInstance().getWinMultipleByValue(this.sumWin);
-            BannerUI.showTotalWin.emit(this.sumWin * BaseDataManager.getInstance().bet.getCurRate(), multiple);
-        }
+        // if (this.sumWin > 0) {
+        //     let multiple: number = DataManager.getInstance().bet.getWinMultipleByValue(this.sumWin);
+        //     BannerUI.showTotalWin.emit(this.sumWin * DataManager.getInstance().bet.getLineTotal(), multiple);
+        // }
 
         //要多等一秒
-        XUtils.scheduleOnce(() => {
-
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SHOWWIN);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_WAIT);
-            BaseDataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_ENDGAME);
-
-            this.finish();
-        }, 1, this);
+        // await Utils.delay(1);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_SHOWWIN);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_WAIT);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_FEATURE_CHEKRESULT);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_SHOWWIN);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_WAIT);
+        // DataManager.getInstance().setState(s5g.game.proto.ESTATEID.K_ENDGAME);
+        this.finish();
     }
 
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }

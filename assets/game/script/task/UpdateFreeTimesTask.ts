@@ -1,22 +1,25 @@
-import { GameTask } from "../../../base/script/tasks/GameTask";
+import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { GameTask } from 'db://assets/common/script/tasks/GameTask';
+
+import { SlotData } from 'db://assets/game/script/data/SlotData';
 
 /**
  * 更新免費遊戲次數
  */
 export class UpdateFreeTimesTask extends GameTask {
+    protected name: string = 'UpdateFreeTimesTask';
+    public wildMultiplier: number = 0;
+    public freeSpinTimes: number;
 
-    protected name: string = "UpdateFreeTimesTask";
-
-    /**目標次數 */
-    public times: number;
-
-    execute(): void {
-
-        //直接設定
-        // FeatureGameUI.refreshRemainTimes.emit(this.times);
+    async execute(): Promise<void> {
+        if (this.wildMultiplier > 0) {
+            SlotData.fsWildMultiply = this.wildMultiplier;//變更免費遊戲 wild倍率
+        }
+        SettingsController.updateFreeSpinCount.emit(this.freeSpinTimes);
         this.finish();
     }
+
     update(deltaTime: number): void {
-        // throw new Error("Method not implemented.");
+        // throw new Error('Method not implemented.');
     }
 }
