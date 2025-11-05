@@ -6,21 +6,8 @@
   "textureCompressConfig": {
     "customConfigs": {},
     "userPreset": {
-      "69Jb0bOnVIsbv9KvKNUcBi": {
-        "name": "s5gLow",
-        "options": {
-          "web": {
-            "png": {
-              "quality": 50
-            },
-            "webp": {
-              "quality": 50
-            }
-          }
-        }
-      },
       "e0uAaz6pRIb7LANoa9MhiP": {
-        "name": "s5gMedium",
+        "name": "pngWebp",
         "options": {
           "web": {
             "png": {
@@ -32,15 +19,27 @@
           }
         }
       },
-      "8fxiKox0lJE4YSaFyN65vz": {
-        "name": "s5gHigh",
+      "69Jb0bOnVIsbv9KvKNUcBi": null,
+      "8fxiKox0lJE4YSaFyN65vz": null,
+      "4cxrc/CeRMBYlCj6XubHFJ": {
+        "name": "jpgWebp",
+        "options": {
+          "web": {
+            "jpg": {
+              "quality": 80
+            },
+            "webp": {
+              "quality": 80
+            }
+          }
+        }
+      },
+      "acmUQQ3+dJXKgcuQ/k9hXx": {
+        "name": "png8",
         "options": {
           "web": {
             "png": {
-              "quality": 100
-            },
-            "webp": {
-              "quality": 100
+              "quality": 80
             }
           }
         }
