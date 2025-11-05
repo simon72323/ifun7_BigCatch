@@ -242,7 +242,7 @@ export class AutoSpin extends Component {
             item.active = true;
 
             //啟用監聽
-            addBtnClickEvent(this.node, 'AutoSpin', item.getComponent(Button), this.pickDropItem, i);
+            addBtnClickEvent(this.node, 'AutoSpin', item.getComponent(Button), 'pickDropItem', i);
         }
     }
 
