@@ -18,6 +18,8 @@ import { NetworkManager } from 'db://assets/common/script/network/NetworkManager
 import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
 import { ScreenAdapter } from 'db://assets/common/script/utils/ScreenAdapter';
 import { Utils } from 'db://assets/common/script/utils/Utils';
+import { InGameMenuPanel } from 'db://assets/common/client-promotion/ingamemenu/InGameMenuPanel';
+import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
 
 const { ccclass, property } = _decorator;
 
@@ -70,6 +72,7 @@ export class GameMain extends Component {
         SlotMachine.startMi.on((column: number) => {
             AudioManager.getInstance().playSound(AudioKey.teasing);
             AudioManager.getInstance().editMusicVolume(0.1);
+            CharacterUI.win.emit();
             // this.isMi = true;
         }, this);
 
@@ -121,9 +124,11 @@ export class GameMain extends Component {
         const buyFeatureEnabled = DataManager.getInstance().bet.getBuyFeatureTotal() !== -1;
         BaseEvent.buyFeatureEnabled.emit(buyFeatureEnabled);//設置購買功能是否啟用
 
-        KeyboardManager.getInstance().initialize();
+        KeyboardManager.getInstance().initialize();//初始化鍵盤管理器
         SettingsController.getInstance().initialize();//初始化設定控制器
         MessageHandler.getInstance().initialize();//初始化消息處理
+        InGameMenuPanel.initialize.emit();//初始化遊戲內選單
+
 
         //開始遊戲--------------------------------------------------------
         // console.log('開始遊戲');

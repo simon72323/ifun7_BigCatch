@@ -6,6 +6,8 @@ export enum AudioKey {
     bgmMg = 'mu_main_background',//一般遊戲背景音樂
     bgmFg = 'mu_background',//免費遊戲背景音樂
 
+    btnClick = 'btnClick',//公版按鈕音效
+
     //購買免費遊戲相關
     btnBuyConfirm = 'se_confirm',//購買免費遊戲確認
     btnBuyCancle = 'se_cancel',//購買免費遊戲取消

@@ -47,21 +47,26 @@ export class ScreenAdapter {
      * 處理畫面大小變化 
      */
     public static handleResize() {
-        // console.log('處理畫面大小變化');
         if (!game.canvas) return;
 
         const rect = game.canvas.getBoundingClientRect();
         const aspectRatio = rect.width / rect.height;
 
         // 判斷橫豎屏並設置對應分辨率
-        if (aspectRatio > (720 / 1280)) {
-            // 橫屏模式
-            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.SHOW_ALL);
+        if (aspectRatio > 1) {
+            if (aspectRatio > 1280 / 720) {
+                view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
+            } else {
+                view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_WIDTH);
+            }
             // console.log('橫屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
-            // 豎屏模式
-            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
+            if (aspectRatio < 720 / 1280) {
+                view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
+            } else {
+                view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_HEIGHT);
+            }
             // console.log('豎屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }

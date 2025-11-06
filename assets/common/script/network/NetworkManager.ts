@@ -165,19 +165,19 @@ export class NetworkManager {
     /**
      * 獲取促銷簡介資料
      */
-    public async sendPromotionBrief(): Promise<void> {
+    public async sendPromotionBrief(): Promise<IPromotionBrief[]> {
         const response = await this.sendRequest(NetworkApi.GET_PROMOTION_BRIEF, {
             promotion_id: '-1'
         });
         // console.log('[NetworkManager] onGetPromotionBriefReceived =>', response);
-        this.processPromotionBrief(response);
+        return this.processPromotionBrief(response);
     }
 
     /**
      * 處理促銷簡介資料
      * @param response 原始促銷資料
      */
-    private processPromotionBrief(response: any): void {
+    private processPromotionBrief(response: any): IPromotionBrief[] {
         let promotionBriefResponse = response.data;
         // 按結束時間排序
         promotionBriefResponse.sort((a: IPromotionBrief, b: IPromotionBrief) => {
@@ -197,7 +197,8 @@ export class NetworkManager {
         }
         promotionBriefResponse = promotionBriefResponse.concat(temp);
         //更新資料
-        DataManager.getInstance().promotionData = promotionBriefResponse;
+        return promotionBriefResponse;
+        // DataManager.getInstance().promotionData = promotionBriefResponse;
     }
 
     /**

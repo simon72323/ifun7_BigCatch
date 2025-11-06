@@ -16,7 +16,8 @@ export class CharacterUI extends Component {
     }
 
     private win(): void {
-        this.ani_character.setAnimation(0, 'win', true);
+        this.ani_character.setAnimation(0, 'win', false);
+        this.ani_character.addAnimation(0, 'idle', true);
     }
 
     private idle(): void {
