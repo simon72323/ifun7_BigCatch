@@ -54,7 +54,7 @@
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
-        "packable": true,
+        "packable": false,
         "pixelsToUnit": 100,
         "pivotX": 0.5,
         "pivotY": 0.5,
@@ -127,8 +127,12 @@
   },
   "userData": {
     "type": "sprite-frame",
-    "fixAlphaTransparencyArtifacts": true,
+    "fixAlphaTransparencyArtifacts": false,
     "hasAlpha": true,
-    "redirect": "f0f3f696-7975-4717-9494-80ce50e48637@6c48a"
+    "redirect": "f0f3f696-7975-4717-9494-80ce50e48637@6c48a",
+    "compressSettings": {
+      "useCompressTexture": true,
+      "presetId": "e0uAaz6pRIb7LANoa9MhiP"
+    }
   }
 }
