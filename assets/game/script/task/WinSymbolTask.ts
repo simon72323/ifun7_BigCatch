@@ -14,7 +14,7 @@ import { BigWinUI } from 'db://assets/game/components/BigWinUI/BigWinUI';
 import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
 import { FreeGameUI } from 'db://assets/game/components/FreeGameUI/FreeGameUI';
 import { ReelBlackUI } from 'db://assets/game/components/ReelBlackUI/ReelBlackUI';
-import { Symbol } from 'db://assets/game/components/slotMachine/Symbol';
+import { Symbol } from 'db://assets/game/components/Symbol/Symbol';
 import { WinScoreUI } from 'db://assets/game/components/WinScoreUI/WinScoreUI';
 import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 import { FISH_ODDS } from 'db://assets/game/script/data/GameConst';
@@ -121,6 +121,7 @@ export class WinSymbolTask extends GameTask {
 
         //=======漁夫個別表演模式
         for (let i = 0; i < allWildPos.length; i++) {
+            CharacterUI.win.emit();
             await this.wildScoreMove(i);
         }
     }

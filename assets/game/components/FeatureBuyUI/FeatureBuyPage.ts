@@ -50,9 +50,9 @@ export class FeatureBuyPage extends Component {
         this.addBtn = this.node.getChildByPath('pic_buy/btn_add').getComponent(Button);
         this.lessBtn = this.node.getChildByPath('pic_buy/btn_less').getComponent(Button);
         const scriptName = 'FeatureBuyPage';
-        addBtnClickEvent(this.node, scriptName, this.buyBtn, this.onClickBuy);
-        addBtnClickEvent(this.node, scriptName, this.addBtn, this.onClickChangeBet, '1');
-        addBtnClickEvent(this.node, scriptName, this.lessBtn, this.onClickChangeBet, '-1');
+        addBtnClickEvent(this.node, scriptName, this.buyBtn, 'onClickBuy');
+        addBtnClickEvent(this.node, scriptName, this.addBtn, 'onClickChangeBet', '1');
+        addBtnClickEvent(this.node, scriptName, this.lessBtn, 'onClickChangeBet', '-1');
 
         //關閉
         this.node.getChildByName('Block').on(Button.EventType.CLICK, this.hide, this);

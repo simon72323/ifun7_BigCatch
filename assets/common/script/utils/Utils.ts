@@ -1,4 +1,4 @@
-import { JsonAsset, resources, _decorator, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, sp, Label } from 'cc';
+import { JsonAsset, resources, _decorator, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, sp, Label, Color, EventTarget, find } from 'cc';
 
 import { BaseConfig } from 'db://assets/common/script/data/BaseConfig';
 import { RunNumber } from 'db://assets/common/script/types/BaseType';
@@ -13,7 +13,7 @@ export class Utils {
      * @returns 格式化後的字符串
      */
     public static numberFormat(value: number): string {
-        let decimalPoint = BaseConfig.DecimalPlaces;
+        const decimalPoint = BaseConfig.DecimalPlaces;
         const preciseValue = Utils.accMul(value, 1);
         return preciseValue.toLocaleString('en', { minimumFractionDigits: decimalPoint, maximumFractionDigits: decimalPoint });
     }
@@ -471,6 +471,283 @@ export class Utils {
     // public static circularDistance(a: number, b: number, length: number): number {
     //     return Math.min(Math.abs(a - b), length - Math.abs(a - b));
     // }
+
+    public static async commonFadeIn(ui: Node, fadeout: boolean = false, color: Color[] = null, colorComponent = null, duration: number = 0.3, eventTarget: EventTarget = null) {
+        if (ui == null) return;
+        if (eventTarget && eventTarget['running'] === true) return;
+        if (this.activeUIEventTarget?.['running'] === true) return;
+        let sprite = colorComponent;
+        if (sprite == null) sprite = Utils.getColorComponent(ui);
+        if (sprite == null) return;
+
+        const refColor = color ?? this.activeUIAlpha;
+        let fromColor = fadeout ? refColor[1] : refColor[0];
+        let toColor = fadeout ? refColor[0] : refColor[1];
+
+        const targetEventTarget = eventTarget ?? new EventTarget();
+        targetEventTarget.removeAll('done');
+        targetEventTarget['running'] = true;
+
+        sprite.color = fromColor;
+        let alpha = { value: fromColor.a };
+        tween(alpha).to(duration, { value: toColor.a }, {
+            easing: 'smooth',
+            onUpdate: () => { sprite.color = new Color(toColor.r, toColor.g, toColor.b, alpha.value); },
+            onComplete: () => { eventTarget.emit('done'); }
+        }).start();
+        //tween( sprite ).to(0.3, { color: toColor }, { easing: 'smooth' }).start();
+        await this.delayEvent(eventTarget);
+        targetEventTarget['running'] = false;
+        ui.active = !fadeout;
+    }
+
+    public static readonly activeUIScale = [new Vec3(0.7, 0.7, 1), new Vec3(1, 1, 1)];
+    public static readonly activeUIAlpha = [new Color(255, 255, 255, 0), new Color(255, 255, 255, 255)];
+    public static activeUIEventTarget: EventTarget = null;
+    public static async commonActiveUITween(ui: Node, active: boolean, colorAlpha: boolean = true, duration: number = 0.3) {
+        if (ui == null) return;
+        if (this.activeUIEventTarget?.['running'] === true) return;
+
+        let fromScale = active ? this.activeUIScale[0] : this.activeUIScale[1];
+        let toScale = active ? this.activeUIScale[1] : this.activeUIScale[0];
+        this.activeUIEventTarget = this.activeUIEventTarget ?? new EventTarget();
+        this.activeUIEventTarget.removeAll('done');
+        this.activeUIEventTarget['running'] = true;
+        ui.setScale(fromScale);
+        ui.active = true;
+        tween(ui).to(duration, { scale: toScale }, {
+            easing: 'backOut',
+            onComplete: (x) => Utils.activeUIEventTarget.emit('done')
+        }).start();
+
+        let sprite = Utils.getColorComponent(ui);
+        if (sprite != null) {
+
+            if (colorAlpha === false) {
+                let fromColor = active ? this.activeUIAlpha[0] : this.activeUIAlpha[1];
+                let toColor = active ? this.activeUIAlpha[1] : this.activeUIAlpha[0];
+                sprite.color = fromColor;
+                tween(sprite).to(duration, { color: toColor }, { easing: 'smooth' }).start();
+            } else {
+                // if ( duration >= 0.2 ) duration -= 0.1;
+                let fromColor = active ? { value: 0 } : { value: 255 };
+                let toColor = active ? { value: 255 } : { value: 0 };
+                tween(fromColor).to(duration, toColor, {
+                    easing: 'smooth',
+                    onUpdate: () => { sprite.color = new Color(255, 255, 255, fromColor.value); }
+                }).start();
+            }
+        }
+
+        await this.delayEvent(this.activeUIEventTarget);
+        this.activeUIEventTarget['running'] = false;
+        ui.active = active;
+    }
+
+    public static getColorComponent(node: Node): any {
+        if (node == null) return null;
+        const components = node['_components'];
+        if (components == null || components.length === 0) return null;
+        for (let i in components) {
+            const comp = components[i];
+            if (comp == null) continue;
+            if (comp['color'] == null) continue;
+            if (comp['color'] instanceof Color) return comp;
+        }
+
+        return null;
+    }
+
+    public static async delayEvent(event: EventTarget = null, eventType: string = 'done'): Promise<any> {
+        if (event == null) return;
+        return await new Promise((resolve) => { event.once(eventType, resolve); });
+    }
+
+    /**
+     * 預載資料初始化
+     * @param initData 
+     * @param bindComponent 
+     * @returns 
+     */
+    public static initData(initData: any, bindComponent: any, propertiesKey: string = 'properties') {
+        if (initData == null) return;
+        if (bindComponent == null) return;
+        // if ( bindComponent.node == null ) return;
+
+        let properties = bindComponent[propertiesKey];
+        if (properties == null) properties = {};
+
+        for (let i = 0; i < Object.keys(initData).length; i++) {
+            const key = Object.keys(initData)[i];
+            const property = initData[key];
+            const { property: processedProperty, haveInitEvent } = Utils.processProperty(bindComponent, key, property);
+
+            properties[key] = processedProperty;
+
+            if (haveInitEvent != null) haveInitEvent();
+        }
+    }
+
+    public static processProperty(bindComponent: any, key: string, property: any) {
+        let haveInitEvent = null;
+
+        for (let j = 0; j < Object.keys(property).length; j++) {
+            const subKey = Object.keys(property)[j];
+            const subProperty = property[subKey];
+
+            if (subKey === 'INIT_EVENT') {
+                let boundSubProperty = subProperty.bind(bindComponent);
+                haveInitEvent = boundSubProperty;
+                continue;
+            }
+            let node: any, path: string;
+            if (subProperty == null) continue;
+
+            if (subProperty[DATA_TYPE.SCENE_PATH] != null) {
+                path = subProperty[DATA_TYPE.SCENE_PATH];
+                if (path == null || typeof (path) !== 'string') continue;
+
+                node = find(path);
+                if (node == null) {
+                    console.error('Node not found: ' + subProperty[DATA_TYPE.SCENE_PATH], [key, property, path, bindComponent]);
+                    console.log('subProperty', subProperty);
+                    continue;
+                }
+            } else {
+                path = subProperty[DATA_TYPE.NODE_PATH];
+                if (path == null || typeof (path) !== 'string') continue;
+
+                if (path === '') node = bindComponent.node;
+                else node = bindComponent.node.getChildByPath(path);
+
+                if (node == null) {
+                    console.error('Node not found: ' + subProperty[DATA_TYPE.NODE_PATH]);
+                    console.log('subProperty', subProperty);
+                    continue;
+                }
+            }
+
+            const t = subProperty[DATA_TYPE.TYPE] ? subProperty[DATA_TYPE.TYPE] : Node;
+            const component = (t == Node) ? node : node.getComponent(t);
+
+            if (component == null) {
+                // console.error('Component not found: ' + subProperty[DATE_TYPE.TYPE], path);
+                continue;
+            }
+
+            let propertiesData = Utils.initPropertyData(component);
+
+            if (subProperty[DATA_TYPE.CLICK_EVENT] != null) {
+                node.on(Node.EventType.TOUCH_END, subProperty[DATA_TYPE.CLICK_EVENT], bindComponent);
+                Utils.AddHandHoverEvent(node);
+
+                // if (subProperty['buttonSound'] === true) { // 播放共用音效
+                //     node.on(Node.EventType.TOUCH_END, () => { SoundManager.PlayButtonSound(); }, bindComponent);
+                // }
+            }
+
+            propertiesData[DATA_TYPE.NODE] = node;
+            propertiesData[DATA_TYPE.COMPONENT] = component;
+            propertiesData[DATA_TYPE.TYPE] = t;
+            propertiesData[DATA_TYPE.NODE_PATH] = path;
+            propertiesData[DATA_TYPE.CLICK_EVENT] = subProperty[DATA_TYPE.CLICK_EVENT];
+
+            const otherData = subProperty;
+            delete otherData[DATA_TYPE.NODE];
+            delete otherData[DATA_TYPE.COMPONENT];
+            delete otherData[DATA_TYPE.TYPE];
+            delete otherData[DATA_TYPE.NODE_PATH];
+            delete otherData[DATA_TYPE.CLICK_EVENT];
+            if (Object.keys(otherData).length > 0) propertiesData = Utils.mergeJsonData(propertiesData, otherData);
+
+            if (!property[key] || !property[key][subKey]) property[subKey] = propertiesData;
+            else property[subKey] = Utils.mergeJsonData(property[key][subKey], propertiesData);
+        }
+
+        return { property, haveInitEvent };
+    }
+
+    public static initPropertyData<T>(component: T) {
+        return {
+            [DATA_TYPE.NODE]: Node,
+            [DATA_TYPE.COMPONENT]: component,
+            [DATA_TYPE.TYPE]: null,
+            [DATA_TYPE.NODE_PATH]: '',
+            [DATA_TYPE.CLICK_EVENT]: Function,
+
+            get node() { return this[DATA_TYPE.NODE]; },
+            get component() { return this[DATA_TYPE.COMPONENT]; },
+            get type() { return this[DATA_TYPE.TYPE]; },
+            get clickEvent() { return this[DATA_TYPE.CLICK_EVENT]; }
+        };
+    }
+
+    /**
+     * 合併兩個 JSON 物件
+     */
+    public static mergeJsonData(target: any, source: any) {
+        const mergedTarget = target ?? {};
+        if (source == null) return mergedTarget;
+
+        let keys = Object.keys(source);
+        for (let i in keys) {
+            let key = keys[i];
+            mergedTarget[key] = source[key];
+        }
+        return mergedTarget;
+    }
+
+    /**
+     * 共用 tween 數字變化動畫
+     * @param label             { Label  }           顯示的 Label
+     * @param from              { number }           起始數字
+     * @param to                { number }           結束數字
+     * @param duration          { float }             動畫時間
+     * @param numberStringFunc  { Function }         數字轉換字串函式 (value:number)=>string
+     * @param eventTarget       { EventTarget }      指定等待結束事件
+     * @returns 
+     */
+    public static async commonTweenNumber(label: Label, from: number = 0, to: number, duration: number, numberStringFunc?: Function, eventTarget?: EventTarget, onBreak?: Function): Promise<{ tween: any, eventPromise?: Promise<void>, data: { value: number } }> {
+        if (label == null) return;
+
+        let data = { value: from };
+
+        const formatFunc = numberStringFunc ?? Utils.numberFormat;
+        label.string = formatFunc(from);
+
+        const t = tween(data).to(duration, { value: to }, {
+            easing: 'smooth',
+            onUpdate: () => {
+                label.string = formatFunc(data.value);
+                if (eventTarget) eventTarget['value'] = data.value;
+                // if ( onBreak != null ) onBreak(t);
+            },
+            onComplete: () => {
+                if (eventTarget == null) return;
+                eventTarget.emit('done');
+                eventTarget['done'] = true;
+            }
+        });
+
+        t.start();
+        t['isDone'] = get => { return data.value === to; };
+
+        if (eventTarget) {
+            const eventPromise = new Promise<void>((resolve) => { eventTarget.once('done', () => resolve()); });
+            return { tween: t, eventPromise, data };
+        }
+        await Utils.delay(duration * 1000);
+        return { tween: t, data };
+    }
+}
+
+export enum DATA_TYPE {
+    NODE = 0, // object node
+    COMPONENT = 1, // object component
+    TYPE = 2, // object component type
+    NODE_PATH = 3, // node path for init object
+    CLICK_EVENT = 4, // click event
+    SCENE_PATH = 5, // scene path
 }
 
 /**
@@ -478,14 +755,14 @@ export class Utils {
 * @param target 目標(掛腳本的節點)
 * @param component 組件名稱
 * @param button 按鈕
-* @param handler 處理器
+* @param handler 處理器名稱
 * @param eventData 事件數據(可選)
 */
-export function addBtnClickEvent(target: Node, component: string, button: Button, handler: Function, eventData?: string) {
+export function addBtnClickEvent(target: Node, component: string, button: Button, handler: string, eventData?: string) {
     const eventHandler = new Component.EventHandler();
     eventHandler.target = target;
     eventHandler.component = component;
-    eventHandler.handler = handler.name;
+    eventHandler.handler = handler;
     if (eventData) eventHandler.customEventData = eventData;
     button.clickEvents.push(eventHandler);
 }
@@ -495,14 +772,14 @@ export function addBtnClickEvent(target: Node, component: string, button: Button
 // * @param target 目標(掛腳本的節點)
 // * @param component 組件名稱
 // * @param toggle 切換按鈕
-// * @param handler 處理器
+// * @param handler 處理器名稱
 // * @param eventData 事件數據(可選)
 // */
-// export function addToggleClickEvent(target: Node, component: string, toggle: Toggle, handler: Function, eventData?: string) {
+// export function addToggleClickEvent(target: Node, component: string, toggle: Toggle, handler: string, eventData?: string) {
 //     const eventHandler = new Component.EventHandler();
 //     eventHandler.target = target;
 //     eventHandler.component = component;
-//     eventHandler.handler = handler.name;
+//     eventHandler.handler = handler;
 //     if (eventData) eventHandler.customEventData = eventData;
 //     toggle.checkEvents.push(eventHandler);
 // }
