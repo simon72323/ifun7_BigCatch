@@ -2163,7 +2163,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.1",
+    "_name": "Symbol_1",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2553,7 +2553,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.2",
+    "_name": "Symbol_2",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2943,7 +2943,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.3",
+    "_name": "Symbol_3",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -3333,7 +3333,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.4",
+    "_name": "Symbol_4",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -3723,7 +3723,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.5",
+    "_name": "Symbol_15",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -4113,7 +4113,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.6",
+    "_name": "Symbol_16",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -4503,7 +4503,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.7",
+    "_name": "Symbol_17",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -4893,7 +4893,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.8",
+    "_name": "Symbol_18",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -5283,7 +5283,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Symbol.9",
+    "_name": "Symbol_19",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -37256,6 +37256,38 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 1543
+    },
+    "symbolOdds": [
+      {
+        "__id__": 78
+      },
+      {
+        "__id__": 94
+      },
+      {
+        "__id__": 110
+      },
+      {
+        "__id__": 126
+      },
+      {
+        "__id__": 142
+      },
+      {
+        "__id__": 158
+      },
+      {
+        "__id__": 174
+      },
+      {
+        "__id__": 190
+      },
+      {
+        "__id__": 206
+      }
+    ],
+    "verLabel": {
+      "__id__": 1474
     },
     "_id": ""
   },

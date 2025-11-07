@@ -1,9 +1,10 @@
-import { _decorator, Button, Component, Node, Vec3 } from 'cc';
+import { _decorator, Button, Component, Label, Node, Vec3 } from 'cc';
 
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { Utils } from 'db://assets/common/script/utils/Utils';
+import { SlotData } from '../../script/data/SlotData';
 
 
 const { ccclass, property } = _decorator;
@@ -16,10 +17,16 @@ export class GameInformationUI extends Component {
     private closeBtn: Node = null;
     private content: Node = null;
 
+    @property([Node])
+    private symbolOdds: Node[] = [];
+    @property(Label)
+    private verLabel: Label = null;
+
     onLoad() {
         BaseEvent.showGameInformation.on(this.show, this);
         this.setupNode();
         this.node.active = false;
+        this.verLabel.string = 'Ver:0.9.1';
     }
 
     /**
@@ -35,6 +42,7 @@ export class GameInformationUI extends Component {
      * 顯示
      */
     private show() {
+        this.updateSymbolOdds();//更新符號賠率
         DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
         Utils.fadeIn(this.node, 0.15, 0, 255);
         Utils.tweenScaleTo(this.node, 0.15, 0.8, 1);
@@ -44,6 +52,20 @@ export class GameInformationUI extends Component {
         this.closeBtn.once(Button.EventType.CLICK, this.hide, this);
     }
 
+    /**
+     * 更新符號賠率
+     */
+    private updateSymbolOdds() {
+        for (let i = 0; i < this.symbolOdds.length; i++) {
+            const symbolID = parseInt(this.symbolOdds[i].name.split('_')[1]);
+            let payData = SlotData.getPayBySymbolID(symbolID);
+            let string = '';
+            payData.forEach((data: { count: number, cent: string }) => {
+                string += data.count + ' '+ data.cent + '\n';
+            });
+            this.symbolOdds[i].getChildByPath('Score').getComponent(Label).string = string;
+        }
+    }
     /**
      * 隱藏
      */

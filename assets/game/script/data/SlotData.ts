@@ -33,78 +33,38 @@ export class SlotData {
                 { count: 4, point: 10 },
                 { count: 3, point: 2 }
             ],
-            F1: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F2: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F3: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F4: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F5: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F6: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F7: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            F8: [
-                { count: 5, point: 20 },
-                { count: 4, point: 5 },
-                { count: 3, point: 1 }
-            ],
-            L1: [
+            LA: [
                 { count: 5, point: 10 },
                 { count: 4, point: 2.5 },
                 { count: 3, point: 0.2 }
             ],
-            L2: [
+            LK: [
                 { count: 5, point: 10 },
                 { count: 4, point: 2.5 },
                 { count: 3, point: 0.2 }
             ],
-            L3: [
+            LQ: [
                 { count: 5, point: 5 },
                 { count: 4, point: 1 },
                 { count: 3, point: 0.2 }
             ],
-            L4: [
+            LJ: [
                 { count: 5, point: 5 },
                 { count: 4, point: 1 },
                 { count: 3, point: 0.2 }
             ],
-            L5: [
+            LT: [
                 { count: 5, point: 5 },
                 { count: 4, point: 1 },
                 { count: 3, point: 0.2 }
             ]
         },
-        bet: {
-            min: 1,
-            max: 100,
-            featureLimit: '100,000',
-            featureMultipleClassic: 75
-        }
+        // bet: {
+        //     min: 1,
+        //     max: 100,
+        //     featureLimit: '100,000',
+        //     featureMultipleClassic: 75
+        // }
     };
 
     /**
@@ -119,14 +79,6 @@ export class SlotData {
             [SymbolID.H2, 'H2'],
             [SymbolID.H3, 'H3'],
             [SymbolID.H4, 'H4'],
-            [SymbolID.F1, 'F1'],
-            [SymbolID.F2, 'F2'],
-            [SymbolID.F3, 'F3'],
-            [SymbolID.F4, 'F4'],
-            [SymbolID.F5, 'F5'],
-            [SymbolID.F6, 'F6'],
-            [SymbolID.F7, 'F7'],
-            [SymbolID.F8, 'F8'],
             [SymbolID.LA, 'LA'],
             [SymbolID.LK, 'LK'],
             [SymbolID.LQ, 'LQ'],
@@ -137,7 +89,7 @@ export class SlotData {
         const payData = this.payloadTemplate.symbolPoints[symbolIDPayloadMap.get(symbolID)];
         if (payData) {
             payData.forEach((data: { count: number, point: number }) => {
-                result.push({ count: data.count, cent: Utils.numberFormat(data.point * DataManager.getInstance().bet.getBetTotal()) });
+                result.push({ count: data.count, cent: Utils.numberFormatCurrency(data.point * DataManager.getInstance().bet.getBetTotal()) });
             }, this);
         }
         return result;
