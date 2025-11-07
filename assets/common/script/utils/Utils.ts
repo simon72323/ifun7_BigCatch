@@ -24,7 +24,7 @@ export class Utils {
      * @returns 格式化後的字符串
      */
     public static numberFormatCurrency(value: number): string {
-        return BaseConfig.CurrencySymbol + ' ' + Utils.numberFormat(value);
+        return BaseConfig.CurrencySymbol + Utils.numberFormat(value);
     }
 
 
