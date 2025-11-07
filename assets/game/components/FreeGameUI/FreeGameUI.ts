@@ -92,7 +92,8 @@ export class FreeGameUI extends Component {
         const moveScore = instantiate(this.moveScore);
         moveScore.setParent(this.node);
         moveScore.setPosition(startPos);
-        moveScore.getChildByName('Label').getComponent(Label).string = Utils.numberFormat(score);
+        moveScore.getChildByPath('numLayout/currency').getComponent(Label).string = Utils.getCurrencySymbol();
+        moveScore.getChildByPath('numLayout/Label').getComponent(Label).string = Utils.numberFormat(score);
         tween(moveScore)
             .to(moveTime, { position: targetPos }, { easing: 'sineIn' })
             .call(() => {

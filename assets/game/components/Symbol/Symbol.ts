@@ -259,7 +259,8 @@ export class Symbol extends BaseSymbol {
             this.score.getComponent(UIOpacity).opacity = 255;
         }
         //更新分數
-        this.score.getChildByName('Label').getComponent(Label).string = Utils.numberFormat(score);
+        this.score.getChildByPath('numLayout/currency').getComponent(Label).string = Utils.getCurrencySymbol();
+        this.score.getChildByPath('numLayout/Label').getComponent(Label).string = Utils.numberFormat(score);
         //縮放動畫
         tween(this.score)
             .to(0.1, { scale: new Vec3(1.4, 1.4, 1) })
@@ -363,7 +364,8 @@ export class Symbol extends BaseSymbol {
             this.score.getComponent(UIOpacity).opacity = isBS ? 128 : 255;
             const betCredit = DataManager.getInstance().bet.getBetTotal();
             const fishScore = FISH_ODDS[this.symbolID] * betCredit;
-            this.score.getChildByName('Label').getComponent(Label).string = Utils.numberFormat(fishScore);
+            this.score.getChildByPath('numLayout/currency').getComponent(Label).string = Utils.getCurrencySymbol();
+            this.score.getChildByPath('numLayout/Label').getComponent(Label).string = Utils.numberFormat(fishScore);
         }
         else {
             this.score.active = false;

@@ -13,12 +13,14 @@ export class WinScoreUI extends Component {
     public static showWin: XEvent1<number> = new XEvent1();
     public static hideWin: XEvent = new XEvent();
     private winLabel: Label = null;
+    private currencyLabel: Label = null;
     private runNum: RunNumber = {
         curValue: 0,
         finalValue: 0
     };
 
     onLoad(): void {
+        this.currencyLabel = this.node.getChildByName('currency').getComponent(Label);
         this.winLabel = this.node.getChildByName('WinNum').getComponent(Label);
         WinScoreUI.showWin.on(this.showWin, this);
         WinScoreUI.hideWin.on(this.hideWin, this);
@@ -30,6 +32,7 @@ export class WinScoreUI extends Component {
      * @param value 贏得分數
      */
     private showWin(value: number): void {
+        this.currencyLabel.string = Utils.getCurrencySymbol();
         const time = BaseConst.SLOT_TIME[DataManager.getInstance().curTurboMode].showWinTime;
         this.node.active = true;
         Utils.fadeIn(this.node, 0.1, 0, 255);

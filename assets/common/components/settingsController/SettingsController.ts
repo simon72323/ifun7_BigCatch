@@ -6,6 +6,7 @@ import { XEvent, XEvent1, XEvent2 } from 'db://assets/common/script/event/XEvent
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { AudioMode, ModuleID, TurboMode } from 'db://assets/common/script/types/BaseType';
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
+import { InGameMenuPanel } from 'db://assets/common/client-promotion/ingamemenu/InGameMenuPanel';
 
 const { ccclass, property } = _decorator;
 
@@ -79,6 +80,7 @@ export class SettingsController extends Component {
 
     private porControllerBtns: Node = null;//直式控制器
     private porOptionMenu: Node = null;//直式選單
+    // private landControllerBtns: Node = null;//橫式控制器
     private landOptionMenu: Node = null;//橫式選單
 
     private isOpenOption: boolean = false;//是否開啟選單
@@ -115,6 +117,7 @@ export class SettingsController extends Component {
     private setNode() {
         this.porControllerBtns = this.node.getChildByName('Por_ControllerBtns');
         this.porOptionMenu = this.node.getChildByName('Por_OptionMenu');
+        // this.landControllerBtns = this.node.getChildByName('Land_ControllerBtns');
         this.landOptionMenu = this.node.getChildByName('Land_OptionMenu');
 
         this.balanceValue = this.betInfo.getChildByPath('Balance/Value').getComponent(Label);
@@ -472,10 +475,17 @@ export class SettingsController extends Component {
             this.porControllerBtns.getComponent(Animation).play('optionMenuHide');
             this.porOptionMenu.getComponent(Animation).play('optionMenuShow');
             this.landOptionMenu.getComponent(Animation).play('optionMenuShow');
+            Utils.fadeIn(this.landOptionMenu, 0.2, 0, 255);
+            Utils.fadeIn(this.porOptionMenu, 0.2, 0, 255);
+            Utils.fadeOut(this.porControllerBtns, 0.2, 255, 0);
+
         } else {
             this.porControllerBtns.getComponent(Animation).play('optionMenuShow');
             this.porOptionMenu.getComponent(Animation).play('optionMenuHide');
             this.landOptionMenu.getComponent(Animation).play('optionMenuHide');
+            Utils.fadeIn(this.porControllerBtns, 0.2, 0, 255);
+            Utils.fadeOut(this.landOptionMenu, 0.2, 255, 0);
+            Utils.fadeOut(this.porOptionMenu, 0.2, 255, 0);
         }
     }
 
@@ -542,6 +552,7 @@ export class SettingsController extends Component {
      */
     private onClickFavorites() {
         // 開啟我的最愛視窗
+        InGameMenuPanel.onClickInGameMenu.emit();
     }
 
     /**

@@ -173,7 +173,7 @@
       "r": 0,
       "g": 0,
       "b": 0,
-      "a": 204
+      "a": 220
     },
     "_spriteFrame": {
       "__uuid__": "7d8f9b89-4fd1-4c9f-a3ab-38ec7cded7ca@f9941",
@@ -318,13 +318,13 @@
       "__type__": "cc.Quat",
       "x": 0,
       "y": 0,
-      "z": 3.278354330135671e-8,
-      "w": 0.9999999999999989
+      "z": 0,
+      "w": 1
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1.0625711679458618,
-      "y": 1.062571167945871,
+      "x": 0,
+      "y": 0,
       "z": 1
     },
     "_mobility": 0,
@@ -561,13 +561,13 @@
       "__type__": "cc.Quat",
       "x": 0,
       "y": 0,
-      "z": 2.18556949769868e-8,
-      "w": 0.9999999999999996
+      "z": 2.185569391740003e-8,
+      "w": 0.9999999999999994
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1.0625711679458618,
-      "y": 1.0625711679458658,
+      "x": 0.9853943586349487,
+      "y": 0.9853943586349525,
       "z": 1
     },
     "_mobility": 0,
@@ -2222,7 +2222,7 @@
       "__expectedType__": "sp.SkeletonData"
     },
     "defaultSkin": "default",
-    "defaultAnimation": "fg_loop",
+    "defaultAnimation": "fg_in",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
     "_preCacheMode": 0,
@@ -2495,7 +2495,6 @@
       "__id__": 0
     },
     "fileId": "51dAztnrlAgYNW2Gf4GULL",
-    "instance": null,
-    "targetOverrides": null
+    "targetOverrides": []
   }
 ]

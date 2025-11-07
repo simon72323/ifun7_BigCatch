@@ -54,6 +54,7 @@ export class BigWinUI extends Component {
     private isPlaying: boolean = false;
     /**數字label */
     private winLabel: Label;
+    private currencyLabel: Label;
 
     private aniWin: sp.Skeleton;
     private aniCoin: sp.Skeleton;
@@ -104,7 +105,8 @@ export class BigWinUI extends Component {
 
         this.aniWin = this.node.getChildByPath('bigWinNode/ani_win').getComponent(sp.Skeleton);
         this.aniCoin = this.node.getChildByPath('bigWinNode/ani_coin').getComponent(sp.Skeleton);
-        this.winLabel = this.node.getChildByPath('bigWinNode/num_totalwin').getComponent(Label);
+        this.currencyLabel = this.node.getChildByPath('bigWinNode/numLayout/currency').getComponent(Label);
+        this.winLabel = this.node.getChildByPath('bigWinNode/numLayout/num_totalwin').getComponent(Label);
         this.node.active = false;
     }
 
@@ -116,6 +118,7 @@ export class BigWinUI extends Component {
     private onShow(value: number): void {
         AudioManager.getInstance().editMusicVolume(0.1);//降低背景音樂音量
         AudioManager.getInstance().playSound(AudioKey.afterMusic);//報獎音效
+        this.currencyLabel.string = Utils.getCurrencySymbol();
         const dataManager = DataManager.getInstance();
         //skip
         this.node.getChildByPath('SkipSensor').once(Button.EventType.CLICK, this.onSkip, this);

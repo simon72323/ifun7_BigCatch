@@ -7,6 +7,10 @@ import { InGameInformation } from 'db://assets/common/client-promotion/ingamemen
 import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 
+declare global {
+    var __GAME_PLUGIN__: any;
+}
+
 /**
  * 類別,浮動式按鈕
  */
@@ -14,13 +18,7 @@ const { ccclass, property } = _decorator;
 @ccclass('InGameMenuPanel')
 export class InGameMenuPanel extends Component {
     public static initialize: XEvent = new XEvent();
-    // private static instance: InGameMenuPanel;
-    // public static getInstance(): InGameMenuPanel {
-    //     if (!InGameMenuPanel.instance) {
-    //         InGameMenuPanel.instance = new InGameMenuPanel();
-    //     }
-    //     return InGameMenuPanel.instance;
-    // }
+    public static onClickInGameMenu: XEvent = new XEvent();
 
     @property({ type: SpriteFrame })
     public cashDropSF: SpriteFrame[] = [];
@@ -59,6 +57,78 @@ export class InGameMenuPanel extends Component {
         this.off = this.node.getChildByPath('PromotionUI/ArrowBtn/Off');
         this.setupEvent();
     }
+
+    /**
+     * 設置事件
+     */
+    private setupEvent() {
+        const scriptName = 'InGameMenuPanel';
+        addBtnClickEvent(this.node, scriptName, this.arrowLBtn.getComponent(Button), 'onClickBtn');
+        addBtnClickEvent(this.node, scriptName, this.btnPromotion.getComponent(Button), 'onClickPromotion');
+        addBtnClickEvent(this.node, scriptName, this.btnJackpot.getComponent(Button), 'onClickJackpot');
+        InGameMenuPanel.onClickInGameMenu.on(this.onClickInGameMenu, this);
+        InGameMenuPanel.initialize.on(this.initialize, this);
+    }
+
+    /**
+     * 開啟或關閉按鈕
+     */
+    public onClickBtn(): void {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
+        this.isOpen = !this.isOpen;
+        this.on.active = this.isOpen;
+        this.off.active = !this.isOpen;
+
+        if (this.redDot.active) {
+            this.redDot.active = false;
+        }
+        const nodeWidth = this.promotionUI.getComponent(UITransform).width;
+        const movePos = this.isOpen ? new Vec3(-nodeWidth, 0, 0) : new Vec3(-60, 0, 0);
+        tween(this.promotionUI)
+            .to(0.3, { position: movePos }, { easing: easing.sineOut })
+            .start();
+    }
+
+    //============================== 觸發活動頁面 API  ==============================
+
+    /** 浮動按鈕左下 撒幣＋晉升賽＋錦標賽 */
+    public onClickPromotion(): void {
+        if (typeof __GAME_PLUGIN__ === 'undefined' || __GAME_PLUGIN__ == null) return;
+        //this.promotionContent.setSlideToIndex( this.visiblePromotion );
+        //this.promotionContent.sendPromoteApi( Date.now() );
+        __GAME_PLUGIN__.dispatch({
+            type: 'setting/setPromotionTableDialogShow',
+            payload: true
+        });
+
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
+        // Utils.GoogleTag('PromotionOpen', { 'event_category': 'open_ui', 'event_label': 'open_ui' });
+    }
+
+    /** 浮動按鈕左上 Jackpot */
+    public onClickJackpot(): void {
+        // this.promotionContent.sendJackpotRefreshApi(Date.now());
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
+        //GoogleAnalytics.AddGtag( 'event', 'promotion_open', { 'event_category': 'open_jackpot_ui', 'event_label': 'open_jackpot_ui' } );
+        // Utils.GoogleTag('PromotionOpen', { 'event_category': 'open_jackpot_ui', 'event_label': 'open_jackpot_ui' });
+    }
+
+    /** 浮動按鈕右 熱門遊戲＋最愛遊戲 */
+    public onClickInGameMenu(): void {
+        //this.getInGameMenuData();
+        if (typeof __GAME_PLUGIN__ === 'undefined' || __GAME_PLUGIN__ == null) return;
+        __GAME_PLUGIN__.dispatch({
+            type: 'setting/setGameListDialogShow',
+            payload: true
+        });
+        //GoogleAnalytics.AddGtag( 'event', 'in_game_menu_open_ui', { 'event_category': 'open_ui', 'event_label': 'open_ui' } );
+        // Utils.GoogleTag('InGameMenuOpenUI', { 'event_category': 'open_ui', 'event_label': 'open_ui' });
+        let element = document.getElementsByClassName('igm_close')?.[0] as HTMLElement;
+        if (element == null) return;
+
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
+    }
+    //============================== 觸發活動頁面 API  ==============================
 
     /**
      * 初始化處銷活動
@@ -193,33 +263,5 @@ export class InGameMenuPanel extends Component {
         setTimeout(() => {
             this.runPromotionTimeExpand();
         }, 60000);
-    }
-
-    /**
-     * 設置事件
-     */
-    private setupEvent() {
-        const scriptName = 'InGameMenuPanel';
-        addBtnClickEvent(this.node, scriptName, this.arrowLBtn.getComponent(Button), 'onClickBtn');
-        InGameMenuPanel.initialize.on(this.initialize, this);
-    }
-
-    /**
-     * 開啟或關閉按鈕
-     */
-    public onClickBtn(): void {
-        AudioManager.getInstance().playSound(AudioKey.btnClick);
-        this.isOpen = !this.isOpen;
-        this.on.active = this.isOpen;
-        this.off.active = !this.isOpen;
-
-        if (this.redDot.active) {
-            this.redDot.active = false;
-        }
-        const nodeWidth = this.promotionUI.getComponent(UITransform).width;
-        const movePos = this.isOpen ? new Vec3(-nodeWidth, 0, 0) : new Vec3(-60, 0, 0);
-        tween(this.promotionUI)
-            .to(0.3, { position: movePos }, { easing: easing.sineOut })
-            .start();
     }
 }

@@ -42,8 +42,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
+      "x": 2.3205103616419365e-7,
+      "y": 1.1368683772161603e-13,
       "z": 0
     },
     "_lrot": {
@@ -170,7 +170,7 @@
       "r": 0,
       "g": 0,
       "b": 0,
-      "a": 150
+      "a": 200
     },
     "_spriteFrame": {
       "__uuid__": "7d8f9b89-4fd1-4c9f-a3ab-38ec7cded7ca@f9941",
@@ -37272,7 +37272,6 @@
       "__id__": 0
     },
     "fileId": "fdDe7OOXZO8KuHZdpNdbuC",
-    "instance": null,
     "targetOverrides": []
   }
 ]

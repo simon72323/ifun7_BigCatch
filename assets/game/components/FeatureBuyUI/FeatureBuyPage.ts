@@ -17,10 +17,8 @@ const { ccclass } = _decorator;
  */
 @ccclass('FeatureBuyPage')
 export class FeatureBuyPage extends Component {
-
     /**顯示(免費遊戲花費) */
     public static show: XEvent = new XEvent();
-
     /**隱藏 */
     public static hide: XEvent = new XEvent();
 
@@ -30,6 +28,7 @@ export class FeatureBuyPage extends Component {
     private buyUI: Node;
     /**花費 */
     private costLabel: Label;
+    private currencyLabel: Label;
     /**購買按鈕 */
     private buyBtn: Button;
     /**增加按鈕 */
@@ -39,7 +38,8 @@ export class FeatureBuyPage extends Component {
 
     onLoad() {
         this.buyUI = this.node.getChildByName('pic_buy');
-        this.costLabel = this.node.getChildByPath('pic_buy/num_totalwin').getComponent(Label);
+        this.currencyLabel = this.node.getChildByPath('pic_buy/numLayout/currency').getComponent(Label);
+        this.costLabel = this.node.getChildByPath('pic_buy/numLayout/num_totalwin').getComponent(Label);
 
         const cancelBtn = this.node.getChildByPath('pic_buy/btn_cancel').getComponent(Button);
         cancelBtn.node.on(Button.EventType.CLICK, () => {
@@ -69,6 +69,7 @@ export class FeatureBuyPage extends Component {
     private show(): void {
         DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
         AudioManager.getInstance().playSound(AudioKey.showBuyWindow);
+        this.currencyLabel.string = Utils.getCurrencySymbol();
         this.updateBuyInfo();//更新購買資訊
         this.node.active = true;
         Utils.fadeIn(this.buyUI, 0.3, 0, 255);

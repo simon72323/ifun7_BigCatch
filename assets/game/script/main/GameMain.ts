@@ -47,14 +47,15 @@ export class GameMain extends Component {
         this.topBlack.getComponent(UIOpacity).opacity = 255;
 
         if (this.isFake === false) {
-            this.sendPromotionBrief()
-                .then(this.sendInGameMenuStatus)
-                // .then(this.sendInGameMenu)
-                .then(this.initGame.bind(this))
-                .catch((e: any) => {
-                    console.error(e);
-                    // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
-                });
+            this.initGame();
+            // this.sendPromotionBrief()
+            //     .then(this.sendInGameMenuStatus)
+            //     // .then(this.sendInGameMenu)
+            //     .then(this.initGame.bind(this))
+            //     .catch((e: any) => {
+            //         console.error(e);
+            //         // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
+            //     });
         } else {
             //獲取促銷簡介、遊戲內選單狀態、遊戲內選單
             const fakeData1 = { 'name': '', 'account': 'token5800', 'agent_account': 'CS8901', 'credit': 500000000, 'currency': 'IDR', 'free_spin_data': [{ 'free_spin_id': '', 'bet': 0, 'end_date': '', 'rounds_left': 0 }], 'is_anchor': false, 'simulator_data': {} };
@@ -86,29 +87,27 @@ export class GameMain extends Component {
         }, this);
     }
 
-    private async sendPromotionBrief() {
-        await NetworkManager.getInstance().sendPromotionBrief();
-    }
+    // private async sendPromotionBrief() {
+    //     await NetworkManager.getInstance().sendPromotionBrief();
+    // }
 
-    private async sendInGameMenuStatus() {
-        await NetworkManager.getInstance().sendInGameMenuStatus();
-    }
+    // private async sendInGameMenuStatus() {
+    //     await NetworkManager.getInstance().sendInGameMenuStatus();
+    // }
 
-    private async sendInGameMenu() {
-        await NetworkManager.getInstance().sendInGameMenu();
-    }
+    // private async sendInGameMenu() {
+    //     await NetworkManager.getInstance().sendInGameMenu();
+    // }
 
     /**
      * 遊戲初始化內容
      */
     private initGame() {
-        // ScreenAdapter.setupResize();//初始化屏幕適配
         ScreenAdapter.handleResize();
         //淡出初始遮黑
         Utils.fadeOut(this.topBlack, 0.3, 255, 0, () => {
             this.topBlack.active = false;
         });
-
         //初始化盤面
         SlotMachine.initResultParser.emit(GameConst.BS_INIT_RESULT);
 

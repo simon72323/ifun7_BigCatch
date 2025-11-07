@@ -25,6 +25,7 @@ export class TotalWinUI extends Component {
 
     private totalwin_ani: sp.Skeleton;
     private num_totalwin: Label;
+    private currencyLabel: Label;
     private totalTimesLabel: Label;
     private showTime: Label;
     private sens: Node;
@@ -45,7 +46,8 @@ export class TotalWinUI extends Component {
 
     onLoad() {
         this.totalwin_ani = this.node.getChildByName('totalwin_ani').getComponent(sp.Skeleton);
-        this.num_totalwin = this.node.getChildByPath('totalwin_ani/Content/num_totalwin').getComponent(Label);
+        this.currencyLabel = this.node.getChildByPath('totalwin_ani/Content/numLayout/currency').getComponent(Label);
+        this.num_totalwin = this.node.getChildByPath('totalwin_ani/Content/numLayout/num_totalwin').getComponent(Label);
         this.totalTimesLabel = this.node.getChildByPath('totalwin_ani/Content/totalTimes/Label').getComponent(Label);
         this.showTime = this.node.getChildByPath('totalwin_ani/Content/Layout/ShowTime').getComponent(Label);
         this.sens = this.node.getChildByName('Sens');
@@ -65,6 +67,7 @@ export class TotalWinUI extends Component {
         this.node.active = true;
         Utils.fadeIn(this.node, 0.3, 0, 255);
         this.totalTimesLabel.string = count.toString();
+        this.currencyLabel.string = Utils.getCurrencySymbol();
 
         // this.cbCover = onCover;
         this.cbComplete = onComplete;

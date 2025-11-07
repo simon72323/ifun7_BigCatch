@@ -27,6 +27,15 @@ export class Utils {
         return BaseConfig.CurrencySymbol + ' ' + Utils.numberFormat(value);
     }
 
+
+    /**
+     * 獲取幣別符號
+     * @returns 幣別符號
+     */
+    public static getCurrencySymbol(): string {
+        return BaseConfig.CurrencySymbol;
+    }
+
     /**
      * 跑分動畫
      * @param time 動畫時間
