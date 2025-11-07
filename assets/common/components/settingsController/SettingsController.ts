@@ -1,4 +1,4 @@
-import { _decorator, Animation, Button, Component, EventTouch, KeyCode, Label, Node, screen, Tween, tween, Vec3 } from 'cc';
+import { _decorator, Animation, Button, Component, EventTouch, KeyCode, Label, Node, screen, sys, Tween, tween, Vec3 } from 'cc';
 import { Notice } from 'db://assets/common/components/notice/Notice';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
@@ -97,6 +97,8 @@ export class SettingsController extends Component {
     private totalWinValue: Label = null;//總贏得
     private totalBetValue: Label = null;//總下注
 
+    private optionBackBtn: Node = null;//選單返回按鈕
+
     /**當前設置頁面 0=spin頁面 1=menu頁面*/
     // private curSettingPage: number = 0;
     private totalBet: number = 0;//總下注
@@ -119,6 +121,7 @@ export class SettingsController extends Component {
         this.porOptionMenu = this.node.getChildByName('Por_OptionMenu');
         // this.landControllerBtns = this.node.getChildByName('Land_ControllerBtns');
         this.landOptionMenu = this.node.getChildByName('Land_OptionMenu');
+        this.optionBackBtn = this.node.getChildByName('OptionBackBtn');
 
         this.balanceValue = this.betInfo.getChildByPath('Balance/Value').getComponent(Label);
         this.totalWinValue = this.betInfo.getChildByPath('TotalWin/Value').getComponent(Label);
@@ -128,6 +131,7 @@ export class SettingsController extends Component {
         this.stopSpinBtn = this.spinNode.getChildByName('StopSpinBtn');
         this.freeSpin = this.spinNode.getChildByName('FreeSpin');
         this.stopAutoSpinBtn = this.spinNode.getChildByName('StopAutoSpinBtn');
+
     }
 
     /**
@@ -145,6 +149,7 @@ export class SettingsController extends Component {
         addBtnClickEvent(this.node, scriptName, this.recordBtn.getComponent(Button), 'onClickRecord');
         addBtnClickEvent(this.node, scriptName, this.favoritesBtn.getComponent(Button), 'onClickFavorites');
         addBtnClickEvent(this.node, scriptName, this.informationBtn.getComponent(Button), 'onClickInformation');
+        addBtnClickEvent(this.node, scriptName, this.optionBackBtn.getComponent(Button), 'onClickOption');
 
         addBtnClickEvent(this.node, scriptName, this.backBtn.getComponent(Button), 'onClickOption');
         addBtnClickEvent(this.node, scriptName, this.stopAutoSpinBtn.getComponent(Button), 'onStopAutoSpin');
@@ -195,38 +200,14 @@ export class SettingsController extends Component {
             }
         }, this);
         this.updateBetBtnInteractable();
+        this.screenBtn.active = !sys.isMobile;
     }
-
-    /**
-     * 禁用全螢幕
-     * @returns {boolean} 是否禁用全螢幕
-     */
-    // private iphoneDisableFullScreen() : boolean {
-    //     if ( sys.isMobile === false ) return false;
-    //     if ( sys.os !== 'iOS' )       return false;
-
-    //     const fullScreen = this.props['fullScreen'];
-    //     fullScreen['fullscreen_p'][DATA_TYPE.NODE].active        = false;
-    //     fullScreen['fullscreen_exit_p'][DATA_TYPE.NODE].active   = false;
-    //     fullScreen['fullscreen_l'][DATA_TYPE.NODE].active        = false;
-    //     fullScreen['fullscreen_exit_l'][DATA_TYPE.NODE].active   = false;
-    //     fullScreen['fullscreen_p'][DATA_TYPE.NODE].parent.active = false;
-    //     fullScreen['fullscreen_l'][DATA_TYPE.NODE].parent.active = false;
-
-    //     this.props['soundMode_p']['content'][DATA_TYPE.NODE].setPosition(150, 10, 0);
-    //     this.props['buttons']['Record'][DATA_TYPE.NODE].setPosition(0, 10, 0);
-    //     this.props['buttons']['InGameMenu'][DATA_TYPE.NODE].setPosition(-150, 10, 0);
-    //     this.props['buttons']['InGameMenuLandscape'][DATA_TYPE.NODE].setPosition(0, 90, 0);
-
-    //     return true;
-    // }
 
     /**
      * 啟用/禁用所有控制類按鈕
      * @param enabled {boolean} 啟用/禁用
      */
     private setBtnInteractable(enabled: boolean) {
-        //TODO:免費遊戲鈕也要同步控制
         this.spinBtn.getComponent(Button).interactable = enabled;
         this.autoBtn.getComponent(Button).interactable = enabled;
         this.turboBtn.getComponent(Button).interactable = enabled;
@@ -471,6 +452,8 @@ export class SettingsController extends Component {
         this.isOpenOption = !this.isOpenOption;
         DataManager.getInstance().lockKeyboard = this.isOpenOption;//鎖定/解除鍵盤功能
         // console.log('lockKeyboard', DataManager.getInstance().lockKeyboard);
+        // this.setBtnInteractable(!this.isOpenOption);//禁用控制器按鈕
+        this.optionBackBtn.active = this.isOpenOption;//關閉返回按鈕
         if (this.isOpenOption) {
             this.porControllerBtns.getComponent(Animation).play('optionMenuHide');
             this.porOptionMenu.getComponent(Animation).play('optionMenuShow');
@@ -478,7 +461,6 @@ export class SettingsController extends Component {
             Utils.fadeIn(this.landOptionMenu, 0.2, 0, 255);
             Utils.fadeIn(this.porOptionMenu, 0.2, 0, 255);
             Utils.fadeOut(this.porControllerBtns, 0.2, 255, 0);
-
         } else {
             this.porControllerBtns.getComponent(Animation).play('optionMenuShow');
             this.porOptionMenu.getComponent(Animation).play('optionMenuHide');
@@ -551,8 +533,9 @@ export class SettingsController extends Component {
      * 開啟我的最愛視窗
      */
     private onClickFavorites() {
-        // 開啟我的最愛視窗
+        console.log('開啟我的最愛視窗');
         InGameMenuPanel.onClickInGameMenu.emit();
+        this.onClickOption();//關閉選單
     }
 
     /**

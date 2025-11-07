@@ -4,7 +4,7 @@ import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { Utils } from 'db://assets/common/script/utils/Utils';
-import { SlotData } from '../../script/data/SlotData';
+import { SlotData } from 'db://assets/game/script/data/SlotData';
 
 
 const { ccclass, property } = _decorator;
@@ -19,6 +19,7 @@ export class GameInformationUI extends Component {
 
     @property([Node])
     private symbolOdds: Node[] = [];
+
     @property(Label)
     private verLabel: Label = null;
 
@@ -60,12 +61,16 @@ export class GameInformationUI extends Component {
             const symbolID = parseInt(this.symbolOdds[i].name.split('_')[1]);
             let payData = SlotData.getPayBySymbolID(symbolID);
             let string = '';
-            payData.forEach((data: { count: number, cent: string }) => {
-                string += data.count + ' '+ data.cent + '\n';
+            payData.forEach((data: { count: number, cent: string }, index: number) => {
+                string += data.count + ' ' + data.cent;
+                if (index < payData.length - 1) {
+                    string += '\n';
+                }
             });
             this.symbolOdds[i].getChildByPath('Score').getComponent(Label).string = string;
         }
     }
+
     /**
      * 隱藏
      */

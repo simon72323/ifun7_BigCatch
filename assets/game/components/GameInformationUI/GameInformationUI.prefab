@@ -2416,7 +2416,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 104.51171875,
-      "height": 97.8
+      "height": 127.8
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2451,7 +2451,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "5 Rp 99999\n4 Rp 99999\n3 Rp 99999",
+    "_string": "5 Rp 99999\n4 Rp 99999\n3 Rp 99999\n5 Rp 99999",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -37304,6 +37304,7 @@
       "__id__": 0
     },
     "fileId": "fdDe7OOXZO8KuHZdpNdbuC",
+    "instance": null,
     "targetOverrides": []
   }
 ]
