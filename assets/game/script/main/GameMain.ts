@@ -14,7 +14,7 @@ import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { KeyboardManager } from 'db://assets/common/script/manager/KeyboardManager';
-import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
+// import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
 import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
 import { ScreenAdapter } from 'db://assets/common/script/utils/ScreenAdapter';
 import { Utils } from 'db://assets/common/script/utils/Utils';
@@ -48,14 +48,6 @@ export class GameMain extends Component {
 
         if (this.isFake === false) {
             this.initGame();
-            // this.sendPromotionBrief()
-            //     .then(this.sendInGameMenuStatus)
-            //     // .then(this.sendInGameMenu)
-            //     .then(this.initGame.bind(this))
-            //     .catch((e: any) => {
-            //         console.error(e);
-            //         // console.log('fail to fetch the brief of promotion or the status of in game menu from server');
-            //     });
         } else {
             //獲取促銷簡介、遊戲內選單狀態、遊戲內選單
             const fakeData1 = { 'name': '', 'account': 'token5800', 'agent_account': 'CS8901', 'credit': 500000000, 'currency': 'IDR', 'free_spin_data': [{ 'free_spin_id': '', 'bet': 0, 'end_date': '', 'rounds_left': 0 }], 'is_anchor': false, 'simulator_data': {} };
@@ -86,18 +78,6 @@ export class GameMain extends Component {
             // this.isMi = false;
         }, this);
     }
-
-    // private async sendPromotionBrief() {
-    //     await NetworkManager.getInstance().sendPromotionBrief();
-    // }
-
-    // private async sendInGameMenuStatus() {
-    //     await NetworkManager.getInstance().sendInGameMenuStatus();
-    // }
-
-    // private async sendInGameMenu() {
-    //     await NetworkManager.getInstance().sendInGameMenu();
-    // }
 
     /**
      * 遊戲初始化內容

@@ -19,8 +19,8 @@ export class InGameInformation {
     public inGameListStore = {};
 
     /** server data Promotion */
-    public promotionInformation = [];
-    public jackpotInformation = [];
+    public promotionInformation: PromotionData[] = [];
+    public jackpotInformation: JackpotData[] = [];
     public jackpotTierData = {
         mini: 0,
         minor: 0,
@@ -53,5 +53,26 @@ export class InGameInformation {
         this._instance = new InGameInformation();
         return this._instance;
     }
+}
+
+export interface PromotionData {
+    promotion_type: number;
+    promotion_id: string;
+    promotion_name: string;
+    min_bet: number;
+    time_zone: string;
+    begin_date: string;
+    end_date: string;
+    currency: string;
+    budget: number;
+}
+
+export interface JackpotData {
+    promotion_id: string;
+    end_date: string;
+    promotion_name: string;
+    time_zone: string;
+    min_bet: number;
+    currency: string;
 }
 

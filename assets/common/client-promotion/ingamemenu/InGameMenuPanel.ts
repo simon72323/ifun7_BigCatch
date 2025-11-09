@@ -1,4 +1,4 @@
-import { _decorator, Component, Vec3, Node, tween, Button, UITransform, easing, sp, SpriteFrame, Sprite } from 'cc';
+import { _decorator, Component, Vec3, Node, tween, Button, UITransform, easing, sp, SpriteFrame, Sprite, Label } from 'cc';
 
 import { addBtnClickEvent } from 'db://assets/common/script/utils/Utils';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
@@ -6,6 +6,7 @@ import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 import { InGameInformation } from 'db://assets/common/client-promotion/ingamemenu/InGameInformation';
 import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
+import { UIPromotionTips } from 'db://assets/common/client-promotion/ingamemenu/PromotionTips/UIPromotionTips';
 
 declare global {
     var __GAME_PLUGIN__: any;
@@ -70,6 +71,24 @@ export class InGameMenuPanel extends Component {
         InGameMenuPanel.initialize.on(this.initialize, this);
     }
 
+    start() {
+        if (typeof __GAME_PLUGIN__ !== 'undefined' && __GAME_PLUGIN__ !== null) {
+            __GAME_PLUGIN__.dispatch({
+                type: 'setting/setFlags',
+                payload: {
+                    // 遊戲咧表
+                    gameListDialogEnable: true,
+                    // Promotion計分板
+                    promotionTableDialogEnable: true,
+                    // Promotion提示
+                    promotionDialogEnable: true,
+                    // Cash Drop Reward Popup提示
+                    cashDropRewardPopupEnable: true
+                }
+            });
+        }
+    }
+
     /**
      * 開啟或關閉按鈕
      */
@@ -91,7 +110,7 @@ export class InGameMenuPanel extends Component {
 
     //============================== 觸發活動頁面 API  ==============================
 
-    /** 浮動按鈕左下 撒幣＋晉升賽＋錦標賽 */
+    /** 打開Promotion計分板,浮動按鈕左下 撒幣＋晉升賽＋錦標賽 */
     public onClickPromotion(): void {
         if (typeof __GAME_PLUGIN__ === 'undefined' || __GAME_PLUGIN__ == null) return;
         //this.promotionContent.setSlideToIndex( this.visiblePromotion );
@@ -113,7 +132,7 @@ export class InGameMenuPanel extends Component {
         // Utils.GoogleTag('PromotionOpen', { 'event_category': 'open_jackpot_ui', 'event_label': 'open_jackpot_ui' });
     }
 
-    /** 浮動按鈕右 熱門遊戲＋最愛遊戲 */
+    /** 打開遊戲列表視窗,浮動按鈕右 熱門遊戲＋最愛遊戲 */
     public onClickInGameMenu(): void {
         //this.getInGameMenuData();
         if (typeof __GAME_PLUGIN__ === 'undefined' || __GAME_PLUGIN__ == null) return;
@@ -134,7 +153,9 @@ export class InGameMenuPanel extends Component {
      * 初始化處銷活動
      */
     public async initialize() {
+        //設置促銷簡介資料並顯示Promotion提示
         await this.setPromotionBriefData();
+        //設置遊戲內選單狀態
         await this.setInGameMenuStatus();
         this.createIcon();
     }
@@ -143,7 +164,27 @@ export class InGameMenuPanel extends Component {
      * 設置促銷簡介資料
      */
     private async setPromotionBriefData(): Promise<void> {
-        const promotionBriefResponse = await NetworkManager.getInstance().sendPromotionBrief();
+        let promotionBriefResponse = await NetworkManager.getInstance().sendPromotionBrief();
+        // 進行排序的程式碼
+        if (Array.isArray(promotionBriefResponse)) {
+            promotionBriefResponse.sort((a, b) => {
+                const timeZoneNow: Date = new Date(new Date().toLocaleString('sv-SE', { timeZone: a.time_zone }).replace(/-/g, '/'));
+                const timeA = new Date(a.end_date.replace(/-/g, '/')).getTime() - timeZoneNow.getTime();
+                const timeB = new Date(b.end_date.replace(/-/g, '/')).getTime() - timeZoneNow.getTime();
+                return timeB > timeA ? 1 : -1;
+            });
+        }
+
+        // 把錦標賽拿到後面放
+        let pushType = 1;
+        let temp = promotionBriefResponse.filter(value => value.promotion_type === pushType);
+        for (let i = promotionBriefResponse.length - 1; i >= 0; i--) {
+            if (promotionBriefResponse[i].promotion_type === pushType) {
+                promotionBriefResponse.splice(i, 1);
+            }
+        }
+
+        promotionBriefResponse = promotionBriefResponse.concat(temp);
         for (let i = 0; i < promotionBriefResponse.length; i++) {
             if (promotionBriefResponse[i].promotion_type === 2) {
                 InGameInformation.instance.jackpotInformation.push({
@@ -168,6 +209,8 @@ export class InGameMenuPanel extends Component {
                 });
             }
         }
+        //顯示Promotion提示
+        UIPromotionTips.show.emit(promotionBriefResponse);
     }
 
     /**
@@ -219,10 +262,17 @@ export class InGameMenuPanel extends Component {
      */
     private updatePromotion() {
         let index = 0;
-        // 每5秒輪播cash drop活動按鈕
-        setInterval(() => {
+        // 提取更新逻辑为一个函数
+        const updateContent = () => {
             const isFinish = (this.promotionReciprocalTime[index] === '');
-            this.btnPromotion.node.getChildByName('LabelTime').active = !isFinish;
+            const labelTimeLeft = this.btnPromotion.node.getChildByName('LabelTime');
+            if (isFinish) {
+                labelTimeLeft.active = false;
+            } else {
+                labelTimeLeft.active = true;
+                labelTimeLeft.getComponent(Label).string = this.promotionReciprocalTime[index];
+            }
+
             const promotionType = InGameInformation.instance.promotionInformation[index].promotion_type;
             const promotionSprite = this.btnPromotion.node.getChildByName('Sprite').getComponent(Sprite);
             if (promotionType === 0) {
@@ -234,6 +284,14 @@ export class InGameMenuPanel extends Component {
             if (index >= InGameInformation.instance.promotionInformation.length) {
                 index = 0;
             }
+        };
+
+        // 立即执行一次
+        updateContent();
+
+        // 每5秒輪播cash drop活動按鈕
+        setInterval(() => {
+            updateContent();
         }, 5000);
     }
 
