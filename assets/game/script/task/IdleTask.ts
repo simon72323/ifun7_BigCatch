@@ -138,7 +138,7 @@ export class IdleTask extends GameTask {
             // 餘額不足
             SettingsController.refreshCredit.emit(DataManager.getInstance().userCredit);
             // DataManager.getInstance().isAutoMode = false;
-            Notice.showNoBalance.emit();
+            Notice.showError.emit(220);
             this.idleState();
         }
         else {

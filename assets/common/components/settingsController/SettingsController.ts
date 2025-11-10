@@ -533,7 +533,7 @@ export class SettingsController extends Component {
      * 開啟我的最愛視窗
      */
     private onClickFavorites() {
-        console.log('開啟我的最愛視窗');
+        // console.log('開啟我的最愛視窗');
         InGameMenuPanel.onClickInGameMenu.emit();
         this.onClickOption();//關閉選單
     }

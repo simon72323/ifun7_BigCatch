@@ -191,7 +191,7 @@ export class UIPromotionTips extends Component {
     public clickConfirm() {
         if (this.isReady === false) return;
         this.closeUI();
-        console.log('clickConfirm', this.toggle.isChecked);
+        // console.log('clickConfirm', this.toggle.isChecked);
         if (this.toggle.isChecked === false) return;
         this.saveStorageToday(this.lastData.promotion_id);
     }
@@ -202,7 +202,7 @@ export class UIPromotionTips extends Component {
      */
     public saveStorageToday(id: string) {
         const today = this.formatDateToYYYYMMDD(Date.now());
-        console.log('saveStorageToday', id, today);
+        // console.log('saveStorageToday', id, today);
         sys.localStorage.setItem(id, today);
     }
 

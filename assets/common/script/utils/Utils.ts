@@ -380,6 +380,20 @@ export class Utils {
         target.on(Node.EventType.MOUSE_ENTER, () => { game.canvas.style.cursor = 'pointer'; });
         target.on(Node.EventType.MOUSE_LEAVE, () => { game.canvas.style.cursor = 'default'; });
     }
+
+    /**
+     * 載入Json文件
+     * @param path 文件路徑
+     * @returns Json文件資料
+     */
+    public static async loadJson(path: string) {
+        return new Promise((resolve, reject) => {
+            resources.load(path, JsonAsset, (err, json) => {
+                if (err) return reject(err);
+                resolve(json.json);
+            });
+        });
+    }
 }
 
 export enum DATA_TYPE {

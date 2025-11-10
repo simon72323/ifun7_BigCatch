@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 
-import { XEvent, XEvent1 } from 'db://assets/common/script/event/XEvent';
-import { ErrorCodeConfig } from 'db://assets/common/script/network/ErrorCodeConfig';
+import { XEvent1 } from 'db://assets/common/script/event/XEvent';
+import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 
 const { ccclass } = _decorator;
 
@@ -11,60 +11,54 @@ const { ccclass } = _decorator;
 @ccclass('Notice')
 export class Notice extends Component {
     public static showError: XEvent1<number> = new XEvent1();
-    public static showNoBalance: XEvent = new XEvent();
 
     /**錯誤提示 */
-    private infoError: Node;
-    /**餘額不足提示 */
-    private infoNoBalance: Node;
+    private infoErrorConfirm: Node = null;
+    private infoErrorLabel: Label;
 
-    /**錯誤代碼配置 */
-    private errorCodeConfig: ErrorCodeConfig;
+    private backMask: Node;
 
-    onLoad() {
+
+    public errorMessage: any = null;
+
+    async onLoad() {
+        this.infoErrorConfirm = this.node.getChildByPath('InfoError/Confirm');
+        this.infoErrorLabel = this.node.getChildByPath('InfoError/Label').getComponent(Label);
+        this.backMask = this.node.getChildByName('BackMask');
+
         Notice.showError.on(this.showError, this);
-        Notice.showNoBalance.on(this.showNoBalance, this);
-        // Notice.instance = this;
-        this.errorCodeConfig = new ErrorCodeConfig();
-        this.infoError = this.node.getChildByName('InfoError');
-        this.infoNoBalance = this.node.getChildByName('InfoNoBalance');
 
-        this.infoError.getChildByName('Click').on(Button.EventType.CLICK, () => {
-            this.onCloseNotice();
-        }, this);
+        addBtnClickEvent(this.infoErrorConfirm, 'Notice', this.infoErrorConfirm.getComponent(Button), 'onCloseNotice');
+        addBtnClickEvent(this.backMask, 'Notice', this.backMask.getComponent(Button), 'onCloseNotice');
 
-        this.infoNoBalance.getChildByName('Click').on(Button.EventType.CLICK, () => {
-            window.location.reload();//重新加載
-            this.onCloseNotice();
-        }, this);
+        this.node.active = false;
     }
 
     /**
      * 顯示錯誤提示
      * @param errorCode {number} 錯誤代碼
      */
-    public showError(errorCode: number) {
-        const errorDescription = this.errorCodeConfig.getErrorDescription(errorCode);
-        this.infoError.getChildByName('Label').getComponent(Label).string = errorDescription;
-        this.node.getChildByPath('BlackMask').active = true;
-        this.infoError.active = true;
-    }
-
-    /**
-     * 顯示餘額不足提示 
-     * @param errorCode {number} 錯誤代碼
-     */
-    public showNoBalance() {
-        this.node.getChildByPath('BlackMask').active = true;
-        this.infoNoBalance.active = true;
+    public async showError(errorCode: number) {
+        await this.loadErrorMessage();
+        Utils.fadeIn(this.node, 0.2, 0, 255);
+        Utils.tweenScaleTo(this.node, 0.2, 0.5, 1);
+        const errorMessage = this.errorMessage[errorCode];
+        this.infoErrorLabel.string = errorMessage;
+        this.node.active = true;
     }
 
     /**
      * 關閉提示
      */
     private onCloseNotice() {
-        this.node.getChildByPath('BlackMask').active = false;
-        this.infoError.active = false;
-        this.infoNoBalance.active = false;
+        Utils.fadeOut(this.node, 0.2, 255, 0, () => {
+            this.node.active = false;
+        });
+        Utils.tweenScaleTo(this.node, 0.2, 1, 0.5);
+    }
+
+    private async loadErrorMessage() {
+        if (this.errorMessage !== null) return;
+        this.errorMessage = await Utils.loadJson('data/ErrorMessage');
     }
 }

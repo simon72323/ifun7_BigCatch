@@ -34,15 +34,15 @@
         "__id__": 1539
       },
       {
-        "__id__": 1542
+        "__id__": 1543
       }
     ],
     "_prefab": {
-      "__id__": 1544
+      "__id__": 1545
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 2.3205103616419365e-7,
+      "x": 9.282041446567746e-8,
       "y": 1.1368683772161603e-13,
       "z": 0
     },
@@ -304,7 +304,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 20,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -2459,7 +2459,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -2849,7 +2849,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -3239,7 +3239,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -3629,7 +3629,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -4019,7 +4019,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -4409,7 +4409,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -4799,7 +4799,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -5189,7 +5189,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -5579,7 +5579,7 @@
     "_fontFamily": "Arial",
     "_lineHeight": 30,
     "_overflow": 0,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_font": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -36833,7 +36833,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 304,
+      "x": 299,
       "y": 508.5,
       "z": 0
     },
@@ -37018,7 +37018,7 @@
     "_alignFlags": 33,
     "_target": null,
     "_left": 964,
-    "_right": -15,
+    "_right": -10,
     "_top": -15,
     "_bottom": 0,
     "_horizontalCenter": 0,
@@ -37215,10 +37215,14 @@
     "orientationNode": [],
     "orientationActive": [],
     "orientationScale": [],
-    "orientationPosition": [],
-    "orientationSize": [
+    "orientationPosition": [
       {
         "__id__": 1541
+      }
+    ],
+    "orientationSize": [
+      {
+        "__id__": 1542
       }
     ],
     "orientationSpriteFrame": [],
@@ -37228,6 +37232,24 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "1c5RZXwbZORJ5XbYS8xSFj"
+  },
+  {
+    "__type__": "OrientationPosition",
+    "target": {
+      "__id__": 10
+    },
+    "portraitPosition": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "landscapePosition": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
   },
   {
     "__type__": "OrientationSize",
@@ -37255,7 +37277,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 1543
+      "__id__": 1544
     },
     "symbolOdds": [
       {
@@ -37304,7 +37326,6 @@
       "__id__": 0
     },
     "fileId": "fdDe7OOXZO8KuHZdpNdbuC",
-    "instance": null,
     "targetOverrides": []
   }
 ]
