@@ -144,7 +144,6 @@ export class InGameMenuPanel extends Component {
         // Utils.GoogleTag('InGameMenuOpenUI', { 'event_category': 'open_ui', 'event_label': 'open_ui' });
         let element = document.getElementsByClassName('igm_close')?.[0] as HTMLElement;
         if (element == null) return;
-
         AudioManager.getInstance().playSound(AudioKey.btnClick);
     }
     //============================== 觸發活動頁面 API  ==============================

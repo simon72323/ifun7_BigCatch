@@ -4,6 +4,7 @@ import { LanguageLabel } from 'db://assets/common/components/localized/LanguageL
 import { i18n } from 'db://assets/common/script/utils/i18n';
 import { XEvent1 } from 'db://assets/common/script/event/XEvent';
 import { PromotionData } from 'db://assets/common/client-promotion/ingamemenu/InGameInformation';
+import { DataManager } from 'db://assets/common/script/data/DataManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIPromotionTips')
@@ -70,6 +71,7 @@ export class UIPromotionTips extends Component {
     private closeUI() {
         Utils.fadeOut(this.node, 0.3, 255, 0, () => {
             this.node.active = false;
+            DataManager.getInstance().lockKeyboard = false;//解除鎖定鍵盤功能
             this.onComplete?.();
             this.onComplete = null;
         });
@@ -90,6 +92,7 @@ export class UIPromotionTips extends Component {
 
             const data = dataList[idx];
             if (this.displayContent(data) == false) return;
+            DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
             this.node.active = true;
             this.content.active = true;
 
