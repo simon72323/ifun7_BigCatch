@@ -39,7 +39,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -1250.808,
+      "x": 0,
       "y": 0,
       "z": 0
     },
@@ -68,7 +68,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "\bBackMask",
+    "_name": "BackMask",
     "_objFlags": 512,
     "__editorExtras__": {},
     "_parent": {
@@ -1124,9 +1124,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 36,
-      "g": 36,
-      "b": 36,
+      "r": 40,
+      "g": 40,
+      "b": 40,
       "a": 255
     },
     "_string": "Ver:0000.001",
@@ -1332,7 +1332,6 @@
       "__id__": 0
     },
     "fileId": "2cGi4gvGpBaZxgd4vQUeYN",
-    "instance": null,
     "targetOverrides": null
   }
 ]

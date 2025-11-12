@@ -5,6 +5,7 @@ import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 import { SlotData } from 'db://assets/game/script/data/SlotData';
+import { GameConst } from 'db://assets/game/script/data/GameConst';
 
 
 const { ccclass, property } = _decorator;
@@ -27,7 +28,7 @@ export class GameInformationUI extends Component {
         BaseEvent.showGameInformation.on(this.show, this);
         this.setupNode();
         this.node.active = false;
-        this.verLabel.string = 'Ver:0.9.1';
+        this.verLabel.string = GameConst.Ver;
     }
 
     /**

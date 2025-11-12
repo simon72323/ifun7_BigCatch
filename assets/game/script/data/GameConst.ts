@@ -14,6 +14,9 @@ export class GameConst extends BaseConst {
         [2, 1, 0, 1, 2], [0, 1, 2, 1, 0], [2, 2, 1, 0, 0], [0, 0, 1, 2, 2], [2, 1, 1, 1, 0]
     ];
 
+    /**版本號 */
+    public static Ver = 'Ver:0.9.2';
+
     /**橫軸列數 */
     public static REEL_COL: number = 5;
 

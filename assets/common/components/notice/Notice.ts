@@ -2,6 +2,7 @@ import { _decorator, Button, Component, Label, Node } from 'cc';
 
 import { XEvent1 } from 'db://assets/common/script/event/XEvent';
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
+import { GameConst } from 'db://assets/game/script/data/GameConst';
 
 const { ccclass } = _decorator;
 
@@ -15,6 +16,7 @@ export class Notice extends Component {
     /**錯誤提示 */
     private infoErrorConfirm: Node = null;
     private infoErrorLabel: Label;
+    private versionLabel: Label;
 
     private backMask: Node;
 
@@ -24,7 +26,9 @@ export class Notice extends Component {
     async onLoad() {
         this.infoErrorConfirm = this.node.getChildByPath('InfoError/Confirm');
         this.infoErrorLabel = this.node.getChildByPath('InfoError/Label').getComponent(Label);
-        this.backMask = this.node.getChildByName('BackMask');
+        this.backMask = this.node.getChildByName('BackMask');
+        this.versionLabel = this.node.getChildByPath('InfoError/Version').getComponent(Label);
+        this.versionLabel.string = GameConst.Ver;
 
         Notice.showError.on(this.showError, this);
 
