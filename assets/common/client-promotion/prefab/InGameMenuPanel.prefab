@@ -32,10 +32,13 @@
       },
       {
         "__id__": 120
+      },
+      {
+        "__id__": 122
       }
     ],
     "_prefab": {
-      "__id__": 122
+      "__id__": 125
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2829,7 +2832,7 @@
     "__prefab": {
       "__id__": 119
     },
-    "_alignFlags": 33,
+    "_alignFlags": 32,
     "_target": null,
     "_left": 0,
     "_right": 0,
@@ -2976,6 +2979,44 @@
     "fileId": "d4jmhH9BxJqohGrtCprfuW"
   },
   {
+    "__type__": "9430fCxgGREUr5qkMMkG/3W",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 123
+    },
+    "orientationNode": [],
+    "orientationActive": [],
+    "orientationScale": [],
+    "orientationPosition": [],
+    "orientationPosY": [
+      {
+        "__id__": 124
+      }
+    ],
+    "orientationSize": [],
+    "orientationSpriteFrame": [],
+    "orientationLayoutPadding": [],
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "bc1DGRE8tCm7eRToWxOTKt"
+  },
+  {
+    "__type__": "OrientationPosY",
+    "target": {
+      "__id__": 1
+    },
+    "portraitPosY": 540,
+    "landscapePosY": 270
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -2984,6 +3025,6 @@
       "__id__": 0
     },
     "fileId": "47z4eoUgdHxb24w82YngbM",
-    "targetOverrides": null
+    "targetOverrides": []
   }
 ]

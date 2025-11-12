@@ -71,7 +71,22 @@ class OrientationPosition {
 }
 
 /**
- * 直橫式節點位置
+ * 直橫式節點Y位置
+ */
+@ccclass('OrientationPosY')
+class OrientationPosY {
+    @property({ type: Node, tooltip: '目標節點' })
+    public target: Node = null!;
+
+    @property({ tooltip: '直式Y位置' })
+    public portraitPosY: number = 0;
+
+    @property({ tooltip: '橫式Y位置' })
+    public landscapePosY: number = 0;
+}
+
+/**
+ * 直橫式節點尺寸
  */
 @ccclass('OrientationSize')
 class OrientationSize {
@@ -158,6 +173,9 @@ export class OrientationManager extends Component {
     @property({ type: [OrientationPosition], tooltip: '直橫式位置控制' })
     private orientationPosition: OrientationPosition[] = [];
 
+    @property({ type: [OrientationPosY], tooltip: '直橫式Y位置控制' })
+    private orientationPosY: OrientationPosY[] = [];
+
     @property({ type: [OrientationSize], tooltip: '直橫式尺寸控制' })
     private orientationSize: OrientationSize[] = [];
 
@@ -220,6 +238,17 @@ export class OrientationManager extends Component {
                 if (target) {
                     const positionValue = isLandscape ? position.landscapePosition : position.portraitPosition;
                     target.setPosition(positionValue);
+                }
+            });
+        }
+
+        //節點Y位置
+        if (this.orientationPosY) {
+            this.orientationPosY.forEach((posY, index) => {
+                const target = posY.target;
+                if (target) {
+                    const posYValue = isLandscape ? posY.landscapePosY : posY.portraitPosY;
+                    target.setPosition(new Vec3(target.position.x, posYValue, target.position.z));
                 }
             });
         }
