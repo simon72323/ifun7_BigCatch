@@ -7,6 +7,7 @@ import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { AudioMode, ModuleID, TurboMode } from 'db://assets/common/script/types/BaseType';
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 import { InGameMenuPanel } from 'db://assets/common/client-promotion/ingamemenu/InGameMenuPanel';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 const { ccclass, property } = _decorator;
 
@@ -199,7 +200,7 @@ export class SettingsController extends Component {
                 this.handleClickSpin();
             }
         }, this);
-        this.updateBetBtnInteractable();
+        // this.updateBetBtnInteractable();
         this.screenBtn.active = !sys.isMobile;
     }
 
@@ -218,7 +219,9 @@ export class SettingsController extends Component {
 
         //true時要判斷更新+-按鈕是否可用，false時直接禁用
         if (enabled) {
-            this.updateBetBtnInteractable();
+            // this.updateBetBtnInteractable();
+            this.addBetBtn.getComponent(Button).interactable = true;
+            this.minusBetBtn.getComponent(Button).interactable = true;
         } else {
             this.addBetBtn.getComponent(Button).interactable = false;
             this.minusBetBtn.getComponent(Button).interactable = false;
@@ -228,10 +231,10 @@ export class SettingsController extends Component {
     /**
      * 更新下注+-按鈕是否可用
      */
-    private updateBetBtnInteractable() {
-        this.addBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getPlusEnabled();
-        this.minusBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
-    }
+    // private updateBetBtnInteractable() {
+    // this.addBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getPlusEnabled();
+    // this.minusBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
+    // }
 
     private sceneChange(moduleID: ModuleID) {
         if (moduleID === ModuleID.BS) {
@@ -389,6 +392,7 @@ export class SettingsController extends Component {
      * 點擊自動下注按鈕
      */
     private onClickAuto() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         // console.log('onClickAuto');
         BaseEvent.showAutoSpin.emit();
     }
@@ -399,6 +403,7 @@ export class SettingsController extends Component {
      * @param eventData 事件數據
      */
     private changeBet(event: EventTouch, eventData: string) {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         // console.log('changeBet', eventData);
         const changeValue = parseInt(eventData);
         this.changeBetValue(changeValue);
@@ -415,7 +420,7 @@ export class SettingsController extends Component {
         const betTotal = DataManager.getInstance().bet.getBetTotal();
         this.refreshBet(betTotal);
         // this.totalBetValue.string = Utils.numberFormatCurrency(betValue);
-        this.updateBetBtnInteractable();
+        // this.updateBetBtnInteractable();
 
         //更新購買功能是否可用
         const buyFeatureTotal = DataManager.getInstance().bet.getBuyFeatureTotal();
@@ -426,6 +431,7 @@ export class SettingsController extends Component {
      * 切換加速模式
      */
     private onClickTurbo() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         let tempTurboMode = DataManager.getInstance().curTurboMode;
         tempTurboMode = (tempTurboMode + 1) % 3;
         DataManager.getInstance().curTurboMode = tempTurboMode;
@@ -449,6 +455,7 @@ export class SettingsController extends Component {
      * 開啟/關閉選單
      */
     private onClickOption() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         this.isOpenOption = !this.isOpenOption;
         DataManager.getInstance().lockKeyboard = this.isOpenOption;//鎖定/解除鍵盤功能
         // console.log('lockKeyboard', DataManager.getInstance().lockKeyboard);
@@ -475,6 +482,7 @@ export class SettingsController extends Component {
      * 切換全螢幕
      */
     private onClickScreen() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         this.isFullScreen = !this.isFullScreen;
         const fullScreenOn = this.screenBtn.getChildByName('FullScreenOn');
         const fullScreenOff = this.screenBtn.getChildByName('FullScreenOff');
@@ -493,6 +501,7 @@ export class SettingsController extends Component {
      * 切換音效狀態
      */
     private onClickAudio() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         this.audioMode = (this.audioMode + 1) % 3;
         const audioOnNode = this.audioBtn.getChildByName('AudioOn');
         const musicOffNode = this.audioBtn.getChildByName('MusicOff');
@@ -525,6 +534,7 @@ export class SettingsController extends Component {
      * 開啟下注紀錄
      */
     private onClickRecord() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         const betrecordurl = DataManager.getInstance().getFullBetrecordurl();
         window.open(betrecordurl, '_blank');
     }
@@ -533,15 +543,17 @@ export class SettingsController extends Component {
      * 開啟我的最愛視窗
      */
     private onClickFavorites() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         // console.log('開啟我的最愛視窗');
         InGameMenuPanel.onClickInGameMenu.emit();
-        this.onClickOption();//關閉選單
+        // this.onClickOption();//關閉選單
     }
 
     /**
      * 開啟遊戲說明
      */
     private onClickInformation() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         BaseEvent.showGameInformation.emit();
     }
 

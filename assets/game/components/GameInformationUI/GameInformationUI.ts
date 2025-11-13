@@ -6,6 +6,8 @@ import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 import { SlotData } from 'db://assets/game/script/data/SlotData';
 import { GameConst } from 'db://assets/game/script/data/GameConst';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 
 const { ccclass, property } = _decorator;
@@ -76,6 +78,7 @@ export class GameInformationUI extends Component {
      * 隱藏
      */
     private hide() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         DataManager.getInstance().lockKeyboard = false;//解除鎖定鍵盤功能
         Utils.tweenScaleTo(this.node, 0.1, 1, 0.9);
         Utils.fadeOut(this.node, 0.1, 255, 0, () => {

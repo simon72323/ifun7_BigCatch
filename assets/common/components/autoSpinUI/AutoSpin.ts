@@ -4,6 +4,8 @@ import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { TurboMode } from 'db://assets/common/script/types/BaseType';
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 const { ccclass, property } = _decorator;
 
@@ -97,6 +99,7 @@ export class AutoSpin extends Component {
      * 關閉自動選單
      */
     private onClose() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         DataManager.getInstance().lockKeyboard = false;//解除鎖定鍵盤功能
         Utils.tweenScaleTo(this.node, 0.1, 1, 0.9);
         Utils.fadeOut(this.node, 0.1, 255, 0, () => {
@@ -109,6 +112,7 @@ export class AutoSpin extends Component {
      * 按下執行按鈕
      */
     private onClickStart() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         this.onClose();
         if (DataManager.getInstance().isAutoTimes) {
             /** 設置自動旋轉次數 */
@@ -123,6 +127,7 @@ export class AutoSpin extends Component {
      * 按下快速轉按鈕
      */
     private onClickFastSpin() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         const dataManager = DataManager.getInstance();
         dataManager.curTurboMode = dataManager.curTurboMode !== TurboMode.Fast
             ? TurboMode.Fast
@@ -134,6 +139,7 @@ export class AutoSpin extends Component {
      * 按下加速轉按鈕
      */
     private onClickTurboSpin() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         const dataManager = DataManager.getInstance();
         dataManager.curTurboMode = dataManager.curTurboMode !== TurboMode.Turbo
             ? TurboMode.Turbo
@@ -145,6 +151,7 @@ export class AutoSpin extends Component {
      * 按下停止直到功能按鈕
      */
     private onClickStopUntilFeature() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         const dataManager = DataManager.getInstance();
         dataManager.isStopUntilFeature = !dataManager.isStopUntilFeature;
         this.updateStopUntilFeature();
@@ -154,6 +161,7 @@ export class AutoSpin extends Component {
      * 按下轉次數按鈕
      */
     private onClickAutoTimes() {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         const dataManager = DataManager.getInstance();
         dataManager.isAutoTimes = !dataManager.isAutoTimes;
         this.updateAutoTimes();
@@ -265,6 +273,7 @@ export class AutoSpin extends Component {
      * @param active 
      */
     private openDrop(active: boolean) {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         this.scrollView.node.active = active;
         this.maskBtn.active = active;
     }
