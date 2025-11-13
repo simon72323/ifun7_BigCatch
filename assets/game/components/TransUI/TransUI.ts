@@ -1,7 +1,4 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Tween, tween } from 'cc';
-
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent, XEvent3, XEvent4 } from 'db://assets/common/script/event/XEvent';
@@ -9,6 +6,7 @@ import { BundleLoader } from 'db://assets/common/script/loading/BundleLoader';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 enum CutsceneAni {
     fg_loop = 'fg_loop',
@@ -16,7 +14,6 @@ enum CutsceneAni {
 }
 
 const { ccclass, property } = _decorator;
-
 /**
  * 轉場UI
  */

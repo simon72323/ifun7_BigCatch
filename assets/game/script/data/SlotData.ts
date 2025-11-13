@@ -1,9 +1,7 @@
-
-import { SymbolID } from 'db://assets/game/script/data/GameConst';
-
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 
+import { SymbolID } from 'db://assets/game/script/data/GameConst';
 
 export class SlotData {
     /**紀錄免費遊戲 wild倍率 */
@@ -64,12 +62,6 @@ export class SlotData {
                 { count: 3, point: 0.2 }
             ]
         }
-        // bet: {
-        //     min: 1,
-        //     max: 100,
-        //     featureLimit: '100,000',
-        //     featureMultipleClassic: 75
-        // }
     };
 
     /**

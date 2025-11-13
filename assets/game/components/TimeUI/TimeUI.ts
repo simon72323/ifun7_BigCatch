@@ -1,8 +1,6 @@
 import { _decorator, Component, Label } from 'cc';
 
-
 const { ccclass, property } = _decorator;
-
 /**
  * 轉場UI
  */

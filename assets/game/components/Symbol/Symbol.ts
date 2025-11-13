@@ -1,15 +1,13 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity, tween, Vec3, instantiate, Tween } from 'cc';
-
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-import { FISH_ODDS, SymbolID } from 'db://assets/game/script/data/GameConst';
-import { SlotData } from 'db://assets/game/script/data/SlotData';
-
 import { BaseSymbol } from 'db://assets/common/components/slotMachine/BaseSymbol';
 import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+import { FISH_ODDS, SymbolID } from 'db://assets/game/script/data/GameConst';
+import { SlotData } from 'db://assets/game/script/data/SlotData';
 
 /**圖示ID對應的索引 */
 const symbolImageMap = new Map<number, number>([

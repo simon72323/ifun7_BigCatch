@@ -1,5 +1,4 @@
 import { _decorator, Component } from 'cc';
-
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 

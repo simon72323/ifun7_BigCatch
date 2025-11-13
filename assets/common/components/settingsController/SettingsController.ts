@@ -1,5 +1,4 @@
 import { _decorator, Animation, Button, Component, EventTouch, KeyCode, Label, Node, screen, sys, Tween, tween, Vec3 } from 'cc';
-import { Notice } from 'db://assets/common/components/notice/Notice';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent, XEvent1, XEvent2 } from 'db://assets/common/script/event/XEvent';
@@ -44,7 +43,6 @@ export class SettingsController extends Component {
 
     @property({ type: Node, tooltip: 'SPIN節點' })
     private spinNode: Node = null;
-
 
     @property({ type: Node, tooltip: '自動按鈕' })
     private autoBtn: Node = null;
@@ -100,8 +98,6 @@ export class SettingsController extends Component {
 
     private optionBackBtn: Node = null;//選單返回按鈕
 
-    /**當前設置頁面 0=spin頁面 1=menu頁面*/
-    // private curSettingPage: number = 0;
     private totalBet: number = 0;//總下注
 
     /**
@@ -120,7 +116,6 @@ export class SettingsController extends Component {
     private setNode() {
         this.porControllerBtns = this.node.getChildByName('Por_ControllerBtns');
         this.porOptionMenu = this.node.getChildByName('Por_OptionMenu');
-        // this.landControllerBtns = this.node.getChildByName('Land_ControllerBtns');
         this.landOptionMenu = this.node.getChildByName('Land_OptionMenu');
         this.optionBackBtn = this.node.getChildByName('OptionBackBtn');
 
@@ -200,7 +195,6 @@ export class SettingsController extends Component {
                 this.handleClickSpin();
             }
         }, this);
-        // this.updateBetBtnInteractable();
         this.screenBtn.active = !sys.isMobile;
     }
 
@@ -219,7 +213,6 @@ export class SettingsController extends Component {
 
         //true時要判斷更新+-按鈕是否可用，false時直接禁用
         if (enabled) {
-            // this.updateBetBtnInteractable();
             this.addBetBtn.getComponent(Button).interactable = true;
             this.minusBetBtn.getComponent(Button).interactable = true;
         } else {
@@ -252,7 +245,6 @@ export class SettingsController extends Component {
             this.stopSpinBtn.active = false;
             this.stopAutoSpinBtn.active = false;
             this.freeSpin.active = true;
-            // this.updateFreeSpinCount();
         }
     }
 
@@ -281,9 +273,7 @@ export class SettingsController extends Component {
         });
 
         BaseEvent.clickSpin.emit(isBuyFs);
-        // console.log('發送Spin請求');
     }
-
 
     /**
      * 按下按鈕動畫
@@ -458,8 +448,6 @@ export class SettingsController extends Component {
         AudioManager.getInstance().playSound(AudioKey.btnClick);
         this.isOpenOption = !this.isOpenOption;
         DataManager.getInstance().lockKeyboard = this.isOpenOption;//鎖定/解除鍵盤功能
-        // console.log('lockKeyboard', DataManager.getInstance().lockKeyboard);
-        // this.setBtnInteractable(!this.isOpenOption);//禁用控制器按鈕
         this.optionBackBtn.active = this.isOpenOption;//關閉返回按鈕
         if (this.isOpenOption) {
             this.porControllerBtns.getComponent(Animation).play('optionMenuHide');

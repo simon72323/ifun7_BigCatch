@@ -1,25 +1,21 @@
 import { _decorator, Component, Node } from 'cc';
-
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { ModuleID } from 'db://assets/common/script/types/BaseType';
 import { Utils } from 'db://assets/common/script/utils/Utils';
-const { ccclass } = _decorator;
 
+const { ccclass } = _decorator;
 /**
  * 背景UI
  */
 @ccclass('BackgroundUI')
 export class BackgroundUI extends Component {
-
+    //免費遊戲背景
     private bg_fg: Node;
-    // private bg_mg: Node;
 
     onLoad() {
-        // this.bg_mg = this.node.getChildByName('bg_mg');
         this.bg_fg = this.node.getChildByName('bg_fg');
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
-
         this.onChangeScene(ModuleID.BS);
     }
 

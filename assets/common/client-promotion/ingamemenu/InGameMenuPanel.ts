@@ -1,5 +1,4 @@
 import { _decorator, Component, Vec3, Node, tween, Button, UITransform, easing, sp, SpriteFrame, Sprite, Label } from 'cc';
-
 import { addBtnClickEvent } from 'db://assets/common/script/utils/Utils';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { AudioKey } from 'db://assets/game/script/data/AudioKey';

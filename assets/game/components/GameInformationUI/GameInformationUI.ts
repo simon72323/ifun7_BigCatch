@@ -4,11 +4,11 @@ import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { Utils } from 'db://assets/common/script/utils/Utils';
+import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+
 import { SlotData } from 'db://assets/game/script/data/SlotData';
 import { GameConst } from 'db://assets/game/script/data/GameConst';
-import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-
 
 const { ccclass, property } = _decorator;
 

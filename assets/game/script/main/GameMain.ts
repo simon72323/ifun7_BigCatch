@@ -1,12 +1,4 @@
 import { _decorator, Component, Node, UIOpacity } from 'cc';
-
-import { FeatureBuyBtn } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyBtn';
-import { FeatureBuyPage } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyPage';
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-import { GameConst } from 'db://assets/game/script/data/GameConst';
-import { MessageHandler } from 'db://assets/game/script/main/MessageHandler';
-import { IdleTask } from 'db://assets/game/script/task/IdleTask';
-
 import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
 import { slotAudioKey, SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
@@ -14,11 +6,17 @@ import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { KeyboardManager } from 'db://assets/common/script/manager/KeyboardManager';
-// import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
 import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
 import { ScreenAdapter } from 'db://assets/common/script/utils/ScreenAdapter';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 import { InGameMenuPanel } from 'db://assets/common/client-promotion/ingamemenu/InGameMenuPanel';
+
+import { FeatureBuyBtn } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyBtn';
+import { FeatureBuyPage } from 'db://assets/game/components/FeatureBuyUI/FeatureBuyPage';
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+import { GameConst } from 'db://assets/game/script/data/GameConst';
+import { MessageHandler } from 'db://assets/game/script/main/MessageHandler';
+import { IdleTask } from 'db://assets/game/script/task/IdleTask';
 import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
 
 const { ccclass, property } = _decorator;

@@ -1,5 +1,4 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, tween, Tween } from 'cc';
-
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent4 } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
@@ -14,7 +13,6 @@ enum TotalWinAnimation {
 }
 
 const { ccclass } = _decorator;
-
 /**
  * FS結算UI
  */

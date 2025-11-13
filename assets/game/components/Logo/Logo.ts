@@ -1,5 +1,4 @@
 import { _decorator, Component, Sprite } from 'cc';
-
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BundleLoader } from 'db://assets/common/script/loading/BundleLoader';
 

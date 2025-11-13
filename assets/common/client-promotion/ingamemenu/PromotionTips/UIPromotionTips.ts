@@ -5,8 +5,8 @@ import { i18n } from 'db://assets/common/script/utils/i18n';
 import { XEvent1 } from 'db://assets/common/script/event/XEvent';
 import { PromotionData } from 'db://assets/common/client-promotion/ingamemenu/InGameInformation';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
-const { ccclass, property } = _decorator;
 
+const { ccclass, property } = _decorator;
 @ccclass('UIPromotionTips')
 export class UIPromotionTips extends Component {
     public static show: XEvent1<PromotionData[]> = new XEvent1();

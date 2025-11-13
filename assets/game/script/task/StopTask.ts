@@ -11,39 +11,14 @@ import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
  * 老虎機停輪
  */
 export class StopTask extends GameTask {
-
     protected name: string = 'StopTask';
 
     /**盤面停止符號(二維陣列) */
     public resultPattern: number[][];
-
     /**免費遊戲次數 */
     public freeSpinTimes: number;
-    /**輪帶索引 */
-    // public rngList: number[];
-
-    /**中線資料 */
-    // public winLineData: IWinLineData[];
-    /**scatter獲得資料 */
-    // public winScatterData: IWinScatterData;
-
-    /**是否中scatter免費遊戲 */
-    // public isScatterWin: boolean = false;
-
-    /**是否為最後一盤 */
-    // public isLastPlane: boolean = false;
-
 
     execute(): void {
-        // DataManager.getInstance().hasSkip = false;
-
-        //預先設定此盤面是否中獎, 讓瞇牌結束可以決定要播什麼動作
-        // BSRoleUI.scatterWin.emit(this.isScatterWin);
-
-        //設定老虎機盤面停止符號
-        // let slotParser = DataManager.getInstance().slotData.slotParser;
-        // slotParser.slotPattern = this.resultPattern;
-
         ReelBlackUI.hide.emit();//隱藏壓黑
         BaseEvent.stopLineLoop.emit();//停止中獎線輪播
 
@@ -54,16 +29,8 @@ export class StopTask extends GameTask {
 
         //監聽轉動結束
         SlotMachine.slotRunFinish.once(() => {
-            // BaseEvent.clickSkip.off(this);
             this.finish();
         }, this);
-
-        //監聽急停
-        // BaseEvent.clickSkip.once(() => {
-        //     // DataManager.getInstance().hasSkip = true;
-        //     BaseEvent.clickSkip.off(this);
-        //     // SlotMachine.slotSkip.emit();
-        // }, this);
     }
 
     /**

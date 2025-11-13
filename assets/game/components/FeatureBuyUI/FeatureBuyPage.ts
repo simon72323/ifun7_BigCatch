@@ -1,7 +1,4 @@
 import { _decorator, Button, Component, EventTouch, Label, Node, tween, Vec3 } from 'cc';
-
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-
 import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
@@ -9,6 +6,7 @@ import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 const { ccclass } = _decorator;
 

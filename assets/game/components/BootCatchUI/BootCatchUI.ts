@@ -1,11 +1,9 @@
 import { _decorator, Component, Node, sp, tween, Vec3 } from 'cc';
-
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-
 import { XEvent1 } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 const { ccclass, property } = _decorator;
 @ccclass('BootCatchUI')

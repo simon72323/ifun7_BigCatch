@@ -1,7 +1,4 @@
 import { _decorator, Button, Color, Component, KeyCode, Label, sp, tween, Tween } from 'cc';
-
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-
 import { BaseConst } from 'db://assets/common/script/data/BaseConst';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
@@ -9,6 +6,8 @@ import { XEvent, XEvent1 } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { BigWinType } from 'db://assets/common/script/types/BaseType';
 import { Utils } from 'db://assets/common/script/utils/Utils';
+
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 type BigWinConfig = {
     sound: AudioKey
@@ -59,8 +58,6 @@ export class BigWinUI extends Component {
     private aniWin: sp.Skeleton;
     private aniCoin: sp.Skeleton;
 
-    /**是否提早結束 */
-    // private isSkip: boolean = false;
     /**獎項參數 */
     private bigWinConfig: BigWinConfig[] = [
         {
@@ -101,7 +98,6 @@ export class BigWinUI extends Component {
 
     onLoad() {
         BigWinUI.show.on(this.onShow, this);
-        // BigWin.hide.on(this.onHide, this);
 
         this.aniWin = this.node.getChildByPath('bigWinNode/ani_win').getComponent(sp.Skeleton);
         this.aniCoin = this.node.getChildByPath('bigWinNode/ani_coin').getComponent(sp.Skeleton);
@@ -139,12 +135,10 @@ export class BigWinUI extends Component {
 
         this.node.active = true;
         this.isPlaying = true;
-        // this.isSkip = false;
 
         this.winLabel.string = '';
         this.winLabel.color = Color.WHITE;
 
-        // Utils.ClearSpine(this.aniCoin);
         this.aniCoin.setAnimation(0, CoinAnimation.superWin_in, false);
         this.aniCoin.addAnimation(0, CoinAnimation.superWin_loop, true);
 
@@ -206,9 +200,10 @@ export class BigWinUI extends Component {
                 }
             })
             .call(() => {
-                if (this.data.endRateValue === this.data.finalRateValue) {
-                    // AudioManager.getInstance().stopSound(AudioKey.WinRolling);
-                }
+                //停止跑分音效
+                // if (this.data.endRateValue === this.data.finalRateValue) {
+                // AudioManager.getInstance().stopSound(AudioKey.WinRolling);
+                // }
             })
             .delay(endDelay)
             .call(() => {

@@ -1,3 +1,9 @@
+import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
+import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
+import { IGameResult, ISpinData } from 'db://assets/common/script/network/NetworkApi';
+import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
+import { Utils } from 'db://assets/common/script/utils/Utils';
+
 import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
 import { AutoSpinDelayTask } from 'db://assets/game/script/task/AutoSpinDelayTask';
 import { BackBSSettleTask } from 'db://assets/game/script/task/BackBSSettleTask';
@@ -9,14 +15,6 @@ import { TransTask } from 'db://assets/game/script/task/TransTask';
 import { UpdateFreeTimesTask } from 'db://assets/game/script/task/UpdateFreeTimesTask';
 import { WinScatterTask } from 'db://assets/game/script/task/WinScatterTask';
 import { WinSymbolTask } from 'db://assets/game/script/task/WinSymbolTask';
-
-import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
-
-import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
-import { IGameResult, ISpinData } from 'db://assets/common/script/network/NetworkApi';
-import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
-import { Utils } from 'db://assets/common/script/utils/Utils';
-
 
 /**
  * 消息處理

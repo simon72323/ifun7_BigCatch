@@ -1,10 +1,9 @@
 import { _decorator, Button, Component, Node } from 'cc';
-
-import { AudioKey } from 'db://assets/game/script/data/AudioKey';
-
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
+
+import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 const { ccclass } = _decorator;
 

@@ -5,7 +5,6 @@ import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 
-
 /**
  * 自動轉等待時間
  */

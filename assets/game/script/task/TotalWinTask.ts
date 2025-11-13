@@ -11,21 +11,16 @@ import { SlotData } from 'db://assets/game/script/data/SlotData';
  * FS總結算
  */
 export class TotalWinTask extends GameTask {
-
     protected name: string = 'TotalWinTask';
 
     /**目前累計獲得金額 */
     public totalWin: number;
     /**返回BS盤面 */
     public backBSParser: number[][];
-
     /**總免費遊戲次數 */
     public totalFreeSpinTimes: number;
 
     execute(): void {
-
-        // AudioManager.getInstance().stopMusic(AudioKey.FsMusic);
-
         TotalWinUI.show.emit(this.totalWin, this.totalFreeSpinTimes,
             //轉場全遮蔽
             () => {
