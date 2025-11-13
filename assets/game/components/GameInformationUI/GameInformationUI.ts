@@ -63,14 +63,19 @@ export class GameInformationUI extends Component {
         for (let i = 0; i < this.symbolOdds.length; i++) {
             const symbolID = parseInt(this.symbolOdds[i].name.split('_')[1]);
             let payData = SlotData.getPayBySymbolID(symbolID);
-            let string = '';
+            let lineString = '';
+            let scoreString = '';
             payData.forEach((data: { count: number, cent: string }, index: number) => {
-                string += data.count + ' ' + data.cent;
+                // string += data.count + ' ' + data.cent;
+                scoreString += data.cent;
+                lineString += data.count;
                 if (index < payData.length - 1) {
-                    string += '\n';
+                    scoreString += '\n';
+                    lineString += '\n';
                 }
             });
-            this.symbolOdds[i].getChildByPath('Score').getComponent(Label).string = string;
+            this.symbolOdds[i].getChildByPath('Line').getComponent(Label).string = lineString;
+            this.symbolOdds[i].getChildByPath('Score').getComponent(Label).string = scoreString;
         }
     }
 

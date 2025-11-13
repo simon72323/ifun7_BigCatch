@@ -33,6 +33,11 @@ export class SlotData {
                 { count: 4, point: 10 },
                 { count: 3, point: 2 }
             ],
+            FishAll: [
+                { count: 5, point: 20 },
+                { count: 4, point: 5 },
+                { count: 3, point: 1 }
+            ],
             LA: [
                 { count: 5, point: 10 },
                 { count: 4, point: 2.5 },
@@ -58,7 +63,7 @@ export class SlotData {
                 { count: 4, point: 1 },
                 { count: 3, point: 0.2 }
             ]
-        },
+        }
         // bet: {
         //     min: 1,
         //     max: 100,
@@ -79,6 +84,7 @@ export class SlotData {
             [SymbolID.H2, 'H2'],
             [SymbolID.H3, 'H3'],
             [SymbolID.H4, 'H4'],
+            [SymbolID.F1, 'FishAll'],
             [SymbolID.LA, 'LA'],
             [SymbolID.LK, 'LK'],
             [SymbolID.LQ, 'LQ'],
