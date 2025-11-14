@@ -1,5 +1,4 @@
 import { _decorator, Component, Node, Prefab, tween, instantiate, UITransform, Vec3, Tween, easing, Button } from 'cc';
-
 import { BaseSymbol } from 'db://assets/common/components/slotMachine/BaseSymbol';
 import { BaseConst } from 'db://assets/common/script/data/BaseConst';
 import { DataManager } from 'db://assets/common/script/data/DataManager';

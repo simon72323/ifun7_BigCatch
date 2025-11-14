@@ -1,7 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-
 import { BaseSymbolData } from 'db://assets/common/components/slotMachine/BaseSymbolData';
-// import { Grid } from '@common/script/types/BaseType';
 
 const { ccclass } = _decorator;
 

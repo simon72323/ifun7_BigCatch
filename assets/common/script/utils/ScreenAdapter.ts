@@ -54,19 +54,19 @@ export class ScreenAdapter {
 
         // 判斷橫豎屏並設置對應分辨率
         if (aspectRatio > 1) {
-            if (aspectRatio > 1280 / 720) {
-                view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_HEIGHT);
-            } else {
-                view.setDesignResolutionSize(1280, 720, ResolutionPolicy.FIXED_WIDTH);
-            }
+            // if (aspectRatio > 1280 / 720) {
+            view.setDesignResolutionSize(1280, 720, ResolutionPolicy.SHOW_ALL);
+            // } else {
+            //     view.setDesignResolutionSize(1280, 720, ResolutionPolicy.SHOW_ALL);
+            // }
             // console.log('橫屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Landscape);
         } else {
-            if (aspectRatio < 720 / 1280) {
-                view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_WIDTH);
-            } else {
-                view.setDesignResolutionSize(720, 1280, ResolutionPolicy.FIXED_HEIGHT);
-            }
+            // if (aspectRatio < 720 / 1280) {
+            view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
+            // } else {
+            // view.setDesignResolutionSize(720, 1280, ResolutionPolicy.SHOW_ALL);
+            // }
             // console.log('豎屏模式');
             BaseEvent.changeOrientation.emit(OrientationtMode.Portrait);
         }
