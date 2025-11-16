@@ -1,5 +1,6 @@
 import { _decorator, Button, Color, Component, KeyCode, Label, sp, tween, Tween } from 'cc';
 import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { BetData } from 'db://assets/common/script/data/BetData';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent, XEvent1 } from 'db://assets/common/script/event/XEvent';
@@ -115,7 +116,6 @@ export class BigWinUI extends Component {
         AudioManager.getInstance().editMusicVolume(0.1);//降低背景音樂音量
         AudioManager.getInstance().playSound(AudioKey.afterMusic);//報獎音效
         this.currencyLabel.string = Utils.getCurrencySymbol();
-        const dataManager = DataManager.getInstance();
         //skip
         this.node.getChildByPath('SkipSensor').once(Button.EventType.CLICK, this.onSkip, this);
         BaseEvent.keyDown.once((code: KeyCode) => {
@@ -131,7 +131,7 @@ export class BigWinUI extends Component {
         this.data.endRateValue = 0;
         this.data.finalRateValue = value;
         this.data.currentType = BigWinType.big;
-        this.data.finalType = dataManager.getBigWinTypeByValue(value);
+        this.data.finalType = DataManager.getInstance().getBigWinTypeByValue(value);
 
         this.node.active = true;
         this.isPlaying = true;
@@ -142,9 +142,9 @@ export class BigWinUI extends Component {
         this.aniCoin.setAnimation(0, CoinAnimation.superWin_in, false);
         this.aniCoin.addAnimation(0, CoinAnimation.superWin_loop, true);
 
-        this.bigWinValue = dataManager.bigWinMultiple[BigWinType.big] * dataManager.bet.getBetTotal();
-        this.superWinValue = dataManager.bigWinMultiple[BigWinType.super] * dataManager.bet.getBetTotal();
-        this.megaWinValue = dataManager.bigWinMultiple[BigWinType.mega] * dataManager.bet.getBetTotal();
+        this.bigWinValue = DataManager.getInstance().bigWinMultiple[BigWinType.big] * BetData.getBetTotal();
+        this.superWinValue = DataManager.getInstance().bigWinMultiple[BigWinType.super] * BetData.getBetTotal();
+        this.megaWinValue = DataManager.getInstance().bigWinMultiple[BigWinType.mega] * BetData.getBetTotal();
         this.tweenAtLevel();
     }
 
@@ -156,7 +156,6 @@ export class BigWinUI extends Component {
 
         //設定bigWin等級樣式
         this.setTypeStyle(this.data.currentType);
-        const dataManager = DataManager.getInstance();
 
         switch (this.data.currentType) {
             case BigWinType.big:
@@ -178,14 +177,14 @@ export class BigWinUI extends Component {
         let endDelay: number = 0;
 
         //超過極限
-        if (endType > dataManager.bigWinMultiple.length - 1) {
+        if (endType > DataManager.getInstance().bigWinMultiple.length - 1) {
             this.data.endRateValue = this.data.finalRateValue;
             duration = config.duration;
         }
         //最後等級,直接到終值,時間等比例換算
         else if (this.data.currentType === this.data.finalType) {
             this.data.endRateValue = this.data.finalRateValue;
-            let levelEndValue = dataManager.bigWinMultiple[endType] * dataManager.bet.getBetTotal();
+            let levelEndValue = DataManager.getInstance().bigWinMultiple[endType] * BetData.getBetTotal();
             duration = config.duration * (this.data.finalRateValue - this.data.currentRateValue) / (levelEndValue - this.data.currentRateValue);
             endDelay = config.duration - duration;
         }

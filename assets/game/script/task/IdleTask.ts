@@ -1,6 +1,7 @@
 
 import { Notice } from 'db://assets/common/components/notice/Notice';
 import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { BetData } from 'db://assets/common/script/data/BetData';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { GameTask } from 'db://assets/common/script/tasks/GameTask';
@@ -14,7 +15,7 @@ import { SpinTask } from 'db://assets/game/script/task/SpinTask';
 export class IdleTask extends GameTask {
     protected name: string = 'IdleTask';
     execute(): void {
-        DataManager.getInstance().curModuleID = ModuleID.BS;
+        DataManager.getInstance().curModuleID = ModuleID.MG;
 
         if (DataManager.getInstance().isAutoMode) {
             if (DataManager.getInstance().isAutoTimes && DataManager.getInstance().autoSpinCount > 0) {
@@ -35,7 +36,7 @@ export class IdleTask extends GameTask {
     private idleState(): void {
         BaseEvent.resetSpin.emit();//重置Spin按鈕
         BaseEvent.buyFeatureEnabled.emit(true);//啟用購買功能
-        SettingsController.refreshBet.emit(DataManager.getInstance().bet.getBetTotal());//刷新下注
+        SettingsController.refreshBet.emit(BetData.getBetTotal());//刷新下注
 
         BaseEvent.clickSpin.on(this.onSpin, this);
 
@@ -50,8 +51,8 @@ export class IdleTask extends GameTask {
      * @param buyFs 是否購買免費遊
      */
     private onSpin(buyFs: boolean = false): void {
-        let betCredit = buyFs ? DataManager.getInstance().bet.getBuyFeatureTotal()
-            : DataManager.getInstance().bet.getBetTotal();
+        let betCredit = buyFs ? BetData.getBuyFeatureTotal()
+            : BetData.getBetTotal();
 
         SettingsController.refreshWin.emit(0, 0);//刷新贏分=0
 

@@ -1,5 +1,6 @@
 import { _decorator, Button, Component, EventTouch, Label, Node, tween, Vec3 } from 'cc';
 import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
+import { BetData } from 'db://assets/common/script/data/BetData';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { XEvent } from 'db://assets/common/script/event/XEvent';
@@ -119,7 +120,7 @@ export class FeatureBuyPage extends Component {
      * 更新購買資訊
      */
     private updateBuyInfo(): void {
-        const buyFeatureTotal = DataManager.getInstance().bet.getBuyFeatureTotal();
+        const buyFeatureTotal = BetData.getBuyFeatureTotal();
         this.costLabel.string = Utils.numberFormat(buyFeatureTotal);
         this.buyBtn.interactable = buyFeatureTotal !== -1;
     }
@@ -128,8 +129,8 @@ export class FeatureBuyPage extends Component {
      * 更新下注+-按鈕是否可用
      */
     private updateBetBtnInteractable() {
-        this.addBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getPlusEnabled();
-        this.lessBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
+        this.addBtn.getComponent(Button).interactable = BetData.getPlusEnabled();
+        this.lessBtn.getComponent(Button).interactable = BetData.getLessEnabled();
     }
 
     /**

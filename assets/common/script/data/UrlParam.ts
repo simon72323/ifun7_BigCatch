@@ -1,25 +1,25 @@
 export class UrlParam {
     /** 用戶token */
-    public token: string = '';
+    public static token: string = '';
     /** 遊戲id */
-    public gameId: number = 0;
+    public static gameId: number = 0;
     /** 語言 */
-    public lang: string = '';
+    public static lang: string = '';
     /** 投注記錄url */
-    public betRecordUrl: string = '';
+    public static betRecordUrl: string = '';
     /** 主頁url */
-    public homeUrl: string = '';
+    public static homeUrl: string = '';
     /** 模式 */
-    public mode: string = '';
+    public static mode: string = '';
     /** 伺服器url */
-    public serverUrl: string = '';
+    public static serverUrl: string = '';
     /** 依據參數顯示不同 loading 頁 */
-    public b: string = '';
+    public static b: string = '';
 
     /**
      * 初始化並快取所有URL參數
      */
-    public initUrlParameters(): void {
+    public static initUrlParameters(): void {
         const hostname = window.location.hostname;
         const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
         if (isLocal) {

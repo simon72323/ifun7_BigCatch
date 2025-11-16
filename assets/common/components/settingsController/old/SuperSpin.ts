@@ -10,7 +10,7 @@
 //     private superSpin: Node = null;//超級SPIN節點
 //     private content: Node = null;//超級SPIN內容
 //     private preMessage: Node = null;//超級SPIN預先訊息
-//     private BsBg: Node = null;//超級SPIN BS背景
+//     private BsBg: Node = null;//超級SPIN MG背景
 //     private FsBg: Node = null;//超級SPIN FS背景
 
 //     onLoad() {
@@ -32,9 +32,9 @@
 //         this.superSpin.active = active;
 //         this.content.active = !active;
 //         this.preMessage.active = active;
-//         const isBS = DataManager.getInstance().isBS();
-//         this.BsBg.active = isBS;
-//         this.FsBg.active = !isBS;
+//         const isMG = DataManager.getInstance().isMG();
+//         this.BsBg.active = isMG;
+//         this.FsBg.active = !isMG;
 //         // const copy = instantiate(this.props['superSpin']['win'].node);
 //         // ObjectPool.registerNode('winLabelClone', copy);
 //     }

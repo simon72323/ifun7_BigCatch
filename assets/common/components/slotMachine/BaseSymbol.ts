@@ -1,5 +1,4 @@
 import { _decorator, Component, Node } from 'cc';
-import { BaseSymbolData } from 'db://assets/common/components/slotMachine/BaseSymbolData';
 
 const { ccclass } = _decorator;
 
@@ -37,9 +36,9 @@ export class BaseSymbol extends Component {
      * 設定圖示ID
      * @param newSymbolID 
      */
-    public setSymbolData(_data: BaseSymbolData): void {
-        //override
-    }
+    // public setSymbolData(_data: BaseSymbolData): void {
+    //     //override
+    // }
 
     /** 模糊貼圖顯示 */
     public blurShow(): void {
@@ -82,10 +81,10 @@ export class BaseSymbol extends Component {
     }
 
     /**
-     * 回復BS盤面symbol
+     * 回復MG盤面symbol
      * @param symbolID 圖示ID
      */
-    public backBS(symbolID: number): void {
+    public backMG(symbolID: number): void {
         //override
     }
 }

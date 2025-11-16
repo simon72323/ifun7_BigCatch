@@ -1,4 +1,3 @@
-import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { IGameResult, ISpinData } from 'db://assets/common/script/network/NetworkApi';
 import { TaskManager } from 'db://assets/common/script/tasks/TaskManager';
@@ -6,7 +5,7 @@ import { Utils } from 'db://assets/common/script/utils/Utils';
 
 import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
 import { AutoSpinDelayTask } from 'db://assets/game/script/task/AutoSpinDelayTask';
-import { BackBSSettleTask } from 'db://assets/game/script/task/BackBSSettleTask';
+import { BackMGSettleTask } from 'db://assets/game/script/task/BackMGSettleTask';
 import { BootCatchTask } from 'db://assets/game/script/task/BootCatchTask';
 import { IdleTask } from 'db://assets/game/script/task/IdleTask';
 import { StopTask } from 'db://assets/game/script/task/StopTask';
@@ -15,6 +14,7 @@ import { TransTask } from 'db://assets/game/script/task/TransTask';
 import { UpdateFreeTimesTask } from 'db://assets/game/script/task/UpdateFreeTimesTask';
 import { WinScatterTask } from 'db://assets/game/script/task/WinScatterTask';
 import { WinSymbolTask } from 'db://assets/game/script/task/WinSymbolTask';
+import { IWinFishData, IWinLineData } from 'db://assets/game/script/data/SlotType';
 
 /**
  * 消息處理
@@ -39,14 +39,14 @@ export class MessageHandler {
      */
     public initialize(): void {
         //監聽Spin結果
-        BaseEvent.onSpinResult.on(this.parseBSResult, this);
+        BaseEvent.onSpinResult.on(this.parseMGResult, this);
     }
 
     /**
      * 接收Spin結果並開始排腳本
      * @param slotResult 結果
      */
-    private parseBSResult(slotResult: ISpinData): void {
+    private parseMGResult(slotResult: ISpinData): void {
         // console.log('接收Spin結果', slotResult);
         //執行主遊戲結果
         const mainGame = slotResult.main_game;
@@ -95,14 +95,14 @@ export class MessageHandler {
             //FG結算
             const totalWinTask = new TotalWinTask();
             totalWinTask.totalWin = slotResult.sub_game.pay_credit_total;//FG中獎總金額
-            totalWinTask.backBSParser = slotResult.main_game.game_result;
+            totalWinTask.backMGParser = slotResult.main_game.game_result;
             totalWinTask.totalFreeSpinTimes = slotResult.sub_game.game_result.length;
             TaskManager.getInstance().addTask(totalWinTask);
 
-            //返回BS
-            const backBSSettleTask = new BackBSSettleTask();
-            backBSSettleTask.userCredit = slotResult.user_credit;
-            TaskManager.getInstance().addTask(backBSSettleTask);
+            //返回MG
+            const backMGSettleTask = new BackMGSettleTask();
+            backMGSettleTask.userCredit = slotResult.user_credit;
+            TaskManager.getInstance().addTask(backMGSettleTask);
         }
         // console.log('======回到待機======');
         TaskManager.getInstance().addTask(new AutoSpinDelayTask());

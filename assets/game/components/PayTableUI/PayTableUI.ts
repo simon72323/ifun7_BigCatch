@@ -41,7 +41,7 @@
 //         PayTableUI.show.on(this.onShow, this);
 //         this.black.on(Button.EventType.CLICK, this.onHide, this);
 
-//         // let lang = DataManager.getInstance().urlParam.lang;
+//         // let lang = UrlParam.lang;
 //         // BundleLoader.onLoaded(BaseConst.BUNDLE_LANGUAGE, `${lang}/${LangBundleDir.paytable}`, (langRes: any) => {
 //         //     this.node.getChildByPath('PaySymbol/Scatter/L/bg').getComponent(Sprite).spriteFrame = langRes['paytable_left_2'];
 //         //     this.node.getChildByPath('PaySymbol/Scatter/R/bg').getComponent(Sprite).spriteFrame = langRes['paytable_right_2'];

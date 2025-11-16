@@ -39,7 +39,7 @@ export class DataManager {
     public isStopUntilFeature: boolean = false;
 
     /** 當前模式 */
-    public curModuleID: ModuleID = ModuleID.BS;
+    public curModuleID: ModuleID = ModuleID.MG;
     /** 當前加速模式(免費遊戲會強制設為Normal) */
     public curTurboMode: TurboMode = TurboMode.Fast;
 
@@ -51,54 +51,40 @@ export class DataManager {
     /** 是否鎖定鍵盤 */
     public lockKeyboard: boolean = false;
 
-    //=================================== 資料 ======================================
-    /**網址參數 */
-    public urlParam: UrlParam = new UrlParam();
-    /**下注相關資料 */
-    public bet: BetData = new BetData();
-    //=================================== 資料 ======================================
-
     //============================= server資料 =====================================
     /** 用戶資料 */
-    private _userData: IUserData;
-    public get userData(): IUserData {
-        return this._userData;
+    private userData: IUserData;
+    public getUserData(): IUserData {
+        return this.userData;
     }
 
-    public set userData(userData: IUserData) {
-        this._userData = userData;
+    public setUserData(userData: IUserData): void {
+        this.userData = userData;
         this.userCredit = userData.credit;
         this.currency = userData.currency;
     }
 
     /** 遊戲資料 */
-    private _gameData: IGameData;
-    public get gameData(): IGameData {
-        return this._gameData;
+    private gameData: IGameData;
+    public getGameData(): IGameData {
+        return this.gameData;
     }
 
-    public set gameData(gameData: IGameData) {
-        this._gameData = gameData;
+    public setGameData(gameData: IGameData) {
+        this.gameData = gameData;
         this.bigWinMultiple.push(gameData.big_win);
         this.bigWinMultiple.push(gameData.super_win);
         this.bigWinMultiple.push(gameData.mega_win);
 
         // 初始化 BetData 的數據依賴
-        this.bet.setGameData(gameData);
-        this.bet.setLineIdx(gameData.line_bet_default_index);
-        this.bet.setBetIdx(gameData.coin_value_default_index);
-        this.bet.setCoinValue(gameData.coin_value[gameData.coin_value_default_index]);
+        BetData.gameData = gameData;
+        BetData.lineIdx = gameData.line_bet_default_index;
+        BetData.betIdx = gameData.coin_value_default_index;
+        BetData.coinValue = gameData.coin_value[gameData.coin_value_default_index];
     }
 
     /** 下注回傳資料 */
-    private _spinResult: ISpinData;
-    public get spinResult(): ISpinData {
-        return this._spinResult;
-    }
-
-    public set spinResult(spinResult: ISpinData) {
-        this._spinResult = spinResult;
-    }
+    // public spinResult: ISpinData;
 
     /** 幣別 */
     public currency: string = '';
@@ -127,16 +113,16 @@ export class DataManager {
      * @returns 
      */
     public getFullBetrecordurl(): string {
-        const { betRecordUrl, token, serverUrl, lang } = this.urlParam;
+        const { betRecordUrl, token, serverUrl, lang } = UrlParam;
         return `${betRecordUrl}?token=${token}&lang=${lang}&serverurl=${serverUrl}`;
     }
 
     /**
-     * 是否為BS模式(一般遊戲)
+     * 是否為MG模式(一般遊戲)
      * @returns 
      */
-    public isBS(): boolean {
-        return this.curModuleID === ModuleID.BS;
+    public isMG(): boolean {
+        return this.curModuleID === ModuleID.MG;
     }
 
     /**
@@ -151,7 +137,7 @@ export class DataManager {
 
         let bigWinLevel: BigWinType = BigWinType.non;
         //取得贏錢倍數
-        const multiple: number = this.bet.getWinMultipleByValue(value);
+        const multiple: number = BetData.getWinMultipleByValue(value);
         for (let i = 0; i < this.bigWinMultiple.length; i++) {
             if (multiple >= this.bigWinMultiple[i]) {
                 bigWinLevel = i;
@@ -171,7 +157,7 @@ export class DataManager {
         const multiple = this.gameData.buy_spin.multiplier;
         const limit_total = this.gameData.buy_spin.limit_total;
         //總購買金額
-        const totalBuy = multiple * this.bet.getBetTotal();
+        const totalBuy = multiple * BetData.getBetTotal();
         if (totalBuy > limit_total) {
             return -1;//代表超過限額
         }

@@ -118,7 +118,7 @@
 //     // private reset(): void {
 //     //     this.curCampaignID = '';
 //     //     this.curCampaignRemainCount = 0;
-//     //     DataManager.getInstance().bet.setPromoRate(-1, -1);
+//     //     BetData.setPromoRate(-1, -1);
 //     // }
 
 //     /**
@@ -133,7 +133,7 @@
 //     //     //送出免費轉Spin
 //     //     this.curCampaignRemainCount = remain_count;
 //     //     this.curCampaignID = campaign_id;
-//     //     DataManager.getInstance().bet.setPromoRate(bet_rate, bet_level);
+//     //     BetData.setPromoRate(bet_rate, bet_level);
 //     //     //送出Spin
 //     //     BaseEvent.clickSpin.emit(false);
 //     // }

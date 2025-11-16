@@ -7,11 +7,11 @@ import { FeatureBuyBtn } from 'db://assets/game/components/FeatureBuyUI/FeatureB
 import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 
 /**
- * FS返回NG總結算(先BigWin再橫幅)
+ * FS返回MG總結算(先BigWin再橫幅)
  */
-export class BackBSSettleTask extends GameTask {
+export class BackMGSettleTask extends GameTask {
 
-    protected name: string = 'BackBSSettleTask';
+    protected name: string = 'BackMGSettleTask';
 
     /**目前累計獲得金額(右下角Win) */
     public userCredit: number;
@@ -26,8 +26,8 @@ export class BackBSSettleTask extends GameTask {
         FeatureBuyBtn.show.emit();
 
         //回復盤面
-        // SlotMachine.backBSParser.emit(this.backBSParser);
-        // SlotMachine.change.emit(SlotMachineID.BS, DataManager.getInstance().gameData.bsLastMap);
+        // SlotMachine.backMGParser.emit(this.backMGParser);
+        // SlotMachine.change.emit(SlotMachineID.MG, DataManager.getInstance().getGameData().bsLastMap);
         // UIController
         // SettingsPage1.setSpinState.emit(SpinButtonState.Disabled);
         this.finish();

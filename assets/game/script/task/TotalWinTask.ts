@@ -15,8 +15,8 @@ export class TotalWinTask extends GameTask {
 
     /**目前累計獲得金額 */
     public totalWin: number;
-    /**返回BS盤面 */
-    public backBSParser: number[][];
+    /**返回MG盤面 */
+    public backMGParser: number[][];
     /**總免費遊戲次數 */
     public totalFreeSpinTimes: number;
 
@@ -24,13 +24,13 @@ export class TotalWinTask extends GameTask {
         TotalWinUI.show.emit(this.totalWin, this.totalFreeSpinTimes,
             //轉場全遮蔽
             () => {
-                //回復BS盤面
+                //回復MG盤面
                 BaseEvent.stopLineLoop.emit();//停止中獎線輪播
                 ReelBlackUI.hide.emit();//隱藏遮黑
-                BaseEvent.changeScene.emit(ModuleID.BS);
+                BaseEvent.changeScene.emit(ModuleID.MG);
                 FreeGameUI.hide.emit();
                 SlotData.fsWildMultiply = 1;//重置免費遊戲 wild倍率
-                SlotMachine.backBSParser.emit(this.backBSParser);//回復BS盤面
+                SlotMachine.backMGParser.emit(this.backMGParser);//回復MG盤面
             },
             //演示完畢
             () => {

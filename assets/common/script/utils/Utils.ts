@@ -1,9 +1,9 @@
 import { JsonAsset, resources, _decorator, game, Node, tween, Vec3, UIOpacity, director, Scheduler, Component, Button, sp, Label, Color, EventTarget, find } from 'cc';
 
-import { BaseConfig } from 'db://assets/common/script/data/BaseConfig';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
 import { RunNumber } from 'db://assets/common/script/types/BaseType';
 
-const { ccclass, property } = _decorator;
+// const { ccclass, property } = _decorator;
 
 export class Utils {
     //================================== 數字相關 =====================================
@@ -13,7 +13,7 @@ export class Utils {
      * @returns 格式化後的字符串
      */
     public static numberFormat(value: number): string {
-        const decimalPoint = BaseConfig.DecimalPlaces;
+        const decimalPoint = BaseConst.DecimalPlaces;
         const preciseValue = Utils.accMul(value, 1);
         return preciseValue.toLocaleString('en', { minimumFractionDigits: decimalPoint, maximumFractionDigits: decimalPoint });
     }
@@ -24,7 +24,7 @@ export class Utils {
      * @returns 格式化後的字符串
      */
     public static numberFormatCurrency(value: number): string {
-        return BaseConfig.CurrencySymbol + Utils.numberFormat(value);
+        return BaseConst.CurrencySymbol + Utils.numberFormat(value);
     }
 
 
@@ -33,7 +33,7 @@ export class Utils {
      * @returns 幣別符號
      */
     public static getCurrencySymbol(): string {
-        return BaseConfig.CurrencySymbol;
+        return BaseConst.CurrencySymbol;
     }
 
     /**

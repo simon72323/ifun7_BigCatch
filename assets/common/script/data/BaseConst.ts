@@ -1,7 +1,7 @@
 import { TurboMode } from 'db://assets/common/script/types/BaseType';
 
 /**
- * 公版全域常數
+ * 公版全域常量
  */
 export class BaseConst {
     /**逾時時間 */
@@ -58,4 +58,25 @@ export class BaseConst {
             waitNextSpinTime: 0.1       // 下一輪轉動等待秒數
         }
     };
+
+    /** 網站 */
+    public static Sites = {
+        /** 開發網站 */
+        Develop: [
+            'gc.prep.lab',
+            'gc.playhard.name',
+            'gc.ifun7.vip',
+            'localhost',
+            'gs.prep.lab'],
+        QA: []
+    };
+
+    /** 版本 */
+    public static Version = 'Ver:5800.002';
+
+    /** 貨幣符號 */
+    public static CurrencySymbol = 'A$';
+
+    /** 小數點位數 */
+    public static DecimalPlaces = 2;
 }

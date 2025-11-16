@@ -1,10 +1,10 @@
 import { _decorator } from 'cc';
-
 import { Notice } from 'db://assets/common/components/notice/Notice';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
-import { ErrorCodeConfig } from 'db://assets/common/script/network/ErrorCodeConfig';
-import { FETCH_METHODS, FetchRequestUtils, IFetchPayload } from 'db://assets/common/script/network/FetchRequestUtils';
+import { FETCH_METHODS, FetchRequest, IFetchPayload } from 'db://assets/common/script/network/FetchRequest';
 import { ICashDrop, ICashDropPrizeRecord, IExtraDataResponse, IFreeSpinTotalPayoutResponse, IPromotionBrief, ISpinData, ITournament, ITournamentPrizeRecord, NetworkApi } from 'db://assets/common/script/network/NetworkApi';
+import { UrlParam } from 'db://assets/common/script/data/UrlParam';
+import { BetData } from 'db://assets/common/script/data/BetData';
 
 const { ccclass, property } = _decorator;
 
@@ -18,63 +18,6 @@ export class NetworkManager {
         return NetworkManager._instance;
     }
 
-    protected fetchRequest: FetchRequestUtils;
-    protected errorCodeConfig: ErrorCodeConfig;
-
-    constructor() {
-        this.fetchRequest = new FetchRequestUtils();
-        this.fetchRequest.onErrorDelegate.add(this.onFetchError.bind(this));
-        this.errorCodeConfig = new ErrorCodeConfig();
-    }
-
-    /**
-     * 錯誤處理
-     * @param errorCode 錯誤代碼
-     */
-    protected onFetchError(errorCode: number): void {
-        console.error(`網路錯誤: ${errorCode}`);
-
-        // 根據錯誤代碼顯示相應的錯誤彈窗
-        if (errorCode === -1) {
-            // 網路連線錯誤
-            Notice.showError.emit(-1);
-        } else if (errorCode === -2) {
-            // 超時錯誤
-            Notice.showError.emit(-1); // 使用相同的網路錯誤提示
-        } else {
-            // 其他HTTP錯誤狀態碼
-            Notice.showError.emit(errorCode);
-        }
-    }
-
-    /**
-     * 檢查錯誤代碼
-     * @param response 回應資料
-     */
-    protected checkErrorCode(response: any): boolean {
-        if (response.error_code !== 0) {
-            // 獲取錯誤描述
-            const errorMessage = this.errorCodeConfig.errorCodes.get(response.error_code) || 'Unknown Error';
-            const fullErrorMessage = `${response.error_code} - ${errorMessage}`;
-
-            if (this.errorCodeConfig.retryErrorCodes.includes(response.error_code)) {
-                // 需要重試的錯誤 - 顯示錯誤彈窗，用戶可以點擊重新連線
-                console.warn(`需要重試的錯誤: ${fullErrorMessage}`);
-                Notice.showError.emit(response.error_code);
-            } else if (this.errorCodeConfig.closeAndContinueCodes.includes(response.error_code)) {
-                // 需要關閉並繼續的錯誤 - 顯示錯誤彈窗(有OK按鈕，會關閉視窗並繼續)
-                console.error(`需要關閉並繼續的錯誤: ${fullErrorMessage}`);
-                Notice.showError.emit(response.error_code);
-            } else {
-                // 一般錯誤 - 顯示錯誤彈窗(有重新連線按鈕)
-                console.error(`一般錯誤: ${fullErrorMessage}`);
-                Notice.showError.emit(response.error_code);
-            }
-            return false; // 有錯誤
-        }
-        return true; // 沒有錯誤
-    }
-
     /**
      * 發送請求
      * @param command 命令
@@ -84,21 +27,23 @@ export class NetworkManager {
     private async sendRequest(command: string, data: any = {}): Promise<IResponseData> {
         const content: IRequestData = {
             command,
-            token: DataManager.getInstance().urlParam.token,
+            token: UrlParam.token,
             data
         };
 
         // 設置請求資料
         const fetchPayload: IFetchPayload = {
-            url: DataManager.getInstance().urlParam.serverUrl,
+            url: UrlParam.serverUrl,
             method: FETCH_METHODS.POST,
             content: JSON.stringify(content)
         };
 
         return new Promise((resolve, reject) => {
-            this.fetchRequest.sendRequest(fetchPayload, (response: IResponseData) => {
-                if (this.checkErrorCode(response)) {
-                    resolve(response);  // 沒有錯誤，成功
+            FetchRequest.send(fetchPayload, (response: IResponseData) => {
+                if (response.error_code !== 0) {
+                    Notice.showError.emit(response.error_code);
+                } else {
+                    resolve(response);  //回傳回應資料
                 }
             }).catch((error) => {
                 reject(error);
@@ -122,19 +67,15 @@ export class NetworkManager {
      */
     public async sendSpin(SpinID: number, callback: (spinResult: ISpinData) => void): Promise<void> {
         try {
-            const betData = DataManager.getInstance().bet;
             const data = {
-                game_id: DataManager.getInstance().urlParam.gameId,
-                coin_value: betData.getCoinValue(),
-                line_bet: betData.getLineBet(),
-                line_num: betData.getLineTotal(),
-                bet_credit: betData.getBetTotal(),
+                game_id: UrlParam.gameId,
+                coin_value: BetData.coinValue,
+                line_bet: BetData.getLineBet(),
+                line_num: BetData.getLineTotal(),
+                bet_credit: BetData.getBetTotal(),
                 buy_spin: SpinID
             };
             const response = await this.sendRequest(NetworkApi.SPIN, data);
-            // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
-            // console.log('[NetworkManager] onGetGSSpinDataReceived =>', response);
-            DataManager.getInstance().spinResult = response.data;
             callback(response.data);// 成功回調
         } catch (error) {
             // console.error('[NetworkManager] sendSpin error =>', error);
@@ -288,7 +229,7 @@ export class NetworkManager {
         const response = await this.sendRequest(NetworkApi.GET_USER_DATA);
         // console.log('[NetworkManager] onGetGSUserDataReceived =>', response);
         // return response.data as IUserData;
-        DataManager.getInstance().userData = response.data[0];
+        DataManager.getInstance().setUserData(response.data[0]);
     }
 
     /**
@@ -296,11 +237,11 @@ export class NetworkManager {
      */
     public async sendGameData(): Promise<void> {
         const response = await this.sendRequest(NetworkApi.GET_GAME_DATA, {
-            game_id: DataManager.getInstance().urlParam.gameId
+            game_id: UrlParam.gameId
         });
         // console.log('[NetworkManager] onGetGSGameDataReceived =>', response);
         // return response.data as IGameData;
-        DataManager.getInstance().gameData = response.data[0];
+        DataManager.getInstance().setGameData(response.data[0]);
     }
 
     /**

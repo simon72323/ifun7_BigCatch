@@ -68,7 +68,7 @@ export class BaseEvent {
     /**廣播是否可點擊購買功能 */
     public static buyFeatureEnabled: XEvent1<boolean> = new XEvent1();
 
-    /**切換場景(BS/FS) */
+    /**切換場景(MG/FS) */
     public static changeScene: XEvent1<ModuleID> = new XEvent1();
 
     /**按下鍵盤 */

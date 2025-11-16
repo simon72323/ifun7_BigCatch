@@ -1,7 +1,7 @@
 import { _decorator, Button, Component, KeyCode, Label, Node, sp, Sprite, Tween, tween } from 'cc';
-import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { UrlParam } from 'db://assets/common/script/data/UrlParam';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
-import { XEvent, XEvent3, XEvent4 } from 'db://assets/common/script/event/XEvent';
+import { XEvent, XEvent4 } from 'db://assets/common/script/event/XEvent';
 import { BundleLoader } from 'db://assets/common/script/loading/BundleLoader';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
@@ -62,7 +62,7 @@ export class TransUI extends Component {
      * 設定語言
      */
     private setLanguage(): void {
-        let lang: string = DataManager.getInstance().urlParam.lang;
+        const lang = UrlParam.lang;
         BundleLoader.onLoaded('language', `${lang}/texture`, (langRes: any) => {
             this.node.getChildByPath('cutscene_ani/ribbon/tx_get').getComponent(Sprite).spriteFrame = langRes['tx_get'];
             this.node.getChildByPath('cutscene_ani/Content/tx_getFree').getComponent(Sprite).spriteFrame = langRes['tx_getFree'];

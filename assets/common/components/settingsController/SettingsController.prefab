@@ -11676,6 +11676,7 @@
         "__id__": 504
       }
     ],
+    "orientationPosY": [],
     "orientationSize": [],
     "orientationSpriteFrame": [],
     "orientationLayoutPadding": [],
@@ -11820,6 +11821,7 @@
       "__id__": 0
     },
     "fileId": "1dJEeZjA5OeKBad7+ub16P",
+    "instance": null,
     "targetOverrides": []
   }
 ]

@@ -7,6 +7,7 @@ import { AudioMode, ModuleID, TurboMode } from 'db://assets/common/script/types/
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
 import { InGameMenuPanel } from 'db://assets/common/client-promotion/ingamemenu/InGameMenuPanel';
 import { AudioKey } from 'db://assets/game/script/data/AudioKey';
+import { BetData } from 'db://assets/common/script/data/BetData';
 
 const { ccclass, property } = _decorator;
 
@@ -225,12 +226,12 @@ export class SettingsController extends Component {
      * 更新下注+-按鈕是否可用
      */
     // private updateBetBtnInteractable() {
-    // this.addBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getPlusEnabled();
-    // this.minusBetBtn.getComponent(Button).interactable = DataManager.getInstance().bet.getLessEnabled();
+    // this.addBetBtn.getComponent(Button).interactable = BetData.getPlusEnabled();
+    // this.minusBetBtn.getComponent(Button).interactable = BetData.getLessEnabled();
     // }
 
     private sceneChange(moduleID: ModuleID) {
-        if (moduleID === ModuleID.BS) {
+        if (moduleID === ModuleID.MG) {
             if (DataManager.getInstance().isAutoMode) {
                 //自動轉模式，則顯示停止按鈕
                 this.spinBtn.active = false;
@@ -406,14 +407,14 @@ export class SettingsController extends Component {
      */
     private changeBetValue(changeValue: number) {
         //下注數值更新(添加幣別符號與格式化)
-        DataManager.getInstance().bet.getChangeBetValue(changeValue);
-        const betTotal = DataManager.getInstance().bet.getBetTotal();
+        BetData.getChangeBetValue(changeValue);
+        const betTotal = BetData.getBetTotal();
         this.refreshBet(betTotal);
         // this.totalBetValue.string = Utils.numberFormatCurrency(betValue);
         // this.updateBetBtnInteractable();
 
         //更新購買功能是否可用
-        const buyFeatureTotal = DataManager.getInstance().bet.getBuyFeatureTotal();
+        const buyFeatureTotal = BetData.getBuyFeatureTotal();
         BaseEvent.buyFeatureEnabled.emit(buyFeatureTotal !== -1);//-1代表不可購買
     }
 

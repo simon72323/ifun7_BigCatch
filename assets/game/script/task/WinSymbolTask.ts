@@ -1,8 +1,8 @@
 import { Tween, tween, Vec3 } from 'cc';
 import { SettingsController } from 'db://assets/common/components/settingsController/SettingsController';
 import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
-import { IWinFishData, IWinLineData } from 'db://assets/common/components/slotMachine/SlotType';
 import { BaseConst } from 'db://assets/common/script/data/BaseConst';
+import { BetData } from 'db://assets/common/script/data/BetData';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { BaseEvent } from 'db://assets/common/script/event/BaseEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
@@ -18,6 +18,7 @@ import { Symbol } from 'db://assets/game/components/Symbol/Symbol';
 import { WinScoreUI } from 'db://assets/game/components/WinScoreUI/WinScoreUI';
 import { AudioKey } from 'db://assets/game/script/data/AudioKey';
 import { FISH_ODDS } from 'db://assets/game/script/data/GameConst';
+import { IWinFishData, IWinLineData } from 'db://assets/game/script/data/SlotType';
 
 
 /**
@@ -140,7 +141,7 @@ export class WinSymbolTask extends GameTask {
             const wildSymbol = wildSymbolNode.getComponent('Symbol') as Symbol;
             wildSymbol.symbolWin();
             for (let i = 0; i < allFishPos.length; i++) {
-                const betCredit = DataManager.getInstance().bet.getBetTotal();
+                const betCredit = BetData.getBetTotal();
                 const fishScore = FISH_ODDS[fishSymbolIDs[i]] * betCredit;
                 const fishPos: Vec3 = SlotMachine.getSymbolPosList()[allFishPos[i]];
                 wildScore += fishScore;

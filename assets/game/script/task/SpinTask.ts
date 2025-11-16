@@ -49,8 +49,8 @@ export class SpinTask extends GameTask {
             DataManager.getInstance().isAutoMode = false;
         }
 
-        const isBS = DataManager.getInstance().isBS();
-        // if (isBS) {
+        const isMG = DataManager.getInstance().isMG();
+        // if (isMG) {
         //     //先轉型(免費遊戲直接給結果不轉動)
         //     // if (!DataManager.getInstance().isBuyFs) {
         //     SlotMachine.spin.emit();
@@ -92,8 +92,8 @@ export class SpinTask extends GameTask {
                 const newUserCredit = DataManager.getInstance().userCredit - this.betCredit;
                 SettingsController.refreshCredit.emit(newUserCredit);
                 DataManager.getInstance().userCredit = newUserCredit;
-            } else if (isBS) {
-                TaskManager.getInstance().addTask(new IdleTask());//Spin失敗且是BS模式要回idle
+            } else if (isMG) {
+                TaskManager.getInstance().addTask(new IdleTask());//Spin失敗且是MG模式要回idle
             }
             this.finish();
         });

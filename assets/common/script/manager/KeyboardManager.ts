@@ -33,7 +33,7 @@ export class KeyboardManager {
 
         if (DataManager.getInstance().lockKeyboard
             || DataManager.getInstance().isAutoMode
-            || !DataManager.getInstance().isBS()) {
+            || !DataManager.getInstance().isMG()) {
             return;
         }
 

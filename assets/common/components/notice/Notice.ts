@@ -1,8 +1,8 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
-
 import { XEvent1 } from 'db://assets/common/script/event/XEvent';
 import { addBtnClickEvent, Utils } from 'db://assets/common/script/utils/Utils';
-import { GameConst } from 'db://assets/game/script/data/GameConst';
+import { UrlParam } from 'db://assets/common/script/data/UrlParam';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
 
 const { ccclass } = _decorator;
 
@@ -17,10 +17,7 @@ export class Notice extends Component {
     private infoErrorConfirm: Node = null;
     private infoErrorLabel: Label;
     private versionLabel: Label;
-
     private backMask: Node;
-
-
     public errorMessage: any = null;
 
     async onLoad() {
@@ -28,8 +25,7 @@ export class Notice extends Component {
         this.infoErrorLabel = this.node.getChildByPath('InfoError/Label').getComponent(Label);
         this.backMask = this.node.getChildByName('BackMask');
         this.versionLabel = this.node.getChildByPath('InfoError/Version').getComponent(Label);
-        this.versionLabel.string = GameConst.Ver;
-
+        this.versionLabel.string = BaseConst.Version;
         Notice.showError.on(this.showError, this);
 
         addBtnClickEvent(this.infoErrorConfirm, 'Notice', this.infoErrorConfirm.getComponent(Button), 'onCloseNotice');
@@ -46,8 +42,12 @@ export class Notice extends Component {
         await this.loadErrorMessage();
         Utils.fadeIn(this.node, 0.2, 0, 255);
         Utils.tweenScaleTo(this.node, 0.2, 0.5, 1);
-        const errorMessage = this.errorMessage[errorCode];
-        this.infoErrorLabel.string = errorMessage;
+
+        //獲取錯誤訊息
+        const lang = UrlParam.lang || 'en';
+        const messageKey = this.errorMessage[String(errorCode)] || this.errorMessage['default'].Message;
+        const messageText = this.errorMessage.ErrorMessage[messageKey][lang];
+        this.infoErrorLabel.string = messageText.replace('{0}', String(errorCode));
         this.node.active = true;
     }
 
@@ -61,6 +61,9 @@ export class Notice extends Component {
         Utils.tweenScaleTo(this.node, 0.2, 1, 0.5);
     }
 
+    /**
+     * 載入錯誤訊息
+     */
     private async loadErrorMessage() {
         if (this.errorMessage !== null) return;
         this.errorMessage = await Utils.loadJson('data/ErrorMessage');

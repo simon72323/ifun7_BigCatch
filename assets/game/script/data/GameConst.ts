@@ -14,9 +14,6 @@ export class GameConst extends BaseConst {
         [2, 1, 0, 1, 2], [0, 1, 2, 1, 0], [2, 2, 1, 0, 0], [0, 0, 1, 2, 2], [2, 1, 1, 1, 0]
     ];
 
-    /**版本號 */
-    public static Ver = 'Ver:0.9.2';
-
     /**橫軸列數 */
     public static REEL_COL: number = 5;
 
@@ -30,8 +27,8 @@ export class GameConst extends BaseConst {
         5: 20   // 索引3對應5個scatter，20次
     };
 
-    /**BS初始盤面結果 */
-    public static BS_INIT_RESULT: number[][] = [
+    /**MG初始盤面結果 */
+    public static MG_INIT_RESULT: number[][] = [
         [15, 16, 17],
         [1, 6, 2],
         [8, 0, 7],
@@ -79,10 +76,13 @@ export class GameConst extends BaseConst {
         }
     };
 
+    /**版本號 */
+    public static Version = 'Ver:5800.002';
 }
 
-/**覆蓋BaseConst的SLOT_TIME */
+/**覆蓋BaseConst資料 */
 BaseConst.SLOT_TIME = GameConst.SLOT_TIME;
+BaseConst.Version = GameConst.Version;
 
 /**符號ID */
 export enum SymbolID {
@@ -121,6 +121,6 @@ export const FISH_ODDS = {
 
 /**老虎機ID */
 // export enum SlotMachineID {
-//     BS = 0,
-//     FS = 1
+//     MG = 0,
+//     FG = 1
 // }

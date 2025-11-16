@@ -1,12 +1,13 @@
-import { _decorator, Component, director, Label, Node, ProgressBar, sp } from 'cc';
+import { _decorator, Component, director, Label, ProgressBar, sp } from 'cc';
 
 import { Notice } from 'db://assets/common/components/notice/Notice';
-import { BaseConfig } from 'db://assets/common/script/data/BaseConfig';
+import { BaseConst } from 'db://assets/common/script/data/BaseConst';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { NetworkManager } from 'db://assets/common/script/network/NetworkManager';
 import { i18n } from 'db://assets/common/script/utils/i18n';
 import { ScreenAdapter } from 'db://assets/common/script/utils/ScreenAdapter';
 import { Utils } from 'db://assets/common/script/utils/Utils';
+import { UrlParam } from 'db://assets/common/script/data/UrlParam';
 
 
 const { ccclass, property, disallowMultiple } = _decorator;
@@ -29,8 +30,8 @@ export class Loading extends Component {
         // E2ETest.E2EStartLoading();
         ScreenAdapter.setupResize();//初始化屏幕適配
         this.initUI();
-        DataManager.getInstance().urlParam.initUrlParameters();//初始化URL參數
-        i18n.init(DataManager.getInstance().urlParam.lang);//初始化語言
+        UrlParam.initUrlParameters();//初始化URL參數
+        i18n.init(UrlParam.lang);//初始化語言
 
         // GoogleAnalytics.instance.initialize();
     }
@@ -102,18 +103,18 @@ export class Loading extends Component {
      * 取得新的 token
      */
     private async getRenewToken() {
-        let paramToken = DataManager.getInstance().urlParam.token;  // 從 URL 獲取的原始 token
+        let paramToken = UrlParam.token;  // 從 URL 獲取的原始 token
         let token = sessionStorage.getItem(paramToken); // 檢查 sessionStorage 中是否有緩存的 token
 
         // 如果 sessionStorage 中有有效的 token，直接使用
         if (token != null && token.length > 0) {
-            DataManager.getInstance().urlParam.token = token;
+            UrlParam.token = token;
             return token;
         }
 
         // 如果沒有緩存的 token，才向伺服器請求新的 token
         const newToken = await NetworkManager.getInstance().sendRenewToken();
-        DataManager.getInstance().urlParam.token = newToken; // 只更新 token
+        UrlParam.token = newToken; // 只更新 token
         return newToken;
     }
 
@@ -165,7 +166,7 @@ export class Loading extends Component {
         }
 
         const urlCurrency = DataManager.getInstance().currency;
-        BaseConfig.CurrencySymbol = currencyJson.CurrencySymbol[urlCurrency];
-        BaseConfig.DecimalPlaces = parseInt(currencyJson.DecimalPlaces[urlCurrency]);
+        BaseConst.CurrencySymbol = currencyJson.CurrencySymbol[urlCurrency];
+        BaseConst.DecimalPlaces = parseInt(currencyJson.DecimalPlaces[urlCurrency]);
     }
 }

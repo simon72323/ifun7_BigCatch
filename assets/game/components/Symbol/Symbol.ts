@@ -1,6 +1,7 @@
 import { _decorator, Label, sp, Sprite, SpriteFrame, Node, UIOpacity, tween, Vec3, instantiate, Tween } from 'cc';
 import { BaseSymbol } from 'db://assets/common/components/slotMachine/BaseSymbol';
 import { SlotMachine } from 'db://assets/common/components/slotMachine/SlotMachine';
+import { BetData } from 'db://assets/common/script/data/BetData';
 import { DataManager } from 'db://assets/common/script/data/DataManager';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
@@ -204,7 +205,7 @@ export class Symbol extends BaseSymbol {
                 .start();
         }
         //免費遊戲wild出現時播放音效
-        if (this.isWild() && !DataManager.getInstance().isBS()) {
+        if (this.isWild() && !DataManager.getInstance().isMG()) {
             AudioManager.getInstance().playSound(AudioKey.wildShow);
         }
         this.isStop = true;
@@ -321,10 +322,10 @@ export class Symbol extends BaseSymbol {
     }
 
     /**
-     * 回復BS盤面symbol
+     * 回復MG盤面symbol
      * @param symbolID 圖示ID
      */
-    public backBS(symbolID: number): void {
+    public backMG(symbolID: number): void {
         this.reset();
         this.setSymbolID(symbolID);
     }
@@ -358,9 +359,9 @@ export class Symbol extends BaseSymbol {
     private setScoreState() {
         if (this.symbolID >= SymbolID.F1 && this.symbolID <= SymbolID.F6) {
             this.score.active = true;
-            const isBS = DataManager.getInstance().isBS();
-            this.score.getComponent(UIOpacity).opacity = isBS ? 128 : 255;
-            const betCredit = DataManager.getInstance().bet.getBetTotal();
+            const isMG = DataManager.getInstance().isMG();
+            this.score.getComponent(UIOpacity).opacity = isMG ? 128 : 255;
+            const betCredit = BetData.getBetTotal();
             const fishScore = FISH_ODDS[this.symbolID] * betCredit;
             this.score.getChildByPath('numLayout/currency').getComponent(Label).string = Utils.getCurrencySymbol();
             this.score.getChildByPath('numLayout/Label').getComponent(Label).string = Utils.numberFormat(fishScore);

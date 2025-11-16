@@ -1,4 +1,4 @@
-import { DataManager } from 'db://assets/common/script/data/DataManager';
+import { BetData } from 'db://assets/common/script/data/BetData';
 import { Utils } from 'db://assets/common/script/utils/Utils';
 
 import { SymbolID } from 'db://assets/game/script/data/GameConst';
@@ -87,7 +87,7 @@ export class SlotData {
         const payData = this.payloadTemplate.symbolPoints[symbolIDPayloadMap.get(symbolID)];
         if (payData) {
             payData.forEach((data: { count: number, point: number }) => {
-                result.push({ count: data.count, cent: Utils.numberFormatCurrency(data.point * DataManager.getInstance().bet.getBetTotal()) });
+                result.push({ count: data.count, cent: Utils.numberFormatCurrency(data.point * BetData.getBetTotal()) });
             }, this);
         }
         return result;

@@ -16,7 +16,7 @@ export class BackgroundUI extends Component {
         this.bg_fg = this.node.getChildByName('bg_fg');
 
         BaseEvent.changeScene.on(this.onChangeScene, this);
-        this.onChangeScene(ModuleID.BS);
+        this.onChangeScene(ModuleID.MG);
     }
 
     /**
@@ -24,7 +24,7 @@ export class BackgroundUI extends Component {
      * @param id 
      */
     private onChangeScene(id: ModuleID) {
-        if (id === ModuleID.BS) {
+        if (id === ModuleID.MG) {
             if (this.bg_fg.active) {
                 Utils.fadeOut(this.bg_fg, 0.5, 255, 0, () => {
                     this.bg_fg.active = false;

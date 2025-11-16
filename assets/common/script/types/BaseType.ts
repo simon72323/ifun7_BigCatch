@@ -20,7 +20,7 @@ export enum OrientationtMode {
 /**場景類型 */
 export enum ModuleID {
     /**一般遊戲 */
-    BS = 'BS',
+    MG = 'MG',
     /**免費遊戲 */
     FG = 'FG',
 }

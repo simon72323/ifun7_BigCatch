@@ -1,13 +1,13 @@
 
 // import { BigWinUI } from '@game/components/BigWinUI/BigWinUI';
 
-// import { IWinLineData } from '@common/components/slotMachine/SlotType';
-
 // import { BaseConst } from '@common/script/data/BaseConst';
 // import { DataManager } from '@common/script/data/DataManager';
 // import { GameTask } from '@common/script/tasks/GameTask';
 // import { BigWinType } from '@common/script/types/BaseType';
 // import { Utils } from '@common/script/utils/Utils';
+
+// import { IWinFishData, IWinLineData } from 'db://assets/game/script/data/SlotType';
 
 
 // /**
@@ -26,7 +26,7 @@
 //     /**執行 */
 //     async execute(): Promise<void> {
 //         const dataManager = DataManager.getInstance();
-//         //BS單轉總分達到BigWin額外演示
+//         //MG單轉總分達到BigWin額外演示
 //         if (dataManager.getBigWinTypeByValue(this.payCreditTotal) !== BigWinType.non) {
 //             console.log('waitForBigWinComplete');
 //             await this.waitForBigWinComplete();

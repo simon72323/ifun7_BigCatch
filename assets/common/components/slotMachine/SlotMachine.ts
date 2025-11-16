@@ -44,8 +44,8 @@ export class SlotMachine extends Component {
     public static showSymbolWin: XEvent1<number[]> = new XEvent1();
     /**顯示壓黑 */
     public static showBlack: XEvent = new XEvent();
-    /**返回BS盤面 */
-    public static backBSParser: XEvent1<number[][]> = new XEvent1();
+    /**返回MG盤面 */
+    public static backMGParser: XEvent1<number[][]> = new XEvent1();
     //======================================= XEvent ========================================
 
     private reelCol: number = 5;//橫軸列數
@@ -102,7 +102,7 @@ export class SlotMachine extends Component {
         this.initCreatReel();//生成節點
         SlotMachine.initResultParser.on(this.initResultParser, this);
         SlotMachine.slotRun.on(this.onSlotRun, this);
-        SlotMachine.backBSParser.on(this.onBackBSParser, this);
+        SlotMachine.backMGParser.on(this.onBackMGParser, this);
         BaseEvent.clickStop.on(this.onSlotSkip, this);
 
         SlotMachine.showSymbolWin.on(this.onShowSymbolWin, this);
@@ -201,14 +201,14 @@ export class SlotMachine extends Component {
     }
 
     /**
-     * 返回BS盤面
-     * @param backBSParser 返回BS盤面
+     * 返回MG盤面
+     * @param backMGParser 返回MG盤面
      */
-    private onBackBSParser(backBSParser: number[][]) {
-        for (let i = 0; i < backBSParser.length; i++) {
-            for (let j = 0; j < backBSParser[i].length; j++) {
+    private onBackMGParser(backMGParser: number[][]) {
+        for (let i = 0; i < backMGParser.length; i++) {
+            for (let j = 0; j < backMGParser[i].length; j++) {
                 const symbol = this.reelMainSymbol[i][j];
-                symbol.backBS(backBSParser[i][j]);
+                symbol.backMG(backMGParser[i][j]);
             }
         }
     }
