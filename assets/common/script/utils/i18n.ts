@@ -1,5 +1,5 @@
 import { _decorator, Component, JsonAsset, Enum, director } from 'cc';
-import { EDITOR, PREVIEW } from 'cc/env';
+import { EDITOR } from 'cc/env';
 
 import { LanguageLabel } from 'db://assets/common/components/localized/LanguageLabel';
 
@@ -37,8 +37,8 @@ export class i18nLanguageData {
 }
 
 @ccclass('i18n')
-@disallowMultiple(true)
-@executeInEditMode(true)
+@disallowMultiple(true)//禁止在同一節點上掛載多個i18n組件
+@executeInEditMode(true)//允許在編輯器中執行
 export class i18n extends Component {
     public static instance: i18n;
     public static language: {};
@@ -77,7 +77,7 @@ export class i18n extends Component {
             return;
         }
         i18n.instance = this;
-        director.addPersistRootNode(this.node);
+        // director.addPersistRootNode(this.node);
         this.loadLanguage();
     }
 
@@ -161,6 +161,7 @@ export class i18n extends Component {
         if (i18n.language[key] == null) return null;
 
         let type = (EDITOR) ? i18n.instance.previewLanguage : i18n.languageType;
+        console.log('type', type);
         if (i18n.language[key][type] == null) type = Language.en;
 
         if (i18n.language[key][type][id] == null) {

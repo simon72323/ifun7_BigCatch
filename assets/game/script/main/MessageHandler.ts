@@ -51,7 +51,7 @@ export class MessageHandler {
         //執行主遊戲結果
         const mainGame = slotResult.main_game;
         // console.log('======執行主遊戲結果======');
-        this.handleGameResult(mainGame, false);
+        this.handleGameResult(mainGame, false);//處理盤面停止結果流程
         this.fsTotalWin = 0;//重置免費遊戲總贏分
         this.freeSpinTimes = 0;//重置免費遊戲次數
 

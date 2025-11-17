@@ -356,23 +356,6 @@ export class Utils {
     }
 
     /**
-     * 載入本地貨幣資料
-     * @returns 本地貨幣資料
-     */
-    public static loadCurrency(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            resources.load('data/currency', JsonAsset, (err, currency) => {
-                if (err != null) {
-                    console.error(err);
-                    reject(err);
-                    return;
-                }
-                resolve(currency.json);
-            });
-        });
-    }
-
-    /**
      * 添加手型懸停事件
      * @param target 目標節點
      */

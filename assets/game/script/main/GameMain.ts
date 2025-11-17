@@ -19,6 +19,7 @@ import { MessageHandler } from 'db://assets/game/script/main/MessageHandler';
 import { IdleTask } from 'db://assets/game/script/task/IdleTask';
 import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
 import { BetData } from 'db://assets/common/script/data/BetData';
+import { Loading } from 'db://assets/common/components/loading/Loading';
 
 const { ccclass, property } = _decorator;
 
@@ -28,22 +29,14 @@ export class GameMain extends Component {
     public static shake: XEvent = new XEvent();
     public static fsOpening: XEvent = new XEvent();
 
-    @property({ type: Node, tooltip: '初始遮黑' })
-    private topBlack: Node = null;
-
     @property({ tooltip: '是否為假老虎機' })
     private isFake: boolean = false;
 
     async onLoad() {
         //初始化盤面
         //初始化遊戲資料
-
         await AudioManager.getInstance().loadBundleAudios();
         slotAudioKey.reelStop = AudioKey.reelStop;//指定公版輪軸停止音效名稱
-
-        //顯示初始化遮黑
-        this.topBlack.active = true;
-        this.topBlack.getComponent(UIOpacity).opacity = 255;
 
         if (this.isFake === false) {
             this.initGame();
@@ -83,10 +76,7 @@ export class GameMain extends Component {
      */
     private initGame() {
         ScreenAdapter.handleResize();
-        //淡出初始遮黑
-        Utils.fadeOut(this.topBlack, 0.3, 255, 0, () => {
-            this.topBlack.active = false;
-        });
+        Loading.remove.emit();//移除載入畫面
         //初始化盤面
         SlotMachine.initResultParser.emit(GameConst.MG_INIT_RESULT);
 
