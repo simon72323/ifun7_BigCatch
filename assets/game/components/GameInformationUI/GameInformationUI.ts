@@ -30,7 +30,7 @@ export class GameInformationUI extends Component {
         BaseEvent.showGameInformation.on(this.show, this);
         this.setupNode();
         this.node.active = false;
-        this.verLabel.string = GameConst.Ver;
+        this.verLabel.string = GameConst.Version;
     }
 
     /**

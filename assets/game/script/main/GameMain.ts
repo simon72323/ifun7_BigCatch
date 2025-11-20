@@ -89,7 +89,7 @@ export class GameMain extends Component {
         //設置購買功能是否可見、啟用
         const buyFeatureVisible = DataManager.getInstance().getGameData().buy_spin.allow_buy === 1;
         BaseEvent.buyFeatureVisible.emit(buyFeatureVisible);//設置購買功能是否可見
-        const buyFeatureEnabled = BetData.getBuyFeatureTotal() !== -1;
+        const buyFeatureEnabled = BetData.getBuyFeatureEnabled();
         BaseEvent.buyFeatureEnabled.emit(buyFeatureEnabled);//設置購買功能是否啟用
 
         KeyboardManager.getInstance().initialize();//初始化鍵盤管理器

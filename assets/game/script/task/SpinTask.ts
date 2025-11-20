@@ -21,7 +21,7 @@ export class SpinTask extends GameTask {
     protected name: string = 'BaseSpinTask';
 
     /** 是否購買免費遊戲 */
-    public isBuyFs: boolean = false;
+    public isBuyFg: boolean = false;
     /** 下注金額 */
     public betCredit: number = 0;
 
@@ -39,7 +39,7 @@ export class SpinTask extends GameTask {
 
 
         //購買免費遊戲強制取消Turbo, 但不跳通知
-        if (this.isBuyFs) {
+        if (this.isBuyFg) {
             DataManager.getInstance().curTurboMode = TurboMode.Normal;
             BaseEvent.setTurboBtnState.emit(TurboMode.Normal);
         }
@@ -52,13 +52,13 @@ export class SpinTask extends GameTask {
         const isMG = DataManager.getInstance().isMG();
         // if (isMG) {
         //     //先轉型(免費遊戲直接給結果不轉動)
-        //     // if (!DataManager.getInstance().isBuyFs) {
+        //     // if (!DataManager.getInstance().isBuyFg) {
         //     SlotMachine.spin.emit();
         //     // }
         // }
 
         //判斷要傳送一般spin還是免費spin(檢查一下免費遊戲按下時是否有變更成FS模式)
-        let spinID = this.isBuyFs ? 1 : 0;
+        let spinID = this.isBuyFg ? 1 : 0;
 
         //------------------------跑假資料------------------------
         //多重連線

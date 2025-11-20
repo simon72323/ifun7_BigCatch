@@ -69,7 +69,7 @@ export class FeatureBuyPage extends Component {
         DataManager.getInstance().lockKeyboard = true;//鎖定鍵盤功能
         AudioManager.getInstance().playSound(AudioKey.showBuyWindow);
         this.currencyLabel.string = Utils.getCurrencySymbol();
-        this.updateBuyInfo();//更新購買資訊
+        this.updateBuyTotal();//更新購買花費
         this.node.active = true;
         Utils.fadeIn(this.buyUI, 0.3, 0, 255);
         this.buyUI.scale = new Vec3(0.8, 0.8, 1);
@@ -110,28 +110,29 @@ export class FeatureBuyPage extends Component {
      * @param eventData 事件數據
      */
     private onClickChangeBet(event: EventTouch, eventData: string): void {
+        AudioManager.getInstance().playSound(AudioKey.btnClick);
         const changeValue = parseInt(eventData);
         SettingsController.changeBetValue.emit(changeValue);
-        this.updateBuyInfo();
-        this.updateBetBtnInteractable();
+        this.updateBuyTotal();
+        // this.updateBetBtnInteractable();
     }
 
     /**
      * 更新購買資訊
      */
-    private updateBuyInfo(): void {
+    private updateBuyTotal(): void {
         const buyFeatureTotal = BetData.getBuyFeatureTotal();
         this.costLabel.string = Utils.numberFormat(buyFeatureTotal);
-        this.buyBtn.interactable = buyFeatureTotal !== -1;
+        this.buyBtn.interactable = BetData.getBuyFeatureEnabled();
     }
 
     /**
      * 更新下注+-按鈕是否可用
      */
-    private updateBetBtnInteractable() {
-        this.addBtn.getComponent(Button).interactable = BetData.getPlusEnabled();
-        this.lessBtn.getComponent(Button).interactable = BetData.getLessEnabled();
-    }
+    // private updateBetBtnInteractable() {
+    //     this.addBtn.getComponent(Button).interactable = BetData.getPlusEnabled();
+    //     this.lessBtn.getComponent(Button).interactable = BetData.getLessEnabled();
+    // }
 
     /**
      * 購買退出

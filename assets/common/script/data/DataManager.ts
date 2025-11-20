@@ -51,6 +51,9 @@ export class DataManager {
     /** 是否鎖定鍵盤 */
     public lockKeyboard: boolean = false;
 
+    /** 是否購買免費遊戲 */
+    public isBuyFg: boolean = false;
+
     //============================= server資料 =====================================
     /** 用戶資料 */
     private userData: IUserData;

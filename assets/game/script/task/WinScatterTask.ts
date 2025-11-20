@@ -22,7 +22,7 @@ export class WinScatterTask extends GameTask {
         AudioManager.getInstance().playSound(AudioKey.scatterWin);
         ReelBlackUI.show.emit(); //壓黑
         SlotMachine.showSymbolWin.emit(this.winPos); //顯示中獎位置
-
+        AudioManager.getInstance().editMusicVolume(0);
         //如果設定停止直到免費轉，則停止自動遊戲
         if (DataManager.getInstance().isStopUntilFeature) {
             BaseEvent.stopAutoSpin.emit();//停止自動遊戲

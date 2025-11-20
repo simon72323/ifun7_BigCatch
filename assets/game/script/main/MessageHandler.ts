@@ -6,7 +6,6 @@ import { Utils } from 'db://assets/common/script/utils/Utils';
 import { GameConst, SymbolID } from 'db://assets/game/script/data/GameConst';
 import { AutoSpinDelayTask } from 'db://assets/game/script/task/AutoSpinDelayTask';
 import { BackMGSettleTask } from 'db://assets/game/script/task/BackMGSettleTask';
-import { BootCatchTask } from 'db://assets/game/script/task/BootCatchTask';
 import { IdleTask } from 'db://assets/game/script/task/IdleTask';
 import { StopTask } from 'db://assets/game/script/task/StopTask';
 import { TotalWinTask } from 'db://assets/game/script/task/TotalWinTask';
@@ -15,6 +14,7 @@ import { UpdateFreeTimesTask } from 'db://assets/game/script/task/UpdateFreeTime
 import { WinScatterTask } from 'db://assets/game/script/task/WinScatterTask';
 import { WinSymbolTask } from 'db://assets/game/script/task/WinSymbolTask';
 import { IWinFishData, IWinLineData } from 'db://assets/game/script/data/SlotType';
+import { HookCatchTask } from 'db://assets/game/script/task/HookCatchTask';
 
 /**
  * 消息處理
@@ -118,12 +118,13 @@ export class MessageHandler {
         //執行盤面停止
         const stopTask = new StopTask();
         stopTask.resultPattern = gameResult.game_result;
+        stopTask.scatterInfo = gameResult.scatter_info;
         TaskManager.getInstance().addTask(stopTask);
 
         //是否表演額外加次數(釣起靴子)
         if (gameResult.extra?.no_m_add_spin) {
-            const bootCatchTask = new BootCatchTask();
-            TaskManager.getInstance().addTask(bootCatchTask);
+            const hookCatchTask = new HookCatchTask();
+            TaskManager.getInstance().addTask(hookCatchTask);
 
             //更新免費遊戲次數
             this.freeSpinTimes += 1;// 免費遊戲次數+1

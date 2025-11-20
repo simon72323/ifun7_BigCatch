@@ -36,6 +36,11 @@ export class GameConst extends BaseConst {
         [18, 19, 20]
     ];
 
+    /**釣起scatter機率 */
+    public static catchScatterRate: number = 0.4;
+    /**購買免費遊戲是否釣起scatter */
+    public static buyFgCatchScatter: boolean = false;
+
     /**遊戲轉動時間(遊戲可覆寫BaseConst的SLOT_TIME) */
     public static SLOT_TIME = {
         [TurboMode.Normal]: {
@@ -77,7 +82,7 @@ export class GameConst extends BaseConst {
     };
 
     /**版本號 */
-    public static Version = 'Ver:5800.002';
+    public static Version = 'Ver:5800.003';
 }
 
 /**覆蓋BaseConst資料 */

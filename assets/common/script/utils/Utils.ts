@@ -19,12 +19,40 @@ export class Utils {
     }
 
     /**
+     * 數字格式化，添加千分位逗號(KMB)
+     * @param value 要格式化的數字
+     * @returns 格式化後的字符串
+     */
+    public static numberFormatKMB(value: number): string {
+        const decimalPoint = BaseConst.DecimalPlaces;
+        const preciseValue = Utils.accMul(value, 1);
+        if (preciseValue >= 1_000_000_000) {
+            return (preciseValue / 1_000_000_000).toLocaleString('en', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + 'B';
+        } else if (preciseValue >= 1_000_000) {
+            return (preciseValue / 1_000_000).toLocaleString('en', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + 'M';
+        } else if (preciseValue >= 1_000) {
+            return (preciseValue / 1_000).toLocaleString('en', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + 'K';
+        } else {
+            return preciseValue.toLocaleString('en', { minimumFractionDigits: decimalPoint, maximumFractionDigits: decimalPoint });
+        }
+    }
+
+    /**
      * 數字格式化，添加幣別符號
      * @param value 要格式化的數字
      * @returns 格式化後的字符串
      */
     public static numberFormatCurrency(value: number): string {
-        return BaseConst.CurrencySymbol + Utils.numberFormat(value);
+        return BaseConst.CurrencySymbol + ' ' + Utils.numberFormat(value);
+    }
+
+    /**
+     * 數字格式化，添加幣別符號(KMB)
+     * @param value 要格式化的數字
+     * @returns 格式化後的字符串
+     */
+    public static numberFormatKMBCurrency(value: number): string {
+        return BaseConst.CurrencySymbol + ' ' + Utils.numberFormatKMB(value);
     }
 
 

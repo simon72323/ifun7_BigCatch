@@ -1,16 +1,16 @@
 import { GameTask } from 'db://assets/common/script/tasks/GameTask';
 
-import { AddSpinUI } from 'db://assets/game/components/BootCatchUI/AddSpinUI';
-import { BootCatchUI } from 'db://assets/game/components/BootCatchUI/BootCatchUI';
+import { AddSpinUI } from 'db://assets/game/components/HookCatchUI/AddSpinUI';
+import { HookCatchUI } from 'db://assets/game/components/HookCatchUI/HookCatchUI';
 
 /**
  * 釣靴事件任務
  */
-export class BootCatchTask extends GameTask {
-    protected name: string = 'BootCatchTask';
+export class HookCatchTask extends GameTask {
+    protected name: string = 'HookCatchTask';
 
     execute(): void {
-        BootCatchUI.show.emit(() => {
+        HookCatchUI.catchBoot.emit(() => {
             AddSpinUI.show.emit( () => {
                 this.finish();
             });

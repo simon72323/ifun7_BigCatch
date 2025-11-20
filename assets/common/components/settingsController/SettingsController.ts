@@ -259,9 +259,9 @@ export class SettingsController extends Component {
 
     /**
      * 處理點擊Spin按鈕
-     * @param isBuyFs 是否購買免費遊戲
+     * @param isBuyFg 是否購買免費遊戲
      */
-    private handleClickSpin(isBuyFs: boolean = false) {
+    private handleClickSpin(isBuyFg: boolean = false) {
         this.clickAnim(this.spinBtn);
         this.rotateAnim(this.spinBtn);
         this.setBtnInteractable(false);//禁用控制器按鈕
@@ -273,7 +273,7 @@ export class SettingsController extends Component {
             this.stopSpinBtn.getComponent(Animation).play('stopSpinShow');
         });
 
-        BaseEvent.clickSpin.emit(isBuyFs);
+        BaseEvent.clickSpin.emit(isBuyFg);
     }
 
     /**
@@ -414,8 +414,8 @@ export class SettingsController extends Component {
         // this.updateBetBtnInteractable();
 
         //更新購買功能是否可用
-        const buyFeatureTotal = BetData.getBuyFeatureTotal();
-        BaseEvent.buyFeatureEnabled.emit(buyFeatureTotal !== -1);//-1代表不可購買
+        const buyFeatureEnabled = BetData.getBuyFeatureEnabled();
+        BaseEvent.buyFeatureEnabled.emit(buyFeatureEnabled);//更新購買功能是否可用
     }
 
     /**

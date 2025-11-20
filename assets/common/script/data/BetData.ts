@@ -53,22 +53,29 @@ export class BetData {
     }
 
     /**
-     * 取得免費遊戲總購買金額(免費遊戲購買倍率 x 總下注)，-1代表沒有購買功能或超過限額
+     * 取得免費遊戲總購買金額(免費遊戲購買倍率 x 總下注)
      * @returns 
      */
     public static getBuyFeatureTotal(): number {
-        if (!this.gameData.buy_spin) {
-            return -1;//代表沒有購買功能
-        }
         const multiple = this.gameData.buy_spin.multiplier;
-        const limit_total = this.gameData.buy_spin.limit_total;
-        //總購買金額
-        const totalBuy = multiple * this.getBetTotal();
-        if (totalBuy > limit_total) {
-            return -1;//代表超過限額
-        }
+        const totalBuy = multiple * this.getBetTotal();//總購買金額
         return totalBuy;
-        // return Utils.accMul(this.gameData.buy_spin.multiplier, this.getBetTotal());
+    }
+
+    /**
+     * 取得免費遊戲是否可用
+     * @returns 
+     */
+    public static getBuyFeatureEnabled(): boolean {
+        if (!this.gameData.buy_spin) {
+            return false;//代表沒有購買功能
+        }
+        const limit_total = this.gameData.buy_spin.limit_total;
+        const totalBuy = this.getBuyFeatureTotal();//總購買金額
+        if (totalBuy > limit_total) {
+            return false;//代表超過限額
+        }
+        return true;
     }
 
     /**

@@ -23,7 +23,8 @@ export class UrlParam {
         const hostname = window.location.hostname;
         const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
         if (isLocal) {
-            this.token = 'testtokenUSD5800';
+            // this.token = 'testtokenUSD5800';
+            this.token = 'testtoken5800';
             this.gameId = 5800;
             this.lang = 'zh-cn';
             this.betRecordUrl = 'https://gc.ifun7.vip/betrecord/';

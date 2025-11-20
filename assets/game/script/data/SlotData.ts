@@ -87,7 +87,7 @@ export class SlotData {
         const payData = this.payloadTemplate.symbolPoints[symbolIDPayloadMap.get(symbolID)];
         if (payData) {
             payData.forEach((data: { count: number, point: number }) => {
-                result.push({ count: data.count, cent: Utils.numberFormatCurrency(data.point * BetData.getBetTotal()) });
+                result.push({ count: data.count, cent: Utils.numberFormatKMBCurrency(data.point * BetData.getBetTotal()) });
             }, this);
         }
         return result;
