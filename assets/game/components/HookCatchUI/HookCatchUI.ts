@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, sp, tween, Vec3 } from 'cc';
+import { _decorator, Component, Node, Size, sp, tween, UITransform, Vec3 } from 'cc';
 import { XEvent1, XEvent3 } from 'db://assets/common/script/event/XEvent';
 import { AudioManager } from 'db://assets/common/script/manager/AudioManager';
 import { Utils } from 'db://assets/common/script/utils/Utils';
@@ -42,11 +42,13 @@ export class HookCatchUI extends Component {
         this.scheduleOnce(() => {
             AudioManager.getInstance().playSound(AudioKey.hook);
         }, 0.3);
+        this.node.getComponent(UITransform).setContentSize(new Size(1000, 1200));
         this.ani_hook.node.position = new Vec3(0, -35, 0);
         this.node.active = true;
         Utils.fadeIn(this.node, 0.1, 0, 255);
         this.ani_hook.setAnimation(0, 'hook_in', false);
         await Utils.delay(1);
+        this.node.getComponent(UITransform).setContentSize(new Size(1000, 620));
         this.ani_hook.setAnimation(0, 'hook_get', false);
         await Utils.delay(0.8);
         this.ani_multiply.node.active = true;
@@ -84,6 +86,7 @@ export class HookCatchUI extends Component {
         this.scheduleOnce(() => {
             AudioManager.getInstance().playSound(AudioKey.hook);
         }, 0.3);
+        this.node.getComponent(UITransform).setContentSize(new Size(1000, 1200));
         const xPos = reelCol * 164 - 308;//x位置
         const endYPos = 415 - reelRow * 158;//y位置
         this.ani_hook.node.position = new Vec3(xPos, -35, 0);
@@ -91,6 +94,7 @@ export class HookCatchUI extends Component {
         Utils.fadeIn(this.node, 0.1, 0, 255);
         this.ani_hook.setAnimation(0, 'hook_in', false);
         await Utils.delay(1);
+        this.node.getComponent(UITransform).setContentSize(new Size(1000, 620));
         this.ani_hook.setAnimation(0, 'hook_get', false);
         await Utils.delay(0.8);
         this.ani_multiply.node.active = true;
