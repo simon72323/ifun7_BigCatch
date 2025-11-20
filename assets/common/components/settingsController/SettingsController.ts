@@ -78,6 +78,11 @@ export class SettingsController extends Component {
     @property({ type: Node, tooltip: '減少下注按鈕' })
     private minusBetBtn: Node = null;
 
+    @property({ type: Node, tooltip: '直式全螢幕節點' })
+    private porScreenPosNode: Node = null;
+    @property({ type: Node, tooltip: '橫式全螢幕節點' })
+    private landScreenPosNode: Node = null;
+
     private porControllerBtns: Node = null;//直式控制器
     private porOptionMenu: Node = null;//直式選單
     // private landControllerBtns: Node = null;//橫式控制器
@@ -196,7 +201,8 @@ export class SettingsController extends Component {
                 this.handleClickSpin();
             }
         }, this);
-        this.screenBtn.active = !sys.isMobile;
+        this.porScreenPosNode.active = !sys.isMobile;
+        this.landScreenPosNode.active = !sys.isMobile;
     }
 
     /**
