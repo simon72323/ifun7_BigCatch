@@ -20,6 +20,7 @@ import { IdleTask } from 'db://assets/game/script/task/IdleTask';
 import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
 import { BetData } from 'db://assets/common/script/data/BetData';
 import { Loading } from 'db://assets/common/components/loading/Loading';
+import { Cheat } from '../Cheat';
 
 const { ccclass, property } = _decorator;
 
@@ -76,6 +77,7 @@ export class GameMain extends Component {
      */
     private initGame() {
         ScreenAdapter.handleResize();
+        Cheat.showCheat.emit();//顯示作弊UI
         Loading.remove.emit();//移除載入畫面
         //初始化盤面
         SlotMachine.initResultParser.emit(GameConst.MG_INIT_RESULT);

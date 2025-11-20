@@ -1,10 +1,12 @@
 import { _decorator, Component, Node, Toggle } from 'cc';
 import { GameConst } from 'db://assets/game/script/data/GameConst';
 import { UrlParam } from 'db://assets/common/script/data/UrlParam';
+import { XEvent } from 'db://assets/common/script/event/XEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('Cheat')
 export class Cheat extends Component {
+    public static showCheat: XEvent = new XEvent();
 
     private buyToggle: Toggle = null;
     private catchToggle40: Toggle = null;
@@ -18,11 +20,19 @@ export class Cheat extends Component {
         // this.catchToggle100 = this.node.getChildByPath('CheatUI/CatchScatter/Catch100').getComponent(Toggle);
         this.cheatUI = this.node.getChildByPath('CheatUI');
         this.node.active = false;
+        Cheat.showCheat.on(this.showCheat, this);
+    }
+
+    private showCheat(): void {
+        if (UrlParam.token === 'testtoken5800') {
+            this.node.active = true;
+        }
     }
 
     public onCheat() {
         /**如果是測試token，則顯示作弊UI */
         if (UrlParam.token === 'testtoken5800') {
+            this.node.active = true;
             this.cheatUI.active = !this.cheatUI.active;
             this.buyToggle.isChecked = GameConst.buyFgCatchScatter;
             this.catchToggle40.isChecked = GameConst.catchScatterRate === 0.4;

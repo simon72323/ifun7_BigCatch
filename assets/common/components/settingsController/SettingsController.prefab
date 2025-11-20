@@ -40,17 +40,17 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 489
-      },
-      {
         "__id__": 491
       },
       {
         "__id__": 493
+      },
+      {
+        "__id__": 495
       }
     ],
     "_prefab": {
-      "__id__": 505
+      "__id__": 507
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -11067,10 +11067,13 @@
       },
       {
         "__id__": 486
+      },
+      {
+        "__id__": 488
       }
     ],
     "_prefab": {
-      "__id__": 488
+      "__id__": 490
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -11468,7 +11471,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 100,
-      "height": 400
+      "height": 391
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -11531,6 +11534,44 @@
     "fileId": "586YIfw7VLYoPQwO/XG09P"
   },
   {
+    "__type__": "cc.Layout",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 465
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 489
+    },
+    "_resizeMode": 1,
+    "_layoutType": 2,
+    "_cellSize": {
+      "__type__": "cc.Size",
+      "width": 40,
+      "height": 40
+    },
+    "_startAxis": 0,
+    "_paddingLeft": 0,
+    "_paddingRight": 0,
+    "_paddingTop": 0,
+    "_paddingBottom": 9,
+    "_spacingX": 0,
+    "_spacingY": 18,
+    "_verticalDirection": 1,
+    "_horizontalDirection": 0,
+    "_constraint": 0,
+    "_constraintNum": 2,
+    "_affectedByScale": false,
+    "_isAlign": false,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "11vgxHy85KFK3HMUC6BHCY"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -11553,7 +11594,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 490
+      "__id__": 492
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -11581,7 +11622,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 492
+      "__id__": 494
     },
     "betInfo": {
       "__id__": 2
@@ -11638,15 +11679,9 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 494
+      "__id__": 496
     },
     "orientationNode": [
-      {
-        "__id__": 495
-      },
-      {
-        "__id__": 496
-      },
       {
         "__id__": 497
       },
@@ -11667,13 +11702,19 @@
       },
       {
         "__id__": 503
+      },
+      {
+        "__id__": 504
+      },
+      {
+        "__id__": 505
       }
     ],
     "orientationActive": [],
     "orientationScale": [],
     "orientationPosition": [
       {
-        "__id__": 504
+        "__id__": 506
       }
     ],
     "orientationPosY": [],
