@@ -43,7 +43,6 @@ export class IdleTask extends GameTask {
         //購買功能
         BaseEvent.buyFeature.on(() => {
             SettingsController.clickSpin.emit(true);//透過點擊Spin按鈕(購買免費遊戲)
-            console.log('購買免費遊戲');
             DataManager.getInstance().isBuyFg = true;//設置為購買免費遊戲
         }, this);
     }

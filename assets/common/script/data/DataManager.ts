@@ -174,4 +174,20 @@ export class DataManager {
     public isBlockKeyboard(): boolean {
         return this.lockKeyboard;
     }
+
+    /**
+     * 取得免費遊戲是否可用
+     * @returns 
+     */
+    public getBuyFeatureEnabled(): boolean {
+        if (!this.gameData.buy_spin) {
+            return false;//代表沒有購買功能
+        }
+        // const limit_total = this.gameData.buy_spin.limit_total;
+        const totalBuy = BetData.getBuyFeatureTotal();//總購買金額
+        if (this.userCredit < totalBuy) {
+            return false;//代表餘額不足
+        }
+        return true;
+    }
 }

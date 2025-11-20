@@ -20,7 +20,7 @@ import { IdleTask } from 'db://assets/game/script/task/IdleTask';
 import { CharacterUI } from 'db://assets/game/components/CharacterUI/CharacterUI';
 import { BetData } from 'db://assets/common/script/data/BetData';
 import { Loading } from 'db://assets/common/components/loading/Loading';
-import { Cheat } from '../Cheat';
+import { Cheat } from 'db://assets/game/script/Cheat';
 
 const { ccclass, property } = _decorator;
 
@@ -91,7 +91,7 @@ export class GameMain extends Component {
         //設置購買功能是否可見、啟用
         const buyFeatureVisible = DataManager.getInstance().getGameData().buy_spin.allow_buy === 1;
         BaseEvent.buyFeatureVisible.emit(buyFeatureVisible);//設置購買功能是否可見
-        const buyFeatureEnabled = BetData.getBuyFeatureEnabled();
+        const buyFeatureEnabled = DataManager.getInstance().getBuyFeatureEnabled();
         BaseEvent.buyFeatureEnabled.emit(buyFeatureEnabled);//設置購買功能是否啟用
 
         KeyboardManager.getInstance().initialize();//初始化鍵盤管理器

@@ -73,11 +73,20 @@ export class i18n extends Component {
 
     public onLoad() {
         if (i18n.instance && i18n.instance !== this) {
-            this.node.destroy();
-            return;
+            //檢查舊實例的節點是否仍然有效
+            if (i18n.instance.node && i18n.instance.node.isValid) {
+                this.node.destroy();
+                return;
+            } else {
+                // 舊節點已無效，清除實例引用
+                i18n.instance = null;
+            }
         }
         i18n.instance = this;
-        // director.addPersistRootNode(this.node);
+        // 只在運行時模式下添加持久化根節點（編輯器模式下不生效）
+        if (!EDITOR) {
+            director.addPersistRootNode(this.node);
+        }
         this.loadLanguage();
     }
 

@@ -63,22 +63,6 @@ export class BetData {
     }
 
     /**
-     * 取得免費遊戲是否可用
-     * @returns 
-     */
-    public static getBuyFeatureEnabled(): boolean {
-        if (!this.gameData.buy_spin) {
-            return false;//代表沒有購買功能
-        }
-        const limit_total = this.gameData.buy_spin.limit_total;
-        const totalBuy = this.getBuyFeatureTotal();//總購買金額
-        if (totalBuy > limit_total) {
-            return false;//代表超過限額
-        }
-        return true;
-    }
-
-    /**
      * 改變下注並回傳下注值
      * @param changeValue 改變值（正數為增加，負數為減少）
      */

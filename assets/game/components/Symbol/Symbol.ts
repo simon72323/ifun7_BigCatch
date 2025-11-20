@@ -357,7 +357,7 @@ export class Symbol extends BaseSymbol {
      * 設定分數的狀態
      */
     private setScoreState() {
-        if (this.symbolID >= SymbolID.F1 && this.symbolID <= SymbolID.F6) {
+        if (this.symbolID >= SymbolID.F1 && this.symbolID <= SymbolID.F8) {
             this.score.active = true;
             const isMG = DataManager.getInstance().isMG();
             this.score.getComponent(UIOpacity).opacity = isMG ? 128 : 255;

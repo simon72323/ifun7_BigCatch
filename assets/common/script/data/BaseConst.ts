@@ -72,7 +72,7 @@ export class BaseConst {
     };
 
     /** 版本 */
-    public static Version = 'Ver:5800.002';
+    public static Version = 'Ver:';
 
     /** 貨幣符號 */
     public static CurrencySymbol = 'A$';

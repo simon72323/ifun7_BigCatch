@@ -155,6 +155,7 @@ export class SlotMachine extends Component {
                     this.reelTopSymbol[i].push(symbol);
                     this.reelSymbols[i].push(symbol);
                     symbol.setRandomSymbolID();
+                    symbol.node.active = false;//初始隱藏
                 } else if (idx < row2x) {
                     //設置主層symbol
                     this.reelMainSymbol[i].push(symbol);
@@ -170,6 +171,7 @@ export class SlotMachine extends Component {
                     this.reelBottomSymbol[i].push(symbol);
                     this.reelSymbols[i].push(symbol);
                     symbol.setRandomSymbolID();
+                    symbol.node.active = false;//初始隱藏
                 }
             });
         }

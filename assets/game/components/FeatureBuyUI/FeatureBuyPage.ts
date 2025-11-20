@@ -123,7 +123,7 @@ export class FeatureBuyPage extends Component {
     private updateBuyTotal(): void {
         const buyFeatureTotal = BetData.getBuyFeatureTotal();
         this.costLabel.string = Utils.numberFormat(buyFeatureTotal);
-        this.buyBtn.interactable = BetData.getBuyFeatureEnabled();
+        this.buyBtn.interactable = DataManager.getInstance().getBuyFeatureEnabled();
     }
 
     /**

@@ -82,7 +82,7 @@ export class GameConst extends BaseConst {
     };
 
     /**版本號 */
-    public static Version = 'Ver:5800.003';
+    public static Version = 'Ver:5800.004';
 }
 
 /**覆蓋BaseConst資料 */
@@ -97,13 +97,13 @@ export enum SymbolID {
     H3,
     H4,
     F1 = 5,
-    F2,
-    F3,
-    F4,
-    F5,
-    F6,
-    F7,
-    F8,
+    F2 = 6,
+    F3 = 7,
+    F4 = 8,
+    F5 = 9,
+    F6 = 10,
+    F7 = 11,
+    F8 = 12,
     LA = 15,
     LK,
     LQ,

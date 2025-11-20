@@ -80,6 +80,7 @@ export class SettingsController extends Component {
 
     @property({ type: Node, tooltip: '直式全螢幕節點' })
     private porScreenPosNode: Node = null;
+
     @property({ type: Node, tooltip: '橫式全螢幕節點' })
     private landScreenPosNode: Node = null;
 
@@ -420,7 +421,7 @@ export class SettingsController extends Component {
         // this.updateBetBtnInteractable();
 
         //更新購買功能是否可用
-        const buyFeatureEnabled = BetData.getBuyFeatureEnabled();
+        const buyFeatureEnabled = DataManager.getInstance().getBuyFeatureEnabled();
         BaseEvent.buyFeatureEnabled.emit(buyFeatureEnabled);//更新購買功能是否可用
     }
 
