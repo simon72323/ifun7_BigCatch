@@ -25,6 +25,7 @@ export class StopTask extends GameTask {
     public freeSpinTimes: number;
     /**scatter資訊 */
     public scatterInfo: ISymbolInfo;
+    private randomRngIndex: number = 0;
 
     execute(): void {
         ReelBlackUI.hide.emit();//隱藏壓黑
@@ -37,10 +38,13 @@ export class StopTask extends GameTask {
         if (GameConst.buyFgCatchScatter) {
             DataManager.getInstance().isBuyFg = false;//購買免費遊戲重置為false
         }
+
         if (this.scatterInfo && this.scatterInfo.amount >= 3 && !DataManager.getInstance().isBuyFg) {
             isCatchScatter = Math.random() < GameConst.catchScatterRate;
             if (isCatchScatter) {
-                const changePos = this.scatterInfo.position[1];//要改變的scatter位置
+                const randomRng = this.scatterInfo.amount - 2;
+                this.randomRngIndex = 1 + Math.floor(Math.random() * randomRng);
+                const changePos = this.scatterInfo.position[this.randomRngIndex];//要改變的scatter位置
                 const reel1Pattern = this.resultPattern[0];//第一軸盤面
                 const normalSymbolID: number[] = [1, 2, 3, 4, 15, 16, 17, 18, 19];//一般圖示ID
                 // 過濾出不在 reel1Pattern 中的 normalSymbolID
@@ -61,7 +65,7 @@ export class StopTask extends GameTask {
         SlotMachine.slotRunFinish.once(() => {
             if (isCatchScatter) {
                 //如果表演釣scatter，則恢復該scatter圖示
-                const changePos = this.scatterInfo.position[1];//要改變的scatter位置
+                const changePos = this.scatterInfo.position[this.randomRngIndex];//要改變的scatter位置
                 HookCatchUI.catchScatter.emit(changePos[0], changePos[1], () => {
                     const posID = changePos[0] * GameConst.REEL_ROW + changePos[1];
                     const scatterSymbolNode = SlotMachine.getSymbolList()[posID];
