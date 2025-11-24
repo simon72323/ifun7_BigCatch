@@ -82,7 +82,7 @@ export class GameConst extends BaseConst {
     };
 
     /**版本號 */
-    public static Version = 'Ver:5800.004';
+    public static Version = 'Ver:5800.005';
 }
 
 /**覆蓋BaseConst資料 */
