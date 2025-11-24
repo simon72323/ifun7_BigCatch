@@ -292,6 +292,7 @@ export class AudioManager extends Component {
         if (!audioInfo) return;
         audioInfo.audioSource.loop = true;//循環播放
         audioInfo.musicPlaying = true;//設置為正在播放
+        if (this.isMusicMuted) audioInfo.audioSource.volume = 0;
         audioInfo.audioSource.play();//重頭播放(背景運行時也要啟用播放)
         if (!(await this.onUserInteraction()) || this.isMusicMuted || this.isInBackground) return;
         this.audioTween(audioInfo.audioSource).to(0.3, { volume: 1 }).start();

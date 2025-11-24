@@ -194,6 +194,14 @@ export class SettingsController extends Component {
     }
 
     /**
+     * 檢測是否為iOS系統
+     */
+    private isIOS(): boolean {
+        const ua = navigator.userAgent;
+        return /iP(hone|od|ad)/.test(ua);
+    }
+
+    /**
      * 開始遊戲初始化
      */
     public initialize() {
@@ -202,8 +210,10 @@ export class SettingsController extends Component {
                 this.handleClickSpin();
             }
         }, this);
-        this.porScreenPosNode.active = !sys.isMobile;
-        this.landScreenPosNode.active = !sys.isMobile;
+        // 只在iOS系統時隱藏全螢幕按鈕
+        const isIOSDevice = this.isIOS();
+        this.porScreenPosNode.active = !isIOSDevice;
+        this.landScreenPosNode.active = !isIOSDevice;
     }
 
     /**
